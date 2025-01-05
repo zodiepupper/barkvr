@@ -1,20 +1,23 @@
 extends CharacterBody3D
 
-#controllers:
-@onready var righthand :BarkHand= %righthand
-@onready var lefthand :BarkHand= %lefthand
-@onready var xr_camera_3d :XRCamera3D = $xrplayer/XrCamera3d
-@onready var camera_3d :Camera3D = $xrplayer/Camera3D
-@onready var xrplayer :XROrigin3D = $xrplayer
-@onready var playercamoffset = $playercamoffset
-@onready var camray = $xrplayer/Camera3D/camray
-@onready var collision_shape_3d = %CollisionShape3D
-@onready var world_ray :InteractionRay = %worldRay
-@onready var ui_ray :InteractionRay = %uiRay
-@onready var handmenu = %handmenu
-@onready var menuoffset = %menuoffset
+# TODO plans:
+# use child nodes to modularize player abilities like grabbing and movement
 
-var head_pos :=Vector3():
+#controllers:
+@onready var righthand: BarkHand= %righthand
+@onready var lefthand: BarkHand= %lefthand
+@onready var xr_camera_3d: XRCamera3D = $xrplayer/XrCamera3d
+@onready var camera_3d: Camera3D = $xrplayer/Camera3D
+@onready var xrplayer: XROrigin3D = $xrplayer
+@onready var playercamoffset: Node3D = $playercamoffset
+@onready var camray: RayCast3D = $xrplayer/Camera3D/camray
+@onready var collision_shape_3d: CollisionShape3D = %CollisionShape3D
+@onready var world_ray: InteractionRay = %worldRay
+@onready var ui_ray: InteractionRay = %uiRay
+@onready var handmenu: Node3D = %handmenu
+@onready var menuoffset: Node3D = %menuoffset
+
+var head_pos: =Vector3():
 	get:
 		return xr_camera_3d.global_position if vr_mode_enabled else camera_3d.global_position
 

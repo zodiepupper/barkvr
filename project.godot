@@ -53,6 +53,10 @@ export/convert_text_resources_to_binary=false
 
 enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/unidot_importer/plugin.cfg", "res://addons/vrm/plugin.cfg")
 
+[global_group]
+
+player_xr_origin=""
+
 [gui]
 
 common/text_edit_undo_stack_max_size=4096
@@ -205,8 +209,10 @@ limits/message_queue/max_size_mb=128
 
 [physics]
 
+3d/run_on_separate_thread=true
 common/physics_jitter_fix=0.0
 3d/physics_engine="JoltPhysics3D"
+common/physics_interpolation=true
 
 [rendering]
 
@@ -214,9 +220,11 @@ textures/canvas_textures/default_texture_filter=2
 driver/threads/thread_model=2
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
+anti_aliasing/screen_space_roughness_limiter/amount=4.0
 
 [xr]
 
+openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
 openxr/startup_alert=false

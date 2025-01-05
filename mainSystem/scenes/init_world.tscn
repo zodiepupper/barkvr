@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://dv0etfy0ao5"]
+[gd_scene load_steps=12 format=3 uid="uid://dv0etfy0ao5"]
 
 [ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://mainAssets/worlds/basic_starter.tscn" id="1_ad4cs"]
 [ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://mainSystem/scenes/objects/worldObjects/playerSpawnLocation.tscn" id="2_humgq"]
 [ext_resource type="PackedScene" uid="uid://d0wvfw354l2i5" path="res://mainAssets/ui/3dui/loading halo demo.tscn" id="3_eytop"]
-[ext_resource type="Script" path="res://mainSystem/scripts/mic_playback.gd" id="4_5gnpn"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="4_gqc8a"]
 [ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
 [ext_resource type="PackedScene" uid="uid://b3sbt3oft3cxg" path="res://mainAssets/ui/3dPanel/editmode/vreditor.tscn" id="9_k6sjl"]

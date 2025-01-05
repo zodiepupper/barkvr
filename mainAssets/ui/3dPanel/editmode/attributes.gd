@@ -70,10 +70,10 @@ func set_target(new_target):
 				TYPE_OBJECT:
 					if prop.hint_string == "Node":
 						print('node don\'t add')
-					else:
-						var tmp :Object_Attribute = object_field.instantiate()
-						v_box_container.add_child(tmp)
-						tmp.call_deferred("set_data",fieldname, target, prop.name)
+					#else:
+						#var tmp :Object_Attribute = object_field.instantiate()
+						#v_box_container.add_child(tmp)
+						#tmp.call_deferred("set_data",fieldname, target, prop.name)
 				TYPE_STRING_NAME:
 					var tmp :String_Attribute = string_field.instantiate()
 					v_box_container.add_child(tmp)

@@ -158,7 +158,8 @@ func _init():
 	viewport.is_processing_input()
 	viewport.gui_embed_subwindows = true
 	viewport.own_world_3d = true
-	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	#viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
 	mesh = MeshInstance3D.new()
 	mesh.mesh = QuadMesh.new()
 	colshape = CollisionShape3D.new()

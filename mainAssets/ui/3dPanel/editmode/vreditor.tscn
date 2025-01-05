@@ -13,8 +13,8 @@ script = ExtResource("1_8pitw")
 [node name="script" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.707107, -8.9407e-08, 0.707107, 5.96046e-08, 1, 8.74228e-08, -0.707107, 2.98023e-08, 0.707107, -0.442787, -4.44088e-15, 0.18931)
-collision_layer = 2
-collision_mask = 6
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_tnd62")
 _auto_load_ui = ExtResource("5_s3be6")
 transparent = false
@@ -23,8 +23,8 @@ metadata/grabbable = true
 [node name="attributes" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.707107, 0, -0.707107, 3.30343e-20, 1, 4.37114e-08, 0.707107, 0, 0.707107, 0.445292, -2.66453e-15, 0.181695)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_tnd62")
 _auto_load_ui = ExtResource("4_hhemb")
 transparent = false
@@ -33,8 +33,8 @@ metadata/grabbable = true
 [node name="addnode" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 2.51218e-15, 0, -2.17558e-15, 0.866025, -0.5, -1.25607e-15, 0.5, 0.866026, 0, 0.4, 0.0629571)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_tnd62")
 _auto_load_ui = ExtResource("5_r0hk5")
 transparent = false

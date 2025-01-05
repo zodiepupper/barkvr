@@ -69,7 +69,7 @@ script = ExtResource("1_iwrfe")
 flymode = false
 metadata/health = SubResource("GDScript_swjn5")
 
-[node name="xrplayer" type="XROrigin3D" parent="."]
+[node name="xrplayer" type="XROrigin3D" parent="." groups=["player_xr_origin"]]
 
 [node name="Camera3D" type="Camera3D" parent="xrplayer"]
 current = true

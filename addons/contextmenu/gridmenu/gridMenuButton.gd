@@ -23,8 +23,8 @@ extends StaticBody3D
 			label_3d.text = text
 
 ## Optionally add a script to be called when the button is pressed or hovered
-## [br][br]The script is instantiated and the "onhover" or
-## "onclick" methods will be called when the button is hovered or clicked
+## [br][br]The script is instantiated and the "onhover -> void" or
+## "onclick -> void" methods will be called when the button is hovered or clicked
 @export var callscript : Script:
 	set(value):
 		callscript = value

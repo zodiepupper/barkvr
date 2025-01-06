@@ -82,10 +82,10 @@ func set_target(new_target):
 					var tmp :String_Attribute = string_field.instantiate()
 					v_box_container.add_child(tmp)
 					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_COLOR:
-					var tmp :Color_Attribute = color_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
+				#TYPE_COLOR:
+					#var tmp :Color_Attribute = color_field.instantiate()
+					#v_box_container.add_child(tmp)
+					#tmp.set_data(fieldname, new_target, prop.name)
 				TYPE_BOOL:
 					var tmp :Bool_Attribute = bool_field.instantiate()
 					v_box_container.add_child(tmp)

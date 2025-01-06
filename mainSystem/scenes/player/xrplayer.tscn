@@ -66,7 +66,7 @@ radius = 0.1
 
 [node name="CharacterBody3D" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_iwrfe")
-flymode = false
+noclip = true
 metadata/health = SubResource("GDScript_swjn5")
 
 [node name="xrplayer" type="XROrigin3D" parent="." groups=["player_xr_origin"]]
@@ -76,7 +76,6 @@ current = true
 
 [node name="camray" type="RayCast3D" parent="xrplayer/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13393)
-visible = false
 target_position = Vector3(0, 0, -1000)
 collision_mask = 65535
 hit_back_faces = false
@@ -89,6 +88,9 @@ collision_mask = 3
 [node name="uiRay" parent="xrplayer/Camera3D" instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
 collision_mask = 260
+
+[node name="headtarget" type="Node3D" parent="xrplayer/Camera3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" groups=["playerCamera"]]
 cull_mask = 1048573

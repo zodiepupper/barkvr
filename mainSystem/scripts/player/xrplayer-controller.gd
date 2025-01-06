@@ -16,6 +16,7 @@ extends CharacterBody3D
 @onready var ui_ray: InteractionRay = %uiRay
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
+@onready var headtarget: Node3D = $xrplayer/Camera3D/headtarget
 
 var head_pos: =Vector3():
 	get:
@@ -48,7 +49,8 @@ var camPrevPos : Vector3 = Vector3()
 		if value and !flymode:
 			flymode = true
 		noclip = value
-		collision_shape_3d.disabled = value
+		if collision_shape_3d:
+			collision_shape_3d.disabled = value
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")

@@ -8,9 +8,9 @@ extends XRController3D
 @onready var hand_menu_point :Node3D = $handproxy/handMenuPoint
 @onready var grab_parent :Node3D= $handproxy/grabParent
 #@onready var grabjoint = $handproxy/grabjoint
-@onready var local_player = $"../.."
-@onready var righthand = %righthand
-@onready var lefthand = %lefthand
+@onready var local_player :Node = $"../.."
+@onready var righthand :Node = %righthand
+@onready var lefthand :Node = %lefthand
 #TODO readd handtracking stuffs
 #@onready var lefthandtracking :SimpleOpenXRHand= %lefthandtracking
 #@onready var righthandtracking :SimpleOpenXRHand= %righthandtracking

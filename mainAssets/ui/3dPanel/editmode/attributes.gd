@@ -45,8 +45,9 @@ var event_manager
 #	if !is_field_focused:
 #		update_fields()
 
-func set_target(new_target):
-	if new_target and new_target is Object:
+func set_target(new_target, above_targets=[]):
+	if new_target and new_target is Object and new_target not in above_targets:
+		above_targets.append(new_target)
 		target = new_target
 		if "name" in new_target and new_target.name:
 			targetname.text = new_target.name
@@ -68,12 +69,12 @@ func set_target(new_target):
 				fieldname = "bone: "+new_target.get_bone_name(int(prop.name.split("/")[1]))+" "+prop.name.split("/")[-1]
 			match prop.type:
 				TYPE_OBJECT:
-					if prop.hint_string == "Node":
+					if prop.hint_string == "Node" or prop.class_name in ClassDB.get_inheriters_from_class("Node"):
 						print('node don\'t add')
-					#else:
-						#var tmp :Object_Attribute = object_field.instantiate()
-						#v_box_container.add_child(tmp)
-						#tmp.call_deferred("set_data",fieldname, target, prop.name)
+					else:
+						var tmp :Object_Attribute = object_field.instantiate()
+						v_box_container.add_child(tmp)
+						tmp.call_deferred("set_data",fieldname, target, prop.name,above_targets)
 				TYPE_STRING_NAME:
 					var tmp :String_Attribute = string_field.instantiate()
 					v_box_container.add_child(tmp)
@@ -82,10 +83,10 @@ func set_target(new_target):
 					var tmp :String_Attribute = string_field.instantiate()
 					v_box_container.add_child(tmp)
 					tmp.set_data(fieldname, new_target, prop.name)
-				#TYPE_COLOR:
-					#var tmp :Color_Attribute = color_field.instantiate()
-					#v_box_container.add_child(tmp)
-					#tmp.set_data(fieldname, new_target, prop.name)
+				TYPE_COLOR:
+					var tmp :Color_Attribute = color_field.instantiate()
+					v_box_container.add_child(tmp)
+					tmp.set_data(fieldname, new_target, prop.name)
 				TYPE_BOOL:
 					var tmp :Bool_Attribute = bool_field.instantiate()
 					v_box_container.add_child(tmp)

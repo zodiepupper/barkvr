@@ -34,7 +34,7 @@ func _ready() -> void:
 
 ## sets the name, field target node, and the property name for the field to look for
 ## name:String, new_target:Node, new_property_name:String
-func set_data(new_name:String, new_target:Object, new_property_name:String):
+func set_data(new_name:String, new_target:Object, new_property_name:String, above_targets=[]):
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name
@@ -43,4 +43,4 @@ func set_data(new_name:String, new_target:Object, new_property_name:String):
 	attributes.hide_titlebar = true
 	attributes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	field_parent.add_child(attributes)
-	attributes.call_deferred("set_target",target[property_name])
+	attributes.call_deferred("set_target",target[property_name], above_targets)

@@ -29,7 +29,7 @@ func onclick() -> void:
 		print(renik.armature_head_target)
 "
 
-[sub_resource type="Resource" id="Resource_bfulf"]
+[sub_resource type="Resource" id="Resource_ok86x"]
 resource_name = "ForwardGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 1.0
@@ -61,7 +61,7 @@ contact_point_ease = 0.05
 contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_k8ksp"]
+[sub_resource type="Resource" id="Resource_ri55t"]
 resource_name = "BackwardGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 0.5
@@ -93,7 +93,7 @@ contact_point_ease = 0.1
 contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_04oqe"]
+[sub_resource type="Resource" id="Resource_yihob"]
 resource_name = "SidewaysGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 0.75
@@ -170,9 +170,9 @@ torso_spine_twist = 1.0
 [node name="RenIKFootPlacement" type="Node3D" parent="."]
 transform = Transform3D(1, 1.11759e-08, 0, -6.70552e-08, 1, 0, -7.45058e-09, 0, 1, 0, 0, 0)
 script = ExtResource("2_6e7rw")
-forward_gait = SubResource("Resource_bfulf")
-backward_gait = SubResource("Resource_k8ksp")
-sideways_gait = SubResource("Resource_04oqe")
+forward_gait = SubResource("Resource_ok86x")
+backward_gait = SubResource("Resource_ri55t")
+sideways_gait = SubResource("Resource_yihob")
 left_hip_offset = Vector3(0.109996, -0.149882, -0.047796)
 right_hip_offset = Vector3(-0.109996, -0.149882, -0.047796)
 live_preview = true

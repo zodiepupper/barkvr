@@ -89,7 +89,7 @@ collision_mask = 3
 unique_name_in_owner = true
 collision_mask = 260
 
-[node name="headtarget" type="Node3D" parent="xrplayer/Camera3D"]
+[node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" groups=["playerCamera"]]
@@ -169,6 +169,9 @@ pixel_size = 0.002
 text = "test"
 script = SubResource("GDScript_dn0nl")
 
+[node name="handiktarget" type="Node3D" parent="xrplayer/righthand"]
+transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
+
 [node name="lefthand" type="XRController3D" parent="xrplayer"]
 unique_name_in_owner = true
 tracker = &"left_hand"
@@ -219,6 +222,9 @@ disabled = true
 [node name="notificationparent" type="Node3D" parent="xrplayer/lefthand/handproxy" groups=["notificationparent"]]
 transform = Transform3D(-4.37114e-09, -4.37114e-09, 0.1, -4.37114e-09, -0.1, -4.37114e-09, 0.1, -4.37114e-09, 4.37114e-09, 0.048, -0.064, -0.077)
 script = ExtResource("8_n4qtp")
+
+[node name="handiktarget" type="Node3D" parent="xrplayer/lefthand"]
+transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
 
 [node name="menuoffset" type="Node3D" parent="xrplayer"]
 unique_name_in_owner = true

@@ -148,4 +148,3 @@ func contains_bone(skeleton: Skeleton3D, bone: int) -> bool:
 			spineBone = skeleton.get_bone_parent(spineBone)
 
 	return false
-

@@ -451,6 +451,7 @@ func dangle_foot(p_head: Transform3D, p_distance: float,
 		Quaternion(), 1 - dangle_follow_head)
 	var dangle_vector: Vector3 = Vector3(0, spine_length + p_leg_length, 0) - p_hip_offset
 	var dangle_basis: Basis = p_head.basis * upright_head
+	var rand_vect :Vector3 = Vector3()
 	foot.basis = dangle_basis * Basis(Vector3(1, 0, 0), dangle_angle)
 	foot.origin = p_head.origin + dangle_basis * (-dangle_vector)
 	return foot

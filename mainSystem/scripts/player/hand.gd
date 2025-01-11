@@ -9,6 +9,8 @@ extends XRController3D
 @onready var grab_parent :Node3D= $handproxy/grabParent
 #@onready var grabjoint = $handproxy/grabjoint
 @onready var local_player :Node = $"../.."
+@onready var handproxy: Node3D = $handproxy
+@onready var handiktarget: Node3D = $handiktarget
 @onready var righthand :Node = %righthand
 @onready var lefthand :Node = %lefthand
 #TODO readd handtracking stuffs

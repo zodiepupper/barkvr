@@ -16,7 +16,7 @@ extends CharacterBody3D
 @onready var ui_ray: InteractionRay = %uiRay
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
-@onready var headtarget: Node3D = $xrplayer/Camera3D/headtarget
+@onready var headiktarget: Node3D = $xrplayer/Camera3D/headiktarget
 
 var head_pos: =Vector3():
 	get:

@@ -96,4 +96,3 @@ static func log_clampf(value: float, target: float, looseness: float) -> float:
 	var difference: float = value - target
 	var effectiveLooseness: float = looseness if difference >= 0 else looseness * -1
 	return target + effectiveLooseness * log(1 + (difference / effectiveLooseness))
-

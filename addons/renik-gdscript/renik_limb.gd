@@ -144,4 +144,3 @@ func is_valid_in_skeleton(skeleton: Skeleton3D) -> bool:
 		curr = skeleton.get_bone_parent(curr)
 
 	return curr != -1
-

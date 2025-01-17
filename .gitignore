@@ -6,5 +6,4 @@ exports/
 temp_unityimp/
 assets/deleteme/
 *.tmp
-*.import
 *.DS_Store

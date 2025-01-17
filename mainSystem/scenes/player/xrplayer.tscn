@@ -76,17 +76,19 @@ current = true
 
 [node name="camray" type="RayCast3D" parent="xrplayer/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13393)
-target_position = Vector3(0, 0, -1000)
+target_position = Vector3(0, 0, -10000)
 collision_mask = 65535
 hit_back_faces = false
 script = ExtResource("2_wrxg3")
 
 [node name="worldRay" parent="xrplayer/Camera3D" instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
+target_position = Vector3(0, 0, -10000)
 collision_mask = 3
 
 [node name="uiRay" parent="xrplayer/Camera3D" instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
+target_position = Vector3(0, 0, -10000)
 collision_mask = 260
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
@@ -114,9 +116,11 @@ script = ExtResource("2_npgyv")
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="worldRay" parent="xrplayer/righthand/handproxy" instance=ExtResource("4_316iy")]
+target_position = Vector3(0, 0, -10000)
 collision_mask = 3
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" instance=ExtResource("4_316iy")]
+target_position = Vector3(0, 0, -10000)
 collision_mask = 260
 
 [node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
@@ -181,9 +185,13 @@ script = ExtResource("2_npgyv")
 [node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]
 
 [node name="worldRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
+enabled = false
+target_position = Vector3(0, 0, -10000)
 collision_mask = 3
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
+enabled = false
+target_position = Vector3(0, 0, -10000)
 collision_mask = 260
 
 [node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy"]

@@ -18,7 +18,7 @@ var text : String = "":
 				label_3d.text = "loading:\n"+str(value)
 			else:
 				label_3d.text = str(value)
-			create_tween().tween_callback(func():
+			get_tree().create_tween().tween_callback(func():
 				mesh_instance_3d.detect_size(label_3d)
 				).set_delay(.01)
 
@@ -47,7 +47,7 @@ func _wait_for_thread_and_remove_loader(thread:Thread):
 func done(finish_text:String="done!"):
 	isloading = false
 	text = finish_text
-	var tween := create_tween()
+	var tween := get_tree().create_tween()
 	animation_player.pause()
 	animation_player3.pause()
 	tween.tween_property(halo1,"rotation_degrees",Vector3(),1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SPRING)

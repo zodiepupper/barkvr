@@ -21,7 +21,10 @@ var property_name:String = '':
 			)
 		#color_rect.color = col
 		col.v = .8
-		margin_container.modulate = col
+		#margin_container.modulate = col
+		color_rect.color.r = col.r
+		color_rect.color.g = col.g
+		color_rect.color.b = col.b
 		print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
 
 func _ready() -> void:

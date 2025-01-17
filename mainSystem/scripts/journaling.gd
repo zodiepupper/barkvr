@@ -424,15 +424,19 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	#Thread.set_thread_safety_checks_enabled(false)
 	var logging_prefix := asset_name+" : "
 	print("Import VRM: " + asset_name + " ----------------------")
-	var gltf = GLTFDocument.new()
+	var gltf
 	if "type" in data and data.type == 'fbx':
 		gltf = FBXDocument.new()
+	else:
+		gltf = GLTFDocument.new()
 	var flags := 16+8
 	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
 	GLTFDocument.register_gltf_document_extension(vrm_extension, true)
-	var state = GLTFState.new()
+	var state
 	if "type" in data and data.type == 'fbx':
 		state = FBXState.new()
+	else:
+		state = GLTFState.new()
 	# HANDLE_BINARY_EMBED_AS_BASISU crashes on some files in 4.0 and 4.1
 	state.handle_binary_image = GLTFState.HANDLE_BINARY_EMBED_AS_UNCOMPRESSED  # GLTFState.HANDLE_BINARY_EXTRACT_TEXTURES
 	var err :int

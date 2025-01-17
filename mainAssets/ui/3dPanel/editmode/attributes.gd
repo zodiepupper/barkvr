@@ -21,6 +21,7 @@ var enum_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn
 var string_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/string.tscn")
 var object_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/object.tscn")
 var color_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/color.tscn")
+var array_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/array.tscn")
 var is_field_focused = false
 var target : Object = null
 
@@ -75,6 +76,11 @@ func set_target(new_target, above_targets=[]):
 						var tmp :Object_Attribute = object_field.instantiate()
 						v_box_container.add_child(tmp)
 						tmp.call_deferred("set_data",fieldname, target, prop.name,above_targets)
+				TYPE_ARRAY:
+					print('array')
+					var tmp :Array_Attribute = array_field.instantiate()
+					v_box_container.add_child(tmp)
+					tmp.set_data(fieldname, new_target, prop.name)
 				TYPE_STRING_NAME:
 					var tmp :String_Attribute = string_field.instantiate()
 					v_box_container.add_child(tmp)

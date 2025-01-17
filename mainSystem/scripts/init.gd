@@ -6,7 +6,11 @@ extends Node3D
 
 @export var game_startup_scene :PackedScene
 
+var anarrayfortesting : Array
+
 func _ready():
+	for i in range(1000):
+		anarrayfortesting.append(i*1.1)
 	if game_startup_scene:
 		call_deferred("add_child",game_startup_scene.instantiate())
 	var dir = DirAccess.open('user://')

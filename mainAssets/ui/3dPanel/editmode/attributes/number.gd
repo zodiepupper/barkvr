@@ -5,11 +5,11 @@ extends Control
 @onready var val = $VBoxContainer/position/v/val
 @onready var type_label = $VBoxContainer/position/v/Panel2/Label
 
-var target:Object
+var target:Variant
 var _is_editing:bool = false:
 	get:
 		return _check_focus()
-var property_name:String = ''
+var property_name:Variant = ''
 @export_enum("float","int") var type = 0:
 	set(val):
 		type = val
@@ -43,9 +43,9 @@ func _process(_delta):
 		update_fields()
 
 func update_fields():
-	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
+	if target and (property_name is not String or !property_name.is_empty()) and !_is_editing and (is_instance_valid(target) or !(target is Object)) and !_check_focus():
 		val.text = str(target[property_name])
-	elif !is_instance_valid(target):
+	elif !is_instance_valid(target) and target is Object:
 		target = null
 		val.text = ''
 
@@ -56,7 +56,7 @@ func _check_focus():
 
 ## sets the name, field target node, and the property name for the field to look for
 ## name:String, new_target:Node, new_property_name:String
-func set_data(new_name:String, new_target:Object, new_property_name:String):
+func set_data(new_name:String, new_target:Variant, new_property_name:Variant):
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name

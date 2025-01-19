@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://12mm63qyglpf"]
+[gd_scene load_steps=6 format=3 uid="uid://12mm63qyglpf"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/player/interactionRay.gd" id="1_nnnux"]
 [ext_resource type="Script" path="res://mainSystem/scenes/objects/tools/Line3D.gd" id="2_hejn6"]
+[ext_resource type="PackedScene" uid="uid://b5e67b4tlsvfs" path="res://mainSystem/scenes/player/rayvis.tscn" id="3_6jlx7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6bpur"]
 shading_mode = 0
@@ -16,13 +17,15 @@ _surfaces = [{
 "vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 204, 204, 61, 0, 0, 0, 0)
 }]
 
-[node name="handray" type="RayCast3D"]
-target_position = Vector3(0, 0, -1000)
-collision_mask = 4
+[node name="handray" type="Node3D"]
 script = ExtResource("1_nnnux")
+query_on_process = true
+target_position = Vector3(0, 0, -1e+09)
 
 [node name="Line3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_6bpur")
 mesh = SubResource("ArrayMesh_qvybh")
 script = ExtResource("2_hejn6")
 iswobbly = false
+
+[node name="rayvis" parent="." instance=ExtResource("3_6jlx7")]

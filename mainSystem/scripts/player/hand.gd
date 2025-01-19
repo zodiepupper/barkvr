@@ -2,8 +2,8 @@ class_name BarkHand
 extends XRController3D
 
 @onready var grabArea : Area3D = $handproxy/grabArea
-@onready var world_ray : RayCast3D = $handproxy/worldRay
-@onready var ui_ray : RayCast3D = $handproxy/uiRay
+@onready var world_ray : Node3D = $handproxy/worldRay
+@onready var ui_ray : Node3D = $handproxy/uiRay
 @onready var handmenu :Node3D = %"handmenu"
 @onready var hand_menu_point :Node3D = $handproxy/handMenuPoint
 @onready var grab_parent :Node3D= $handproxy/grabParent

@@ -1,8 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://r68jre2w5k33"]
+[gd_scene load_steps=19 format=3 uid="uid://r68jre2w5k33"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/player/xrplayer-controller.gd" id="1_iwrfe"]
 [ext_resource type="Script" path="res://mainSystem/scripts/player/hand.gd" id="2_npgyv"]
-[ext_resource type="Script" path="res://mainSystem/scripts/player/flat_camera.gd" id="2_wrxg3"]
 [ext_resource type="PackedScene" uid="uid://12mm63qyglpf" path="res://mainSystem/scenes/player/handray.tscn" id="4_316iy"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="5_d1mpu"]
 [ext_resource type="Texture2D" uid="uid://cncindvbjlp8g" path="res://mainAssets/ui/assets/wrist_menu/UI_mockup_trasparent.png" id="6_j5bbn"]
@@ -73,23 +72,22 @@ metadata/health = SubResource("GDScript_swjn5")
 
 [node name="Camera3D" type="Camera3D" parent="xrplayer"]
 current = true
+fov = 90.0
 
 [node name="camray" type="RayCast3D" parent="xrplayer/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13393)
 target_position = Vector3(0, 0, -10000)
 collision_mask = 65535
 hit_back_faces = false
-script = ExtResource("2_wrxg3")
 
-[node name="worldRay" parent="xrplayer/Camera3D" instance=ExtResource("4_316iy")]
+[node name="worldRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
-target_position = Vector3(0, 0, -10000)
-collision_mask = 3
+enabled = false
+query_exception_nodes = [NodePath("../../..")]
 
-[node name="uiRay" parent="xrplayer/Camera3D" instance=ExtResource("4_316iy")]
+[node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
-target_position = Vector3(0, 0, -10000)
-collision_mask = 260
+query_exception_nodes = [NodePath("../../..")]
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
@@ -115,13 +113,12 @@ script = ExtResource("2_npgyv")
 [node name="grabParent" type="Node3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="worldRay" parent="xrplayer/righthand/handproxy" instance=ExtResource("4_316iy")]
-target_position = Vector3(0, 0, -10000)
-collision_mask = 3
+[node name="worldRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
+enabled = false
+query_exception_nodes = [NodePath("../../../..")]
 
-[node name="uiRay" parent="xrplayer/righthand/handproxy" instance=ExtResource("4_316iy")]
-target_position = Vector3(0, 0, -10000)
-collision_mask = 260
+[node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
+query_exception_nodes = [NodePath("../../../..")]
 
 [node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.05, 0, 4.37114e-09)
@@ -184,15 +181,12 @@ script = ExtResource("2_npgyv")
 
 [node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]
 
-[node name="worldRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
+[node name="worldRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 enabled = false
-target_position = Vector3(0, 0, -10000)
-collision_mask = 3
+query_exception_nodes = [NodePath("../../../..")]
 
-[node name="uiRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
-enabled = false
-target_position = Vector3(0, 0, -10000)
-collision_mask = 260
+[node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
+query_exception_nodes = [NodePath("../../../..")]
 
 [node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)

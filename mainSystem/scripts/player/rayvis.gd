@@ -3,15 +3,13 @@ extends Node3D
 @onready var physics = $physics
 @onready var cursor = $cursor
 
-@export var leftside := false
-
 var cursor_size_factor = 50.0
 
 var target := Vector3()
 
 func _process(_delta):
 	if get_tree().get_first_node_in_group("player"):
-		var dist = target.distance_to(get_tree().get_first_node_in_group("playerCamera").global_position)
+		var dist = target.distance_to(get_viewport().get_camera_3d().global_position)
 		pointer.scale = Vector3(1,1,1)*dist/cursor_size_factor
 		physics.scale = Vector3(1,1,1)*dist/cursor_size_factor
 		cursor.scale = Vector3(1,1,1)*dist/cursor_size_factor
@@ -23,10 +21,10 @@ func _process(_delta):
 func setType(type:String):
 	pass
 	if type == "rigidbody":
-#		physics.show()
-#		pointer.hide()
-		cursor.show()
+		physics.show()
+		pointer.hide()
+		#cursor.show()
 	if type == "pointer":
-#		physics.hide()
-#		pointer.show()
-		cursor.show()
+		physics.hide()
+		pointer.show()
+		#cursor.show()

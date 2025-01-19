@@ -300,10 +300,10 @@ func _input(event):
 			if ui_ray.is_colliding():
 				LocalGlobals.playerreleaseuifocus.emit()
 				ui_ray.click()
-				ui_ray.release()
+				#ui_ray.release()
 			elif world_ray.is_colliding():
 				world_ray.click()
-				world_ray.release()
+				#world_ray.release()
 		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
 			lookdrag = {}
 	if event is InputEventScreenDrag:
@@ -336,11 +336,11 @@ func flat_movement():
 			for item in grabbed.values():
 				if "node" in item and "primary" in item.node:
 					item.node.primary()
-		else:
-			if ui_ray.is_colliding():
-				ui_ray.click()
-			elif world_ray.is_colliding():
-				world_ray.click()
+		#else:
+			#if ui_ray.is_colliding():
+				#ui_ray.click()
+			#elif world_ray.is_colliding():
+				#world_ray.click()
 	if Input.is_action_just_released("click"):
 		if grabbed.size() > 0:
 			for item in grabbed.values():

@@ -35,8 +35,8 @@ func add_item(text:String,metadata:Variant,replace:String=''):
 				else:
 					tree[item_id].tree_item = create_item()
 					#tree[item_id].tree_item.add_button(0,load("res://assets/icons/teenyicons/solid/bin.svg"))
-				if metadata.node.has_method('equip_to_local_user'):
-					tree[item_id].tree_item.add_button(0, load("res://assets/icons/teenyicons/outline/drag.svg"), -1, false, "equip avatar")
+				#if metadata.node.has_method('equip_to_local_user'):
+					#tree[item_id].tree_item.add_button(0, load("res://assets/icons/teenyicons/outline/drag.svg"), -1, false, "equip avatar")
 					
 				tree[item_id].tree_item.collapsed = true
 				tree[item_id].tree_item.set_text(0,text)
@@ -71,3 +71,6 @@ func update_item(node:Node) -> void:
 				tree[item_id].tree_item.set_text(0,node.get_meta("display_name"))
 			else:
 				tree[item_id].tree_item.set_text(0,node.name)
+
+func _gui_input(event: InputEvent) -> void:
+	print(event)

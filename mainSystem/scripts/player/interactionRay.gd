@@ -140,7 +140,7 @@ func _process(_delta):
 			# get the current viewport's camera and project a ray
 			# from the camera based on the cursor position
 			var cam = get_viewport().get_camera_3d()
-			target_position = (cam.project_local_ray_normal(get_viewport().get_mouse_position()))*-10000.0
+			target_position = to_local(cam.project_position(get_viewport().get_mouse_position(),10000))
 		# and the mouse is captured by the window...
 		else:
 			# set the target_position to be very far straight ahead

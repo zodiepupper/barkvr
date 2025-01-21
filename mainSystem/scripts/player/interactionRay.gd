@@ -181,7 +181,6 @@ func interact() -> void:
 				prevHover = tmpcol
 		else:
 			if !pressed:
-				print(pressed)
 				if "laser_input" in prevHover:
 					prevHover.laser_input({
 						'hovering': prevHover == tmpcol,
@@ -280,7 +279,6 @@ func scrolldown():
 				})
 
 func click():
-	print('click')
 	if is_colliding():
 		var tmpcol = get_collider()
 		if tmpcol.has_method("laser_input"):
@@ -292,10 +290,8 @@ func click():
 				})
 			pressed = true
 			prevPressed = tmpcol
-	print(pressed)
 
 func release():
-	print('release')
 	if is_colliding() and !prevPressed:
 		var tmpcol = get_collider()
 		if tmpcol.has_method("laser_input"):

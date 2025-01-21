@@ -10,9 +10,7 @@ extends CharacterBody3D
 @onready var camera_3d: Camera3D = $xrplayer/Camera3D
 @onready var xrplayer: XROrigin3D = $xrplayer
 @onready var playercamoffset: Node3D = $playercamoffset
-@onready var camray: RayCast3D = $xrplayer/Camera3D/camray
 @onready var collision_shape_3d: CollisionShape3D = %CollisionShape3D
-@onready var world_ray: InteractionRay = %worldRay
 @onready var ui_ray: InteractionRay = %uiRay
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
@@ -83,8 +81,6 @@ func _toggle_xr(value):
 	if is_instance_valid(lefthand) and is_instance_valid(righthand):
 		lefthand.rays_disabled = !value
 		righthand.rays_disabled = !value
-		world_ray.enabled = !value
-		world_ray.visible = !value
 		ui_ray.enabled = !value
 		ui_ray.visible = !value
 	if !value:
@@ -100,8 +96,6 @@ func _toggle_xr(value):
 		righthand.position = Vector3(.2,.6,-.2)
 		lefthand.position = Vector3(-.2,.6,0.0)
 		lefthand.rotation_degrees = Vector3(-90.0,0,0)
-		world_ray.enabled = true
-		world_ray.show()
 		ui_ray.enabled = true
 		ui_ray.show()
 	else:
@@ -119,7 +113,6 @@ func respawn_player():
 
 func _ready():
 	name = OS.get_unique_id()
-	world_ray.add_exception(self)
 	ui_ray.add_exception(self)
 	lefthand.rays_disabled = !vr_mode_enabled
 	righthand.rays_disabled = !vr_mode_enabled
@@ -300,10 +293,6 @@ func _input(event):
 			if ui_ray.is_colliding():
 				LocalGlobals.playerreleaseuifocus.emit()
 				ui_ray.click()
-				#ui_ray.release()
-			elif world_ray.is_colliding():
-				world_ray.click()
-				#world_ray.release()
 		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
 			lookdrag = {}
 	if event is InputEventScreenDrag:
@@ -328,10 +317,6 @@ func flat_movement():
 		xr_camera_3d.rotate_x(joy_look_vector.y*MOUSE_SPEED)
 		camera_3d.rotate_x(joy_look_vector.y*MOUSE_SPEED)
 	if Input.is_action_just_pressed("click"):
-		if LocalGlobals.player_state != 0:
-			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-		else:
-			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 		if grabbed.size() > 0:
 			for item in grabbed.values():
 				if "node" in item and "primary" in item.node:
@@ -347,7 +332,7 @@ func flat_movement():
 				if "node" in item and "primary_released" in item.node:
 					item.node.primary_released()
 		ui_ray.release()
-		world_ray.release()
+		#world_ray.release()
 	if Input.is_action_just_pressed("rightclick"):
 		if vr_mode_enabled:
 			righthand.grip()
@@ -364,8 +349,8 @@ func flat_movement():
 		else:
 			contextMenuSummon()
 	if !Input.is_action_pressed("rightclick"):
-		if camray.is_colliding():
-			grab_point = camera_3d.to_local(camray.get_collision_point())
+		if ui_ray.is_colliding():
+			grab_point = camera_3d.to_local(ui_ray.get_collision_point())
 		else:
 			grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
@@ -426,10 +411,6 @@ func grip():
 	print('grip')
 	if ui_ray.is_colliding():
 		var rayCollided = ui_ray.get_collider()
-		if rayCollided.has_meta("grabbable"):
-			grab(rayCollided,true)
-	elif world_ray.is_colliding():
-		var rayCollided = world_ray.get_collider()
 		if rayCollided.has_meta("grabbable"):
 			grab(rayCollided,true)
 	grabbing = true

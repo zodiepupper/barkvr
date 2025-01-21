@@ -2,7 +2,6 @@ class_name BarkHand
 extends XRController3D
 
 @onready var grabArea : Area3D = $handproxy/grabArea
-@onready var world_ray : Node3D = $handproxy/worldRay
 @onready var ui_ray : Node3D = $handproxy/uiRay
 @onready var handmenu :Node3D = %"handmenu"
 @onready var hand_menu_point :Node3D = $handproxy/handMenuPoint
@@ -34,15 +33,11 @@ var scalinggrabbedstartscale : Vector3
 var rays_disabled : bool = false:
 	set(value):
 		rays_disabled = value
-		if is_instance_valid(world_ray) and is_instance_valid(ui_ray):
-			world_ray.enabled = !value
-			world_ray.visible = !value
+		if is_instance_valid(ui_ray):
 			ui_ray.enabled = !value
 			ui_ray.visible = !value
 
 func _ready():
-	world_ray.enabled = !rays_disabled
-	world_ray.visible = !rays_disabled
 	ui_ray.enabled = !rays_disabled
 	ui_ray.visible = !rays_disabled
 	if name == "righthand":
@@ -121,18 +116,10 @@ func _process(_delta: float) -> void:
 			var ts = global_position.distance_to(otherhand.global_position)-scalinggrabbedstartdist
 			ts *= 4.0
 			scalinggrabbedobject.scale = scalinggrabbedstartscale+Vector3(ts,ts,ts)
-		if ui_ray.is_colliding():
-			world_ray.enabled = false
-			world_ray.hide()
-		else:
-			world_ray.enabled = true
-			world_ray.show()
 
 func update_raycasts():
 	ui_ray.force_raycast_update()
 	ui_ray.force_update_transform()
-	world_ray.force_raycast_update()
-	world_ray.force_update_transform()
 
 func buttonPressed(btn_name):
 	buttons[btn_name] = true
@@ -141,8 +128,6 @@ func buttonPressed(btn_name):
 	if btn_name == "trigger_click":
 		if ui_ray.is_colliding():
 			ui_ray.click()
-		else:
-			world_ray.click()
 		for item in grabbed.values():
 			if 'primary' in item.node:
 				item.node.primary()
@@ -188,10 +173,6 @@ func grip():
 	elif grabArea.get_overlapping_bodies().size() > 0:
 		for item in grabArea.get_overlapping_bodies():
 			grab(item,true)
-	elif world_ray.is_colliding():
-		var rayCollided = world_ray.get_collider()
-		if rayCollided.has_meta("grabbable"):
-			grab(rayCollided,true)
 	grabbing = true
 
 func ungrip():

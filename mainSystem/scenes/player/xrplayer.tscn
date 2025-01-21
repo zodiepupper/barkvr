@@ -74,19 +74,9 @@ metadata/health = SubResource("GDScript_swjn5")
 current = true
 fov = 90.0
 
-[node name="camray" type="RayCast3D" parent="xrplayer/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13393)
-target_position = Vector3(0, 0, -10000)
-collision_mask = 65535
-hit_back_faces = false
-
-[node name="worldRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
-unique_name_in_owner = true
-enabled = false
-query_exception_nodes = [NodePath("../../..")]
-
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
+visible = false
 query_exception_nodes = [NodePath("../../..")]
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
@@ -112,10 +102,6 @@ script = ExtResource("2_npgyv")
 
 [node name="grabParent" type="Node3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-
-[node name="worldRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
-enabled = false
-query_exception_nodes = [NodePath("../../../..")]
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]
@@ -180,10 +166,6 @@ show_when_tracked = true
 script = ExtResource("2_npgyv")
 
 [node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]
-
-[node name="worldRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
-enabled = false
-query_exception_nodes = [NodePath("../../../..")]
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]

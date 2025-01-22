@@ -13,8 +13,9 @@ top_radius = 0.0
 bottom_radius = 0.01
 height = 0.05
 
-[node name="Linepen" type="Area3D"]
+[node name="Linepen" type="StaticBody3D"]
 script = ExtResource("1_2tj5s")
+metadata/grabbable = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_wt71q")

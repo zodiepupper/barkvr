@@ -28,77 +28,150 @@ extends StaticBody3D
 @export var callscript : Script:
 	set(value):
 		callscript = value
+		# we need to immediately instantiate the callscript
+		# so it can be tracked and continue to exist properly
+		# for consistent behavior and access to the proper
+		# object functions, like nodes needing to be in the tree
 		if callscript and callscript.can_instantiate():
 			callscriptinstance = callscript.new()
 
+## the instantiated callscript
 var callscriptinstance:
 	set(value):
 		callscriptinstance = value
+		# if the instance is a Node, we add it as a child to the 
+		# button so it can be in the scene and behave correctly
 		if callscriptinstance is Node:
 			add_child(callscriptinstance)
 
-var mesh_target_size := Vector2()
+# target sizes for tweening the size of the quad
+# at different states
+var MESH_TARGET_SIZE_CLICKED := Vector2(.02,.02)
+var MESH_TARGET_SIZE_HOVERED := Vector2(.11,.11)
+var MESH_TARGET_SIZE_INACTIVE := Vector2(.09,.09)
+
+# transition mode for the tweens
+var trans_mode := Tween.TRANS_CIRC
+# tween time
+var tween_time := .5
+
+# used to track the lable target position so the
+# position can be lerped toward this value
 var label_target_position := 0.0
 
+# the alpha... idk
 var alpha := 0.5
 
+# for tracking whether the button is hovered
 var hover := false
+# for tracking whether the button is currently
+# being clicked
 var isclicked := false
 
+# a signal to be thrown when clicked
 signal clicked
 
+# resets the label text once the node has
+# entered the tree so it can run the proper
+# initialization code for the value 
+# (reduces duplicate code this way)
 func _ready():
 	label_3d.text = text
+	# apply the endhover state on ready to make sure the buttons start off
+	# with the correct visuals
+	tween_endhover()
 
-func _physics_process(delta):
-	var tmp = mesh_instance_3d.mesh.surface_get_material(0)
-	tmp.albedo_color.a = lerpf(tmp.albedo_color.a, alpha, .1)
-	tmp.albedo_color.r = lerpf(tmp.albedo_color.r, alpha, .1)
-	tmp.albedo_color.g = lerpf(tmp.albedo_color.g, alpha, .1)
-	tmp.albedo_color.b = lerpf(tmp.albedo_color.b, alpha, .1)
-	if isclicked:
-		mesh_target_size = Vector2(.02,.02)
-		label_target_position = -.01
-	elif hover:
-		mesh_target_size = Vector2(.11,.11)
-		label_target_position = .01
-	else:
-		mesh_target_size = Vector2(.09,.09)
-		label_target_position = .0
-	label_3d.position.y = lerpf(label_3d.position.y, label_target_position, .1)
-	mesh_instance_3d.mesh.size.y = lerpf(mesh_instance_3d.mesh.size.y,mesh_target_size.y,.2)
-	mesh_instance_3d.mesh.size.x = lerpf(mesh_instance_3d.mesh.size.x,mesh_target_size.y,.2)
-
+# checks if the callscript has already been setup
+# and sets it up if it hasn't been already
 func _check_callscriptinstance():
 	if !is_instance_valid(callscriptinstance) and callscript != null and callscript.can_instantiate():
 		callscriptinstance = callscript.new()
 
+# capture generic laser input from the interaction ray
 func laser_input(data:Dictionary):
+	# ensures the callscript instance is setup
 	_check_callscriptinstance()
+	# switch case for the interaction state
 	match data.action:
+		# if click event...
 		"click":
+			# check that the event is properly formatted with a pressed variable...
 			if "pressed" in data:
+				# run tweens for click visuals
+				tween_click()
+				# if a button is actually pressed in this event (otherwise it is a
+				# button released event)
 				if data.pressed:
+					# set isclicked to true to track the clicked state
+					# this was a holdover but is not used for the hover 
+					# state tracking
 					isclicked = true
+					# throw clicked signal
 					clicked.emit()
+					# if a spawn item is set, spawn the item
 					if itemToSpawn != null:
+						# allow for spawning multiple if the button is configured to
 						for i in range(item_spawn_multiplier):
+							# insantiate the item to spawn
 							var tmp = load(itemToSpawn).instantiate()
+							# add item to the shared world root
 							get_tree().get_first_node_in_group("localworldroot").add_child(tmp)
+							# set the global position immediately to the location of the button
 							tmp.global_position = global_position
+					# if the callscript instance exists and has the onclick method...
 					if callscriptinstance != null and 'onclick' in callscriptinstance:
+						# call onclick on it
 						callscriptinstance.onclick()
-					if label_3d.text == "set root":
-						if LocalGlobals.editor_refs.has('inspector'):
-							LocalGlobals.editor_refs.inspector.setRoot(get_tree().get_first_node_in_group('localworldroot'))
+				# if this is a button release...
 				else:
+					# run tween for visuals
+					tween_end_click()
+					# set isclicked to false
 					isclicked = false
+		# if the event is a hover event...
 		"hover":
+			# if a button is not already clicked and it's the first event where the 
+			# 3d button is hovered...
+			if !isclicked and !hover:
+				# run tweens for visual
+				tween_end_click()
+			# if callscript is valid and has onhover...
 			if callscriptinstance != null and 'onhover' in callscriptinstance:
+				# call onhover
 				callscriptinstance.onhover()
+			# if the hovering event is actually currently hovering...
 			if data.has('hovering') and data['hovering'] == true:
-				alpha = 1.0
+				# run tweens for visuals
+				tween_hover()
+				# set hover to true
 				hover = true
+			# if the event has "hovering" set to false that means it is
+			# an exiting hover event (the laser is leaving the collider)...
 			else:
-				alpha = 0.5
+				# run tweens for visuals
+				tween_endhover()
+				# set hover to false
 				hover = false
+
+# these should probably be self explanatory (tell zodie to add comments if that's not true x3)
+
+func tween_click():
+	create_tween().tween_property(mesh_instance_3d,"mesh:size",MESH_TARGET_SIZE_CLICKED,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(label_3d,"position:y",-.01,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+
+func tween_end_click():
+	create_tween().tween_property(mesh_instance_3d,"mesh:size",MESH_TARGET_SIZE_HOVERED,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(label_3d,"position:y",.01,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+
+func tween_hover():
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:r",1.0,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:g",1.0,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:b",1.0,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:a",1.0,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+
+func tween_endhover():
+	create_tween().tween_property(mesh_instance_3d,"mesh:size",MESH_TARGET_SIZE_INACTIVE,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:r",.5,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:g",.5,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:b",.5,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)
+	create_tween().tween_property(mesh_instance_3d.mesh.surface_get_material(0),"albedo_color:a",.5,tween_time).set_ease(Tween.EASE_OUT).set_trans(trans_mode)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://r68jre2w5k33"]
+[gd_scene load_steps=18 format=3 uid="uid://r68jre2w5k33"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/player/xrplayer-controller.gd" id="1_iwrfe"]
 [ext_resource type="Script" path="res://mainSystem/scripts/player/hand.gd" id="2_npgyv"]
@@ -21,10 +21,6 @@ albedo_color = Color(0.6, 0.466667, 0.866667, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_mky8q"]
 material = SubResource("StandardMaterial3D_cw1w7")
 size = Vector3(0.05, 0.05, 0.15)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ndmcs"]
-margin = 0.0
-size = Vector3(0, 0, 0)
 
 [sub_resource type="GDScript" id="GDScript_utwae"]
 script/source = "extends Node3D
@@ -122,14 +118,6 @@ skeleton = NodePath("")
 [node name="handMenuPoint" type="Node3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="xrplayer/righthand/handproxy"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-visible = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/StaticBody3D"]
-shape = SubResource("BoxShape3D_ndmcs")
-disabled = true
-
 [node name="wristmenu" type="Node3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(6.03961e-14, 1.9845e-08, 0.454, 1.5876e-07, 0.454, -1.9845e-08, -0.454, 1.5876e-07, -3.90799e-14, 1.74846e-08, 0, 0.202191)
 script = SubResource("GDScript_utwae")
@@ -186,22 +174,8 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 mesh = SubResource("BoxMesh_mky8q")
 skeleton = NodePath("")
 
-[node name="Label3D" type="Label3D" parent="xrplayer/lefthand/handproxy"]
-transform = Transform3D(-0.285086, 0, -0.958502, 0, 1, 0, 0.958502, 0, -0.285086, -5.00462e-10, 0.1, 0.00572462)
-visible = false
-pixel_size = 0.001
-text = "test"
-
 [node name="handMenuPoint" type="Node3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="xrplayer/lefthand/handproxy"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-visible = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/StaticBody3D"]
-shape = SubResource("BoxShape3D_ndmcs")
-disabled = true
 
 [node name="notificationparent" type="Node3D" parent="xrplayer/lefthand/handproxy" groups=["notificationparent"]]
 transform = Transform3D(-4.37114e-09, -4.37114e-09, 0.1, -4.37114e-09, -0.1, -4.37114e-09, 0.1, -4.37114e-09, 4.37114e-09, 0.048, -0.064, -0.077)

@@ -64,6 +64,7 @@ var MOUSE_SPEED := .1
 var lookdrag : Dictionary = {} #{'index': -1,'relative': Vector2(),'velocity': Vector2()}
 @export var touchsticklook := false
 var grab_point := Vector3()
+var screen_just_touched := false
 
 @export var force_set_vr_enabled := false
 
@@ -281,18 +282,21 @@ func _input(event):
 			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.ctrl_pressed:
 				scale *= .9
 	if event is InputEventScreenTouch:
-		if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
-			lookdrag = {
-				'index': event.index,
-				'relative': Vector2(),
-				'velocity': Vector2(),
-				'startposition': event.position,
-				'position': event.position
-			}
 		if event.pressed:
-			if ui_ray.is_colliding():
-				LocalGlobals.playerreleaseuifocus.emit()
-				ui_ray.click()
+			if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
+				lookdrag = {
+					'index': event.index,
+					'relative': Vector2(),
+					'velocity': Vector2(),
+					'startposition': event.position,
+					'position': event.position
+				}
+			get_tree().create_timer(.05).timeout.connect(func():
+				if lookdrag.is_empty():
+					LocalGlobals.playerreleaseuifocus.emit()
+					Input.warp_mouse(event.position)
+					ui_ray.click()
+				)
 		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
 			lookdrag = {}
 	if event is InputEventScreenDrag:

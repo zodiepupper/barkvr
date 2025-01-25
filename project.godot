@@ -16,10 +16,10 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
 config/features=PackedStringArray("4.3", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 0)
-boot_splash/image="res://assets/icons/barkiconrounded.png"
-boot_splash/fullsize=false
 config/icon="res://assets/icons/barkiconrounded.png"
 config/windows_native_icon="res://assets/barkvrcorgi.ico"
+boot_splash/image="res://assets/icons/barkiconrounded.png"
+boot_splash/fullsize=false
 
 [audio]
 
@@ -190,7 +190,6 @@ cleargizmos={
 
 [input_devices]
 
-pointing/emulate_touch_from_mouse=true
 pointing/emulate_mouse_from_touch=false
 pointing/android/enable_long_press_as_right_click=true
 pointing/android/enable_pan_and_scale_gestures=true

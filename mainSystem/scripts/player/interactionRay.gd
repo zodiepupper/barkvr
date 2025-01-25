@@ -14,6 +14,9 @@ var pressed := false:
 	set(val):
 		pressed = val
 
+var using_touch := false
+var touch_timer := Timer.new()
+
 var otherray : InteractionRay
 
 var last_point := Vector3()
@@ -125,6 +128,12 @@ func add_exception_rid(rid : RID) -> void:
 	if query_exceptions.has(rid):
 		query_exceptions.erase(rid)
 
+func _ready() -> void:
+	add_child(touch_timer)
+	touch_timer.timeout.connect(func():
+		using_touch = false
+		)
+
 func _process(_delta):
 	if enabled and query_on_process:
 		query_raycast()
@@ -134,7 +143,7 @@ func _process(_delta):
 		interact()
 		
 	# if we aren't in vr... (note, this function assumes that `target_position_is_local = true`)
-	if !get_viewport().use_xr:
+	if !get_viewport().use_xr and !using_touch:
 		# and the mouse is not captured by the window...
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 			# get the current viewport's camera and project a ray
@@ -218,6 +227,10 @@ func procrayvis():
 	vis.target = vispos
 
 func _input(event):
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		using_touch = true
+		touch_timer.start(.5)
+		target_position = to_local(get_viewport().get_camera_3d().project_position(event.position,10000))
 	if event is InputEventGesture:
 		if is_colliding() and prevHover is Panel3D:
 			prevHover.laser_input({

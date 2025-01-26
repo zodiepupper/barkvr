@@ -1,13 +1,27 @@
 extends StaticBody3D
 
+## this pen uses a linemesh to draw
+
+# tracks if the primary button is pressed
 var pressed := false
+# tracks whether we are currently drawing
 var drawing := false
 
+# shared vertex array for keeping track of the mesh
+# that is currently being edited
 var vertices : PackedVector3Array
+# tracks the meshinstance that is currently being edited
 var current_meshinstance : MeshInstance3D
+# tracks teh current arraymesh
 var current_amesh : ArrayMesh
+# shared mesh arrays like the vertex array
 var mesh_arrays : Array
+# shared material for all the drawn meshes
+# instantiating this here makes it so all 
+# the meshes created with this pen use the 
+# same materail
 var material := StandardMaterial3D.new()
+
 
 @onready var tippoint: Node3D = $tippoint
 

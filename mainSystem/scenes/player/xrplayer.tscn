@@ -72,7 +72,6 @@ fov = 90.0
 
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
-visible = false
 query_exception_nodes = [NodePath("../../..")]
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]

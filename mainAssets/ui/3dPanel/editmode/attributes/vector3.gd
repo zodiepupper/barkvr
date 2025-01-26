@@ -15,7 +15,6 @@ var event_supplier
 
 func _ready():
 	event_supplier = Engine.get_singleton("event_manager")
-	print("event suppliervec3: "+str(event_supplier))
 	xval.text_changed.connect(func(new_text):
 		event_supplier.set_property(
 			event_supplier.root.get_path_to(target),

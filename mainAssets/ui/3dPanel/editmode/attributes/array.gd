@@ -20,7 +20,7 @@ var _is_editing:bool = false
 var property_name:String = '':
 	set(val):
 		property_name = val
-		print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
+		#print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
 
 func _ready() -> void:
 	expand.toggled.connect(func(on:bool):

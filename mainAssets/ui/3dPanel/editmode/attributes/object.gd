@@ -25,7 +25,7 @@ var property_name:String = '':
 		color_rect.color.r = col.r
 		color_rect.color.g = col.g
 		color_rect.color.b = col.b
-		print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
+		#print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
 
 func _ready() -> void:
 	expand.toggled.connect(func(on:bool):

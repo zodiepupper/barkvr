@@ -141,8 +141,6 @@ func _ready():
 	titlebar_top_row.visible = !hide_titlebar
 	titlebar_active.visible = !hide_titlebar
 	event_manager = Engine.get_singleton("event_manager")
-	print("event supplierattrib: "+str(event_manager))
-	print(event_manager)
 	dupbtn.pressed.connect(func():
 		if target:
 			var tmp :Node=target.duplicate()

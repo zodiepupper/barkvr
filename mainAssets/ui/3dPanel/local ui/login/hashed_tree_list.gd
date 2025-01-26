@@ -71,6 +71,3 @@ func update_item(node:Node) -> void:
 				tree[item_id].tree_item.set_text(0,node.get_meta("display_name"))
 			else:
 				tree[item_id].tree_item.set_text(0,node.name)
-
-func _gui_input(event: InputEvent) -> void:
-	print(event)

@@ -227,9 +227,9 @@ func procrayvis():
 	vis.target = vispos
 
 func _input(event):
+	using_touch = false
 	if event is InputEventScreenTouch or event is InputEventScreenDrag:
 		using_touch = true
-		touch_timer.start(.5)
 		target_position = to_local(get_viewport().get_camera_3d().project_position(event.position,10000))
 	if event is InputEventGesture:
 		if is_colliding() and prevHover is Panel3D:
@@ -239,7 +239,7 @@ func _input(event):
 				'event':event,
 				'ray_origin': global_position,
 				'ray_direction': to_global(target_position),
-				'index': interaction_index
+				'index': -1
 			})
 	if event is InputEventMouseButton:
 		if event.pressed:

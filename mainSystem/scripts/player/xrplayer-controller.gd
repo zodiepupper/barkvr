@@ -62,6 +62,13 @@ var vrinspector : Control = null
 # flat vars
 var MOUSE_SPEED := .1
 var lookdrag : Dictionary = {} #{'index': -1,'relative': Vector2(),'velocity': Vector2()}
+var lastlookdragindex : int = -1
+var movedrag : Dictionary = {} #{'index': -1,'relative': Vector2(),'velocity': Vector2()}
+var lastmovedragindex :int = -1
+var touch_move_left := 0.0
+var touch_move_right := 0.0
+var touch_move_forward := 0.0
+var touch_move_backward := 0.0
 @export var touchsticklook := false
 var grab_point := Vector3()
 var screen_just_touched := false
@@ -217,7 +224,7 @@ func _physics_process(delta):
 			velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
 	else:
 		flat_movement()
-		if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
+		if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
 			velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
 		
 	
@@ -289,29 +296,68 @@ func _input(event):
 					'relative': Vector2(),
 					'velocity': Vector2(),
 					'startposition': event.position,
-					'position': event.position
+					'position': event.position,
+					'dragstarttime': Time.get_ticks_msec()
 				}
-			get_tree().create_timer(.05).timeout.connect(func():
-				if lookdrag.is_empty():
-					LocalGlobals.playerreleaseuifocus.emit()
-					Input.warp_mouse(event.position)
-					ui_ray.click()
-				)
+			else:
+				movedrag = {
+					'index': event.index,
+					'relative': Vector2(),
+					'velocity': Vector2(),
+					'startposition': event.position,
+					'position': event.position,
+					'dragstarttime': Time.get_ticks_msec()
+				}
+				screen_just_touched = true
+		
 		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
+			if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
+				_screen_tap_click(event)
 			lookdrag = {}
+		if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
+			if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			and Time.get_ticks_msec()-movedrag.dragstarttime<100:
+				_screen_tap_click(event)
+			movedrag = {}
+			touch_move_left = 0.0
+			touch_move_right = 0.0
+			touch_move_forward = 0.0
+			touch_move_backward = 0.0
+			print('clearing touch movement')
 	if event is InputEventScreenDrag:
+		if movedrag and event.index == movedrag.index:
+			movedrag = {
+				'index': event.index,
+				'relative': event.relative,
+				'velocity': event.velocity,
+				'startposition': movedrag.startposition,
+				'position': event.position,
+				'dragstarttime': movedrag.dragstarttime
+			}
+			touch_move_left = (movedrag.startposition.x-event.position.x)*.01
+			touch_move_right = (event.position.x-movedrag.startposition.x)*.01
+			touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
+			touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
 		if lookdrag and event.index == lookdrag.index:
 			lookdrag = {
 				'index': event.index,
 				'relative': event.relative,
 				'velocity': event.velocity,
 				'startposition': lookdrag.startposition,
-				'position': event.position
+				'position': event.position,
+				'dragstarttime': lookdrag.dragstarttime
 			}
 			if !touchsticklook:
 				rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
 				xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 				camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+
+func _screen_tap_click(event:InputEvent) -> void:
+	LocalGlobals.playerreleaseuifocus.emit()
+	ui_ray.click()
+	ui_ray.release()
+	
 
 func flat_movement():
 	place_grabbed_nodes()
@@ -366,9 +412,22 @@ func flat_movement():
 			vreditor.global_position = righthand.hand_menu_point.global_position
 	righthand.look_at(camera_3d.to_global(grab_point))
 	
-	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
+	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty():
 		var input_dir = Input.get_vector("left", "right", "up", "down")
-		var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
+		print('input dir')
+		print(input_dir)
+		if !movedrag.is_empty():
+			if -touch_move_left > input_dir.x:
+				input_dir.x = -touch_move_left
+			if touch_move_right < input_dir.x:
+				input_dir.x = touch_move_right
+			if -touch_move_forward > input_dir.y:
+				input_dir.y = -touch_move_forward
+			if touch_move_backward < input_dir.y:
+				input_dir.y = touch_move_backward
+		print(input_dir)
+		var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()*input_dir.length()
+		#print(direction)
 		if flymode:
 			direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
 		if direction:

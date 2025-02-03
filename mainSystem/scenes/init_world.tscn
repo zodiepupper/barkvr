@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dv0etfy0ao5"]
+[gd_scene load_steps=11 format=3 uid="uid://dv0etfy0ao5"]
 
 [ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://mainAssets/worlds/basic_starter.tscn" id="1_ad4cs"]
 [ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://mainSystem/scenes/objects/worldObjects/playerSpawnLocation.tscn" id="2_humgq"]
 [ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
 [ext_resource type="PackedScene" uid="uid://dj84bcm2jv1wq" path="res://mainAssets/objects/pens/linepen.tscn" id="7_8hxdm"]
+[ext_resource type="PackedScene" uid="uid://djp6k7l4t71pi" path="res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector.tscn" id="7_sqgh2"]
 [ext_resource type="PackedScene" uid="uid://b3sbt3oft3cxg" path="res://mainAssets/ui/3dPanel/editmode/vreditor.tscn" id="9_k6sjl"]
 [ext_resource type="PackedScene" uid="uid://r68jre2w5k33" path="res://mainSystem/scenes/player/xrplayer.tscn" id="11_qw71v"]
 [ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://mainAssets/ui/3dPanel/local ui/keyboard/virtual_keyboard_2d.tscn" id="12_r71vt"]
@@ -58,6 +59,11 @@ script = ExtResource("5_ykx2e")
 _auto_load_ui = ExtResource("12_r71vt")
 viewport_size = Vector2i(1166, 470)
 metadata/grabbable = true
+
+[node name="Panel3D" type="StaticBody3D" parent="multiplayer world root/local_ui"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.68789, 2.21137, 3.38151)
+script = ExtResource("5_ykx2e")
+_auto_load_ui = ExtResource("7_sqgh2")
 
 [node name="Node3D" type="Node3D" parent="multiplayer world root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)

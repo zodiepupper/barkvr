@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://djp6k7l4t71pi"]
+
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://mainAssets/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
+[ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
+[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="3_4taqd"]
+
+[sub_resource type="GDScript" id="GDScript_qoabx"]
+script/source = "extends Control
+
+
+@onready var sceneinspector: Control = $sceneinspector
+@onready var attributes: Control = $attributes
+
+func _ready() -> void:
+	sceneinspector.selected.connect(func(target):
+		attributes.set_target(target)
+		)
+"
+
+[node name="UnifiedInspector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_qoabx")
+
+[node name="attributes" parent="." instance=ExtResource("1_f3gci")]
+layout_mode = 1
+
+[node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
+layout_mode = 1
+offset_left = 34.0
+
+[node name="Button" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+layout_mode = 0
+offset_right = 12.0
+offset_bottom = 12.0
+toggle_mode = true
+text = ">"
+script = ExtResource("3_4taqd")
+node_to_toggle = NodePath("../sceneinspector")

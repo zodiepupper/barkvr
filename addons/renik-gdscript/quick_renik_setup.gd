@@ -32,11 +32,6 @@ func _determine_avatar_height() -> void:
 		+armature_skeleton.get_bone_global_pose(tmpleft).origin)/2.0
 	var headpos := armature_skeleton.get_bone_global_pose(tmphead).origin
 	var approxheight := avgfootpos.distance_to(headpos)
-	print("find right foot: ", armature_skeleton.get_bone_global_pose(tmpright).origin)
-	print("find left foot: ", armature_skeleton.get_bone_global_pose(tmpleft).origin)
-	print("average of feet position: ", avgfootpos)
-	print("find head: ", armature_skeleton.get_bone_global_pose(tmphead).origin)
-	print("distance between feet avg and head: ", approxheight)
 	calculated_height_coefficient = approxheight
 	armature_skeleton.scale *= 1/approxheight
 
@@ -47,10 +42,4 @@ func _determine_avatar_spine_length() -> void:
 	var spinepos := armature_skeleton.get_bone_global_pose(tmpspine).origin
 	var chestpos := armature_skeleton.get_bone_global_pose(tmpchest).origin
 	var neckpos := armature_skeleton.get_bone_global_pose(tmpneck).origin
-	print('dist spine -> neck: ', neckpos.distance_to(spinepos)*(1/calculated_height_coefficient))
-	print('dist chest -> neck: ', neckpos.distance_to(chestpos)*(1/calculated_height_coefficient))
-	print('dist chest -> spine: ', chestpos.distance_to(spinepos)*(1/calculated_height_coefficient))
-	print('dist spine -> neck: ', neckpos.distance_to(spinepos)*(armature_skeleton.scale.length()))
-	print('dist chest -> neck: ', neckpos.distance_to(chestpos)*(armature_skeleton.scale.length()))
-	print('dist chest -> spine: ', chestpos.distance_to(spinepos)*(armature_skeleton.scale.length()))
 	ren_ik_foot_placement.spine_length = neckpos.distance_to(spinepos)*(armature_skeleton.scale.length())

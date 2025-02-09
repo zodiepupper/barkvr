@@ -91,7 +91,7 @@ tracks/0/path = NodePath(".:mesh:material:alpha_scissor_threshold")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 3),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 1.0]
@@ -103,7 +103,7 @@ tracks/1/path = NodePath(".:mesh:material:albedo_texture:noise:offset")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 3),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 15)]
@@ -115,7 +115,7 @@ tracks/2/path = NodePath(".:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 3),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -133,8 +133,8 @@ script/source = "extends AnimationPlayer
 func _ready() -> void:
 	play(\"launch\")
 
-func _process(delta: float) -> void:
-	get_parent().global_position = get_viewport().get_camera_3d().global_position
+#func _process(delta: float) -> void:
+	#get_parent().global_position = get_viewport().get_camera_3d().global_position
 "
 
 [node name="init_world" type="Node3D"]
@@ -185,7 +185,7 @@ metadata/grabbable = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38342, 0)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08992, 1.91664, 2.46325)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.33328, 1.91664, 2.46325)
 mesh = SubResource("SphereMesh_ffpko")
 skeleton = NodePath("../multiplayer world root")
 

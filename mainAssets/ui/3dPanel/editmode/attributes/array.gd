@@ -42,7 +42,7 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, abov
 			var prop = attributes_target[i]
 			match typeof(prop):
 				TYPE_OBJECT:
-					if prop.hint_string == "Node" or prop.class_name in ClassDB.get_inheriters_from_class("Node"):
+					if "hint_string" in prop and prop.hint_string == "Node" or "class_name" in prop and prop.class_name in ClassDB.get_inheriters_from_class("Node"):
 						print('node don\'t add')
 					else:
 						var tmp :Object_Attribute = object_field.instantiate()

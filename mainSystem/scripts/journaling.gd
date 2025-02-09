@@ -424,7 +424,7 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	#Thread.set_thread_safety_checks_enabled(false)
 	var logging_prefix := asset_name+" : "
 	print("Import VRM: " + asset_name + " ----------------------")
-	var gltf
+	var gltf : GLTFDocument
 	if "type" in data and data.type == 'fbx':
 		gltf = FBXDocument.new()
 	else:
@@ -432,11 +432,14 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	var flags := 16+8
 	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
 	GLTFDocument.register_gltf_document_extension(vrm_extension, true)
-	var state
+	var state : GLTFState
 	if "type" in data and data.type == 'fbx':
 		state = FBXState.new()
+		#state.allow_geometry_helper_nodes = true
 	else:
 		state = GLTFState.new()
+	#if content is String and asset_name in content:
+		#state.base_path = content.trim_suffix(asset_name)
 	# HANDLE_BINARY_EMBED_AS_BASISU crashes on some files in 4.0 and 4.1
 	state.handle_binary_image = GLTFState.HANDLE_BINARY_EMBED_AS_UNCOMPRESSED  # GLTFState.HANDLE_BINARY_EXTRACT_TEXTURES
 	var err :int
@@ -481,14 +484,15 @@ func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={
 	print(asset_to_import)
 	var res :Resource
 	#print(ResourceLoader.get_dependencies(asset_to_import)[0])
-	print(asset_to_import)
+	#print(asset_to_import)
 	res = ResourceLoader.load(asset_to_import,'',ResourceLoader.CACHE_MODE_IGNORE)
-	print(res.resource_path)
-	res = _load_res_with_dependencies(asset_to_import)
+	#res = load(asset_to_import)
+	#print(res.resource_path)
+	#res = _load_res_with_dependencies(asset_to_import)
 	if res != null:
 		var node = res.instantiate()
 		_post_import.call_deferred(root,node,asset_name,data)
-	ResourceLoader.load_threaded_request(asset_to_import, '', true, ResourceLoader.CACHE_MODE_IGNORE)
+	ResourceLoader.load_threaded_request(asset_to_import, '', false, ResourceLoader.CACHE_MODE_IGNORE)
 	_check_loaded(asset_to_import,asset_name,data)
 
 func _load_res_with_dependencies(path:String) -> Resource:

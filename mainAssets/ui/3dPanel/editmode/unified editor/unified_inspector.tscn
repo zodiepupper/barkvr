@@ -28,6 +28,7 @@ script = SubResource("GDScript_qoabx")
 
 [node name="attributes" parent="." instance=ExtResource("1_f3gci")]
 layout_mode = 1
+offset_left = 31.0
 
 [node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
 layout_mode = 1
@@ -37,7 +38,10 @@ offset_left = 34.0
 layout_mode = 0
 offset_right = 12.0
 offset_bottom = 12.0
+focus_mode = 0
 toggle_mode = true
+button_pressed = true
 text = ">"
 script = ExtResource("3_4taqd")
 node_to_toggle = NodePath("../sceneinspector")
+slide = true

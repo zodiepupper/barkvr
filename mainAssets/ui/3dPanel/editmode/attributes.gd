@@ -48,7 +48,6 @@ var event_manager
 
 func set_target(new_target, above_targets=[]):
 	if new_target and new_target is Object and new_target not in above_targets:
-		above_targets.append(new_target)
 		target = new_target
 		if "name" in new_target and new_target.name:
 			targetname.text = new_target.name
@@ -75,9 +74,8 @@ func set_target(new_target, above_targets=[]):
 					else:
 						var tmp :Object_Attribute = object_field.instantiate()
 						v_box_container.add_child(tmp)
-						tmp.call_deferred("set_data",fieldname, target, prop.name,above_targets)
+						tmp.call_deferred("set_data",fieldname, target, prop.name,above_targets.duplicate(true))
 				TYPE_ARRAY:
-					print('array')
 					var tmp :Array_Attribute = array_field.instantiate()
 					v_box_container.add_child(tmp)
 					tmp.set_data(fieldname, new_target, prop.name)
@@ -96,7 +94,7 @@ func set_target(new_target, above_targets=[]):
 				TYPE_BOOL:
 					var tmp :Bool_Attribute = bool_field.instantiate()
 					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
+					tmp.set_data(fieldname, new_target, prop.name, above_targets)
 				TYPE_FLOAT:
 					var tmp :Number_Attribute = number_field.instantiate()
 					tmp.type = 0
@@ -202,17 +200,3 @@ func _export_node(tmp_target:Node):
 		var err = ResourceSaver.save(packed, downpath+tmp_target.name+".res",ResourceSaver.FLAG_BUNDLE_RESOURCES)
 		print("export error: "+str(err))
 		
-		
-	#if !dir.dir_exists("./objects"):
-		#dir.make_dir("./objects")
-	##var object_file = FileAccess.open("user://objects/"+tmp_target.name+".gltf", FileAccess.WRITE)
-	#var gltf = GLTFDocument.new()
-	#var gltf_state = GLTFState.new()
-	#gltf.append_from_scene(tmp_target,gltf_state)
-	#gltf.write_to_filesystem(gltf_state,"user://objects/"+tmp_target.name+".glb")
-	##object_file.store_buffer(gltf.generate_buffer(gltf_state))
-	##var tmpjson = BarkHelpers.node_to_var(tmp_target,'',tmp_target.name)
-	##tmpjson = JSON.stringify(tmpjson)
-	##object_file.store_var(tmpjson)
-	#print('exported node')
-	#return true

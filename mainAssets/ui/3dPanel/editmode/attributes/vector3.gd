@@ -11,7 +11,7 @@ var target:Object
 var _is_editing:bool = false
 var property_name:String = ''
 
-var event_supplier
+var event_supplier : Bark_Journal
 
 func _ready():
 	event_supplier = Engine.get_singleton("event_manager")

@@ -78,12 +78,16 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			Engine.get_singleton("event_manager").import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.fbx'):
 			Engine.get_singleton("event_manager").import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
+		#elif dropped.to_lower().ends_with('.obj'):
+			#Engine.get_singleton("event_manager").import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		elif dropped.to_lower().ends_with('.vrm'):
 			Engine.get_singleton("event_manager").import_asset('vrm',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.res') or \
 			dropped.to_lower().ends_with('.tres') or \
 			dropped.to_lower().ends_with('.scn')  or \
-			dropped.to_lower().ends_with('.tscn'):
+			dropped.to_lower().ends_with('.tscn') or \
+			dropped.to_lower().ends_with('.obj') or \
+			dropped.to_lower().ends_with('.mtl'):
 			Engine.get_singleton("event_manager").import_asset('res',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
 		#elif dropped.to_lower().ends_with('.pck'):

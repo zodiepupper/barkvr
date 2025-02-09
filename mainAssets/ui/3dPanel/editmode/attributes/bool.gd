@@ -10,14 +10,24 @@ var _is_editing:bool = false:
 		return _check_focus()
 var property_name:String = ''
 
+var event_supplier : Bark_Journal
+
+var above_targets : Array
+
 func _ready():
+	event_supplier = Engine.get_singleton("event_manager")
 	val.toggled.connect(func(on):
-		if is_instance_valid(target):
+		if is_instance_valid(target) and is_instance_valid(event_supplier):
 			if on:
 				val.text = "true"
 			else:
 				val.text = "false"
 			target[property_name] = on
+			#event_supplier.set_property(
+				#event_supplier.root.get_path_to(above_targets[0]),
+				#property_name+":x",
+				#on
+			#)
 		)
 
 func _process(_delta):
@@ -28,6 +38,21 @@ func _process(_delta):
 				update_fields()
 	else:
 		update_fields()
+
+func build_path_to_property() -> String:
+	var out := ""
+	if above_targets and above_targets.size() > 1:
+		for i in above_targets.size():
+			if i > 0:
+				out += "/"
+			if "name" in above_targets[i]:
+				out += above_targets[i].name
+			elif "resource_name" in above_targets[i]:
+				var tmp = above_targets[i].resource_name
+				out += above_targets[i].resource_name
+			else:
+				print("couldn't add this object to the node+resource path: "+str(above_targets[i]))
+	return out
 
 func update_fields():
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
@@ -44,7 +69,8 @@ func _check_focus():
 
 ## sets the name, field target node, and the property name for the field to look for
 ## name:String, new_target:Node, new_property_name:String
-func set_data(new_name:String, new_target:Object, new_property_name:String):
+func set_data(new_name:String, new_target:Object, new_property_name:String, new_above_targets=[]):
+	above_targets = new_above_targets
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name
@@ -53,3 +79,4 @@ func set_data(new_name:String, new_target:Object, new_property_name:String):
 		val.text = "true"
 	else:
 		val.text = "false"
+	build_path_to_property()

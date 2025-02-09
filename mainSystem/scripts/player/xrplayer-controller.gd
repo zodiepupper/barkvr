@@ -324,7 +324,6 @@ func _input(event):
 			touch_move_right = 0.0
 			touch_move_forward = 0.0
 			touch_move_backward = 0.0
-			print('clearing touch movement')
 	if event is InputEventScreenDrag:
 		if movedrag and event.index == movedrag.index:
 			movedrag = {
@@ -414,8 +413,6 @@ func flat_movement():
 	
 	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty():
 		var input_dir = Input.get_vector("left", "right", "up", "down")
-		print('input dir')
-		print(input_dir)
 		if !movedrag.is_empty():
 			if -touch_move_left > input_dir.x:
 				input_dir.x = -touch_move_left
@@ -425,9 +422,7 @@ func flat_movement():
 				input_dir.y = -touch_move_forward
 			if touch_move_backward < input_dir.y:
 				input_dir.y = touch_move_backward
-		print(input_dir)
 		var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()*input_dir.length()
-		#print(direction)
 		if flymode:
 			direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
 		if direction:

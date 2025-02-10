@@ -21,10 +21,24 @@ func _ready():
 
 func _process(_delta):
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
-		val.button_pressed = (target[property_name])
+		var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
+		var scrollparent = get_parent_control().get_parent_control()
+		if scrollparent is ScrollContainer:
+			var rect = get_global_rect()
+			if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
+					update_fields()
 	elif !is_instance_valid(target):
 		target = null
 		val.button_pressed = false
+		val.text = ''
+
+func update_fields():
+	print('enum: ', property_name)
+	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
+		val.selected = (target[property_name])
+	elif !is_instance_valid(target):
+		target = null
+		val.selected = -1
 		val.text = ''
 
 func _check_focus():
@@ -37,9 +51,9 @@ func _check_focus():
 func set_data(new_name:String, new_target:Object, new_property_name:String, prop_data:Dictionary):
 	label.text = new_name
 	property_name = new_property_name
-	val.selected = bool(new_target[property_name])
 	var options :Array = prop_data.hint_string.split(',')
 	for i in options.size():
 		val.add_item(options[i], i)
+	val.selected = (new_target[property_name])
 	target = new_target
 	name = new_name

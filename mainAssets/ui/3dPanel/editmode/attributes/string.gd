@@ -18,14 +18,14 @@ func _ready():
 
 func _process(_delta):
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
-	if scrollparentrect is ScrollContainer:
+	var scrollparent = get_parent_control().get_parent_control()
+	if scrollparent is ScrollContainer:
 		var rect = get_global_rect()
 		if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
 				update_fields()
-	else:
-		update_fields()
 
 func update_fields():
+	print('string: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target):
 		val.text = str(target[property_name])
 	elif !is_instance_valid(target):

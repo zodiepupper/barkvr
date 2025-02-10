@@ -227,7 +227,6 @@ anti_aliasing/screen_space_roughness_limiter/amount=4.0
 
 [xr]
 
-openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
 openxr/startup_alert=false

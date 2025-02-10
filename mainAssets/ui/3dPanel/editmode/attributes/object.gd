@@ -38,13 +38,14 @@ func _ready() -> void:
 ## sets the name, field target node, and the property name for the field to look for
 ## name:String, new_target:Node, new_property_name:String
 func set_data(new_name:String, new_target:Object, new_property_name:String, above_targets=[]):
-	above_targets.append(new_target)
-	label.text = new_name
-	target = new_target
-	property_name = new_property_name
-	var attributes_target = target[property_name]
-	var attributes:Control = ATTRIBUTES_SCENE.instantiate()
-	attributes.hide_titlebar = true
-	attributes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	field_parent.add_child(attributes)
-	attributes.call_deferred("set_target",target[property_name], above_targets)
+	if new_property_name in new_target:
+		above_targets.append(new_target)
+		label.text = new_name
+		target = new_target
+		property_name = new_property_name
+		var attributes_target = target[property_name]
+		var attributes:Control = ATTRIBUTES_SCENE.instantiate()
+		attributes.hide_titlebar = true
+		attributes.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		field_parent.add_child(attributes)
+		attributes.call_deferred("set_target",target[property_name], above_targets)

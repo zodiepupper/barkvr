@@ -63,63 +63,82 @@ func set_target(new_target, above_targets=[]):
 		for child in v_box_container.get_children():
 			child.queue_free()
 		var prop_list :Array[Dictionary]= new_target.get_property_list()
-		for prop in prop_list:
-			var fieldname :String= prop.name
-			if prop.name.contains("bones/") and new_target is Skeleton3D:
-				fieldname = "bone: "+new_target.get_bone_name(int(prop.name.split("/")[1]))+" "+prop.name.split("/")[-1]
-			match prop.type:
-				TYPE_OBJECT:
-					if prop.hint_string == "Node" or prop.class_name in ClassDB.get_inheriters_from_class("Node"):
-						print('node don\'t add')
-					else:
-						var tmp :Object_Attribute = object_field.instantiate()
-						v_box_container.add_child(tmp)
-						tmp.call_deferred("set_data",fieldname, target, prop.name,above_targets.duplicate(true))
-				TYPE_ARRAY:
-					var tmp :Array_Attribute = array_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_STRING_NAME:
-					var tmp :String_Attribute = string_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_STRING:
-					var tmp :String_Attribute = string_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_COLOR:
-					var tmp :Color_Attribute = color_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_BOOL:
-					var tmp :Bool_Attribute = bool_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name, above_targets)
-				TYPE_FLOAT:
-					var tmp :Number_Attribute = number_field.instantiate()
-					tmp.type = 0
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_INT:
-					match prop.hint:
-						0:
-							var tmp :Number_Attribute = number_field.instantiate()
-							tmp.type = 1
-							v_box_container.add_child(tmp)
-							tmp.set_data(fieldname, new_target, prop.name)
-						2:
-							var tmp :Enum_Attribute = enum_field.instantiate()
-							v_box_container.add_child(tmp)
-							tmp.set_data(fieldname, new_target, prop.name, prop)
-				TYPE_VECTOR3:
-					var tmp :Vector3_Attribute = vector_3_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
-				TYPE_VECTOR2:
-					var tmp :Vector2_Attribute = vector_2_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.set_data(fieldname, new_target, prop.name)
+		#call_deferred("_add_fields", prop, new_target, above_targets)
+		call_deferred("_add_fields", prop_list, new_target, above_targets)
 #		update_fields()
+
+#func _add_fields(prop, new_target, above_targets) -> void:
+func _add_fields(prop_list, new_target, above_targets) -> void:
+	for i in range(prop_list.size()):
+		var prop = prop_list[i]
+		if i % 4 == 0:
+			await get_tree().process_frame
+		var fieldname :String= prop.name
+		if prop.name.contains("bones/") and new_target is Skeleton3D:
+			fieldname = "bone: "+new_target.get_bone_name(int(prop.name.split("/")[1]))+" "+prop.name.split("/")[-1]
+		match prop.type:
+			TYPE_OBJECT:
+				if prop.hint_string == "Node" or prop.class_name in ClassDB.get_inheriters_from_class("Node"):
+					print('node don\'t add')
+				else:
+					var tmp :Object_Attribute = object_field.instantiate()
+					v_box_container.add_child(tmp)
+					tmp.name = fieldname
+					tmp.set_data(fieldname, target, prop.name,above_targets.duplicate(true))
+			TYPE_ARRAY:
+				var tmp :Array_Attribute = array_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_STRING_NAME:
+				var tmp :String_Attribute = string_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_STRING:
+				var tmp :String_Attribute = string_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_COLOR:
+				var tmp :Color_Attribute = color_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_BOOL:
+				var tmp :Bool_Attribute = bool_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name, above_targets)
+			TYPE_FLOAT:
+				var tmp :Number_Attribute = number_field.instantiate()
+				tmp.type = 0
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_INT:
+				match prop.hint:
+					0:
+						var tmp :Number_Attribute = number_field.instantiate()
+						tmp.type = 1
+						v_box_container.add_child(tmp)
+						tmp.name = fieldname
+						tmp.set_data(fieldname, new_target, prop.name)
+					2:
+						var tmp :Enum_Attribute = enum_field.instantiate()
+						v_box_container.add_child(tmp)
+						tmp.name = fieldname
+						tmp.set_data(fieldname, new_target, prop.name, prop)
+			TYPE_VECTOR3:
+				var tmp :Vector3_Attribute = vector_3_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_VECTOR2:
+				var tmp :Vector2_Attribute = vector_2_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
 
 func update_fields():
 	if target and is_instance_valid(target):

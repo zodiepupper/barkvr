@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://djp6k7l4t71pi"]
+[gd_scene load_steps=9 format=3 uid="uid://djp6k7l4t71pi"]
 
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://mainAssets/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
 [ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="3_4taqd"]
+[ext_resource type="Texture2D" uid="uid://5jr0w6im4k6n" path="res://assets/icons/teenyicons/solid/adjust-horizontal.svg" id="3_44k0f"]
+[ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://mainAssets/ui/3dPanel/editmode/gdscriptpanel.tscn" id="3_io3sm"]
+[ext_resource type="Texture2D" uid="uid://jruwnps6bpen" path="res://assets/icons/teenyicons/solid/align-left.svg" id="5_751a0"]
+[ext_resource type="Texture2D" uid="uid://bndqcjjxuinwt" path="res://assets/icons/teenyicons/solid/code.svg" id="5_dxjhh"]
 
 [sub_resource type="GDScript" id="GDScript_qoabx"]
 script/source = "extends Control
@@ -10,11 +13,55 @@ script/source = "extends Control
 
 @onready var sceneinspector: Control = $sceneinspector
 @onready var attributes: Control = $attributes
+@onready var gdscriptpanel: Control = $gdscriptpanel
 
 func _ready() -> void:
 	sceneinspector.selected.connect(func(target):
 		attributes.set_target(target)
+		gdscriptpanel.set_target(target)
 		)
+"
+
+[sub_resource type="GDScript" id="GDScript_mguyu"]
+script/source = "extends Button
+
+## The node that will have it's [code]visibility[/code] field toggled when this button is pressed
+@export var node_to_toggle : Node
+
+@export var slide := false
+var slide_start_pos
+
+@onready var attributes_toggle: Button = $\"../attributes_toggle\"
+@onready var inspector_toggle: Button = $\"../inspector_toggle\"
+@onready var script_toggle: Button = $\"../script_toggle\"
+
+func _ready() -> void:
+	manual_toggle(!button_pressed)
+
+func manual_toggle(toggled_on) -> void:
+	_toggled(toggled_on)
+	button_pressed = toggled_on
+
+func _toggled(toggled_on):
+	if is_instance_valid(node_to_toggle):
+		if !slide:
+			node_to_toggle.visible = toggled_on
+		if slide:
+			if !slide_start_pos:
+				slide_start_pos = node_to_toggle.position
+			node_to_toggle.show()
+			if toggled_on and is_instance_valid(attributes_toggle) and attributes_toggle != self and attributes_toggle.button_pressed:
+				attributes_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(inspector_toggle) and inspector_toggle != self and inspector_toggle.button_pressed:
+				inspector_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(script_toggle) and script_toggle != self and script_toggle.button_pressed:
+				script_toggle.manual_toggle(false)
+			if toggled_on:
+				create_tween().tween_property(node_to_toggle,\"position:x\",slide_start_pos.x,.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+			else:
+				create_tween().tween_property(node_to_toggle,\"position:x\",-(node_to_toggle.size.x+slide_start_pos.x),.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 "
 
 [node name="UnifiedInspector" type="Control"]
@@ -28,20 +75,57 @@ script = SubResource("GDScript_qoabx")
 
 [node name="attributes" parent="." instance=ExtResource("1_f3gci")]
 layout_mode = 1
-offset_left = 31.0
+offset_left = 60.0
 
 [node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
+z_index = 1
 layout_mode = 1
-offset_left = 34.0
+offset_left = 60.0
 
-[node name="Button" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+[node name="gdscriptpanel" parent="." instance=ExtResource("3_io3sm")]
+layout_mode = 1
+offset_left = 60.0
+
+[node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
 offset_right = 12.0
 offset_bottom = 12.0
 focus_mode = 0
 toggle_mode = true
 button_pressed = true
-text = ">"
-script = ExtResource("3_4taqd")
+icon = ExtResource("3_44k0f")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../attributes")
+slide = true
+
+[node name="inspector_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 60.0
+offset_right = 60.0
+offset_bottom = 120.0
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("5_751a0")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
 node_to_toggle = NodePath("../sceneinspector")
+slide = true
+
+[node name="script_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 120.0
+offset_right = 60.0
+offset_bottom = 180.0
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("5_dxjhh")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../gdscriptpanel")
 slide = true

@@ -98,8 +98,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="active" type="ColorRect" parent="VBoxContainer/titlebar/properties header"]
+custom_minimum_size = Vector2(167.01, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
 color = Color(0, 0, 0, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar/properties header/active"]

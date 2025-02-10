@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/OpenSans-VariableFont_wdth,wght.ttf-f1c5f356a
 Rendering=null
 antialiasing=1
 generate_mipmaps=true
+disable_embedded_bitmaps=true
 multichannel_signed_distance_field=true
 msdf_pixel_range=32
 msdf_size=64

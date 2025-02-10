@@ -122,6 +122,7 @@ func respawn_player():
 func _ready():
 	name = OS.get_unique_id()
 	ui_ray.add_exception(self)
+	vr_mode_enabled = vr_mode_enabled
 	lefthand.rays_disabled = !vr_mode_enabled
 	righthand.rays_disabled = !vr_mode_enabled
 	respawn_player()

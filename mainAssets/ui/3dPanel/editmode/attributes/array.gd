@@ -39,6 +39,8 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, abov
 	var attributes_target = target[property_name]
 	if attributes_target is Array:
 		for i in attributes_target.size():
+			if i%4 == 0:
+				await get_tree().process_frame
 			var prop = attributes_target[i]
 			match typeof(prop):
 				TYPE_OBJECT:

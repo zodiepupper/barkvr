@@ -5,8 +5,8 @@ extends Control
 @onready var resize = $resize
 @onready var tab_container = $TabContainer
 
-var big_height := 800
-var big_width := 800
+var big_height := 1000
+var big_width := 1000
 var small_height := 40
 var expanded := true
 
@@ -14,6 +14,7 @@ var resizing := false
 var resize_start_position := Vector2()
 
 func _ready():
+	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():
 		window_properties.call_deferred("set_target",get_window())
 		,4)
@@ -29,6 +30,6 @@ func _ready():
 
 func _input(event:InputEvent):
 	if resize.button_pressed and event is InputEventMouseMotion:
-		get_viewport().get_parent().viewport_size = event.position
 		big_height = event.position.y
-		big_width = event.position.x
+		big_width = event.position.x if event.position.x > tab_container.custom_minimum_size.x else tab_container.custom_minimum_size.x
+		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)

@@ -19,12 +19,15 @@ script = ExtResource("1_62fs1")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 clip_contents = true
+custom_minimum_size = Vector2(1000, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
 offset_top = 45.0
 grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 tab_alignment = 1
 current_tab = 4
@@ -88,5 +91,6 @@ offset_top = -12.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
+disabled = true
 
 [editable path="TabContainer/window_properties"]

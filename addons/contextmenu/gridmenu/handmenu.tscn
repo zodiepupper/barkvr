@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="1_1fmp6"]
 [ext_resource type="Script" path="res://addons/contextmenu/gridmenu/handmenu.gd" id="1_jd5nk"]
-[ext_resource type="Script" path="res://mainAssets/ui/objects/get_tracking_mesh.gd" id="3_jp45v"]
 
 [sub_resource type="GDScript" id="GDScript_mkksm"]
 script/source = "extends Node
@@ -49,6 +48,13 @@ func onclick():
 	Engine.get_singleton(\"event_manager\").undo_action()
 "
 
+[sub_resource type="GDScript" id="GDScript_tka4v"]
+script/source = "extends Object
+
+func onclick():
+	LocalGlobals.clear_gizmos_func()
+"
+
 [node name="handmenu" type="Node3D"]
 script = ExtResource("1_jd5nk")
 
@@ -92,7 +98,7 @@ callscript = SubResource("GDScript_wrd3g")
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, -0.1, 0)
 text = "redo"
 
-[node name="get space mesh" parent="." instance=ExtResource("1_1fmp6")]
+[node name="clear gizmos" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, -0.1, 8.74228e-09)
-text = "get space mesh"
-callscript = ExtResource("3_jp45v")
+text = "clear gizmos"
+callscript = SubResource("GDScript_tka4v")

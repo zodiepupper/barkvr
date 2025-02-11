@@ -220,13 +220,11 @@ func _physics_process(delta):
 #		collision_shape_3d.position = xr_camera_3d.position.y/2.0
 	
 	# Handle Jump.
-	if vr_mode_enabled:
-		if rightaxbtn and (is_on_floor() or flymode):
-			velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
-	else:
-		flat_movement()
-		if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
-			velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
+	if rightaxbtn and (is_on_floor() or flymode):
+		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
+	flat_movement()
+	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
+		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
 		
 	
 	
@@ -412,7 +410,7 @@ func flat_movement():
 			vreditor.global_position = righthand.hand_menu_point.global_position
 	righthand.look_at(camera_3d.to_global(grab_point))
 	
-	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty():
+	if true:
 		var input_dir = Input.get_vector("left", "right", "up", "down")
 		if !movedrag.is_empty():
 			if -touch_move_left > input_dir.x:

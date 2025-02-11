@@ -214,7 +214,7 @@ func _physics_process(delta):
 			velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
 			velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
 		if xr_camera_3d.position.y > 0.1:
-			collision_shape_3d.shape.height = xr_camera_3d.position.y
+			collision_shape_3d.shape.height = xr_camera_3d.position.y/2.0
 		else:
 			collision_shape_3d.shape.height = 0.1
 #		collision_shape_3d.position = xr_camera_3d.position.y/2.0

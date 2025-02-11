@@ -80,10 +80,14 @@ func _process_message(event:Dictionary):
 											candidate.name
 										)
 										Notifyvr.send_notification('set_ice')
+		_:
+			print('none')
 
 func _display_message(event):
 	if event.has('content'):
 		if event.room_id == target_room:
+			if "content" in event and "msgtype" in event.content:
+				print(event.content.msgtype)
 			var exists = false
 			for i in get_children():
 				if i.name == event.event_id:
@@ -100,6 +104,12 @@ func _display_message(event):
 						)
 				else:
 					tmp.text = str(event)
+				if "url" in event.content:
+					if event.content.url.begins_with("mxc://"):
+						var download_url : String = event.content.url.trim_prefix("mxc://")
+						var download_homeserver : String = download_url.split("/")[0]
+						var download_content_id : String = download_url.split("/")[1]
+						tmp.text = "https://matrix.pupper.dev/_matrix/client/v1/media/download/"+download_homeserver+"/"+download_content_id+"?allow_redirect=true"
 				if is_instance_valid(Engine.get_singleton("user_manager")) and event.sender == Engine.get_singleton("user_manager").userData.login.user_id:
 					tmp.leftside = false
 				if scroll_container.scroll_vertical == size.y:

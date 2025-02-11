@@ -214,8 +214,8 @@ func _ready():
 						for room in msgJson.rooms.leave:
 							joinedRooms.erase(room)
 							call_deferred("emit_signal", "leave_room",room)
-				print('synced')
-				call_deferred("emit_signal", "synced", msgJson)
+				#call_deferred("emit_signal", "synced", msgJson)
+				emit_signal("synced", msgJson)
 				call_deferred("saveUserDict")
 			else:
 				call_deferred("emit_signal","synced", {"result":result})
@@ -309,7 +309,7 @@ func saveUserDict():
 	var tmpdata :Dictionary = userData.duplicate(true)
 	var toStore = JSON.stringify(tmpdata," ")
 	#var toStore = var_to_bytes(userData)
-	print(toStore.length())
+	#print(toStore.length())
 	file.store_string(toStore)
 	file.close()
 	DirAccess.remove_absolute("user://logins/"+uid.validate_filename()+".data")
@@ -352,7 +352,7 @@ func _load_user_dictionary(file:FileAccess):
 
 func sync():
 	var reqData = {}
-	reqData.timeout = 30
+	reqData.timeout = 1000
 	if !next_batch.is_empty():
 		reqData['since'] = next_batch
 	api.sync(base_url,headers,reqData)
@@ -424,6 +424,8 @@ func process_event(event:Dictionary, roomid:String=""):
 							"m.image":
 								got_new_message.emit(event)
 								# TODO get the media here 
+							"m.file":
+								got_new_message.emit(event)
 				"bark.session.request":
 					got_new_message.emit(event)
 				"bark.session.offer":

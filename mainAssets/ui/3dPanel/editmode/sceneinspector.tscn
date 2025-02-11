@@ -12,16 +12,54 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_apb1e")
 
-[node name="Tree" type="Tree" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Tree" type="Tree" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 allow_reselect = true
 allow_search = false
 hide_root = true
 drop_mode_flags = 3
+select_mode = 2
 script = ExtResource("2_k0xmv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="delete" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "delete"
+
+[node name="export" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "export"
+
+[node name="duplicate" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "duplicate"
+
+[node name="reparent" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "reparent"
+
+[node name="cut" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "cut"
+
+[node name="copy" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "copy"
+
+[node name="paste" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "paste"

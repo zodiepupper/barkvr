@@ -1,5 +1,5 @@
 extends Control
-@onready var tree : hashed_tree_list = $Tree
+@onready var tree : hashed_tree_list = %Tree
 @onready var tree_root : TreeItem = tree.create_item()
 
 signal selected(item)
@@ -7,9 +7,24 @@ var root:Node
 
 var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn")
 
+@onready var delete: Button = $HBoxContainer/VBoxContainer/delete
+@onready var export: Button = $HBoxContainer/VBoxContainer/export
+@onready var duplicate: Button = $HBoxContainer/VBoxContainer/duplicate
+@onready var cut: Button = $HBoxContainer/VBoxContainer/cut
+@onready var copy: Button = $HBoxContainer/VBoxContainer/copy
+@onready var paste: Button = $HBoxContainer/VBoxContainer/paste
+
 func _ready():
+	delete.pressed.connect(func():
+		var selected = get_all_selected()
+		for item in selected:
+			if "node" in item.get_metadata(0):
+				item.get_metadata(0).node.queue_free()
+		pass
+		)
+	
 	#print(tree.get_class())
-	tree.item_selected.connect(func():
+	tree.cell_selected.connect(func():
 		selected.emit(tree.get_selected().get_metadata(0).node)
 		LocalGlobals.clear_gizmos.emit()
 		var node = tree.get_selected().get_metadata(0).node
@@ -83,3 +98,18 @@ func addchildren(node:Node, parent:Node=null):
 		if is_instance_valid(node):
 			for i in node.get_children():
 				addchildren(i,node)
+
+func get_all_selected(previous_item: TreeItem = null) -> Array:
+	var out = Array()
+	var next = tree.get_next_selected(previous_item)
+	if next:
+		out.append(next)
+		out.append_array(get_all_selected(next))
+	return out
+
+#func export_selected() -> void:
+	#var world_root = get_tree().get_first_node_in_group("localworldroot")
+	#if world_root and target:
+		#var thread = Thread.new()
+		#thread.start(_export_node.bind(target))
+		#BarkHelpers.rejoin_thread_when_finished(thread)

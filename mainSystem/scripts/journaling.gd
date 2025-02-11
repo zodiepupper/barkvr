@@ -312,11 +312,13 @@ func _import_uri(uri:String, data:Dictionary={}):
 		Thread.set_thread_safety_checks_enabled(false)
 		req.request_completed.connect(_uri_request_completed.bind(req,data,uri))
 		Thread.set_thread_safety_checks_enabled(true)
-		req.request(uri)
+		var headers = Engine.get_singleton("user_manager").headers
+		req.request(uri, headers)
 
 func _uri_request_completed(_result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, req:HTTPRequest, data:Dictionary, uri:String):
 			print('req completed')
 			print('response code: '+str(response_code))
+			var content_type:String = ""
 			var _msg = body.get_string_from_ascii()
 			for header in headers:
 				if header.begins_with("Content-Type:"):
@@ -327,14 +329,22 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 						print('importing uri image')
 						while body.size() < 1:
 							if data.iterations > 4:
+								data.loader.done()
 								return
 							data.iterations += 1
 							body = (FileAccess.get_file_as_bytes(req.download_file))
 						_import_image_bytes(uri, body, data)
+						data.loader.done()
 						return
+					elif trimmed == "application/json":
+						print('woof')
+						data.loader.done()
+						return
+					elif trimmed.contains("gltf-binary"):
+						content_type = "gltf-binary"
 			print('uri returned text')
 			print('uri: '+uri)
-			if uri.contains('.gltf') or uri.contains('.glb'):
+			if uri.contains('.gltf') or uri.contains('.glb') or content_type == "gltf-binary":
 				import_asset('glb', req.download_file, uri, false, data)
 			elif uri.contains('.vrm'):
 				import_asset('vrm',req.download_file, uri, false, data)

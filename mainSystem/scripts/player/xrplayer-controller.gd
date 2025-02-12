@@ -77,7 +77,7 @@ var screen_just_touched := false
 
 var vr_mode_enabled := true:
 	set(value):
-		if force_set_vr_enabled or get_viewport().use_xr:
+		if force_set_vr_enabled:
 			value = true
 		vr_mode_enabled = value
 		Notifyvr.send_notification("vrmode: "+str(value))

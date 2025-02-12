@@ -4,7 +4,6 @@ extends Control
 @onready var window_properties = $TabContainer/window_properties
 @onready var resize = $resize
 @onready var tab_container = $TabContainer
-@onready var restart_in_vr: Button = $"restart in vr"
 
 var big_height := 1200
 var big_width := 1000

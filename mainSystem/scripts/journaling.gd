@@ -254,6 +254,7 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 			content = asset_to_import.get_data()
 	# Decide how to import asset based on type.
 	# TODO pck support
+	data.type = type
 	match type:
 		"text":
 			_import_text(asset_to_import,asset_to_import, data)
@@ -342,12 +343,14 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 						return
 					elif trimmed.contains("gltf-binary"):
 						content_type = "gltf-binary"
+					elif trimmed.contains("vrm"):
+						content_type = "vrm"
 			print('uri returned text')
 			print('uri: '+uri)
 			if uri.contains('.gltf') or uri.contains('.glb') or content_type == "gltf-binary":
-				import_asset('glb', req.download_file, uri, false, data)
-			elif uri.contains('.vrm'):
-				import_asset('vrm',req.download_file, uri, false, data)
+				WorkerThreadPool.add_task(import_asset.bind('glb', req.download_file, uri, false, data))
+			elif uri.contains('.vrm') or content_type == "vrm":
+				WorkerThreadPool.add_task(import_asset.bind('vrm', req.download_file, uri, false, data))
 			elif uri.contains('.res') or uri.contains('.tres') or uri.contains('.scn') or uri.contains('.tscn'):
 				import_asset('res',req.download_file, uri, false, data)
 			#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
@@ -433,7 +436,7 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	check_root()
 	#Thread.set_thread_safety_checks_enabled(false)
 	var logging_prefix := asset_name+" : "
-	print("Import VRM: " + asset_name + " ----------------------")
+	print("Import VRM/GLTF/GLB: " + asset_name + " ----------------------")
 	var gltf : GLTFDocument
 	if "type" in data and data.type == 'fbx':
 		gltf = FBXDocument.new()
@@ -713,7 +716,7 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 	node_to_add.name = node_name
 	print(node_name)
 	# add IK stuff if VRM
-	if node_name.ends_with(".vrm"):
+	if node_name.ends_with(".vrm") or data.type == "vrm":
 		print('attempting ik')
 		var quickreniksetup :Node3D = load("res://addons/renik-gdscript/quick_renik_setup.tscn").instantiate()
 		node_to_add.add_child(quickreniksetup)

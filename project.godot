@@ -224,9 +224,11 @@ textures/canvas_textures/default_texture_filter=2
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
+occlusion_culling/use_occlusion_culling=true
 
 [xr]
 
+openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
 openxr/startup_alert=false

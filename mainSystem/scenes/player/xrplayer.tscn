@@ -75,6 +75,7 @@ unique_name_in_owner = true
 query_exception_nodes = [NodePath("../../..")]
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
+unique_name_in_owner = true
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" groups=["playerCamera"]]
@@ -83,9 +84,6 @@ fov = 90.0
 
 [node name="Node3D" type="Node3D" parent="xrplayer/XrCamera3d" groups=["notificationparent"]]
 transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0929923, -0.0845834, -0.183947)
-
-[node name="iktarget" type="Node3D" parent="xrplayer/XrCamera3d"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.141187)
 
 [node name="righthand" type="XRController3D" parent="xrplayer"]
 unique_name_in_owner = true

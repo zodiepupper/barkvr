@@ -14,7 +14,7 @@ extends CharacterBody3D
 @onready var ui_ray: InteractionRay = %uiRay
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
-@onready var headiktarget: Node3D = $xrplayer/Camera3D/headiktarget
+@onready var headiktarget: Node3D = %headiktarget
 
 var head_pos: =Vector3():
 	get:
@@ -77,8 +77,8 @@ var screen_just_touched := false
 
 var vr_mode_enabled := true:
 	set(value):
-		if force_set_vr_enabled:
-			value = force_set_vr_enabled
+		if force_set_vr_enabled or get_viewport().use_xr:
+			value = true
 		vr_mode_enabled = value
 		Notifyvr.send_notification("vrmode: "+str(value))
 		_toggle_xr(value)
@@ -92,6 +92,7 @@ func _toggle_xr(value):
 		ui_ray.enabled = !value
 		ui_ray.visible = !value
 	if !value:
+		headiktarget.reparent(camera_3d,false)
 		Notifyvr.send_notification("DISABLING XR")
 		collision_shape_3d.shape.height = 1.0
 		collision_shape_3d.shape.radius = .1
@@ -107,6 +108,7 @@ func _toggle_xr(value):
 		ui_ray.enabled = true
 		ui_ray.show()
 	else:
+		headiktarget.reparent(xr_camera_3d,false)
 		if OS.get_name() != "Web":
 			get_viewport().use_xr = true
 		xr_camera_3d.current = true
@@ -408,7 +410,8 @@ func flat_movement():
 			vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
 			get_tree().get_first_node_in_group("localroot").add_child(vreditor)
 			vreditor.global_position = righthand.hand_menu_point.global_position
-	righthand.look_at(camera_3d.to_global(grab_point))
+	if !vr_mode_enabled:
+		righthand.look_at(camera_3d.to_global(grab_point))
 	
 	if true:
 		var input_dir = Input.get_vector("left", "right", "up", "down")

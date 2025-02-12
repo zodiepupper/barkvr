@@ -10,6 +10,7 @@ var anarrayfortesting : Array
 
 func _ready():
 	#OS.set_use_file_access_save_and_swap(true)
+	OS.request_permissions()
 	for i in range(1000):
 		anarrayfortesting.append(i*1.1)
 	if game_startup_scene:
@@ -22,6 +23,8 @@ func _ready():
 		dir.make_dir('./objects')
 	if !dir.dir_exists('./worlds'):
 		dir.make_dir('./worlds')
+	if !dir.dir_exists('./logins'):
+		dir.make_dir('./logins')
 	
 	get_window().files_dropped.connect(func(files:PackedStringArray):
 		var loader :LoadingHalo= load("res://mainAssets/ui/3dui/loading_halo.tscn").instantiate()

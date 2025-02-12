@@ -36,6 +36,7 @@ playback_type = 1
 
 [node name="StartXR" type="Node" parent="."]
 script = ExtResource("2_3r3cq")
+target_refresh_rate = 1000.0
 
 [node name="EnterWebXR" type="CanvasLayer" parent="StartXR"]
 visible = false

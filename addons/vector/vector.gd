@@ -316,7 +316,11 @@ func saveUserDict():
 	DirAccess.rename_absolute("user://logins/"+uid.validate_filename()+".datan", "user://logins/"+uid.validate_filename()+".data")
 
 func getExistingSessions() -> PackedStringArray:
-	var files = DirAccess.get_files_at("user://logins/")
+	var dir = DirAccess.open('user://')
+	print("open current directory: "+str(dir.get_current_dir(true))+"\n"+str(dir))
+	if !dir.dir_exists('./logins/'):
+		dir.make_dir('./logins/')
+	var files := DirAccess.get_files_at("user://logins/")
 	return files
 
 func readUserDict(target_login:String=""):

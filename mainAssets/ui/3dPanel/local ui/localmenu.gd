@@ -6,7 +6,7 @@ extends Control
 @onready var tab_container = $TabContainer
 @onready var restart_in_vr: Button = $"restart in vr"
 
-var big_height := 1000
+var big_height := 1200
 var big_width := 1000
 var small_height := 40
 var expanded := true
@@ -15,14 +15,6 @@ var resizing := false
 var resize_start_position := Vector2()
 
 func _ready():
-	if LocalGlobals.vr_supported:
-		restart_in_vr.hide()
-	restart_in_vr.pressed.connect(func():
-		var args := OS.get_cmdline_args()
-		args.append("--xr-mode on")
-		OS.set_restart_on_exit(true, args)
-		get_tree().quit()
-		)
 	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():
 		window_properties.call_deferred("set_target",get_window())

@@ -1,6 +1,26 @@
-[gd_scene load_steps=11 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=12 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
+
+[sub_resource type="GDScript" id="GDScript_eqaxg"]
+script/source = "extends VBoxContainer
+
+@onready var toggle: Button = $restartinvr/button
+
+var on_color :Color=Color.GREEN
+var off_color :Color=Color.GRAY
+
+func _ready():
+	if LocalGlobals.vr_supported:
+		toggle.hide()
+	toggle.pressed.connect(func():
+		var args := OS.get_cmdline_args()
+		args.append(\"--xr-mode on\")
+		OS.set_restart_on_exit(true, PackedStringArray(args))
+		if OS.is_restart_on_exit_set():
+			get_tree().quit(0)
+		)
+"
 
 [sub_resource type="GDScript" id="GDScript_jyg8t"]
 script/source = "extends VBoxContainer
@@ -231,6 +251,53 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="generalsettings" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "general settings"
+script = ExtResource("1_2xlvg")
+node_to_toggle = NodePath("../generalsettings margin2")
+
+[node name="generalsettings margin2" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/generalsettings margin2"]
+layout_mode = 2
+color = Color(1, 0, 0, 0.2)
+
+[node name="generalsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2"]
+layout_mode = 2
+
+[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings"]
+layout_mode = 2
+size_flags_vertical = 3
+script = SubResource("GDScript_eqaxg")
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "restart in vr"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="button" type="Button" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr/restartinvr"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "restart in vr"
+icon_alignment = 1
+expand_icon = true
+
 [node name="vrsettingsbutton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
@@ -247,7 +314,7 @@ theme_override_constants/margin_right = 16
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/vrsettings margin"]
 layout_mode = 2
-color = Color(1, 0, 0, 0.2)
+color = Color(0.333333, 0, 1, 0.2)
 
 [node name="vrsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin"]
 layout_mode = 2
@@ -548,7 +615,7 @@ theme_override_constants/margin_right = 16
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/chatsettings margin"]
 layout_mode = 2
-color = Color(0, 1, 0, 0.2)
+color = Color(0, 1, 1, 0.2)
 
 [node name="chatsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/chatsettings margin"]
 layout_mode = 2

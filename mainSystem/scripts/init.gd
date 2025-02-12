@@ -9,6 +9,7 @@ extends Node3D
 var anarrayfortesting : Array
 
 func _ready():
+	#OS.set_use_file_access_save_and_swap(true)
 	for i in range(1000):
 		anarrayfortesting.append(i*1.1)
 	if game_startup_scene:

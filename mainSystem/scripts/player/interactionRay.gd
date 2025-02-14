@@ -54,6 +54,15 @@ var query_exceptions : Array[RID]
 			if i not in query_exceptions:
 				query_exceptions.append(i.get_rid())
 
+## the collision layers the ui raycast should collide with
+@export_flags_3d_physics var private_ui_collision_layers : int
+
+## the collision layers the ui raycast should collide with
+@export_flags_3d_physics var edit_ui_collision_layers : int
+
+## the collision layers the world raycast should collide with
+@export_flags_3d_physics var world_collision_layers : int
+
 ## Dictionary to keep the data from the raycast query results
 ## and assign them to the helper values to make it close to 
 ## a drop-in for raycast3d nodes
@@ -90,6 +99,9 @@ var query_is_colliding : bool
 #func _ready() -> void:
 	#query_exception_nodes = query_exception_nodes
 
+## runs the physics query for the raycast
+## this now uses 2 raycasts to enforce a selection bias
+## on what object is being interacted with (ui, vs world objects)
 func query_raycast() -> Dictionary:
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
@@ -100,7 +112,16 @@ func query_raycast() -> Dictionary:
 	else:
 		rayquery.to = target_position
 	rayquery.exclude = query_exceptions
+	rayquery.collision_mask = private_ui_collision_layers
 	query_collision_data = physspace.intersect_ray(rayquery)
+	if query_collision_data.is_empty():
+		rayquery.collision_mask = edit_ui_collision_layers
+		query_collision_data = physspace.intersect_ray(rayquery)
+	if query_collision_data.is_empty():
+		rayquery.collision_mask = world_collision_layers
+		query_collision_data = physspace.intersect_ray(rayquery)
+	else:
+		print('UI')
 	return query_collision_data
 
 ## returns the query position from the last raycast

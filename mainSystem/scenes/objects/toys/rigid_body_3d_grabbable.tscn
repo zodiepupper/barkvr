@@ -13,8 +13,8 @@ collision_layer = 10
 collision_mask = 10
 freeze_mode = 1
 continuous_cd = true
-max_contacts_reported = 8
 contact_monitor = true
+max_contacts_reported = 8
 script = ExtResource("1_vhris")
 
 [node name="CollisionShape3d" type="CollisionShape3D" parent="."]

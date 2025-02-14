@@ -73,6 +73,7 @@ fov = 90.0
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
 query_exception_nodes = [NodePath("../../..")]
+world_collision_layers = 4294967295
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
 unique_name_in_owner = true
@@ -98,6 +99,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]
+world_collision_layers = 4294967295
 
 [node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.05, 0, 4.37114e-09)
@@ -154,6 +156,7 @@ script = ExtResource("2_npgyv")
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]
+world_collision_layers = 4294967295
 
 [node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
@@ -186,12 +189,11 @@ unique_name_in_owner = true
 
 [node name="handmenu" parent="xrplayer/menuoffset" instance=ExtResource("9_opil0")]
 unique_name_in_owner = true
-visible = false
 
 [node name="Panel3D" type="StaticBody3D" parent="xrplayer/menuoffset" groups=["localuipanel"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884321, -0.55546)
-collision_layer = 4
-collision_mask = 4
+collision_layer = 512
+collision_mask = 512
 script = ExtResource("9_u4nd0")
 _auto_load_ui = ExtResource("9_ydb0h")
 transparent = false

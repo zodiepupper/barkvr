@@ -19,77 +19,129 @@ size = Vector3(0.086, 0.018, 0.025)
 
 [node name="GoddettePhysicsIkTest" type="Node3D"]
 
-[node name="godette" parent="." instance=ExtResource("1_aes3c")]
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="."]
+transform = Transform3D(-1.12809e-07, -1, -1.24757e-15, 1.24544e-07, -1.0864e-15, 1, -1, 1.12809e-07, 1.24544e-07, -0.0248292, 0.888686, 0.00588866)
+bone_name = "RightShoulder"
+bone_idx = 41
+use_external_skeleton = true
+external_skeleton = NodePath("../godette/Skeleton3D")
 
-[node name="Body" parent="godette/Skeleton3D" index="0"]
-visible = false
-
-[node name="rshoulder" type="RigidBody3D" parent="."]
-transform = Transform3D(0.97656, 0.215247, 0, -0.215247, 0.97656, 0, 0, 0, 1, -0.0704731, 0.897794, 0)
+[node name="rshoulder" type="RigidBody3D" parent="BoneAttachment3D"]
+transform = Transform3D(-0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 0, 0, 1, 0, 0, 0)
+collision_layer = 9
+collision_mask = 9
 can_sleep = false
 freeze = true
-freeze_mode = 1
 metadata/grabbable = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="rshoulder"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BoneAttachment3D/rshoulder"]
 mesh = SubResource("BoxMesh_uvfo1")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="rshoulder"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAttachment3D/rshoulder"]
 shape = SubResource("BoxShape3D_4tr8g")
 disabled = true
 
 [node name="shouldertoupperarm" type="Generic6DOFJoint3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.124546, 0.906741, 0)
-node_a = NodePath("../rshoulder")
+node_a = NodePath("../BoneAttachment3D/rshoulder")
 node_b = NodePath("../rupperarm")
+linear_limit_x/restitution = 0.01
 
 [node name="rupperarm" type="RigidBody3D" parent="."]
-transform = Transform3D(0.998108, -0.0614841, 0, 0.0614841, 0.998108, 0, 0, 0, 1, -0.213388, 0.900828, 0)
+transform = Transform3D(-0.0614841, -0.998108, 0, -4.36287e-08, 2.68756e-09, -1, 0.998108, -0.0614841, -4.37114e-08, -0.213388, 0.900828, 0)
+collision_layer = 9
+collision_mask = 9
 can_sleep = false
 freeze_mode = 1
 metadata/grabbable = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="rupperarm"]
+visible = false
 mesh = SubResource("BoxMesh_00ppd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="rupperarm"]
 shape = SubResource("BoxShape3D_4tr8g")
-disabled = true
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="rupperarm"]
+bone_name = "RightUpperArm"
+bone_idx = 42
+override_pose = true
+use_external_skeleton = true
+external_skeleton = NodePath("../../godette/Skeleton3D")
 
 [node name="upparmtoforearm" type="Generic6DOFJoint3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.307434, 0.894613, 0)
 node_a = NodePath("../rupperarm")
 node_b = NodePath("../rforearm")
+linear_limit_x/restitution = 0.01
 
 [node name="rforearm" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.377685, 0.892656, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.377685, 0.892656, 0)
+collision_layer = 9
+collision_mask = 9
 can_sleep = false
 freeze_mode = 1
 metadata/grabbable = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="rforearm"]
+visible = false
 mesh = SubResource("BoxMesh_qijb4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="rforearm"]
 shape = SubResource("BoxShape3D_4tr8g")
-disabled = true
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="rforearm"]
+bone_name = "RightLowerArm"
+bone_idx = 43
+override_pose = true
+use_external_skeleton = true
+external_skeleton = NodePath("../../godette/Skeleton3D")
 
 [node name="forearmtohand" type="Generic6DOFJoint3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454422, 0.894128, 0)
 node_a = NodePath("../rforearm")
 node_b = NodePath("../rhand")
+linear_limit_x/restitution = 0.01
+angular_spring_x/enabled = true
+angular_spring_x/stiffness = 10.0
+angular_spring_y/enabled = true
+angular_spring_y/stiffness = 10.0
+angular_spring_z/enabled = true
+angular_spring_z/stiffness = 10.0
 
 [node name="rhand" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.500166, 0.891573, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, -0.500166, 0.891573, 0)
+collision_layer = 9
+collision_mask = 9
 can_sleep = false
-freeze_mode = 1
+freeze = true
 metadata/grabbable = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="rhand"]
+visible = false
 mesh = SubResource("BoxMesh_5uedm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="rhand"]
 shape = SubResource("BoxShape3D_4tr8g")
-disabled = true
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="rhand"]
+bone_name = "RightHand"
+bone_idx = 44
+override_pose = true
+use_external_skeleton = true
+external_skeleton = NodePath("../../godette/Skeleton3D")
+
+[node name="godette" parent="." instance=ExtResource("1_aes3c")]
+
+[node name="Skeleton3D" parent="godette" index="0"]
+bones/42/position = Vector3(0.00588868, 0.188559, 0.0121415)
+bones/42/rotation = Quaternion(0.0307567, 0.999527, -1.24307e-09, -4.03969e-08)
+bones/42/scale = Vector3(1, 1, 1)
+bones/43/position = Vector3(0.0101017, 0.163986, 0.00817198)
+bones/43/rotation = Quaternion(0.0217482, 0.706772, -0.0217482, 0.706772)
+bones/43/scale = Vector3(1, 1, 1)
+bones/44/position = Vector3(-0.00108302, 0.122481, 6.18527e-10)
+bones/44/rotation = Quaternion(-2.26983e-08, -0.707107, -4.96057e-09, 0.707107)
+bones/44/scale = Vector3(1, 1, 1)
 
 [editable path="godette"]

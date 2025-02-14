@@ -54,7 +54,7 @@ func build_path_to_property() -> String:
 	return out
 
 func update_fields():
-	print('bool: ', property_name)
+	#print('bool: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
 		val.button_pressed = (target[property_name])
 	elif !is_instance_valid(target):

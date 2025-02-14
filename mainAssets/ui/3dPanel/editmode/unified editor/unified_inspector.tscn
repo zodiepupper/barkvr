@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://djp6k7l4t71pi"]
+[gd_scene load_steps=10 format=3 uid="uid://djp6k7l4t71pi"]
 
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://mainAssets/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
 [ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
@@ -64,6 +64,14 @@ func _toggled(toggled_on):
 				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 "
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kfbv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
 [node name="UnifiedInspector" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -78,26 +86,29 @@ layout_mode = 1
 offset_left = 60.0
 
 [node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
+visible = false
 z_index = 1
 layout_mode = 1
 offset_left = 60.0
 
 [node name="gdscriptpanel" parent="." instance=ExtResource("3_io3sm")]
+visible = false
 layout_mode = 1
 offset_left = 60.0
 
-[node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+[node name="script_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
-offset_right = 12.0
-offset_bottom = 12.0
+offset_top = 120.0
+offset_right = 60.0
+offset_bottom = 180.0
 focus_mode = 0
 toggle_mode = true
 button_pressed = true
-icon = ExtResource("3_44k0f")
+icon = ExtResource("5_dxjhh")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../attributes")
+node_to_toggle = NodePath("../gdscriptpanel")
 slide = true
 
 [node name="inspector_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
@@ -115,17 +126,25 @@ script = SubResource("GDScript_mguyu")
 node_to_toggle = NodePath("../sceneinspector")
 slide = true
 
-[node name="script_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+[node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
-offset_top = 120.0
-offset_right = 60.0
-offset_bottom = 180.0
+offset_right = 12.0
+offset_bottom = 12.0
 focus_mode = 0
 toggle_mode = true
-button_pressed = true
-icon = ExtResource("5_dxjhh")
+icon = ExtResource("3_44k0f")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../gdscriptpanel")
+node_to_toggle = NodePath("../attributes")
 slide = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8kfbv")

@@ -60,45 +60,63 @@ script = ExtResource("1_jd5nk")
 
 [node name="scale up" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0.1, 0.1, -8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 text = "scale up"
 callscript = SubResource("GDScript_mkksm")
 
 [node name="scale down" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0.1, 0)
+collision_layer = 512
+collision_mask = 512
 text = "scale down"
 callscript = SubResource("GDScript_apv3r")
 
 [node name="cube" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, 0.1, 8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 itemToSpawn = "res://mainSystem/scenes/objects/toys/rigid_body_3d_grabbable.tscn"
 item_spawn_multiplier = 100.0
 text = "cube"
 
 [node name="fly mode" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0.1, 0, -8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 text = "fly mode"
 callscript = SubResource("GDScript_3v3kl")
 
 [node name="noclip" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
+collision_layer = 512
+collision_mask = 512
 text = "noclip"
 callscript = SubResource("GDScript_ft12v")
 
 [node name="print when clicked" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, 0, 8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 text = "print when clicked"
 callscript = SubResource("GDScript_djyhs")
 
 [node name="undo" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0.1, -0.1, -8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 text = "undo"
 callscript = SubResource("GDScript_wrd3g")
 
 [node name="redo" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, -0.1, 0)
+collision_layer = 512
+collision_mask = 512
 text = "redo"
 
 [node name="clear gizmos" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, -0.1, 8.74228e-09)
+collision_layer = 512
+collision_mask = 512
 text = "clear gizmos"
 callscript = SubResource("GDScript_tka4v")

@@ -1,6 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=14 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
+[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/graphics_fields_setter.gd" id="2_6aatb"]
+[ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
 
 [sub_resource type="GDScript" id="GDScript_eqaxg"]
 script/source = "extends VBoxContainer
@@ -104,16 +106,6 @@ func _ready():
 		create_tween().tween_property(zval, \"text\", \"is enabled\" if toggled_on else \"is disabled\", .5)
 		get_tree().get_first_node_in_group('localuilookat').z = toggled_on
 		create_tween().tween_property(z_color_rect,\"color\",Color.BLUE if toggled_on else Color.GRAY,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		)
-"
-
-[sub_resource type="GDScript" id="GDScript_abd45"]
-script/source = "extends Control
-@onready var h_slider = $HSlider
-
-func _ready():
-	h_slider.value_changed.connect(func(value):
-		get_window().get_viewport().scaling_3d_scale = value
 		)
 "
 
@@ -230,6 +222,16 @@ func items() -> PackedStringArray:
 	return output
 "
 
+[sub_resource type="GDScript" id="GDScript_abd45"]
+script/source = "extends Control
+@onready var h_slider = $HSlider
+
+func _ready():
+	h_slider.value_changed.connect(func(value):
+		get_window().get_viewport().scaling_3d_scale = value
+		)
+"
+
 [node name="settings" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -257,39 +259,39 @@ focus_mode = 0
 toggle_mode = true
 text = "general settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../generalsettings margin2")
+node_to_toggle = NodePath("../generalsettings margin")
 
-[node name="generalsettings margin2" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="generalsettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/generalsettings margin2"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/generalsettings margin"]
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
-[node name="generalsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2"]
+[node name="generalsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin"]
 layout_mode = 2
 
-[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings"]
+[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings"]
 layout_mode = 2
 size_flags_vertical = 3
 script = SubResource("GDScript_eqaxg")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "restart in vr"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr"]
+[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="button" type="Button" parent="ScrollContainer/VBoxContainer/generalsettings margin2/generalsettings/restartinvr/restartinvr"]
+[node name="button" type="Button" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr/restartinvr"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -541,29 +543,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 0, 1, 1)
 
-[node name="scaling3d" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings"]
-layout_mode = 2
-script = SubResource("GDScript_abd45")
-
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/scaling3d"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Scaling 3d:"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/scaling3d"]
-layout_mode = 2
-size_flags_vertical = 3
-focus_mode = 0
-min_value = 0.1
-max_value = 1.9
-step = 0.1
-value = 1.0
-scrollable = false
-tick_count = 3
-ticks_on_borders = true
-
 [node name="inspectorupdateinterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings"]
 layout_mode = 2
 script = SubResource("GDScript_xtm8w")
@@ -657,6 +636,7 @@ toggle_mode = true
 text = "Audio Settings"
 script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../audiosettings margin")
+slide = true
 
 [node name="audiosettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
@@ -736,3 +716,51 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
+
+[node name="graphics" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "general settings"
+script = ExtResource("1_2xlvg")
+node_to_toggle = NodePath("../graphics margin")
+slide = true
+
+[node name="graphics margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/graphics margin"]
+layout_mode = 2
+color = Color(1, 0, 0, 0.2)
+
+[node name="graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/graphics margin"]
+layout_mode = 2
+script = ExtResource("2_6aatb")
+
+[node name="anti aliasing" parent="ScrollContainer/VBoxContainer/graphics margin/graphics" instance=ExtResource("2_bod8q")]
+layout_mode = 2
+
+[node name="scaling3d" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/graphics margin/graphics"]
+layout_mode = 2
+script = SubResource("GDScript_abd45")
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/graphics margin/graphics/scaling3d"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Scaling 3d:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/graphics margin/graphics/scaling3d"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+min_value = 0.1
+max_value = 1.9
+step = 0.1
+value = 1.0
+scrollable = false
+tick_count = 3
+ticks_on_borders = true

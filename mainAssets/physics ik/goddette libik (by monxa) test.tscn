@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://bptuhgi78y2fh"]
+
+[ext_resource type="PackedScene" uid="uid://yk0dma18v2xm" path="res://addons/renik-gdscript/sample_models/godette.glb" id="1_5khwa"]
+
+[node name="GoddettePhysicsIkTest" type="Node3D"]
+
+[node name="godette" parent="." instance=ExtResource("1_5khwa")]
+
+[node name="Skeleton3D" parent="godette" index="0"]
+bones/42/position = Vector3(0.00588868, 0.188559, 0.0121415)
+bones/42/rotation = Quaternion(0.0307567, 0.999527, -1.24306e-09, -4.03969e-08)
+bones/42/scale = Vector3(1, 1, 1)
+bones/43/position = Vector3(0.0101017, 0.163986, 0.00817198)
+bones/43/rotation = Quaternion(0.0217482, 0.706772, -0.0217482, 0.706772)
+bones/43/scale = Vector3(1, 1, 1)
+bones/44/position = Vector3(-0.00108302, 0.122481, -3.56203e-08)
+bones/44/rotation = Quaternion(9.57037e-09, -0.707107, -9.57038e-09, 0.707107)
+bones/44/scale = Vector3(1, 1, 1)
+
+[node name="GodotIK" type="GodotIK" parent="godette/Skeleton3D" index="2"]
+transform = Transform3D(-0.741338, -0.564795, 0.362526, 0.52354, -0.148705, 0.838924, -0.41991, 0.811723, 0.405933, -0.320681, 0.727329, 0.171864)
+
+[node name="GodotIKEffector" type="GodotIKEffector" parent="godette/Skeleton3D/GodotIK"]
+bone_idx = 44
+chain_length = 4
+transform_mode = 3
+transform = Transform3D(-0.386659, -0.921157, 0.0443485, -0.875715, 0.351655, -0.330853, 0.289172, -0.166764, -0.94264, 0.017889, 0.00912304, -0.00954676)
+
+[node name="GodotIKEffector2" type="GodotIKEffector" parent="godette/Skeleton3D/GodotIK"]
+bone_idx = 28
+chain_length = 4
+transform_mode = 3
+transform = Transform3D(-0.754278, -0.423207, 0.501957, -0.31417, 0.903972, 0.290055, -0.576508, 0.0610821, -0.814805, -0.39958, -0.247921, 0.224867)
+
+[node name="GodotIKEffector3" type="GodotIKEffector" parent="godette/Skeleton3D/GodotIK"]
+bone_idx = 4
+chain_length = 4
+transform_mode = 3
+transform = Transform3D(-0.717458, 0.307916, -0.624854, -0.63036, 0.0947959, 0.770494, 0.296481, 0.946679, 0.126086, -0.0460094, -0.318479, 0.247743)
+
+[editable path="godette"]

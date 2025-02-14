@@ -25,7 +25,7 @@ func _process(_delta):
 				update_fields()
 
 func update_fields():
-	print('string: ', property_name)
+	#print('string: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target):
 		val.text = str(target[property_name])
 	elif !is_instance_valid(target):

@@ -402,18 +402,23 @@ func flat_movement():
 		else:
 			grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
-		if LocalGlobals.editor_refs.has('vreditor'):
+		if LocalGlobals.editor_refs.has('unified_inspector'):
+			LocalGlobals.editor_refs.unified_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
+			LocalGlobals.editor_refs.unified_inspector.look_at(camera_3d.global_position, Vector3.UP, true)
+		elif LocalGlobals.editor_refs.has('vreditor'):
 			LocalGlobals.editor_refs.mainpanel.global_position = camera_3d.to_global(Vector3(0,0,-.5))
 			LocalGlobals.editor_refs.mainpanel.look_at(camera_3d.global_position, Vector3.UP, true)
 			#LocalGlobals.editor_refs.mainpanel.global_rotation.x += deg_to_rad(90.0)
 		else:
-			vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
+			#vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
+			vreditor = load("res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
 			get_tree().get_first_node_in_group("localroot").add_child(vreditor)
-			vreditor.global_position = righthand.hand_menu_point.global_position
+			vreditor.global_position = camera_3d.to_global(Vector3(0,0,-.5))
+			vreditor.look_at(camera_3d.global_position, Vector3.UP, true)
 	if !vr_mode_enabled:
 		righthand.look_at(camera_3d.to_global(grab_point))
 	
-	if true:
+	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
 		var input_dir = Input.get_vector("left", "right", "up", "down")
 		if !movedrag.is_empty():
 			if -touch_move_left > input_dir.x:

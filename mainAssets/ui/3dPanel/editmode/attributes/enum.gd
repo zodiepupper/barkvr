@@ -33,7 +33,7 @@ func _process(_delta):
 		val.text = ''
 
 func update_fields():
-	print('enum: ', property_name)
+	#print('enum: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
 		val.selected = (target[property_name])
 	elif !is_instance_valid(target):
@@ -51,9 +51,10 @@ func _check_focus():
 func set_data(new_name:String, new_target:Object, new_property_name:String, prop_data:Dictionary):
 	label.text = new_name
 	property_name = new_property_name
-	var options :Array = prop_data.hint_string.split(',')
-	for i in options.size():
-		val.add_item(options[i], i)
+	if "hint_string" in prop_data:
+		var options :Array = prop_data.hint_string.split(',')
+		for i in options.size():
+			val.add_item(options[i], i)
 	val.selected = (new_target[property_name])
 	target = new_target
 	name = new_name

@@ -102,7 +102,7 @@ func _process(_delta):
 		update_fields()
 
 func update_fields():
-	print('color: ', property_name)
+	#print('color: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and property_name in target and target[property_name] and !_check_focus():
 		rval.text = str(target[property_name].r)
 		gval.text = str(target[property_name].g)

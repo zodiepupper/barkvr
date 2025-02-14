@@ -33,7 +33,7 @@ func _process(_delta):
 			update_fields()
 
 func update_fields():
-	print('vec2: ', property_name)
+	#print('vec2: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
 		xval.text = str(target.get(property_name).x)
 		yval.text = str(target.get(property_name).y)

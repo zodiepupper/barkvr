@@ -6,17 +6,24 @@ extends Button
 @export var slide := false
 var slide_start_pos
 
+var prevtween : Tween = create_tween()
+
 func _toggled(toggled_on):
 	if is_instance_valid(node_to_toggle):
+		var tmptween := create_tween()
+		prevtween.kill()
 		if !slide:
 			node_to_toggle.visible = toggled_on
 		if slide:
 			if !slide_start_pos:
 				slide_start_pos = node_to_toggle.position
-			node_to_toggle.show()
 			if toggled_on:
-				create_tween().tween_property(node_to_toggle,"position:x",slide_start_pos.x,.5).\
+				tmptween.tween_property(node_to_toggle,"position:x",slide_start_pos.x,.5).\
 				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+				tmptween.parallel()
+				tmptween.tween_property(node_to_toggle,"visible", true,0.0)
 			else:
-				create_tween().tween_property(node_to_toggle,"position:x",-(node_to_toggle.size.x+slide_start_pos.x),.5).\
+				tmptween.tween_property(node_to_toggle,"position:x",-(node_to_toggle.size.x+slide_start_pos.x),.5).\
 				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+				tmptween.tween_property(node_to_toggle,"visible", false,0.0)
+		prevtween = tmptween

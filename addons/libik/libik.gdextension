@@ -1,0 +1,22 @@
+[configuration]
+entry_symbol = "ikworks_init"
+compatibility_minimum = "4.3"
+
+[libraries]
+linux.debug.x86_64 = "bin/libik.so"
+linux.release.x86_64 = "bin/libik.so"
+windows.debug.x86_64 = "bin/libik.dll"
+windows.release.x86_64 = "bin/libik.dll"
+macos.debug = "bin/libik.dylib"
+macos.release = "bin/libik.dylib"
+ios.debug = "bin/libik.ios.dylib"
+ios.release = "bin/libik.ios.dylib"
+android.debug.arm64 = "bin/libik.android.so"
+android.release.arm64 = "bin/libik.android.so"
+web.debug.wasm32 = "bin/libik.wasm"
+web.release.wasm32 = "bin/libik.wasm"
+
+[icons]
+GodotIK = "icons/icon_godot_ik.svg"
+GodotIKEffector = "icons/icon_godot_ik_effector.svg"
+GodotIKConstraint = "icons/icon_godot_ik_constraint.svg"

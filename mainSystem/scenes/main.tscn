@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c3i4ahamrqxcq"]
+[gd_scene load_steps=16 format=3 uid="uid://c3i4ahamrqxcq"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/init.gd" id="1_gkt54"]
 [ext_resource type="PackedScene" uid="uid://dv0etfy0ao5" path="res://mainSystem/scenes/init_world.tscn" id="2_3jltp"]
@@ -9,7 +9,11 @@
 [ext_resource type="Script" path="res://mainSystem/scripts/settings.gd" id="6_60o4m"]
 [ext_resource type="Script" path="res://addons/vector/vector.gd" id="7_ldaby"]
 [ext_resource type="Script" path="res://mainAssets/objects/pens/voxel_draw_test.gd" id="8_4ywql"]
-[ext_resource type="PackedScene" uid="uid://bro0elbb47bnx" path="res://mainAssets/physics ik/goddette physics ik test.tscn" id="10_evgyk"]
+[ext_resource type="PackedScene" uid="uid://bro0elbb47bnx" path="res://mainAssets/ik testing/goddette physics ik test.tscn" id="10_evgyk"]
+[ext_resource type="PackedScene" uid="uid://bmackcoarqct1" path="res://mainSystem/scenes/objects/toys/static_body_3d_grabbable.tscn" id="11_d8g3h"]
+[ext_resource type="PackedScene" uid="uid://bptuhgi78y2fh" path="res://mainAssets/ik testing/goddette libik (by monxa) test.tscn" id="11_y0lpd"]
+[ext_resource type="PackedScene" uid="uid://cflstd2bxe62a" path="res://mainAssets/ik testing/goddette skeleton ik test.tscn" id="12_ugc8j"]
+[ext_resource type="PackedScene" uid="uid://dt1xf7vatp3tl" path="res://mainAssets/ik testing/goddette ragdoll test.tscn" id="14_k8oeh"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
 
@@ -54,4 +58,30 @@ text = "Enter VR"
 [node name="GoddettePhysicsIkTest" parent="." instance=ExtResource("10_evgyk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119277, 1.51357, 0.355796)
 
+[node name="RigidBody3d" parent="." instance=ExtResource("11_d8g3h")]
+transform = Transform3D(0.886077, 0.423819, -0.187745, 0.170385, -0.674458, -0.718386, -0.431092, 0.604555, -0.669832, -3.58991, 2.37105, 0.167882)
+
+[node name="MeshInstance3d" parent="RigidBody3d" index="1"]
+transparency = 0.6
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="RigidBody3d"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 2.98023e-08, -2.98023e-08, 1, 0, 0, 0)
+remote_path = NodePath("../../goddette libik (monxa)/godette/Skeleton3D/GodotIK/GodotIKEffector")
+
+[node name="goddette libik (monxa)" parent="." instance=ExtResource("11_y0lpd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.24735, 1.64372, 0)
+
+[node name="GodotIKEffector" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="0"]
+transform = Transform3D(-0.386659, -0.921157, 0.0443485, -0.875715, 0.351656, -0.330853, 0.289172, -0.166764, -0.942641, 0.0178921, 0.00912464, -0.00954723)
+
+[node name="Goddette skeleton3d" parent="." instance=ExtResource("12_ugc8j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69273, 1.72772, 0)
+
+[node name="GoddetteRagdollTest" parent="." instance=ExtResource("14_k8oeh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.18176, 1.63659, 0)
+
 [connection signal="pressed" from="StartXR/EnterWebXR/EnterVRButton" to="StartXR" method="_on_enter_webxr_button_pressed"]
+
+[editable path="RigidBody3d"]
+[editable path="goddette libik (monxa)"]
+[editable path="goddette libik (monxa)/godette"]

@@ -1,14 +1,13 @@
-[gd_scene load_steps=18 format=3 uid="uid://r68jre2w5k33"]
+[gd_scene load_steps=16 format=3 uid="uid://r68jre2w5k33"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/player/xrplayer-controller.gd" id="1_iwrfe"]
 [ext_resource type="Script" path="res://mainSystem/scripts/player/hand.gd" id="2_npgyv"]
 [ext_resource type="PackedScene" uid="uid://12mm63qyglpf" path="res://mainSystem/scenes/player/handray.tscn" id="4_316iy"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="5_d1mpu"]
 [ext_resource type="Texture2D" uid="uid://cncindvbjlp8g" path="res://mainAssets/ui/assets/wrist_menu/UI_mockup_trasparent.png" id="6_j5bbn"]
+[ext_resource type="PackedScene" uid="uid://bbqns5wp6l638" path="res://mainAssets/ui/3dPanel/editmode/localmenu.tscn" id="8_8rqii"]
 [ext_resource type="Script" path="res://mainSystem/scripts/player/notificationpositioner.gd" id="8_n4qtp"]
 [ext_resource type="PackedScene" uid="uid://cr02u36wo3sqp" path="res://addons/contextmenu/gridmenu/handmenu.tscn" id="9_opil0"]
-[ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="9_u4nd0"]
-[ext_resource type="PackedScene" uid="uid://doy6bwhtmwdc6" path="res://mainAssets/ui/3dPanel/local ui/localmenu.tscn" id="9_ydb0h"]
 
 [sub_resource type="GDScript" id="GDScript_swjn5"]
 
@@ -36,25 +35,6 @@ script/source = "extends Label3D
 	#text = str(1/delta)
 "
 
-[sub_resource type="GDScript" id="GDScript_2vxca"]
-script/source = "extends Node
-
-@export var flipped := false
-@export var x := true
-@export var y := true
-@export var z := true
-
-func _process(_delta):
-	var prev_rot :Vector3= get_parent().rotation
-	get_parent().look_at(get_tree().get_first_node_in_group('player').get_viewport().get_camera_3d().global_position, Vector3.UP, flipped)
-	if !x:
-		get_parent().rotation.x = prev_rot.x
-	if !y:
-		get_parent().rotation.y = prev_rot.y
-	if !z:
-		get_parent().rotation.z = prev_rot.z
-"
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_clvwe"]
 height = 1.0
 radius = 0.1
@@ -73,6 +53,8 @@ fov = 90.0
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
 query_exception_nodes = [NodePath("../../..")]
+private_ui_collision_layers = 512
+edit_ui_collision_layers = 4
 world_collision_layers = 4294967295
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
@@ -99,6 +81,8 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]
+private_ui_collision_layers = 512
+edit_ui_collision_layers = 4
 world_collision_layers = 4294967295
 
 [node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
@@ -156,6 +140,8 @@ script = ExtResource("2_npgyv")
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 query_exception_nodes = [NodePath("../../../..")]
+private_ui_collision_layers = 512
+edit_ui_collision_layers = 4
 world_collision_layers = 4294967295
 
 [node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy"]
@@ -190,22 +176,7 @@ unique_name_in_owner = true
 [node name="handmenu" parent="xrplayer/menuoffset" instance=ExtResource("9_opil0")]
 unique_name_in_owner = true
 
-[node name="Panel3D" type="StaticBody3D" parent="xrplayer/menuoffset" groups=["localuipanel"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884321, -0.55546)
-collision_layer = 512
-collision_mask = 512
-script = ExtResource("9_u4nd0")
-_auto_load_ui = ExtResource("9_ydb0h")
-transparent = false
-viewport_size = Vector2i(1390, 1024)
-ANCHOR_POSITION = 3
-render_priority = 127
-on_top = true
-metadata/grabbable = true
-
-[node name="parent_lookat_user_camera" type="Node" parent="xrplayer/menuoffset/Panel3D" groups=["localuilookat"]]
-script = SubResource("GDScript_2vxca")
-flipped = true
+[node name="Panel3D" parent="xrplayer/menuoffset" instance=ExtResource("8_8rqii")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true

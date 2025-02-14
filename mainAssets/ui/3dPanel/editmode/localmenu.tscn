@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbqns5wp6l638"]
+
+[ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="1_ddiio"]
+[ext_resource type="PackedScene" uid="uid://doy6bwhtmwdc6" path="res://mainAssets/ui/3dPanel/local ui/localmenu.tscn" id="2_q3y53"]
+
+[sub_resource type="GDScript" id="GDScript_2vxca"]
+script/source = "extends Node
+
+@export var flipped := false
+@export var x := true
+@export var y := true
+@export var z := true
+
+func _process(_delta):
+	var prev_rot :Vector3= get_parent().rotation
+	get_parent().look_at(get_tree().get_first_node_in_group('player').get_viewport().get_camera_3d().global_position, Vector3.UP, flipped)
+	if !x:
+		get_parent().rotation.x = prev_rot.x
+	if !y:
+		get_parent().rotation.y = prev_rot.y
+	if !z:
+		get_parent().rotation.z = prev_rot.z
+"
+
+[node name="Panel3D" type="RigidBody3D" groups=["localuipanel"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884321, -0.55546)
+collision_layer = 512
+collision_mask = 512
+freeze = true
+freeze_mode = 1
+script = ExtResource("1_ddiio")
+_auto_load_ui = ExtResource("2_q3y53")
+ANCHOR_POSITION = 3
+render_priority = 127
+on_top = true
+metadata/grabbable = true
+
+[node name="parent_lookat_user_camera" type="Node" parent="." groups=["localuilookat"]]
+script = SubResource("GDScript_2vxca")
+flipped = true

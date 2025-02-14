@@ -50,6 +50,7 @@ text = "duplicate"
 
 [node name="reparent" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+toggle_mode = true
 text = "reparent"
 
 [node name="cut" type="Button" parent="HBoxContainer/VBoxContainer"]

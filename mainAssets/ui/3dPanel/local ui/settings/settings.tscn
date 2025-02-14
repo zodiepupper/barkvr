@@ -636,7 +636,6 @@ toggle_mode = true
 text = "Audio Settings"
 script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../audiosettings margin")
-slide = true
 
 [node name="audiosettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
@@ -721,12 +720,12 @@ color = Color(0, 1, 0, 0)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-text = "general settings"
+text = "graphics settings"
 script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../graphics margin")
-slide = true
 
 [node name="graphics margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16

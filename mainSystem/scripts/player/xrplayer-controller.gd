@@ -486,15 +486,15 @@ func grab(node:Node, laser:bool=false):
 	var tmpgrab = node.get_meta("grabbable")
 	if tmpgrab:
 		if node.is_class("RigidBody3D"):
-			node.freeze = true
 			if !grabbed.has(node.name):
 				grabbed[node.name] = {
 					"parent": node.get_parent(),
 					'offset': camera_3d.global_transform.affine_inverse() * node.global_transform,
 					'rotoffset': node.global_rotation,
-					'frozen': node.freeze,
+					'isfrozen': node.freeze,
 					'node': node
 				}
+			node.freeze = true
 		else:
 			if laser:
 				pass
@@ -509,6 +509,6 @@ func grab(node:Node, laser:bool=false):
 func releasegrab(node:Node):
 	if grabbed.has(node.name):
 		if node is RigidBody3D:
-			node.freeze = false
+			node.freeze = grabbed[node.name].isfrozen
 		grabbed.erase(node.name)
 		

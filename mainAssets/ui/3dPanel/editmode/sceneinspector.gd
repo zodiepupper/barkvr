@@ -7,25 +7,33 @@ var root:Node
 
 var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn")
 
-@onready var delete: Button = $HBoxContainer/VBoxContainer/delete
-@onready var export: Button = $HBoxContainer/VBoxContainer/export
-@onready var duplicate: Button = $HBoxContainer/VBoxContainer/duplicate
-@onready var cut: Button = $HBoxContainer/VBoxContainer/cut
-@onready var copy: Button = $HBoxContainer/VBoxContainer/copy
-@onready var paste: Button = $HBoxContainer/VBoxContainer/paste
+@onready var delete_btn: Button = $HBoxContainer/VBoxContainer/delete
+@onready var export_btn: Button = $HBoxContainer/VBoxContainer/export
+@onready var duplicate_btn: Button = $HBoxContainer/VBoxContainer/duplicate
+@onready var reparent_btn: Button = $HBoxContainer/VBoxContainer/reparent
+@onready var cut_btn: Button = $HBoxContainer/VBoxContainer/cut
+@onready var copy_btn: Button = $HBoxContainer/VBoxContainer/copy
+@onready var paste_btn: Button = $HBoxContainer/VBoxContainer/paste
+
+var reparenting : bool = false
+var last_selected
 
 func _ready():
-	delete.pressed.connect(func():
+	delete_btn.pressed.connect(func():
 		var selected = get_all_selected()
 		for item in selected:
 			if "node" in item.get_metadata(0):
 				item.get_metadata(0).node.queue_free()
-		pass
+		)
+	duplicate_btn.pressed.connect(_duplicate_targets)
+	reparent_btn.toggled.connect(func(on:bool):
+		reparenting = on
 		)
 	
 	#print(tree.get_class())
 	tree.cell_selected.connect(func():
 		selected.emit(tree.get_selected().get_metadata(0).node)
+		last_selected = tree.get_next_selected(null)
 		LocalGlobals.clear_gizmos.emit()
 		var node = tree.get_selected().get_metadata(0).node
 		if !is_instance_valid(node):
@@ -66,6 +74,12 @@ func _ready():
 	get_tree().node_removed.connect(func(node:Node):
 		tree.remove_item(node)
 		)
+
+func _duplicate_targets() -> void:
+	var selected = get_all_selected()
+	for item in selected:
+		if "node" in item.get_metadata(0):
+			item.get_metadata(0).node.get_parent().add_child(item.get_metadata(0).node.duplicate())
 
 func _check_tree_for_updates():
 	if is_instance_valid(root):

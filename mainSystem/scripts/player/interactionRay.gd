@@ -120,8 +120,6 @@ func query_raycast() -> Dictionary:
 	if query_collision_data.is_empty():
 		rayquery.collision_mask = world_collision_layers
 		query_collision_data = physspace.intersect_ray(rayquery)
-	else:
-		print('UI')
 	return query_collision_data
 
 ## returns the query position from the last raycast

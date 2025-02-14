@@ -34,10 +34,11 @@ const PLAYER_STATE_PAUSED := 0
 const PLAYER_STATE_PLAYING:= 1
 const PLAYER_STATE_TYPING := 2
 
-@export_enum("EDITING", "PLAYING", "VIEWING") var world_state : int = 0
+@export_enum("EDITING", "PLAYING", "VIEWING", "SELECTING") var world_state : int = 0
 const WORLD_STATE_EDITING := 0
 const WORLD_STATE_PLAYING := 1
 const WORLD_STATE_VIEWING := 2
+const WORLD_STATE_SELECTING := 3
 
 var voice_analyzer :AudioEffectSpectrumAnalyzerInstance:
 	get:

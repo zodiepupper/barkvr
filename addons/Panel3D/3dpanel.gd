@@ -1,7 +1,7 @@
 @tool
 @icon("res://addons/Panel3D/icon.svg")
 class_name Panel3D
-extends StaticBody3D
+extends RigidBody3D
 var viewport : SubViewport
 var viewport_container : SubViewportContainer
 var mesh : MeshInstance3D
@@ -86,7 +86,11 @@ var tex : ViewportTexture
 		viewport.size = viewport_size
 		mesh.mesh.size.x = (pixel_size/1000.0)*viewport.size.x
 		mesh.mesh.size.y = (pixel_size/1000.0)*viewport.size.y
-		colshape.shape.size = Vector3((pixel_size/1000.0)*viewport.size.x,(pixel_size/1000.0)*viewport.size.y,.001)
+		mesh.position.z = panel_thickness*.5
+		colshape.shape.size = Vector3((pixel_size/1000.0)*viewport.size.x,(pixel_size/1000.0)*viewport.size.y,panel_thickness)
+
+## sets the thickness of the collider
+@export var panel_thickness := .05
 
 const TOP_LEFT = 0
 const MIDDLE_LEFT = 1
@@ -154,6 +158,8 @@ const BOTTOM_RIGHT = 8
 		material.heightmap_scale = heightmap_scale
 
 func _init():
+	freeze = true
+	freeze_mode = FREEZE_MODE_KINEMATIC
 	viewport = SubViewport.new()
 	viewport.is_processing_input()
 	viewport.gui_embed_subwindows = true

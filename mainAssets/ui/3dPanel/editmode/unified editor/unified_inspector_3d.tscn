@@ -1,12 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://ec0mqh35i2in"]
+[gd_scene load_steps=4 format=3 uid="uid://ec0mqh35i2in"]
 
 [ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="1_2f3s4"]
 [ext_resource type="PackedScene" uid="uid://djp6k7l4t71pi" path="res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector.tscn" id="2_420i3"]
 
-[node name="UnifiedInspector3d" type="StaticBody3D"]
-collision_layer = 4
-collision_mask = 4
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5mcw"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.095, 0.093, 0.18, 0.416)
+
+[node name="UnifiedInspector3d" type="RigidBody3D"]
+collision_layer = 5
+collision_mask = 5
+freeze = true
+freeze_mode = 1
+continuous_cd = true
 script = ExtResource("1_2f3s4")
+background_material = SubResource("StandardMaterial3D_o5mcw")
 _auto_load_ui = ExtResource("2_420i3")
 render_priority = 124
 on_top = true

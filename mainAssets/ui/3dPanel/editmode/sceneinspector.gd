@@ -32,8 +32,16 @@ func _ready():
 	
 	#print(tree.get_class())
 	tree.cell_selected.connect(func():
-		selected.emit(tree.get_selected().get_metadata(0).node)
-		last_selected = tree.get_next_selected(null)
+		var new_selection = tree.get_selected().get_metadata(0).node
+		selected.emit(new_selection)
+		if last_selected and new_selection != last_selected and reparenting:
+			#last_selected.get_parent().remove_child(last_selected)
+			#new_selection.add_child(last_selected)
+			last_selected.reparent(new_selection)
+			last_selected.owner = last_selected.get_parent()
+			_check_tree_for_updates()
+			reparent_btn.button_pressed = false
+		last_selected = new_selection
 		LocalGlobals.clear_gizmos.emit()
 		var node = tree.get_selected().get_metadata(0).node
 		if !is_instance_valid(node):
@@ -53,16 +61,17 @@ func _ready():
 	})
 	_check_tree_for_updates()
 	get_tree().node_added.connect(func(node:Node):
-		await get_tree().process_frame
-		if root:
-			if is_instance_valid(node) and root.is_ancestor_of(node):
-				var nodename :String = node.name
-				if node.has_meta('display_name'):
-					nodename = node.get_meta('display_name')
-				tree.add_item(nodename, {
-					'node':node,
-					'parent':node.get_parent()
-				})
+		if is_inside_tree():
+			await get_tree().process_frame
+			if root:
+				if is_instance_valid(node) and root.is_ancestor_of(node):
+					var nodename :String = node.name
+					if node.has_meta('display_name'):
+						nodename = node.get_meta('display_name')
+					tree.add_item(nodename, {
+						'node':node,
+						'parent':node.get_parent()
+					})
 		)
 	get_tree().node_renamed.connect(func(node:Node):
 		#print('node renamed')

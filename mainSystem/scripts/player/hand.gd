@@ -152,6 +152,7 @@ func buttonReleased(btn_name):
 		rayBody = null
 
 func contextMenuSummon():
+	print(contexttimer)
 	if contexttimer < contexteditortimeout:
 		handmenu.summon(hand_menu_point.global_position, global_position)
 	else:

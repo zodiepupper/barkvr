@@ -58,21 +58,47 @@ text = "Enter VR"
 [node name="GoddettePhysicsIkTest" parent="." instance=ExtResource("10_evgyk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119277, 1.51357, 0.355796)
 
-[node name="RigidBody3d" parent="." instance=ExtResource("11_d8g3h")]
-transform = Transform3D(0.886077, 0.423819, -0.187745, 0.170385, -0.674458, -0.718386, -0.431092, 0.604555, -0.669832, -3.58991, 2.37105, 0.167882)
-
-[node name="MeshInstance3d" parent="RigidBody3d" index="1"]
-transparency = 0.6
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="RigidBody3d"]
-transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 2.98023e-08, -2.98023e-08, 1, 0, 0, 0)
-remote_path = NodePath("../../goddette libik (monxa)/godette/Skeleton3D/GodotIK/GodotIKEffector")
-
 [node name="goddette libik (monxa)" parent="." instance=ExtResource("11_y0lpd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.24735, 1.64372, 0)
 
 [node name="GodotIKEffector" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="0"]
-transform = Transform3D(-0.386659, -0.921157, 0.0443485, -0.875715, 0.351656, -0.330853, 0.289172, -0.166764, -0.942641, 0.0178921, 0.00912464, -0.00954723)
+transform = Transform3D(-0.386659, -0.921157, 0.0443485, -0.875715, 0.351656, -0.330853, 0.289172, -0.166764, -0.942641, -0.0271914, -0.079311, 0.00291187)
+
+[node name="GodotIKEffector2" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="1"]
+transform = Transform3D(-0.754279, -0.423207, 0.501957, -0.314171, 0.903973, 0.290055, -0.576509, 0.0610822, -0.814806, -0.39958, -0.247921, 0.224867)
+
+[node name="GodotIKEffector3" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="2"]
+transform = Transform3D(-0.857363, 0.271607, -0.43722, -0.393742, 0.20101, 0.896974, 0.331512, 0.941184, -0.0653951, -0.146139, -0.545045, 0.280233)
+
+[node name="RigidBody3d" parent="goddette libik (monxa)" instance=ExtResource("11_d8g3h")]
+transform = Transform3D(0.886077, 0.423819, -0.187745, 0.170385, -0.674458, -0.718386, -0.431092, 0.604555, -0.669832, -0.254673, 0.72733, 0.167882)
+
+[node name="MeshInstance3d" parent="goddette libik (monxa)/RigidBody3d" index="1"]
+transparency = 0.6
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="goddette libik (monxa)/RigidBody3d"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 2.98023e-08, -2.98023e-08, 1, 0, 0, 0)
+remote_path = NodePath("../../godette/Skeleton3D/GodotIK/GodotIKEffector")
+
+[node name="RigidBody3d2" parent="goddette libik (monxa)" instance=ExtResource("11_d8g3h")]
+transform = Transform3D(0.527618, -0.174676, -0.83133, -0.831824, -0.304748, -0.463898, -0.172314, 0.93628, -0.306089, 0.197088, 0.743646, 0.229689)
+
+[node name="MeshInstance3d" parent="goddette libik (monxa)/RigidBody3d2" index="1"]
+transparency = 0.6
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="goddette libik (monxa)/RigidBody3d2"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 2.98023e-08, -2.98023e-08, 1, 0, 0, 0)
+remote_path = NodePath("../../godette/Skeleton3D/GodotIK/GodotIKEffector2")
+
+[node name="RigidBody3d3" parent="goddette libik (monxa)" instance=ExtResource("11_d8g3h")]
+transform = Transform3D(0.978161, 0.0263211, -0.206186, -0.112199, 0.901888, -0.417148, 0.174977, 0.431172, 0.885142, 0.197088, 0.966965, -0.0954404)
+
+[node name="MeshInstance3d" parent="goddette libik (monxa)/RigidBody3d3" index="1"]
+transparency = 0.6
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="goddette libik (monxa)/RigidBody3d3"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 2.98023e-08, -2.98023e-08, 1, 0, 0, 0)
+remote_path = NodePath("../../godette/Skeleton3D/GodotIK/GodotIKEffector3")
 
 [node name="Goddette skeleton3d" parent="." instance=ExtResource("12_ugc8j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69273, 1.72772, 0)
@@ -82,6 +108,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.18176, 1.63659, 0)
 
 [connection signal="pressed" from="StartXR/EnterWebXR/EnterVRButton" to="StartXR" method="_on_enter_webxr_button_pressed"]
 
-[editable path="RigidBody3d"]
 [editable path="goddette libik (monxa)"]
 [editable path="goddette libik (monxa)/godette"]
+[editable path="goddette libik (monxa)/RigidBody3d"]
+[editable path="goddette libik (monxa)/RigidBody3d2"]
+[editable path="goddette libik (monxa)/RigidBody3d3"]

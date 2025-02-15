@@ -15,6 +15,7 @@ extends CharacterBody3D
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
 @onready var headiktarget: Node3D = %headiktarget
+@onready var localui: Panel3D = %localui
 
 var head_pos: =Vector3():
 	get:

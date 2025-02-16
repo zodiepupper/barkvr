@@ -62,6 +62,7 @@ var vrinspector : Control = null
 
 # flat vars
 var MOUSE_SPEED := .1
+var JOY_SPEED := .05
 var lookdrag : Dictionary = {} #{'index': -1,'relative': Vector2(),'velocity': Vector2()}
 var lastlookdragindex : int = -1
 var movedrag : Dictionary = {} #{'index': -1,'relative': Vector2(),'velocity': Vector2()}
@@ -268,7 +269,7 @@ func _input(event):
 			rotate_y(-event.relative.x*(MOUSE_SPEED/100))
 			xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 			camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-	if event is InputEventKey:
+	if event is InputEventAction:
 		if event.pressed:
 			if event.keycode == KEY_ESCAPE:
 				match LocalGlobals.player_state:
@@ -363,10 +364,10 @@ func _screen_tap_click(event:InputEvent) -> void:
 func flat_movement():
 	place_grabbed_nodes()
 	var joy_look_vector = Input.get_vector('lookleft','lookright','lookdown','lookup')
-	if joy_look_vector.length()>.1:
-		rotate_y(-joy_look_vector.x*MOUSE_SPEED)
-		xr_camera_3d.rotate_x(joy_look_vector.y*MOUSE_SPEED)
-		camera_3d.rotate_x(joy_look_vector.y*MOUSE_SPEED)
+	if joy_look_vector.length()>.05:
+		rotate_y(-joy_look_vector.x*JOY_SPEED)
+		xr_camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
+		camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
 	if Input.is_action_just_pressed("click"):
 		if grabbed.size() > 0:
 			for item in grabbed.values():
@@ -419,30 +420,32 @@ func flat_movement():
 	if !vr_mode_enabled:
 		righthand.look_at(camera_3d.to_global(grab_point))
 	
+	var input_dir : Vector2
 	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
-		var input_dir = Input.get_vector("left", "right", "up", "down")
-		if !movedrag.is_empty():
-			if -touch_move_left > input_dir.x:
-				input_dir.x = -touch_move_left
-			if touch_move_right < input_dir.x:
-				input_dir.x = touch_move_right
-			if -touch_move_forward > input_dir.y:
-				input_dir.y = -touch_move_forward
-			if touch_move_backward < input_dir.y:
-				input_dir.y = touch_move_backward
-		var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()*input_dir.length()
+		input_dir = Input.get_vector("left", "right", "up", "down")
+	
+	if !movedrag.is_empty():
+		if -touch_move_left > input_dir.x:
+			input_dir.x = -touch_move_left
+		if touch_move_right < input_dir.x:
+			input_dir.x = touch_move_right
+		if -touch_move_forward > input_dir.y:
+			input_dir.y = -touch_move_forward
+		if touch_move_backward < input_dir.y:
+			input_dir.y = touch_move_backward
+	var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()*input_dir.length()
+	if flymode:
+		direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
+	if direction:
+		velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
+		velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
 		if flymode:
-			direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
-		if direction:
-			velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-			velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-			if flymode:
-				velocity.y = direction.y * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-		else:
-			velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			if flymode:
-				velocity.y = move_toward(velocity.y, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+			velocity.y = direction.y * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
+	else:
+		velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+		velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+		if flymode:
+			velocity.y = move_toward(velocity.y, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
 	if lookdrag:
 		if touchsticklook:
 			rotate_y( -(lookdrag.position.x-lookdrag.startposition.x)*(MOUSE_SPEED/800) )

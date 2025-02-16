@@ -1,11 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b3sbt3oft3cxg"]
+[gd_scene load_steps=3 format=3 uid="uid://b3sbt3oft3cxg"]
 
 [ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/vreditor.gd" id="1_8pitw"]
-[ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.tscn" id="2_sp2og"]
 [ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="2_tnd62"]
-[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://mainAssets/ui/3dPanel/editmode/attributes.tscn" id="4_hhemb"]
-[ext_resource type="PackedScene" uid="uid://oyjnngbldb6v" path="res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn" id="5_r0hk5"]
-[ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://mainAssets/ui/3dPanel/editmode/gdscriptpanel.tscn" id="5_s3be6"]
 
 [node name="vreditor" type="Node3D"]
 script = ExtResource("1_8pitw")
@@ -16,9 +12,6 @@ transform = Transform3D(0.707107, -8.9407e-08, 0.707107, 5.96046e-08, 1, 8.74228
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_tnd62")
-_auto_load_ui = ExtResource("5_s3be6")
-transparent = false
-panel_thickness = null
 metadata/grabbable = true
 
 [node name="attributes" type="StaticBody3D" parent="."]
@@ -27,9 +20,6 @@ transform = Transform3D(0.707107, 0, -0.707107, 3.30343e-20, 1, 4.37114e-08, 0.7
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_tnd62")
-_auto_load_ui = ExtResource("4_hhemb")
-transparent = false
-panel_thickness = null
 metadata/grabbable = true
 
 [node name="addnode" type="StaticBody3D" parent="."]
@@ -38,10 +28,6 @@ transform = Transform3D(1, 2.51218e-15, 0, -2.17558e-15, 0.866025, -0.5, -1.2560
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_tnd62")
-_auto_load_ui = ExtResource("5_r0hk5")
-transparent = false
-viewport_size = Vector2i(1014, 504)
-panel_thickness = null
 metadata/grabbable = true
 
 [node name="inspector" type="StaticBody3D" parent="."]
@@ -50,7 +36,4 @@ transform = Transform3D(1, 0, 0, 0, 1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_tnd62")
-_auto_load_ui = ExtResource("2_sp2og")
-transparent = false
-panel_thickness = null
 metadata/grabbable = true

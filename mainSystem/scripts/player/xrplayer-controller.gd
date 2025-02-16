@@ -283,22 +283,21 @@ func _input(event):
 			rotate_y(-event.relative.x*(MOUSE_SPEED/100))
 			xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 			camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-	if event is InputEventAction:
-		if event.pressed:
-			if event.keycode == KEY_ESCAPE:
-				match LocalGlobals.player_state:
-					LocalGlobals.PLAYER_STATE_TYPING:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-						LocalGlobals.emit_signal("playerreleaseuifocus")
-						Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-					LocalGlobals.PLAYER_STATE_PLAYING:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-						LocalGlobals.emit_signal("playerreleaseuifocus")
-						Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-					LocalGlobals.PLAYER_STATE_PAUSED:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-						LocalGlobals.emit_signal("playerreleaseuifocus")
-						Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if event.is_action("pause"):
+		if event.is_pressed():
+			match LocalGlobals.player_state:
+				LocalGlobals.PLAYER_STATE_TYPING:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+					LocalGlobals.emit_signal("playerreleaseuifocus")
+					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+				LocalGlobals.PLAYER_STATE_PLAYING:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+					LocalGlobals.emit_signal("playerreleaseuifocus")
+					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				LocalGlobals.PLAYER_STATE_PAUSED:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+					LocalGlobals.emit_signal("playerreleaseuifocus")
+					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.ctrl_pressed:

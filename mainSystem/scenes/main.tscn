@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3i4ahamrqxcq"]
+[gd_scene load_steps=15 format=3 uid="uid://c3i4ahamrqxcq"]
 
 [ext_resource type="Script" path="res://mainSystem/scripts/init.gd" id="1_gkt54"]
 [ext_resource type="PackedScene" uid="uid://dv0etfy0ao5" path="res://mainSystem/scenes/init_world.tscn" id="2_3jltp"]
@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://bmackcoarqct1" path="res://mainSystem/scenes/objects/toys/static_body_3d_grabbable.tscn" id="11_d8g3h"]
 [ext_resource type="PackedScene" uid="uid://bptuhgi78y2fh" path="res://mainAssets/ik testing/goddette libik (by monxa) test.tscn" id="11_y0lpd"]
 [ext_resource type="PackedScene" uid="uid://cflstd2bxe62a" path="res://mainAssets/ik testing/goddette skeleton ik test.tscn" id="12_ugc8j"]
-[ext_resource type="PackedScene" uid="uid://dt1xf7vatp3tl" path="res://mainAssets/ik testing/goddette ragdoll test.tscn" id="14_k8oeh"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
 
@@ -102,9 +101,6 @@ remote_path = NodePath("../../godette/Skeleton3D/GodotIK/GodotIKEffector3")
 
 [node name="Goddette skeleton3d" parent="." instance=ExtResource("12_ugc8j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69273, 1.72772, 0)
-
-[node name="GoddetteRagdollTest" parent="." instance=ExtResource("14_k8oeh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.18176, 1.63659, 0)
 
 [connection signal="pressed" from="StartXR/EnterWebXR/EnterVRButton" to="StartXR" method="_on_enter_webxr_button_pressed"]
 

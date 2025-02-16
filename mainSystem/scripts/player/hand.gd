@@ -142,13 +142,12 @@ func buttonReleased(btn_name):
 		ungrip()
 	if btn_name == "trigger_click":
 		ui_ray.release()
-		if grab_parent.get_child_count()>0:
-			for item in grab_parent.get_children():
-				if is_instance_valid(item.node):
-					if 'primary_released' in item.node:
-						item.node.primary_released()
-					if 'trigger_pressed' in item.node:
-						item.node.trigger_pressed = false
+		for item in grabbed.values():
+			if is_instance_valid(item.node):
+				if 'primary_released' in item.node:
+					item.node.primary_released()
+				if 'trigger_pressed' in item.node:
+					item.node.trigger_pressed = false
 		rayBody = null
 
 func contextMenuSummon():
@@ -188,29 +187,19 @@ func grab(node:Node, laser:bool=false):
 	var tmpgrab = node.get_meta("grabbable")
 	if tmpgrab:
 		if node.is_class("RigidBody3D"):
-			node.freeze = true
-			if grabbed.has(node.name):
-				scalinggrabbedobject = node
-				scalinggrabbedstartdist = global_position.distance_to(otherhand.global_position)
-				scalinggrabbedstartscale = node.scale
-				isscalinggrabbedobject = true
-			else:
+			if !grabbed.has(node.name):
 				grabbed[node.name] = {
 					"parent": node.get_parent(),
 					'offset': global_transform.affine_inverse() * node.global_transform,
 					'rotoffset': node.global_rotation,
-					'frozen': node.freeze,
+					'isfrozen': node.freeze,
 					'node': node
 				}
+			node.freeze = true
 		else:
 			if laser:
 				pass
-			if grabbed.has(node.name):
-				scalinggrabbedobject = node
-				scalinggrabbedstartdist = global_position.distance_to(otherhand.global_position)
-				scalinggrabbedstartscale = node.scale
-				isscalinggrabbedobject = true
-			else:
+			if !grabbed.has(node.name):
 				grabbed[node.name] = {
 					"parent": node.get_parent(),
 					'offset': global_transform.affine_inverse() * node.global_transform,
@@ -221,6 +210,6 @@ func grab(node:Node, laser:bool=false):
 func releasegrab(node:Node):
 	if grabbed.has(node.name):
 		if node is RigidBody3D:
-			node.freeze = false
+			node.freeze = grabbed[node.name].isfrozen
 		grabbed.erase(node.name)
 		

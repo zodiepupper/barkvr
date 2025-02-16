@@ -211,22 +211,36 @@ func _physics_process(delta):
 		
 		var input_dir = leftStick
 		var direction = ((xr_camera_3d.transform.basis*transform.basis) * Vector3(input_dir.x, 0, -input_dir.y))
+		if flymode:
+			direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
 		if direction:
 			velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
 			velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
+			if flymode:
+				velocity.y = direction.y * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
 		else:
 			velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
 			velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-		if xr_camera_3d.position.y > 0.1:
-			collision_shape_3d.shape.height = xr_camera_3d.position.y/2.0
-		else:
-			collision_shape_3d.shape.height = 0.1
+			if flymode:
+				velocity.y = move_toward(velocity.y, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+			
+		#if direction:
+			#velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
+			#velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
+		#else:
+			#velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+			#velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
+		#if xr_camera_3d.position.y > 0.1:
+			#collision_shape_3d.shape.height = xr_camera_3d.position.y/2.0
+		#else:
+			#collision_shape_3d.shape.height = 0.1
 #		collision_shape_3d.position = xr_camera_3d.position.y/2.0
 	
 	# Handle Jump.
 	if rightaxbtn and (is_on_floor() or flymode):
 		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
-	flat_movement()
+	if !vr_mode_enabled:
+		flat_movement()
 	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
 		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
 		

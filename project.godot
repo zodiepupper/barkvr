@@ -16,11 +16,11 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
 config/features=PackedStringArray("4.3", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 0)
-config/icon="res://assets/icons/barktail2trans.svg"
-config/windows_native_icon="res://assets/barkvrcorgi.ico"
 boot_splash/show_image=false
 boot_splash/image="res://assets/icons/barkiconrounded.png"
 boot_splash/fullsize=false
+config/icon="res://assets/icons/barktail2trans.svg"
+config/windows_native_icon="res://assets/barkvrcorgi.ico"
 
 [audio]
 
@@ -224,6 +224,7 @@ common/physics_interpolation=true
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
+driver/threads/thread_model=2
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
@@ -231,6 +232,7 @@ occlusion_culling/use_occlusion_culling=true
 
 [xr]
 
+openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
 openxr/startup_alert=false

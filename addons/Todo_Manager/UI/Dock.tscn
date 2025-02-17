@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://b6k0dtftankcx"]
 
-[ext_resource type="Script" path="res://addons/Todo_Manager/Dock.gd" id="1"]
-[ext_resource type="Script" path="res://addons/Todo_Manager/Project.gd" id="2"]
-[ext_resource type="Script" path="res://addons/Todo_Manager/Current.gd" id="3"]
+[ext_resource type="Script" uid="uid://bwikucgpcn0tu" path="res://addons/Todo_Manager/Dock.gd" id="1"]
+[ext_resource type="Script" uid="uid://4j7ifxmpyx6i" path="res://addons/Todo_Manager/Project.gd" id="2"]
+[ext_resource type="Script" uid="uid://c40rxmqy0hccn" path="res://addons/Todo_Manager/Current.gd" id="3"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_kqxcu"]
 

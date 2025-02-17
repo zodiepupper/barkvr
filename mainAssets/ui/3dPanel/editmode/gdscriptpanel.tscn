@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cw57xg0xewjcv"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/gdscriptpanel.gd" id="1_g4jiw"]
+[ext_resource type="Script" uid="uid://nc75y0xt42r" path="res://mainAssets/ui/3dPanel/editmode/gdscriptpanel.gd" id="1_g4jiw"]
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_mlath"]
 number_color = Color(0.627451, 0.996078, 0.87451, 1)

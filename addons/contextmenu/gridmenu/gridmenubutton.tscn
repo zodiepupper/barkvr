@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b2r6qi0effaiw"]
 
-[ext_resource type="Script" path="res://addons/contextmenu/gridmenu/gridMenuButton.gd" id="1_oxc5m"]
+[ext_resource type="Script" uid="uid://calb14t8k864q" path="res://addons/contextmenu/gridmenu/gridMenuButton.gd" id="1_oxc5m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f8ppm"]
 resource_local_to_scene = true

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://buiy5jgywujh8"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.gd" id="1_apb1e"]
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/login/hashed_tree_list.gd" id="2_k0xmv"]
+[ext_resource type="Script" uid="uid://bnxo6phyonraq" path="res://mainAssets/ui/3dPanel/editmode/sceneinspector.gd" id="1_apb1e"]
+[ext_resource type="Script" uid="uid://faymicvh83i6" path="res://mainAssets/ui/3dPanel/local ui/login/hashed_tree_list.gd" id="2_k0xmv"]
 
 [node name="sceneinspector" type="Control"]
 layout_mode = 3

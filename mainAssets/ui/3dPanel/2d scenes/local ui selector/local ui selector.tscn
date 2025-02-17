@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cs6qw2eqofh43"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/2d scenes/local ui selector/ui selector grid.gd" id="1_bkyrc"]
+[ext_resource type="Script" uid="uid://cwtssei2jetki" path="res://mainAssets/ui/3dPanel/2d scenes/local ui selector/ui selector grid.gd" id="1_bkyrc"]
 [ext_resource type="PackedScene" uid="uid://bcwenyhqgqlye" path="res://mainAssets/ui/3dPanel/2d scenes/local ui selector/button.tscn" id="2_5c7i2"]
 
 [node name="local ui selector" type="Control"]

@@ -1,17 +1,18 @@
-[gd_scene load_steps=15 format=3 uid="uid://c3i4ahamrqxcq"]
+[gd_scene load_steps=16 format=3 uid="uid://c3i4ahamrqxcq"]
 
-[ext_resource type="Script" path="res://mainSystem/scripts/init.gd" id="1_gkt54"]
+[ext_resource type="Script" uid="uid://uik6keiylg15" path="res://mainSystem/scripts/init.gd" id="1_gkt54"]
 [ext_resource type="PackedScene" uid="uid://dv0etfy0ao5" path="res://mainSystem/scenes/init_world.tscn" id="2_3jltp"]
-[ext_resource type="Script" path="res://mainSystem/scripts/startxr.gd" id="2_3r3cq"]
-[ext_resource type="Script" path="res://mainSystem/scripts/bark_singletons_manager.gd" id="3_hjfed"]
-[ext_resource type="Script" path="res://mainSystem/scripts/journaling.gd" id="4_yl0pk"]
-[ext_resource type="Script" path="res://mainSystem/scripts/networkHandler.gd" id="5_36gsm"]
-[ext_resource type="Script" path="res://mainSystem/scripts/settings.gd" id="6_60o4m"]
-[ext_resource type="Script" path="res://addons/vector/vector.gd" id="7_ldaby"]
-[ext_resource type="Script" path="res://mainAssets/objects/pens/voxel_draw_test.gd" id="8_4ywql"]
+[ext_resource type="Script" uid="uid://dbumpexofbhsu" path="res://mainSystem/scripts/startxr.gd" id="2_3r3cq"]
+[ext_resource type="Script" uid="uid://d0e58hos64wvw" path="res://mainSystem/scripts/bark_singletons_manager.gd" id="3_hjfed"]
+[ext_resource type="Script" uid="uid://b4618ilskmgou" path="res://mainSystem/scripts/journaling.gd" id="4_yl0pk"]
+[ext_resource type="Script" uid="uid://co7b0xchpliyg" path="res://mainSystem/scripts/networkHandler.gd" id="5_36gsm"]
+[ext_resource type="Script" uid="uid://4a6yceroxafw" path="res://mainSystem/scripts/settings.gd" id="6_60o4m"]
+[ext_resource type="Script" uid="uid://b1ijrenh1x14d" path="res://addons/vector/vector.gd" id="7_ldaby"]
+[ext_resource type="Script" uid="uid://b3opf6aydu7h7" path="res://mainAssets/objects/pens/voxel_draw_test.gd" id="8_4ywql"]
 [ext_resource type="PackedScene" uid="uid://bro0elbb47bnx" path="res://mainAssets/ik testing/goddette physics ik test.tscn" id="10_evgyk"]
 [ext_resource type="PackedScene" uid="uid://bmackcoarqct1" path="res://mainSystem/scenes/objects/toys/static_body_3d_grabbable.tscn" id="11_d8g3h"]
 [ext_resource type="PackedScene" uid="uid://bptuhgi78y2fh" path="res://mainAssets/ik testing/goddette libik (by monxa) test.tscn" id="11_y0lpd"]
+[ext_resource type="Script" uid="uid://daaxwjyw0rn11" path="res://mainAssets/ik testing/generic_bone_constraint.gd" id="12_tp85h"]
 [ext_resource type="PackedScene" uid="uid://cflstd2bxe62a" path="res://mainAssets/ik testing/goddette skeleton ik test.tscn" id="12_ugc8j"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
@@ -68,6 +69,16 @@ transform = Transform3D(-0.754279, -0.423207, 0.501957, -0.31417, 0.903973, 0.29
 
 [node name="GodotIKEffector3" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="2"]
 transform = Transform3D(-0.857363, 0.271607, -0.43722, -0.393742, 0.201011, 0.896974, 0.331512, 0.941184, -0.0653947, -0.146139, -0.545045, 0.280234)
+
+[node name="GodotIKEffector4" type="GodotIKEffector" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK" index="3"]
+bone_idx = 63
+chain_length = 3
+transform_mode = 3
+transform = Transform3D(0.754221, -0.420802, 0.504063, 0.620025, 0.70911, -0.335759, -0.216148, 0.565766, 0.795733, -0.680462, -0.073136, -0.280134)
+
+[node name="StraightBoneConstraint" type="GodotIKConstraint" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK/GodotIKEffector4"]
+bone_idx = 62
+script = ExtResource("12_tp85h")
 
 [node name="RigidBody3d" parent="goddette libik (monxa)" instance=ExtResource("11_d8g3h")]
 transform = Transform3D(0.886077, 0.423819, -0.187745, 0.170385, -0.674458, -0.718386, -0.431092, 0.604555, -0.669832, -0.254673, 0.72733, 0.167882)

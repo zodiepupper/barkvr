@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dddtbbin6ty1l"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/attributes/object.gd" id="1_bl13v"]
+[ext_resource type="Script" uid="uid://bgsuycn851owg" path="res://mainAssets/ui/3dPanel/editmode/attributes/object.gd" id="1_bl13v"]
 
 [node name="object" type="Control"]
 clip_contents = true

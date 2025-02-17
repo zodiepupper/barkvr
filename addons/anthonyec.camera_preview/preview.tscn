@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://xybmfvufjuv"]
 
-[ext_resource type="Script" path="res://addons/anthonyec.camera_preview/preview.gd" id="1_6b32r"]
-[ext_resource type="Texture2D" uid="uid://do6d60od41vmg" path="res://addons/anthonyec.camera_preview/Pin.svg" id="2_p0pa8"]
-[ext_resource type="Texture2D" uid="uid://btc01wc11tiid" path="res://addons/anthonyec.camera_preview/GuiResizerTopLeft.svg" id="2_t64ej"]
-[ext_resource type="Texture2D" uid="uid://04l05jxuyt7k" path="res://addons/anthonyec.camera_preview/GuiResizerTopRight.svg" id="3_6yuab"]
+[ext_resource type="Script" uid="uid://bcmipbqn0tm0e" path="res://addons/anthonyec.camera_preview/preview.gd" id="1_6b32r"]
+[ext_resource type="Texture2D" uid="uid://cu0soimffassh" path="res://addons/anthonyec.camera_preview/Pin.svg" id="2_p0pa8"]
+[ext_resource type="Texture2D" uid="uid://u271hs2ifyj2" path="res://addons/anthonyec.camera_preview/GuiResizerTopLeft.svg" id="2_t64ej"]
+[ext_resource type="Texture2D" uid="uid://cajk43eii4j5q" path="res://addons/anthonyec.camera_preview/GuiResizerTopRight.svg" id="3_6yuab"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_hchdq"]
 viewport_path = NodePath("Panel/SubViewport")

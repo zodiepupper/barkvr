@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://uahdxqh2pc7q"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/load remote asset/load_html_asset.gd" id="1_5lcif"]
+[ext_resource type="Script" uid="uid://de1by1itqhw5h" path="res://mainAssets/ui/3dPanel/local ui/load remote asset/load_html_asset.gd" id="1_5lcif"]
 
 [node name="LoadHtmlAsset" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://og3t2qnt8ukh"]
 
-[ext_resource type="Script" path="res://mainSystem/scenes/objects/toys/particlepen.gd" id="1_6lnrq"]
+[ext_resource type="Script" uid="uid://cji5xf5e7jus0" path="res://mainSystem/scenes/objects/toys/particlepen.gd" id="1_6lnrq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_to33s"]
 size = Vector3(0.05, 0.2, 0.05)

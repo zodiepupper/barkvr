@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cn1wel2bnigbf"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/2d scenes/video.gd" id="1_isxg1"]
+[ext_resource type="Script" uid="uid://ebbm1wn0pums" path="res://mainAssets/ui/3dPanel/2d scenes/video.gd" id="1_isxg1"]
 
 [node name="videoContainer" type="VBoxContainer"]
 anchors_preset = 15

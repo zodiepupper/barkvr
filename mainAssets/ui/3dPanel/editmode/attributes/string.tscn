@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://3cx3afcwx3hw"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/attributes/string.gd" id="1_7fh5n"]
+[ext_resource type="Script" uid="uid://cr13nnbjttyvw" path="res://mainAssets/ui/3dPanel/editmode/attributes/string.gd" id="1_7fh5n"]
 
 [node name="string" type="Control"]
 custom_minimum_size = Vector2(0, 150)

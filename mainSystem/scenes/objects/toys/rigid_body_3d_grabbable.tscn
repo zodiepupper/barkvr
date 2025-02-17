@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dglcj6xs6x076"]
 
-[ext_resource type="Script" path="res://mainSystem/scripts/rigid_body_3d_grabbable.gd" id="1_vhris"]
+[ext_resource type="Script" uid="uid://rot85m2x7jxo" path="res://mainSystem/scripts/rigid_body_3d_grabbable.gd" id="1_vhris"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pydgp"]
 size = Vector3(0.1, 0.1, 0.1)

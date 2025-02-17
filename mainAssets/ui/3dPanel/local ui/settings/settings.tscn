@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://pnqmxgn13qw2"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/settings/graphics_fields_setter.gd" id="2_6aatb"]
+[ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
+[ext_resource type="Script" uid="uid://887ipat0423k" path="res://mainAssets/ui/3dPanel/local ui/settings/graphics_fields_setter.gd" id="2_6aatb"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
 
 [sub_resource type="GDScript" id="GDScript_eqaxg"]

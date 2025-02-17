@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b5e67b4tlsvfs"]
 
-[ext_resource type="Script" path="res://mainSystem/scripts/player/rayvis.gd" id="1_6wvgr"]
+[ext_resource type="Script" uid="uid://oqbd1hprv0a1" path="res://mainSystem/scripts/player/rayvis.gd" id="1_6wvgr"]
 [ext_resource type="Texture2D" uid="uid://drxq6fs75fbvi" path="res://mainAssets/ui/assets/rayvis_icons/pointing.svg" id="2_exe05"]
 [ext_resource type="Texture2D" uid="uid://b75p6dv64ascf" path="res://mainAssets/ui/assets/rayvis_icons/physics.svg" id="3_j7jdp"]
 [ext_resource type="Texture2D" uid="uid://cmcp135fq84nn" path="res://mainAssets/ui/assets/rayvis_icons/cursor.svg" id="4_3x516"]

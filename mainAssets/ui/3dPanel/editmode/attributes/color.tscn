@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://5r83rbiuayop"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/attributes/color.gd" id="1_51r0t"]
+[ext_resource type="Script" uid="uid://bsw4anitg0s4s" path="res://mainAssets/ui/3dPanel/editmode/attributes/color.gd" id="1_51r0t"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ta0h6"]
 font_size = 30

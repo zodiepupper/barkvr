@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://drvs5pgtp63nx"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/login/message.gd" id="1_tdypu"]
+[ext_resource type="Script" uid="uid://cekekdhqwn8h2" path="res://mainAssets/ui/3dPanel/local ui/login/message.gd" id="1_tdypu"]
 [ext_resource type="Texture2D" uid="uid://ctpqomaxv1n6h" path="res://assets/icons/teenyicons/solid/clipboard.svg" id="2_4knqr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qcyn"]

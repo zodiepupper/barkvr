@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://ulf7axx80mle"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dui/loading_halo.gd" id="1_1jddo"]
+[ext_resource type="Script" uid="uid://ccoqk6l435gfj" path="res://mainAssets/ui/3dui/loading_halo.gd" id="1_1jddo"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xpd5"]
 cull_mode = 1
@@ -66,7 +66,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gg8he"]
 _data = {
-"rotate": SubResource("Animation_lad5f")
+&"rotate": SubResource("Animation_lad5f")
 }
 
 [sub_resource type="Animation" id="Animation_pcv2y"]
@@ -87,7 +87,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rep1s"]
 _data = {
-"rotate": SubResource("Animation_pcv2y")
+&"rotate": SubResource("Animation_pcv2y")
 }
 
 [node name="crossed halos" type="Node3D"]

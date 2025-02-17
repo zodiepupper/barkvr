@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://by5nu2jf4d1cv"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/save object/save object.gd" id="1_50fbr"]
+[ext_resource type="Script" uid="uid://v0g8o87pbdfc" path="res://mainAssets/ui/3dPanel/local ui/save object/save object.gd" id="1_50fbr"]
 
 [node name="save object" type="Control"]
 layout_mode = 3

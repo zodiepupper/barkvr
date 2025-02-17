@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bbqns5wp6l638"]
 
-[ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="1_ddiio"]
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_ddiio"]
 [ext_resource type="PackedScene" uid="uid://doy6bwhtmwdc6" path="res://mainAssets/ui/3dPanel/local ui/localmenu.tscn" id="2_q3y53"]
 
 [sub_resource type="GDScript" id="GDScript_2vxca"]

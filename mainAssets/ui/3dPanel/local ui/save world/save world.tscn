@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cn48x5w44qy6e"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/local ui/save world/save world.gd" id="1_ajyue"]
+[ext_resource type="Script" uid="uid://qq5jvyx4ryl1" path="res://mainAssets/ui/3dPanel/local ui/save world/save world.gd" id="1_ajyue"]
 
 [node name="save world" type="Control"]
 layout_mode = 3

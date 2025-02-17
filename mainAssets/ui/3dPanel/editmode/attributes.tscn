@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://jqh6stt10ct5"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/attributes.gd" id="1_sps2y"]
+[ext_resource type="Script" uid="uid://e6vcef2box0j" path="res://mainAssets/ui/3dPanel/editmode/attributes.gd" id="1_sps2y"]
 
 [node name="attributes" type="Control"]
 layout_mode = 3

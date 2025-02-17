@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://mainAssets/worlds/basic_starter.tscn" id="1_ad4cs"]
 [ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://mainSystem/scenes/objects/worldObjects/playerSpawnLocation.tscn" id="2_humgq"]
-[ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
 [ext_resource type="PackedScene" uid="uid://djw2ch2x4mclg" path="res://mainAssets/ui/3dui/import helpers/audio3d.tscn" id="6_nx2sb"]
 [ext_resource type="PackedScene" uid="uid://dj84bcm2jv1wq" path="res://mainAssets/objects/pens/linepen.tscn" id="7_8hxdm"]
 [ext_resource type="PackedScene" uid="uid://r68jre2w5k33" path="res://mainSystem/scenes/player/xrplayer.tscn" id="11_qw71v"]
@@ -111,8 +111,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qxavp"]
 _data = {
-"RESET": SubResource("Animation_knd3g"),
-"launch": SubResource("Animation_s1a5l")
+&"RESET": SubResource("Animation_knd3g"),
+&"launch": SubResource("Animation_s1a5l")
 }
 
 [sub_resource type="GDScript" id="GDScript_dw37y"]
@@ -185,6 +185,6 @@ skeleton = NodePath("../multiplayer world root")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D2"]
 deterministic = true
 libraries = {
-"": SubResource("AnimationLibrary_qxavp")
+&"": SubResource("AnimationLibrary_qxavp")
 }
 script = SubResource("GDScript_dw37y")

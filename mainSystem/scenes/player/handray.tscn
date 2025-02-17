@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://12mm63qyglpf"]
 
-[ext_resource type="Script" path="res://mainSystem/scripts/player/interactionRay.gd" id="1_nnnux"]
-[ext_resource type="Script" path="res://mainSystem/scenes/objects/tools/Line3D.gd" id="2_hejn6"]
+[ext_resource type="Script" uid="uid://bmrxlfb75i37p" path="res://mainSystem/scripts/player/interactionRay.gd" id="1_nnnux"]
+[ext_resource type="Script" uid="uid://qd3xl7i1soeg" path="res://mainSystem/scenes/objects/tools/Line3D.gd" id="2_hejn6"]
 [ext_resource type="PackedScene" uid="uid://b5e67b4tlsvfs" path="res://mainSystem/scenes/player/rayvis.tscn" id="3_6jlx7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6bpur"]

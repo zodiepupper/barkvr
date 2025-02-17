@@ -1,4 +1,4 @@
-#@tool
+@tool
 class_name Line3D
 extends MeshInstance3D
 

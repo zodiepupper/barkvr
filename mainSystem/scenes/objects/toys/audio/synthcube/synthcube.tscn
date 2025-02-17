@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dnw1biowam8w"]
 
-[ext_resource type="Script" path="res://mainSystem/scenes/objects/toys/audio/synthcube/synthcube.gd" id="1_p4ec3"]
+[ext_resource type="Script" uid="uid://duvwvwghhl03w" path="res://mainSystem/scenes/objects/toys/audio/synthcube/synthcube.gd" id="1_p4ec3"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_mrsjk"]
 size = Vector3(0.1, 0.1, 0.1)

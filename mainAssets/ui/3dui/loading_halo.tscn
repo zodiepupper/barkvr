@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://ben6x4qpiovfq"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dui/loading_halo.gd" id="1_t6gg2"]
-[ext_resource type="Script" path="res://mainAssets/ui/3dui/quadbackpanel.gd" id="2_8b88k"]
+[ext_resource type="Script" uid="uid://ccoqk6l435gfj" path="res://mainAssets/ui/3dui/loading_halo.gd" id="1_t6gg2"]
+[ext_resource type="Script" uid="uid://cvckssxphmjby" path="res://mainAssets/ui/3dui/quadbackpanel.gd" id="2_8b88k"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xpd5"]
 cull_mode = 1
@@ -38,7 +38,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dtajc"]
 _data = {
-"rotate": SubResource("Animation_sgnvc")
+&"rotate": SubResource("Animation_sgnvc")
 }
 
 [sub_resource type="GDScript" id="GDScript_hwtf5"]

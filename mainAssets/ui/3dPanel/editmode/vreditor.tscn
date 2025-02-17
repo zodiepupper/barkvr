@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b3sbt3oft3cxg"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/vreditor.gd" id="1_8pitw"]
-[ext_resource type="Script" path="res://addons/Panel3D/3dpanel.gd" id="2_tnd62"]
+[ext_resource type="Script" uid="uid://dfc24xmvboo40" path="res://mainAssets/ui/3dPanel/editmode/vreditor.gd" id="1_8pitw"]
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="2_tnd62"]
 
 [node name="vreditor" type="Node3D"]
 script = ExtResource("1_8pitw")

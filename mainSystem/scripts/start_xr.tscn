@@ -1,9 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://clc5dre31iskm"]
 
-[ext_resource type="Script" path="res://addons/godot-xr-tools/xr/start_xr.gd" id="1_ljt1b"]
+[sub_resource type="Resource" id="Resource_uy0lu"]
+metadata/__load_path__ = "res://addons/godot-xr-tools/xr/start_xr.gd"
 
 [node name="StartXR" type="Node"]
-script = ExtResource("1_ljt1b")
+script = SubResource("Resource_uy0lu")
 physics_rate_multiplier = 1.0
 
 [node name="EnterWebXR" type="CanvasLayer" parent="."]

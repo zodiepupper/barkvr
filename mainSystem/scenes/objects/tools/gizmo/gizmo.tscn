@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://cv0sjbxpqjy6h"]
 
-[ext_resource type="Script" path="res://mainSystem/scripts/objects/tools/gizmo/gizmo.gd" id="1_q74wi"]
-[ext_resource type="Script" path="res://mainSystem/scripts/objects/tools/gizmo/axis_mover.gd" id="2_vldjq"]
+[ext_resource type="Script" uid="uid://bxdpv2yy0uc4v" path="res://mainSystem/scripts/objects/tools/gizmo/gizmo.gd" id="1_q74wi"]
+[ext_resource type="Script" uid="uid://cx7nrsulx76r8" path="res://mainSystem/scripts/objects/tools/gizmo/axis_mover.gd" id="2_vldjq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ahq3v"]
 shading_mode = 0

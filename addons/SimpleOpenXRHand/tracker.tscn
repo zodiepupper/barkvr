@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://h8yvi0exq750"]
 
-[ext_resource type="Script" path="res://addons/SimpleOpenXRHand/tracker.gd" id="1_j5i7m"]
+[ext_resource type="Script" uid="uid://ekcn57t04xmn" path="res://addons/SimpleOpenXRHand/tracker.gd" id="1_j5i7m"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_org57"]
 radius = 0.01

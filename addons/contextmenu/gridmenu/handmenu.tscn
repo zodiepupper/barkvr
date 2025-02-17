@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://cr02u36wo3sqp"]
 
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="1_1fmp6"]
-[ext_resource type="Script" path="res://addons/contextmenu/gridmenu/handmenu.gd" id="1_jd5nk"]
+[ext_resource type="Script" uid="uid://djimosgoirclb" path="res://addons/contextmenu/gridmenu/handmenu.gd" id="1_jd5nk"]
 
 [sub_resource type="GDScript" id="GDScript_mkksm"]
 script/source = "extends Node

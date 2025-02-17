@@ -1,107 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://d1novstb8ijb2"]
+[gd_scene load_steps=9 format=3 uid="uid://d1novstb8ijb2"]
 
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik.gd" id="1_1aghp"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/quick_renik_setup.gd" id="1_ak3r4"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik_placement.gd" id="2_6e7rw"]
+[ext_resource type="Script" uid="uid://d1xgdvhjhcp3l" path="res://addons/renik-gdscript/renik.gd" id="1_1aghp"]
+[ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://addons/renik-gdscript/quick_renik_setup.gd" id="1_ak3r4"]
+[ext_resource type="Script" uid="uid://vgywhcowlh6r" path="res://addons/renik-gdscript/renik_placement.gd" id="2_6e7rw"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="2_8t1mr"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik_placement_gait.gd" id="3_rnvnt"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/quick_renik_avatar_equip_button_script.tres.gd" id="3_wi7s6"]
+[ext_resource type="Script" uid="uid://d4kqx1t8ir3rs" path="res://addons/renik-gdscript/quick_renik_avatar_equip_button_script.tres.gd" id="3_wi7s6"]
 
 [sub_resource type="Resource" id="Resource_gfc6f"]
 resource_name = "ForwardGait"
-script = ExtResource("3_rnvnt")
-speed_scalar_min = 1.0
-speed_scalar_max = 0.5
-ground_time = 5.0
-lift_time_base = 10.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 5.0
-apex_out_time_scalar = 5.0
-drop_time_base = 5.0
-drop_time_scalar = 0.0
-tip_toe_distance_scalar = 1.5708
-tip_toe_speed_scalar = 0.785398
-tip_toe_angle_max = 1.0472
-lift_vertical = 0.0
-lift_vertical_scalar = 0.4
-lift_horizontal_scalar = 0.7
-lift_angle = 1.5708
-apex_vertical = 0.0
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
-drop_vertical = 0.0
-drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
-drop_angle = -0.392699
-contact_point_ease = 0.05
-contact_point_ease_scalar = 0.4
-scaling_ease = 0.85
 
 [sub_resource type="Resource" id="Resource_gyb05"]
 resource_name = "BackwardGait"
-script = ExtResource("3_rnvnt")
-speed_scalar_min = 0.5
-speed_scalar_max = 0.75
-ground_time = 5.0
-lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
-drop_time_base = 5.0
-drop_time_scalar = 5.0
-tip_toe_distance_scalar = 0.0
-tip_toe_speed_scalar = 0.0
-tip_toe_angle_max = 0.0
-lift_vertical = 0.025
-lift_vertical_scalar = 0.1
-lift_horizontal_scalar = 0.33
-lift_angle = -0.392699
-apex_vertical = 0.1
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
-drop_vertical = 0.0
-drop_vertical_scalar = 0.1
-drop_horizontal_scalar = 0.25
-drop_angle = 0.392699
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
-scaling_ease = 0.85
 
 [sub_resource type="Resource" id="Resource_kct4q"]
 resource_name = "SidewaysGait"
-script = ExtResource("3_rnvnt")
-speed_scalar_min = 0.75
-speed_scalar_max = 0.75
-ground_time = 10.0
-lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
-drop_time_base = 5.0
-drop_time_scalar = 5.0
-tip_toe_distance_scalar = 0.0
-tip_toe_speed_scalar = 0.0
-tip_toe_angle_max = 0.0
-lift_vertical = 0.05
-lift_vertical_scalar = 0.05
-lift_horizontal_scalar = 0.2
-lift_angle = 0.0
-apex_vertical = 0.01
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
-drop_vertical = 0.01
-drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
-drop_angle = 0.0
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
-scaling_ease = 0.85
 
 [node name="LogicContainer" type="Node3D"]
 script = ExtResource("1_ak3r4")

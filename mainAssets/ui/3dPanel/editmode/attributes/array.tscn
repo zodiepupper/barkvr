@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxshup2m2t62c"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/attributes/array.gd" id="1_oj5ul"]
+[ext_resource type="Script" uid="uid://fpigttckm3dg" path="res://mainAssets/ui/3dPanel/editmode/attributes/array.gd" id="1_oj5ul"]
 
 [node name="array" type="Control"]
 clip_contents = true

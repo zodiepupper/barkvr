@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://br7crmbc15r6i"]
 
-[ext_resource type="Script" path="res://assets/patreon/memberbox.gd" id="1_shy7l"]
+[ext_resource type="Script" uid="uid://cnihskvucyprq" path="res://assets/patreon/memberbox.gd" id="1_shy7l"]
 
 [node name="Memberbox" type="PanelContainer"]
 clip_contents = true

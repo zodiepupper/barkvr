@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bie1xn8v1kd66"]
 
-[ext_resource type="Script" path="res://addons/Todo_Manager/ColourPicker.gd" id="1"]
+[ext_resource type="Script" uid="uid://cq62lf31er1gb" path="res://addons/Todo_Manager/ColourPicker.gd" id="1"]
 
 [node name="TODOColour" type="HBoxContainer"]
 offset_right = 105.0

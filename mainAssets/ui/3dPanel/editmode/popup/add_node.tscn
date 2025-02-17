@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://oyjnngbldb6v"]
 
-[ext_resource type="Script" path="res://mainAssets/ui/3dPanel/editmode/popup/add_node.gd" id="1_5pokh"]
+[ext_resource type="Script" uid="uid://drl8ejalysnau" path="res://mainAssets/ui/3dPanel/editmode/popup/add_node.gd" id="1_5pokh"]
 
 [node name="AddNode" type="Control"]
 layout_mode = 3

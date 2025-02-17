@@ -86,6 +86,7 @@ var tex : ViewportTexture
 		viewport.size = viewport_size
 		mesh.mesh.size.x = (pixel_size/1000.0)*viewport.size.x
 		mesh.mesh.size.y = (pixel_size/1000.0)*viewport.size.y
+		#mesh.mesh.size.z = (pixel_size/1000.0)
 		mesh.position.z = panel_thickness*.5
 		colshape.shape.size = Vector3((pixel_size/1000.0)*viewport.size.x,(pixel_size/1000.0)*viewport.size.y,panel_thickness)
 
@@ -164,7 +165,6 @@ func _init():
 	viewport.is_processing_input()
 	viewport.gui_embed_subwindows = true
 	viewport.own_world_3d = true
-	#viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
 	mesh = MeshInstance3D.new()
 	mesh.mesh = QuadMesh.new()
@@ -172,10 +172,6 @@ func _init():
 	colshape.shape = BoxShape3D.new()
 	material = StandardMaterial3D.new()
 	mesh.mesh.surface_set_material(0,material)
-	#viewport_container = SubViewportContainer.new()
-	#viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	#add_child(viewport_container)
-	#viewport_container.add_child(viewport)
 	if is_instance_valid(find_child("3dpanel_viewport")):
 		viewport = find_child("3dpanel_viewport")
 	else:

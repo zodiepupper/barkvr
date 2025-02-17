@@ -30,13 +30,12 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 4
+current_tab = 0
 tabs_position = 1
 drag_to_rearrange_enabled = true
 tab_focus_mode = 0
 
 [node name="matrix" parent="TabContainer" instance=ExtResource("1_wuo22")]
-visible = false
 clip_contents = true
 layout_mode = 2
 metadata/_tab_index = 0
@@ -61,6 +60,7 @@ layout_mode = 2
 metadata/_tab_index = 3
 
 [node name="Load URL" parent="TabContainer" instance=ExtResource("6_sw1xf")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -81,7 +81,6 @@ offset_top = -12.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
-disabled = true
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1

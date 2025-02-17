@@ -71,8 +71,8 @@ size = Vector3(1.1, 0.1, 0.1)
 script = ExtResource("1_q74wi")
 
 [node name="x" type="StaticBody3D" parent="."]
-collision_layer = 256
-collision_mask = 256
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_vldjq")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="x"]
@@ -94,8 +94,8 @@ shape = SubResource("BoxShape3D_xvnkt")
 
 [node name="y" type="StaticBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-collision_layer = 256
-collision_mask = 256
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_vldjq")
 _axis = "y"
 
@@ -118,8 +118,8 @@ shape = SubResource("BoxShape3D_v4v8i")
 
 [node name="z" type="StaticBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-collision_layer = 256
-collision_mask = 256
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("2_vldjq")
 _axis = "z"
 

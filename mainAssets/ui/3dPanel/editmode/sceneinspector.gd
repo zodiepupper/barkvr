@@ -16,7 +16,7 @@ var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.
 @onready var paste_btn: Button = $HBoxContainer/VBoxContainer/paste
 
 var reparenting : bool = false
-var last_selected
+var last_selected : Array
 
 func _ready():
 	delete_btn.pressed.connect(func():
@@ -34,14 +34,15 @@ func _ready():
 	tree.cell_selected.connect(func():
 		var new_selection = tree.get_selected().get_metadata(0).node
 		selected.emit(new_selection)
-		if last_selected and new_selection != last_selected and reparenting:
+		if last_selected and new_selection not in last_selected and reparenting:
 			#last_selected.get_parent().remove_child(last_selected)
 			#new_selection.add_child(last_selected)
-			last_selected.reparent(new_selection)
-			last_selected.owner = last_selected.get_parent()
+			for item :TreeItem in last_selected:
+				item.get_metadata(0).node.owner = item.get_metadata(0).node.get_parent()
+				item.get_metadata(0).node.reparent(new_selection)
 			_check_tree_for_updates()
 			reparent_btn.button_pressed = false
-		last_selected = new_selection
+		last_selected = get_all_selected()
 		LocalGlobals.clear_gizmos.emit()
 		var node = tree.get_selected().get_metadata(0).node
 		if !is_instance_valid(node):

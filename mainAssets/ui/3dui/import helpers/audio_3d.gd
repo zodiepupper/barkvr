@@ -16,4 +16,4 @@ func load_audio_from_bytes(bytes:PackedByteArray, type:String):
 	pass
 
 func laser_input(data: Dictionary):
-	print(data)
+	pass

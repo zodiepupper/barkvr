@@ -160,27 +160,6 @@ func _process(_delta):
 		procrayvis()
 		# run the interaction function
 		interact()
-		
-	# if we aren't in vr... (note, this function assumes that `target_position_is_local = true`)
-	if !get_viewport().use_xr and !using_touch:
-		# and the mouse is not captured by the window...
-		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-			# get the current viewport's camera and project a ray
-			# from the camera based on the cursor position
-			var cam = get_viewport().get_camera_3d()
-			target_position = to_local(cam.project_position(get_viewport().get_mouse_position(),10000))
-		# and the mouse is captured by the window...
-		else:
-			# set the target_position to be very far straight ahead
-			target_position = Vector3(0,0,-10000)
-	# if the raycast is colliding for the most recent query...
-	if is_colliding():
-		# set the endpoint of the line3d to the collision point
-		line_3d.target = to_local(get_collision_point())
-	# if the raycast is not colliding..
-	else:
-		# set the endpoint of the line3d to the target_position of the raycast
-		line_3d.target = target_position
 	
 
 func interact() -> void:
@@ -260,21 +239,44 @@ func _input(event):
 				'ray_direction': to_global(target_position),
 				'index': -1
 			})
-	if event is InputEventMouseButton:
-		if event.pressed:
+	if event is InputEventMouse:
+		# if we aren't in vr... (note, this function assumes that `target_position_is_local = true`)
+		if !get_viewport().use_xr and !using_touch:
+			# and the mouse is not captured by the window...
+			if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+				# get the current viewport's camera and project a ray
+				# from the camera based on the cursor position
+				var cam = get_viewport().get_camera_3d()
+				target_position = to_local(cam.project_position(get_viewport().get_mouse_position(),10000))
+			# and the mouse is captured by the window...
+			else:
+				# set the target_position to be very far straight ahead
+				target_position = Vector3(0,0,-10000)
+		# if the raycast is colliding for the most recent query...
+		if is_colliding():
+			# set the endpoint of the line3d to the collision point
+			line_3d.target = to_local(get_collision_point())
+		# if the raycast is not colliding..
+		else:
+			# set the endpoint of the line3d to the target_position of the raycast
+			line_3d.target = target_position
+		if event is InputEventMouseButton and event.pressed:
 			match event.button_index:
 				4:
 					scrollup()
 				5:
 					scrolldown()
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		var cam = get_viewport().get_camera_3d()
+		target_position = to_local(cam.project_position(get_viewport().size/2,10000))
 
-func _physics_process(_delta):
-	if enabled and !query_on_process:
-		query_raycast()
-		# updates the raycast visuals
-		procrayvis()
-		# run the interaction function
-		interact()
+#func _physics_process(_delta):
+	#if enabled and !query_on_process:
+		#query_raycast()
+		## updates the raycast visuals
+		#procrayvis()
+		## run the interaction function
+		#interact()
 
 func scrollup():
 	if query_is_colliding:

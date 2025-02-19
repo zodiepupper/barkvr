@@ -249,6 +249,8 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _input(event):
+	if event is InputEventJoypadMotion:
+		pass
 	if event.is_action("cleargizmos"):
 		LocalGlobals.clear_gizmos.emit()
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

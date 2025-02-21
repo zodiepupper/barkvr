@@ -55,7 +55,7 @@ func build_path_to_property() -> String:
 
 func update_fields():
 	#print('bool: ', property_name)
-	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
+	if target and !property_name.is_empty() and !_is_editing and property_name in target and is_instance_valid(target) and !_check_focus():
 		val.button_pressed = (target[property_name])
 	elif !is_instance_valid(target):
 		target = null
@@ -74,9 +74,10 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, new_
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name
-	val.button_pressed = bool(target[property_name])
-	if val.button_pressed:
-		val.text = "true"
-	else:
-		val.text = "false"
-	build_path_to_property()
+	if property_name in target:
+		if property_name.contains("/"):
+			queue_free()
+			return
+		val.button_pressed = (target[property_name])
+		build_path_to_property()
+	

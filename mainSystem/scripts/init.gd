@@ -107,6 +107,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			Engine.get_singleton("event_manager").import_asset('image', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck'):
 			Engine.get_singleton("event_manager").import_asset('zip', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+		elif dropped.ends_with(".mp3") or dropped.ends_with(".ogg") or dropped.ends_with(".wav"):
+			Engine.get_singleton("event_manager").import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		else:
 			Engine.get_singleton("event_manager").import_asset('file', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
 	loader.done()

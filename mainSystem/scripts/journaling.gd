@@ -250,6 +250,8 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 			content = asset_to_import
 		elif asset_to_import is String:
 			content = FileAccess.get_file_as_bytes(asset_to_import)
+			if content.is_empty():
+				print(FileAccess.get_open_error())
 		elif asset_to_import is Image:
 			content = asset_to_import.get_data()
 	# Decide how to import asset based on type.
@@ -269,6 +271,11 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 				_import_image_image(asset_name, asset_to_import, data)
 			else:
 				_import_image_bytes(asset_name, content, data)
+		"audio":
+			if !content.is_empty():
+				_import_audio(asset_name, content, data)
+			elif asset_to_import is String:
+				pass
 		"file":
 			_import_file(asset_name, content, data)
 		"uri":
@@ -602,6 +609,13 @@ func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> 
 	
 	tmpbody.add_child(plane)
 	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+
+## Imports an audio file.
+func _import_audio(asset_name: String, content: PackedByteArray, data:Dictionary={} ) -> void:
+	check_root()
+	var audio3d: Audio3D = load("res://mainAssets/ui/3dui/import helpers/audio3d.tscn").instantiate()
+	audio3d.load_audio_from_bytes(content, "mp3")
+	_post_import.call_deferred(root, audio3d, asset_name, data, true)
 
 ## Imports some text.
 func _import_text(asset_name: String, _content: String, data:Dictionary={} ) -> void:

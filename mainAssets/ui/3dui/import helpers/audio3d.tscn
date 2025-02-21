@@ -27,4 +27,5 @@ mesh = SubResource("SphereMesh_vhfd6")
 surface_material_override/0 = SubResource("StandardMaterial3D_fbh1k")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+max_db = -5.0
 doppler_tracking = 2

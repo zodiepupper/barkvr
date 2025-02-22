@@ -1,12 +1,12 @@
 extends Button
-
+ 
 ## The node that will have it's [code]visibility[/code] field toggled when this button is pressed
 @export var node_to_toggle : Node
 
 @export var slide := false
 var slide_start_pos
 
-var prevtween : Tween = create_tween()
+var prevtween : Tween
 
 func _toggled(toggled_on):
 	if is_instance_valid(node_to_toggle):
@@ -14,7 +14,7 @@ func _toggled(toggled_on):
 		prevtween.kill()
 		if !slide:
 			node_to_toggle.visible = toggled_on
-		if slide:
+		if slide and is_instance_valid(tmptween):
 			if !slide_start_pos:
 				slide_start_pos = node_to_toggle.position
 			if toggled_on:

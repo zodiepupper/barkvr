@@ -25,6 +25,7 @@ func load_audio_from_bytes(bytes:PackedByteArray, type:String):
 
 func _load_audio_from_bytes(bytes:PackedByteArray, type:String):
 	#audio_stream = AudioStreamMP3.load_from_buffer(bytes)
+	printerr(type)
 	audio_stream = AudioStreamMP3.new()
 	audio_stream.data = bytes
 	audio_stream_player_3d.stream = audio_stream

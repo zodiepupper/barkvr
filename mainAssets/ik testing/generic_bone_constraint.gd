@@ -20,7 +20,7 @@ func apply(
 	var dir_parent_child = pos_parent_bone.direction_to(pos_child_bone)
 	var len_parent_bone = pos_parent_bone.distance_to(pos_bone)
 	var len_bone_child = pos_bone.distance_to(pos_child_bone)
-	var vec_parent_bone = pos_bone - pos_parent_bone
+	#var vec_parent_bone = pos_bone - pos_parent_bone
 
 	match chain_dir:
 		FORWARD:

@@ -58,6 +58,8 @@ enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://a
 
 import/fbx2gltf/enabled.android=true
 import/fbx2gltf/enabled.web=true
+import/blender/enabled.android=true
+import/blender/enabled.web=true
 
 [global_group]
 
@@ -239,7 +241,6 @@ occlusion_culling/use_occlusion_culling=true
 
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
-openxr/startup_alert=false
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_tracking_unobstructed_data_source=true
 openxr/extensions/hand_tracking_controller_data_source=true

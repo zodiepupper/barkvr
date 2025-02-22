@@ -1,5 +1,5 @@
-class_name LoadingHalo
 extends Node3D
+class_name LoadingHalo
 @onready var animation_player = $MeshInstance3D/AnimationPlayer
 @onready var animation_player3 = $MeshInstance3D3/AnimationPlayer
 @onready var halo1 = $MeshInstance3D

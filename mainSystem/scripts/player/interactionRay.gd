@@ -25,6 +25,19 @@ var last_dist := float()
 ## set whether the node should cast a ray every frame or not
 @export var enabled := true
 
+## enables smoothing which applys a lerp to the
+## target position to smooth out jittery controller
+## movements when aiming at things
+@export var smoothing_enabled := false
+
+## this controls the speed at which the lerp function
+## interpolates toward the new target point
+@export var smoothing_speed := .1
+
+## used to track previous position the raycast casted to
+## so we can use it as the `from` in the lerpf for smoothing
+var last_to_position : Vector3
+
 ## only works if `enabled = true`
 ## sets whether the raycast being run every frame should run on
 ## the process loop (true) or the physics_process loop (false)
@@ -106,6 +119,7 @@ func query_raycast() -> Dictionary:
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
 	var rayquery := PhysicsRayQueryParameters3D.new()
+	last_to_position
 	rayquery.from = global_position
 	if target_position_is_local:
 		rayquery.to = to_global(target_position)

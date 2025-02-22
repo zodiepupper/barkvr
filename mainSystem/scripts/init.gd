@@ -91,6 +91,7 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			dropped.to_lower().ends_with('.scn')  or \
 			dropped.to_lower().ends_with('.tscn') or \
 			dropped.to_lower().ends_with('.obj') or \
+			dropped.to_lower().ends_with('.blend') or \
 			dropped.to_lower().ends_with('.mtl'):
 			Engine.get_singleton("event_manager").import_asset('res',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):

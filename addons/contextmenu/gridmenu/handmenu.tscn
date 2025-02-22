@@ -42,7 +42,7 @@ func onclick():
 "
 
 [sub_resource type="GDScript" id="GDScript_wrd3g"]
-script/source = "extends Object
+script/source = "extends Node
 
 func onclick():
 	Engine.get_singleton(\"event_manager\").undo_action()

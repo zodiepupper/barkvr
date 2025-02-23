@@ -17,8 +17,9 @@ func _ready():
 		Engine.get_singleton("network_manager").finished_candidates.connect(candidates_finished)
 	if is_instance_valid(Engine.get_singleton("user_manager")):
 		Engine.get_singleton("user_manager").got_new_message.connect(func(event:Dictionary):
+			#WorkerThreadPool.add_task(_process_message.bind(event))
 			_process_message(event)
-			)
+		)
 		Engine.get_singleton("user_manager").got_room_messages.connect(func(data):
 #			for child in get_children():
 #				child.queue_free()
@@ -27,7 +28,7 @@ func _ready():
 			for event in data['body']['chunk']:
 				_process_message(event)
 				prevmessages = data
-			)
+		)
 
 func _process_message(event:Dictionary):
 	match event['type']:

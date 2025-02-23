@@ -194,7 +194,8 @@ func _ready():
 								#print(msgJson.rooms.join[room].timeline)
 								if "events" in msgJson.rooms.join[room].timeline:
 									for event in msgJson.rooms.join[room].timeline.events:
-										call_deferred("process_event",event, room)
+										#process_event(event, room)
+										call_deferred("process_event", event,  room)
 										#if "type" in event:
 											#print(event.type)
 										#else:
@@ -203,7 +204,8 @@ func _ready():
 								#print(msgJson.rooms.join)
 								if "events" in msgJson.rooms.join[room].state:
 									for event in msgJson.rooms.join[room].state.events:
-										call_deferred("process_event",event, room)
+										#process_event(event, room)
+										call_deferred("process_event", event,  room)
 									call_deferred("emit_signal","got_room_state",{
 										"room_id": room,
 										"response_code":200,
@@ -214,9 +216,10 @@ func _ready():
 						for room in msgJson.rooms.leave:
 							joinedRooms.erase(room)
 							call_deferred("emit_signal", "leave_room",room)
-				#call_deferred("emit_signal", "synced", msgJson)
-				emit_signal("synced", msgJson)
-				call_deferred("saveUserDict")
+				call_deferred("emit_signal", "synced", msgJson)
+				#emit_signal("synced", msgJson)
+				#call_deferred("saveUserDict")
+				saveUserDict()
 			else:
 				call_deferred("emit_signal","synced", {"result":result})
 			)

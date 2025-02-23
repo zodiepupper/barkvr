@@ -58,8 +58,7 @@ enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://a
 
 import/fbx2gltf/enabled.android=true
 import/fbx2gltf/enabled.web=true
-import/blender/enabled.android=true
-import/blender/enabled.web=true
+import/blender/enabled=false
 
 [global_group]
 

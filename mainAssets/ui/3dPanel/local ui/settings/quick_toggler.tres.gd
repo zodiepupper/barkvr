@@ -11,7 +11,8 @@ var prevtween : Tween
 func _toggled(toggled_on):
 	if is_instance_valid(node_to_toggle):
 		var tmptween := create_tween()
-		prevtween.kill()
+		if prevtween:
+			prevtween.kill()
 		if !slide:
 			node_to_toggle.visible = toggled_on
 		if slide and is_instance_valid(tmptween):

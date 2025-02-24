@@ -97,7 +97,7 @@ func _display_message(event):
 				var displayname :String = event.sender.split(':')[0].right(-1)
 				if event.room_id in roomlist.tree and "users" in roomlist.tree[event.room_id] and event.sender in roomlist.tree[event.room_id].users and "displayname" in roomlist.tree[event.room_id].users[event.sender]:
 					displayname = roomlist.tree[event.room_id].users[event.sender].displayname
-				var tmp = load("res://mainAssets/ui/3dPanel/local ui/login/message.tscn").instantiate()
+				var tmp :Control = load("res://mainAssets/ui/3dPanel/local ui/login/message.tscn").instantiate()
 				tmp.name = event.event_id
 				if event['content'].has('body'):
 					tmp.text = (
@@ -105,12 +105,28 @@ func _display_message(event):
 						)
 				else:
 					tmp.text = str(event)
+				# this part sets some data so files sent over matrix can be imported
+				# using the journal import_asset flow (the copy text button becomes
+				# an import asset button)
 				if "url" in event.content:
 					if event.content.url.begins_with("mxc://"):
 						var download_url : String = event.content.url.trim_prefix("mxc://")
 						var download_homeserver : String = download_url.split("/")[0]
 						var download_content_id : String = download_url.split("/")[1]
-						tmp.text = "https://matrix.pupper.dev/_matrix/client/v1/media/download/"+download_homeserver+"/"+download_content_id+"?allow_redirect=true"
+						Thread.set_thread_safety_checks_enabled(false)
+						tmp.set_meta("import", true)
+						# automatically convert the mxc uri for the matrix media
+						# repository to a useable uri
+						tmp.set_meta("asset_url", "https://matrix.pupper.dev/_matrix/client/v1/media/download/"+download_homeserver+"/"+download_content_id+"?allow_redirect=true")
+						tmp.text = "could not get asset name"
+						if "body" in event.content:
+							tmp.set_meta("import_asset_name", event.content.body)
+							tmp.text = event.content.body
+						if "info" in event.content and "mimetype" in event.content.info:
+							tmp.text += "\n[color=#8888]asset type: "+event.content.info.mimetype
+						
+						Thread.set_thread_safety_checks_enabled(true)
+						
 				if is_instance_valid(Engine.get_singleton("user_manager")) and event.sender == Engine.get_singleton("user_manager").userData.login.user_id:
 					tmp.leftside = false
 				if scroll_container.scroll_vertical == size.y:

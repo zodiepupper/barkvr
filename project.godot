@@ -40,6 +40,11 @@ webrtc_config/turn_servers=PackedStringArray()
 webrtc_config/turn_password=""
 webrtc_config/turn_username=""
 
+[debug]
+
+file_logging/log_path="user://logs/barkvr.log"
+gdscript/warnings/unused_signal=0
+
 [display]
 
 window/size/viewport_width=1500
@@ -63,6 +68,7 @@ import/blender/enabled=false
 [global_group]
 
 player_xr_origin=""
+localuinode=""
 
 [gui]
 
@@ -241,12 +247,7 @@ occlusion_culling/use_occlusion_culling=true
 openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
-openxr/extensions/hand_tracking=true
-openxr/extensions/hand_tracking_unobstructed_data_source=true
-openxr/extensions/hand_tracking_controller_data_source=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
-openxr/binding_modifiers/analog_threshold=true
-openxr/binding_modifiers/dpad_binding=true
 shaders/enabled=true
 openxr/extensions/hand_tracking_aim=true

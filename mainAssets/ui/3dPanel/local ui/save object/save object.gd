@@ -31,12 +31,12 @@ func _load_requested(object_path:String) -> void:
 		match extension:
 			"res", "tres", "scn", "tscn":
 				print("Loading scene.")
-				Journaling.import_asset("res", object_path)
+				Engine.get_singleton("event_manager").import_asset("res", object_path)
 			"glb", "gltf":
 				print('loading gltf')
-				Journaling.import_asset("glb", object_path)
+				Engine.get_singleton("event_manager").import_asset("glb", object_path)
 			"jpg", "jpeg", "png", "bmp", "tga", "webp":
-				Journaling.import_asset("image", object_path)
+				Engine.get_singleton("event_manager").import_asset("image", object_path)
 			"bark":
 				print("Loading var.")
 				var tmp = object_file.get_var(true)

@@ -171,7 +171,7 @@ func _ready():
 		)
 	activetoggle.toggled.connect(func(on:bool):
 		if target and is_instance_valid(target) and target is Node:
-			event_manager.set_property(event_manager.root.get_path_to(target),"visible",activetoggle.button_pressed)
+			event_manager.set_property(event_manager.root.get_path_to(target),"visible",on)
 			#target.visible = active.button_pressed
 		)
 	export.pressed.connect(func():

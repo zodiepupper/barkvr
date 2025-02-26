@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://uahdxqh2pc7q" path="res://mainAssets/ui/3dPanel/local ui/load remote asset/load_html_asset.tscn" id="6_sw1xf"]
 [ext_resource type="PackedScene" uid="uid://boug2ukv43nh6" path="res://mainAssets/ui/3dPanel/local ui/about panel and supporter stuff/about.tscn" id="7_d0sxl"]
 
-[node name="Localmenu" type="Control"]
+[node name="Localmenu" type="Control" groups=["localuinode"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

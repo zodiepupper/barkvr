@@ -55,6 +55,7 @@ transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0929923, -0.08
 [node name="righthand" type="XRController3D" parent="xrplayer"]
 unique_name_in_owner = true
 tracker = &"right_hand"
+pose = &"aim"
 script = ExtResource("2_npgyv")
 
 [node name="handproxy" type="Node3D" parent="xrplayer/righthand"]
@@ -90,6 +91,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1
 [node name="lefthand" type="XRController3D" parent="xrplayer"]
 unique_name_in_owner = true
 tracker = &"left_hand"
+pose = &"aim"
 script = ExtResource("2_npgyv")
 
 [node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]

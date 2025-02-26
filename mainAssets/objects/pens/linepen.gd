@@ -42,7 +42,7 @@ func primary() -> void:
 func primary_released() -> void:
 	drawing = false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if drawing:
 		mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
 		vertices.push_back(current_meshinstance.to_local(tippoint.global_position))

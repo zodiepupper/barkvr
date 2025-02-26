@@ -4,14 +4,14 @@ extends Control
 var message_scene = preload("res://mainAssets/ui/3dPanel/local ui/login/message.tscn")
 
 func _ready():
-	Vector.got_room_messages.connect(func(data):
+	Engine.get_singleton("user_manager").got_room_messages.connect(func(data):
 		for child in get_children():
 			child.queue_free()
 		for event in data['body']['chunk']:
 			if event['type'] == 'm.room.message':
 				if event.has('content') and event['content'].has('body'):
 					var msg:message_bubble = message_scene.instantiate()
-					if event.has('sender') and event.sender == Vector.userData.login.user_id:
+					if event.has('sender') and event.sender == Engine.get_singleton("user_manager").userData.login.user_id:
 						msg.leftside = false
 					msg.text = event['content']['body']
 					add_child(msg)

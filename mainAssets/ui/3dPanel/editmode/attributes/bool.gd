@@ -47,7 +47,6 @@ func build_path_to_property() -> String:
 			if "name" in above_targets[i]:
 				out += above_targets[i].name
 			elif "resource_name" in above_targets[i]:
-				var tmp = above_targets[i].resource_name
 				out += above_targets[i].resource_name
 			else:
 				print("couldn't add this object to the node+resource path: "+str(above_targets[i]))

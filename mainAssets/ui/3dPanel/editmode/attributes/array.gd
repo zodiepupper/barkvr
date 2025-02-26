@@ -16,7 +16,6 @@ var object_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/object.
 var color_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/color.tscn")
 
 var target:Object
-var _is_editing:bool = false
 var property_name:String = '':
 	set(val):
 		property_name = val

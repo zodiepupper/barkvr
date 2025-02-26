@@ -128,7 +128,7 @@ func _ready() -> void:
 		2)
 	play(\"launch\")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	get_parent().global_position = get_viewport().get_camera_3d().global_position
 "
 

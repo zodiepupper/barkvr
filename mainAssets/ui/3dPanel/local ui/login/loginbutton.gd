@@ -8,7 +8,7 @@ extends Button
 
 func _ready():
 	if is_instance_valid(Engine.get_singleton("user_manager")):
-		Engine.get_singleton("user_manager").got_well_known.connect(func(homeserver:String, base_url:String):
+		Engine.get_singleton("user_manager").got_well_known.connect(func(_got_homeserver:String, base_url:String):
 			base_url_lbl.text = "base_url: "+base_url
 			button.disabled = false
 			)

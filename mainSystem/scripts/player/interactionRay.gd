@@ -25,6 +25,10 @@ var last_dist := float()
 ## set whether the node should cast a ray every frame or not
 @export var enabled := true
 
+## sets whether the ray should follow the mouse cursor position
+## intended to easily keep the target aligned with controllers
+@export var follow_mouse := true
+
 ## enables smoothing which applys a lerp to the
 ## target position to smooth out jittery controller
 ## movements when aiming at things
@@ -119,7 +123,7 @@ func query_raycast() -> Dictionary:
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
 	var rayquery := PhysicsRayQueryParameters3D.new()
-	last_to_position
+	last_to_position # TODO finish raycast smoothing
 	rayquery.from = global_position
 	if target_position_is_local:
 		rayquery.to = to_global(target_position)
@@ -240,7 +244,7 @@ func procrayvis():
 
 func _input(event):
 	using_touch = false
-	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+	if follow_mouse and event is InputEventScreenTouch or event is InputEventScreenDrag:
 		using_touch = true
 		target_position = to_local(get_viewport().get_camera_3d().project_position(event.position,10000))
 	if event is InputEventGesture:
@@ -253,7 +257,7 @@ func _input(event):
 				'ray_direction': to_global(target_position),
 				'index': -1
 			})
-	if event is InputEventMouse:
+	if follow_mouse and event is InputEventMouse:
 		# if we aren't in vr... (note, this function assumes that `target_position_is_local = true`)
 		if !get_viewport().use_xr and !using_touch:
 			# and the mouse is not captured by the window...

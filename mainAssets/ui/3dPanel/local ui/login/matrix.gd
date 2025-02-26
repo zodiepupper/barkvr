@@ -30,7 +30,7 @@ func _ready():
 		Engine.get_singleton("user_manager").leave_room.connect(func(roomid:String):
 			roomlist.remove_item(roomid)
 			)
-		Engine.get_singleton("user_manager").synced.connect(func(data:Dictionary):
+		Engine.get_singleton("user_manager").synced.connect(func(_data:Dictionary):
 			Engine.get_singleton("user_manager").sync()
 			)
 		Engine.get_singleton("user_manager").got_room_state.connect(func(data):

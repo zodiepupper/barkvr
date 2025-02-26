@@ -9,7 +9,6 @@ var ATTRIBUTES_SCENE = load("res://mainAssets/ui/3dPanel/editmode/attributes.tsc
 @onready var margin_container: MarginContainer = $VBoxContainer/MarginContainer
 
 var target:Object
-var _is_editing:bool = false
 var property_name:String = '':
 	set(val):
 		property_name = val
@@ -43,7 +42,6 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, abov
 		label.text = new_name
 		target = new_target
 		property_name = new_property_name
-		var attributes_target = target[property_name]
 		var attributes:Control = ATTRIBUTES_SCENE.instantiate()
 		attributes.hide_titlebar = true
 		attributes.size_flags_horizontal = Control.SIZE_EXPAND_FILL

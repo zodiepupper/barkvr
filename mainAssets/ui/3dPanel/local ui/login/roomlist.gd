@@ -12,7 +12,7 @@ var current_session_room : String = ""
 ## their data, and corresponding TreeItem
 var tree:Dictionary = {}
 
-func add_item(text:String,metadata:Variant,replace:String=''):
+func add_item(text:String,metadata:Variant,_replace:String=''):
 	if metadata and 'state' in metadata and 'room_id' in metadata:
 		var room_id = metadata["room_id"]
 		var roomdict = {}
@@ -71,7 +71,6 @@ func add_item(text:String,metadata:Variant,replace:String=''):
 								roomdict.users[event.state_key]["displayname"] = event.content.displayname
 		if roomdict.users.size() == 2:
 			for user in roomdict.users:
-				var tmp = Engine.get_singleton("user_manager").userData.login.user_id
 				if user != Engine.get_singleton("user_manager").uid:
 					roomdict.name = roomdict.users[user].displayname
 		roomdict['tree_item'].set_text(0,roomdict.name)

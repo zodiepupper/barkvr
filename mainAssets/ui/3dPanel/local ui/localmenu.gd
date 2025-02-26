@@ -24,12 +24,13 @@ func _ready():
 		expanded = !expanded
 		resize.visible = expanded
 		tab_container.visible = expanded
-		create_tween().tween_property(get_viewport().get_parent(),"viewport_size:y",big_height if expanded else small_height,.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-		create_tween().tween_property(get_viewport().get_parent(),"viewport_size:x",big_width if expanded else small_height,1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+		if get_viewport().get_parent() is Panel3D:
+			create_tween().tween_property(get_viewport().get_parent(),"viewport_size:y",big_height if expanded else small_height,.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+			create_tween().tween_property(get_viewport().get_parent(),"viewport_size:x",big_width if expanded else small_height,1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 		)
 
 func _input(event:InputEvent):
-	if resize.button_pressed and event is InputEventMouseMotion:
+	if resize.button_pressed and event is InputEventMouseMotion and get_viewport().get_parent() is Panel3D:
 		big_height = event.position.y
 		big_width = event.position.x if event.position.x > tab_container.custom_minimum_size.x else tab_container.custom_minimum_size.x
 		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)

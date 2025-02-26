@@ -93,7 +93,19 @@ func _toggle_xr(value):
 		righthand.rays_disabled = !value
 		ui_ray.enabled = !value
 		ui_ray.visible = !value
-	if !value:
+	
+	if !localui.is_node_ready():
+		await localui.ready
+	if value:
+		localui.ui.reparent(localui)
+		localui.colshape.disabled = false
+		headiktarget.reparent(xr_camera_3d,false)
+		if OS.get_name() != "Web":
+			get_viewport().use_xr = true
+		xr_camera_3d.current = true
+	else:
+		localui.ui.reparent(get_tree().root)
+		localui.colshape.disabled = true
 		headiktarget.reparent(camera_3d,false)
 		Notifyvr.send_notification("DISABLING XR")
 		collision_shape_3d.shape.height = 1.0
@@ -109,11 +121,6 @@ func _toggle_xr(value):
 		lefthand.rotation_degrees = Vector3(-90.0,0,0)
 		ui_ray.enabled = true
 		ui_ray.show()
-	else:
-		headiktarget.reparent(xr_camera_3d,false)
-		if OS.get_name() != "Web":
-			get_viewport().use_xr = true
-		xr_camera_3d.current = true
 
 func respawn_player():
 	velocity = Vector3()
@@ -370,7 +377,7 @@ func _input(event):
 				xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 				camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 
-func _screen_tap_click(event:InputEvent) -> void:
+func _screen_tap_click(_event:InputEvent) -> void:
 	LocalGlobals.playerreleaseuifocus.emit()
 	ui_ray.click()
 	ui_ray.release()

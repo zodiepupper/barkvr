@@ -9,30 +9,32 @@ bg_color = Color(0, 0, 0, 0.509804)
 [sub_resource type="GDScript" id="GDScript_xgvtk"]
 script/source = "extends Button
 @onready var label: RichTextLabel = $\"../../MarginContainer/Label\"
+@onready var message: message_bubble = $\"../../..\"
 
 #func _ready() -> void:
 	#BarkHelpers.invert_image(icon.get_image())
 
 func _pressed() -> void:
 	print(get_meta_list()) ## ITS NOT GETTING THE METADA SOMEHOW
-	if has_meta(\"import\") and has_meta(\"asset_url\"):
-		if has_meta(\"import_asset_name\"):
+	if message.has_meta(\"import\") and message.has_meta(\"asset_url\"):
+		if message.has_meta(\"import_asset_name\"):
 			var loader :LoadingHalo = load(\"res://mainAssets/ui/3dui/loading_halo.tscn\").instantiate()
-			loader.text = get_meta(\"import_asset_name\")
+			loader.text = message.get_meta(\"import_asset_name\")
 			var player_size_mult:float=1.0
 			var import_position :Vector3= get_window().get_camera_3d().to_global(Vector3(0,0,-2.0)*player_size_mult)
 			if is_instance_valid(get_tree().get_first_node_in_group(\"player\")):
 				var tmpscale = get_tree().get_first_node_in_group(\"player\").global_basis.get_scale()
-				player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
+				player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.
 			Engine.get_singleton(\"event_manager\").import_asset(
 				\"uri\", #type 
-				get_meta(\"asset_url\"), #asset_to_import
-				get_meta(\"import_asset_name\"), #asset_name
+				message.get_meta(\"asset_url\"), #asset_to_import
+				message.get_meta(\"import_asset_name\"), #asset_name
 				false, #recieved
 				{\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult} #data
 			)
 #import_asset('uri',url.text,'', false, {\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult})
-	DisplayServer.clipboard_set(label.text)
+	else:
+		DisplayServer.clipboard_set(label.text)
 "
 
 [node name="message" type="MarginContainer"]

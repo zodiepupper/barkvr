@@ -14,6 +14,7 @@ var resizing := false
 var resize_start_position := Vector2()
 
 func _ready():
+	expanded = tab_container.visible
 	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():
 		window_properties.call_deferred("set_target",get_window())

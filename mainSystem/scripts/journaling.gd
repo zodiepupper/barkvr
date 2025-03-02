@@ -237,6 +237,11 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 	print(type)
 	# Make sure root is valid.
 	check_root()
+	# if the loader isn't in the scene, add it
+	if "loader" in data and data.loader is Node:
+		if !data.loader.is_inside_tree():
+			root.add_child(data.loader)
+			data.loader.global_position = data.position
 	# Generate an asset name if not given.
 	if asset_name.is_empty():
 		# If we have a string path for the asset import, use that instead.

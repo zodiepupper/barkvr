@@ -18,6 +18,7 @@ grow_vertical = 2
 script = ExtResource("1_62fs1")
 
 [node name="TabContainer" type="TabContainer" parent="."]
+visible = false
 clip_contents = true
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 1

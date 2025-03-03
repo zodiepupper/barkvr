@@ -34,6 +34,7 @@ singletons = {
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." groups=["microphone"]]
 stream = SubResource("AudioStreamMicrophone_ve6pm")
 autoplay = true
+bus = &"mic"
 playback_type = 1
 
 [node name="StartXR" type="Node" parent="."]

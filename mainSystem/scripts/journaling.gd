@@ -240,6 +240,9 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 	# if the loader isn't in the scene, add it
 	if "loader" in data and data.loader is Node:
 		if !data.loader.is_inside_tree():
+			if recieved:
+				data.loader = load("res://mainAssets/ui/3dui/loading_halo.tscn").instantiate()
+				data.loader.text = "remote asset"
 			root.add_child(data.loader)
 			data.loader.global_position = data.position
 	# Generate an asset name if not given.
@@ -259,7 +262,7 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 			if content.is_empty():
 				print(FileAccess.get_open_error())
 		elif asset_to_import is Image:
-			content = asset_to_import.get_data()
+			content = asset_to_import.data.data
 	# Decide how to import asset based on type.
 	# TODO pck support
 	data.type = type
@@ -293,22 +296,83 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 				data.loader.done('failed')
 	# Send message to peers.
 	if !recieved:
-		if type == "res":
-			_add_action({
-				'action_name': 'import_asset',
-				'type': type,
-				'asset_to_import': content,
-				'asset_name': asset_name,
-				'data': data
-			})
-		else:
-			_add_action({
-				'action_name': 'import_asset',
-				'type': type,
-				'asset_to_import': content,
-				'asset_name': asset_name,
-				'data': data
-			})
+		match type:
+			"text":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"glb", "vrm":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"res":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"image":
+				data.image_data = asset_to_import.data
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"audio":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"file":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"uri":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"zip":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			_:
+				if "loader" in data:
+					data.loader.done('failed')
 
 func _import_uri(uri:String, data:Dictionary={}):
 	var tmpdir:String = "user://tmp/"+str(hash(uri))
@@ -547,10 +611,43 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 		err = img.load_svg_from_buffer(content)
 	if err != OK:
 		err = img.load_ktx_from_buffer(content)
+	if err != OK and "image_data" in data:
+		var img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
+		"FORMAT_BPTC_RGBF": 23,
+		"FORMAT_BPTC_RGBFU": 24,
+		"FORMAT_ETC": 25,
+		"FORMAT_ETC2_R11": 26,
+		"FORMAT_ETC2_R11S": 27,
+		"FORMAT_ETC2_RG11": 28,
+		"FORMAT_ETC2_RG11S": 29,
+		"FORMAT_ETC2_RGB8": 30,
+		"FORMAT_ETC2_RGBA8": 31,
+		"FORMAT_ETC2_RGB8A1": 32,
+		"FORMAT_ETC2_RA_AS_RG": 33,
+		"FORMAT_DXT5_RA_AS_RG": 34,
+		"FORMAT_ASTC_4x4": 35,
+		"FORMAT_ASTC_4x4_HDR": 36,
+		"FORMAT_ASTC_8x8": 37,
+		"FORMAT_ASTC_8x8_HDR": 38}
+		for format in img_formats_lookup.keys():
+			if data.image_data.format in format:
+				data.image_data.format = format
+				break
+		img = null
+		#img = Image.create_from_data(data.image_data.width, data.image_data.height, data.image_data.mipmaps, img_formats_lookup[data.image_data.format], data.image_data.data)
+		#img.set_data(data.image_data.width, data.image_data.height, data.image_data.mipmaps, img_formats_lookup[data.image_data.format], data.image_data.data)
+		img = Image.new()
+		img.data = data.image_data
+		img
+		print('create image from data:')
+		print(img.data)
+		print(img.is_empty())
+		err = OK
 	
-	if err != OK:
+	if err != OK or img.is_empty():
 		if "loader" in data:
 			data.loader.done('failed')
+			printerr("image failed to load:\n",data)
 		return
 	
 	var tex := ImageTexture.create_from_image(img)
@@ -586,6 +683,15 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 ## Imports an image from an existing image resource.
 func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> void:
 	check_root()
+	
+	var test_image := Image.create_from_data(
+		img.data.width,
+		img.data.height,
+		img.data.mipmaps,
+		Image.FORMAT_ETC2_RGB8,
+		img.data.data
+	)
+	var test = test_image.data
 	
 	var tex := ImageTexture.create_from_image(img)
 	var plane := MeshInstance3D.new()
@@ -709,6 +815,8 @@ func _import_file(asset_name: String, content: PackedByteArray, data:Dictionary=
 ## Accept an incoming network message and handle it appropriately.
 func receive(action: Dictionary) -> void:
 	check_root()
+	if "content" in action and !action.content.is_empty():
+		action.asset_to_import = action.content
 	match action.action_name:
 		"set_property":
 			set_property(action.target, action.prop_name, action.value, true)

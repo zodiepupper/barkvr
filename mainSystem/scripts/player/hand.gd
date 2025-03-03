@@ -109,6 +109,23 @@ func _physics_process(delta):
 			item.node.global_transform = righthand.global_transform * item.offset
 		else:
 			item.node.global_transform = lefthand.global_transform * item.offset
+		if is_instance_valid(Engine.get_singleton("event_manager")):
+				print("apply")
+				Engine.get_singleton("event_manager").set_property(
+					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+					"position",
+					item.node.position
+				)
+				Engine.get_singleton("event_manager").set_property(
+					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+					"rotation",
+					item.node.rotation
+				)
+				Engine.get_singleton("event_manager").set_property(
+					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+					"scale",
+					item.node.scale
+				)
 
 func _process(_delta: float) -> void:
 	if !rays_disabled:

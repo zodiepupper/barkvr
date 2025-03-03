@@ -173,8 +173,8 @@ metadata/grabbable = true
 [node name="Audio3d" parent="multiplayer world root" instance=ExtResource("6_nx2sb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0567468, 1.55099, 2.56656)
 
-[node name="Linepen" parent="." instance=ExtResource("7_8hxdm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38342, 0)
+[node name="Linepen" parent="multiplayer world root" instance=ExtResource("7_8hxdm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38342, 0)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.33328, 1.91664, 2.46325)

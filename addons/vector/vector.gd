@@ -216,10 +216,10 @@ func _ready():
 						for room in msgJson.rooms.leave:
 							joinedRooms.erase(room)
 							call_deferred("emit_signal", "leave_room",room)
+				saveUserDict()
 				call_deferred("emit_signal", "synced", msgJson)
 				#emit_signal("synced", msgJson)
 				#call_deferred("saveUserDict")
-				saveUserDict()
 			else:
 				call_deferred("emit_signal","synced", {"result":result})
 			)

@@ -36,7 +36,7 @@ fov = 90.0
 
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
-query_exception_nodes = [NodePath("../../..")]
+query_exception_nodes = [NodePath("../../.."), NodePath("../../righthand/handproxy/grabArea"), NodePath("../../lefthand/handproxy/grabArea")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294967295

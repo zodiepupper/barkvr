@@ -28,4 +28,4 @@ func _get_webrtc_data():
 					var chan:WebRTCDataChannel = chandict.channel
 					label.text += "channel: "+str(chan)+"\n"
 					label.text += "ready_state: "+str(chan.get_ready_state())+"\n"
-		get_tree().create_timer(.1).timeout.connect(_get_webrtc_data)
+		get_tree().create_timer(.5).timeout.connect(_get_webrtc_data)

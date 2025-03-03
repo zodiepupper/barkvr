@@ -6,7 +6,11 @@
 [node name="about" type="Control"]
 clip_contents = true
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 metadata/_tab_index = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -74,6 +78,30 @@ theme_override_constants/margin_bottom = 12
 [node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
+text = "[center]f1 switches between desktop and vr "
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[right][font size=16] (if you started with vr enabled) "
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer7" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer7"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer7/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
 text = "[center]f10 clears gizmos"
 fit_content = true
 
@@ -107,4 +135,20 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]q or middle mouse summons the context menu"
+fit_content = true
+
+[node name="PanelContainer6" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer6"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer6/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]esc toggles mouse lock"
 fit_content = true

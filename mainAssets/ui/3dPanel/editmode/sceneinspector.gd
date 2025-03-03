@@ -44,6 +44,9 @@ func _ready():
 			reparent_btn.button_pressed = false
 		last_selected = get_all_selected()
 		LocalGlobals.clear_gizmos.emit()
+		if !tree.get_selected():
+			tree.check_children()
+			return
 		var node = tree.get_selected().get_metadata(0).node
 		if !is_instance_valid(node):
 			tree.check_children()

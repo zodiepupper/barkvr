@@ -70,7 +70,7 @@ chain_length = 3
 transform_mode = 3
 transform = Transform3D(0.754221, -0.420802, 0.504063, 0.620025, 0.70911, -0.335759, -0.216148, 0.565766, 0.795733, -0.680462, -0.073136, -0.280134)
 
-[node name="StraightBoneConstraint" type="GodotIKConstraint" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK/GodotIKEffector4"]
+[node name="GenericBoneConstraint" type="GodotIKConstraint" parent="goddette libik (monxa)/godette/Skeleton3D/GodotIK/GodotIKEffector4"]
 bone_idx = 62
 script = ExtResource("12_tp85h")
 

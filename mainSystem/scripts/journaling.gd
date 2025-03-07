@@ -166,13 +166,11 @@ func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
 
 func delete_node(target: NodePath, recieved := false, undid := false) -> void:
 	check_root()
-	print(is_path_remote(target))
 	var target_node := root.get_node(target)
 	var deleted_node_as_packed_scene := PackedScene.new()
 	take_owner_of_node_and_all_children(target_node, target_node)
 	deleted_node_as_packed_scene.pack(target_node)
 	target_node.queue_free()
-	print(undid)
 	if !recieved:
 		_add_action({
 			'action_name': 'delete_node',

@@ -35,10 +35,20 @@ extends Node
 ##		}
 var peers : Array[Dictionary] = []
 
-var packs : Array[PackedByteArray] = [PackedByteArray()]
-
+## current network packet to send stored as a class variable to
+## prevent the need to re-allocate variables over and over again
 var pack : PackedByteArray = PackedByteArray()
+
+## not sure??? some kind of incremented 
+## variable i think maybe i was going to
+## use it for 
 var packsize : int = 0
+
+## fixed network packet size, made it configurable
+## so that the game can be adjusted to different
+## network conditions in the future or can be used
+## as an optimization step (it's kindof an optimization
+## already)
 var packet_size : int = 100000
 
 var bytes_to_send
@@ -47,8 +57,6 @@ var chat_timer :float = 0.0
 var event_sync_timer :float = 0.0
 
 var uname :String = ""
-
-var current_room :String = ''
 
 signal created_offer(data:Dictionary)
 signal created_answer(data:Dictionary)

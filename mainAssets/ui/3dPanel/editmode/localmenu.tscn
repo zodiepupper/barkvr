@@ -11,7 +11,10 @@ script/source = "extends Node
 @export var y := true
 @export var z := true
 
-func _process(_delta):
+func _ready() -> void:
+	ConfigSingleton.changed.connect(on_settings_changed)
+
+func _process(_delta: float) -> void:
 	var prev_rot :Vector3= get_parent().rotation
 	get_parent().look_at(get_tree().get_first_node_in_group('player').get_viewport().get_camera_3d().global_position, Vector3.UP, flipped)
 	if !x:
@@ -20,6 +23,15 @@ func _process(_delta):
 		get_parent().rotation.y = prev_rot.y
 	if !z:
 		get_parent().rotation.z = prev_rot.z
+
+func on_settings_changed(name: StringName) -> void:
+	match name:
+		&\"ui_local_menu_lookat_x\":
+			x = ConfigSingleton.ui_local_menu_lookat_x
+		&\"ui_local_menu_lookat_y\":
+			y = ConfigSingleton.ui_local_menu_lookat_y
+		&\"ui_local_menu_lookat_z\":
+			z = ConfigSingleton.ui_local_menu_lookat_z
 "
 
 [node name="Panel3D" type="RigidBody3D" groups=["localuipanel"]]

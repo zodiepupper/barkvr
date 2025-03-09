@@ -1,138 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=8 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
+[ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://mainAssets/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
 [ext_resource type="Script" uid="uid://887ipat0423k" path="res://mainAssets/ui/3dPanel/local ui/settings/graphics_fields_setter.gd" id="2_6aatb"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
 
-[sub_resource type="GDScript" id="GDScript_eqaxg"]
-script/source = "extends VBoxContainer
-
-@onready var toggle: Button = $restartinvr/button
-
-var on_color :Color=Color.GREEN
-var off_color :Color=Color.GRAY
-
-func _ready():
-	if LocalGlobals.vr_supported:
-		toggle.hide()
-	toggle.pressed.connect(func():
-		var args := OS.get_cmdline_args()
-		args.append(\"--xr-mode on\")
-		OS.set_restart_on_exit(true, PackedStringArray(args))
-		if OS.is_restart_on_exit_set():
-			get_tree().quit(0)
-		)
-"
-
-[sub_resource type="GDScript" id="GDScript_jyg8t"]
-script/source = "extends VBoxContainer
-
-@onready var toggle = $passthrough/toggle
-@onready var color_rect = $passthrough/toggle/ColorRect
-
-var on_color :Color=Color.GREEN
-var off_color :Color=Color.GRAY
-
-func _ready():
-	if XRServer.primary_interface and XRServer.primary_interface.is_passthrough_supported() and XRServer.primary_interface.is_passthrough_enabled():
-		toggle.button_pressed = true
-	else:
-		toggle.button_pressed = false
-	toggle.toggled.connect(func(on:bool):
-		if XRServer.primary_interface and XRServer.primary_interface.is_passthrough_supported():
-			if on:
-				XRServer.primary_interface.start_passthrough()
-			else:
-				XRServer.primary_interface.stop_passthrough()
-			if !XRServer.primary_interface.is_passthrough_enabled():
-				toggle.button_pressed = false
-		else:
-			toggle.button_pressed = false
-		create_tween().tween_property(color_rect,\"color\",on_color if toggle.button_pressed else off_color,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		toggle.text = \"is enabled\" if toggle.button_pressed else \"is disabled\"
-		)
-"
-
-[sub_resource type="GDScript" id="GDScript_udd3x"]
-script/source = "extends VBoxContainer
-
-@onready var toggle = $hand_tracking_toggle/toggle
-@onready var color_rect = $hand_tracking_toggle/toggle/ColorRect
-
-var on_color :Color=Color.GREEN
-var off_color :Color=Color.GRAY
-
-func _ready():
-	toggle.button_pressed = Engine.get_singleton(\"settings_manager\").hand_tracking_enabled
-	create_tween().tween_property(color_rect,\"color\",on_color if toggle.button_pressed else off_color,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-	create_tween().tween_property(toggle,\"text\",\"is enabled\" if toggle.button_pressed else \"is disabled\", .5)
-	toggle.toggled.connect(func(on:bool):
-		Engine.get_singleton(\"settings_manager\").hand_tracking_enabled = on
-		create_tween().tween_property(color_rect,\"color\",on_color if toggle.button_pressed else off_color,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		create_tween().tween_property(toggle,\"text\",\"is enabled\" if toggle.button_pressed else \"is disabled\", .5)
-		)
-"
-
-[sub_resource type="GDScript" id="GDScript_wa730"]
-script/source = "extends VBoxContainer
-
-#localuilookat
-
-@onready var xval = $position/xvbox/xval
-@onready var x_color_rect = $position/xvbox/xval/ColorRect
-@onready var yval = $position/yvbox/yval
-@onready var y_color_rect = $position/yvbox/yval/ColorRect
-@onready var zval = $position/zvbox/zval
-@onready var z_color_rect = $position/zvbox/zval/ColorRect
-
-func _ready():
-	xval.text = \"enabled\" if get_tree().get_first_node_in_group('localuilookat').x else \"disabled\"
-	xval.set_deferred(\"button_pressed\", get_tree().get_first_node_in_group('localuilookat').x)
-	yval.text = \"enabled\" if get_tree().get_first_node_in_group('localuilookat').y else \"disabled\"
-	yval.set_deferred(\"button_pressed\", get_tree().get_first_node_in_group('localuilookat').y)
-	zval.text = \"enabled\" if get_tree().get_first_node_in_group('localuilookat').z else \"disabled\"
-	zval.set_deferred(\"button_pressed\", get_tree().get_first_node_in_group('localuilookat').z)
-	xval.toggled.connect(func(toggled_on: bool):
-		create_tween().tween_property(xval, \"text\", \"is enabled\" if toggled_on else \"is disabled\", .5)
-		get_tree().get_first_node_in_group('localuilookat').x = toggled_on
-		create_tween().tween_property(x_color_rect,\"color\",Color.RED if toggled_on else Color.GRAY,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		)
-	yval.toggled.connect(func(toggled_on: bool):
-		create_tween().tween_property(yval, \"text\", \"is enabled\" if toggled_on else \"is disabled\", .5)
-		get_tree().get_first_node_in_group('localuilookat').y = toggled_on
-		create_tween().tween_property(y_color_rect,\"color\",Color.GREEN if toggled_on else Color.GRAY,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		)
-	zval.toggled.connect(func(toggled_on: bool):
-		create_tween().tween_property(zval, \"text\", \"is enabled\" if toggled_on else \"is disabled\", .5)
-		get_tree().get_first_node_in_group('localuilookat').z = toggled_on
-		create_tween().tween_property(z_color_rect,\"color\",Color.BLUE if toggled_on else Color.GRAY,.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-		)
-"
-
-[sub_resource type="GDScript" id="GDScript_xtm8w"]
-script/source = "extends Control
-@onready var value = $value
-
-func _ready():
-	value.value_changed.connect(func(_value):
-		if Engine.has_singleton(\"settings_manager\") and \"inspector_update_interval\" in Engine.get_singleton(\"settings_manager\"):
-			Engine.get_singleton(\"settings_manager\").inspector_update_interval = value.value
-		)
-"
-
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
-
-[sub_resource type="GDScript" id="GDScript_bjcdg"]
-script/source = "extends Control
-@onready var value = $value
-
-func _ready():
-	value.toggled.connect(func(_value):
-		if Engine.has_singleton(\"settings_manager\") and \"send_messages_with_ctrl_enter\" in Engine.get_singleton(\"settings_manager\"):
-			Engine.get_singleton(\"settings_manager\").send_messages_with_ctrl_enter = value.button_pressed
-			create_tween().tween_property(value,\"text\",\"is enabled\" if value.button_pressed else \"is disabled\", .5)
-		)
-"
 
 [sub_resource type="GDScript" id="GDScript_46aot"]
 script/source = "extends OptionButton
@@ -167,9 +40,9 @@ func _process(_delta):
 	if LocalGlobals.voice_analyzer:
 		color_rect.color.a = LocalGlobals.voice_analyzer.get_magnitude_for_frequency_range(0,40000,AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_MAX).length()*100.0
 
-func has_item_label(item_label:String):
+func has_item_label(item_label:String) -> bool:
 	for item in range(item_count):
-		if get_item_text(item) ==  item_label:
+		if get_item_text(item) == item_label:
 			return true
 	return false
 
@@ -222,16 +95,6 @@ func items() -> PackedStringArray:
 	return output
 "
 
-[sub_resource type="GDScript" id="GDScript_abd45"]
-script/source = "extends Control
-@onready var h_slider = $HSlider
-
-func _ready():
-	h_slider.value_changed.connect(func(value):
-		get_window().get_viewport().scaling_3d_scale = value
-		)
-"
-
 [node name="settings" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -239,6 +102,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_p8muu")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -253,45 +117,44 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="generalsettings" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="GeneralSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "general settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../generalsettings margin")
+node_to_toggle = NodePath("../GeneralSettingsMargin")
 
-[node name="generalsettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="GeneralSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/generalsettings margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
-[node name="generalsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin"]
+[node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
 layout_mode = 2
 
-[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings"]
+[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings"]
 layout_mode = 2
 size_flags_vertical = 3
-script = SubResource("GDScript_eqaxg")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "restart in vr"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="restartinvr" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr"]
+[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="button" type="Button" parent="ScrollContainer/VBoxContainer/generalsettings margin/generalsettings/restartinvr/restartinvr"]
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -300,47 +163,46 @@ text = "restart in vr"
 icon_alignment = 1
 expand_icon = true
 
-[node name="vrsettingsbutton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="VRSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "VR Settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../vrsettings margin")
+node_to_toggle = NodePath("../VRSettingsMargin")
 
-[node name="vrsettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="VRSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/vrsettings margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
 layout_mode = 2
 color = Color(0.333333, 0, 1, 0.2)
 
-[node name="vrsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin"]
+[node name="VRSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings"]
+[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings"]
 layout_mode = 2
 size_flags_vertical = 3
-script = SubResource("GDScript_jyg8t")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/passthrough"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "toggle passthrough"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/passthrough"]
+[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="toggle" type="Button" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/passthrough/passthrough"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -350,7 +212,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/passthrough/passthrough/toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -362,24 +224,23 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="hand_tracking_toggle" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings"]
+[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings"]
 layout_mode = 2
 size_flags_vertical = 3
-script = SubResource("GDScript_udd3x")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/hand_tracking_toggle"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "toggle hand tracking"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="hand_tracking_toggle" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/hand_tracking_toggle"]
+[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="toggle" type="Button" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/hand_tracking_toggle/hand_tracking_toggle"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -389,7 +250,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/vrsettings margin/vrsettings/hand_tracking_toggle/hand_tracking_toggle/toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -401,48 +262,47 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="uisettingsbutton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="UISettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "UI Settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../uisettings margin")
+node_to_toggle = NodePath("../UISettingsMargin")
 
-[node name="uisettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/uisettings margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
 layout_mode = 2
 color = Color(0, 1, 0, 0.2)
 
-[node name="uisettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin"]
+[node name="UISettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
 layout_mode = 2
 
-[node name="localmenulookataxistoggles2" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings"]
+[node name="LocalMenuLookAtAxisToggles" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
 layout_mode = 2
-script = SubResource("GDScript_wa730")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Local Menu LookAt Axis Toggles"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="position" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2"]
+[node name="Position" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="xvbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position"]
+[node name="XVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/xvbox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -450,7 +310,7 @@ text = "x"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="xval" type="Button" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/xvbox"]
+[node name="XVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -460,7 +320,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/xvbox/xval"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -473,11 +333,11 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(1, 0, 0, 1)
 
-[node name="yvbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position"]
+[node name="YVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/yvbox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -485,7 +345,7 @@ text = "y"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="yval" type="Button" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/yvbox"]
+[node name="YVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -495,7 +355,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/yvbox/yval"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -508,11 +368,11 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 1)
 
-[node name="zvbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position"]
+[node name="ZVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/zvbox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -520,7 +380,7 @@ text = "z"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="zval" type="Button" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/zvbox"]
+[node name="ZVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -530,7 +390,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/localmenulookataxistoggles2/position/zvbox/zval"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -543,18 +403,17 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 0, 1, 1)
 
-[node name="inspectorupdateinterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings"]
+[node name="InspectorUpdateInterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
 layout_mode = 2
-script = SubResource("GDScript_xtm8w")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/inspectorupdateinterval"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Inspector Update Interval:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/inspectorupdateinterval/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/Label"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -567,7 +426,7 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="value" type="SpinBox" parent="ScrollContainer/VBoxContainer/uisettings margin/uisettings/inspectorupdateinterval"]
+[node name="SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_icons/updown = SubResource("ImageTexture_5et3l")
@@ -578,39 +437,38 @@ allow_greater = true
 allow_lesser = true
 alignment = 1
 
-[node name="chatsettingsbutton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="ChatSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "chat settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../chatsettings margin")
+node_to_toggle = NodePath("../ChatSettingsMargin")
 
-[node name="chatsettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="ChatSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/chatsettings margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
 layout_mode = 2
 color = Color(0, 1, 1, 0.2)
 
-[node name="chatsettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/chatsettings margin"]
+[node name="ChatSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
 layout_mode = 2
 
-[node name="send messages with ctrl+enter" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/chatsettings margin/chatsettings"]
+[node name="CtrlEnter" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings"]
 layout_mode = 2
-script = SubResource("GDScript_bjcdg")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/chatsettings margin/chatsettings/send messages with ctrl+enter"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "send messages with ctrl+enter:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/chatsettings margin/chatsettings/send messages with ctrl+enter/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Label"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -623,45 +481,45 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="value" type="Button" parent="ScrollContainer/VBoxContainer/chatsettings margin/chatsettings/send messages with ctrl+enter"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter"]
 layout_mode = 2
 size_flags_vertical = 3
 toggle_mode = true
 text = "is disabled"
 
-[node name="audiosettingsbutton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="AudioSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "Audio Settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../audiosettings margin")
+node_to_toggle = NodePath("../AudioSettingsMargin")
 
-[node name="audiosettings margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="AudioSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/audiosettings margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
 layout_mode = 2
 color = Color(0, 0, 1, 0.2)
 
-[node name="audiosettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/audiosettings margin"]
+[node name="AudioSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
 layout_mode = 2
 
-[node name="audioinputselector" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings"]
+[node name="AudioInputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audioinputselector"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Audio Input Device"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="toggle" type="OptionButton" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audioinputselector"]
+[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -670,7 +528,7 @@ icon_alignment = 1
 expand_icon = true
 script = SubResource("GDScript_46aot")
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audioinputselector/toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection/Options"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -683,18 +541,18 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
 
-[node name="audiooutputselector" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings"]
+[node name="AudioOutputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audiooutputselector"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Audio Input Device"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="toggle" type="OptionButton" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audiooutputselector"]
+[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -703,7 +561,7 @@ icon_alignment = 1
 expand_icon = true
 script = SubResource("GDScript_f8k8b")
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/audiosettings margin/audiosettings/audiooutputselector/toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection/Options"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -716,43 +574,42 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
 
-[node name="graphics" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="GraphicsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "graphics settings"
 script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../graphics margin")
+node_to_toggle = NodePath("../GraphicsMargin")
 
-[node name="graphics margin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="GraphicsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/graphics margin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
-[node name="graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/graphics margin"]
+[node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
 layout_mode = 2
 script = ExtResource("2_6aatb")
 
-[node name="anti aliasing" parent="ScrollContainer/VBoxContainer/graphics margin/graphics" instance=ExtResource("2_bod8q")]
+[node name="anti aliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
 layout_mode = 2
 
-[node name="scaling3d" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/graphics margin/graphics"]
+[node name="ViewportScaling" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics"]
 layout_mode = 2
-script = SubResource("GDScript_abd45")
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/graphics margin/graphics/scaling3d"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Scaling 3d:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/graphics margin/graphics/scaling3d"]
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -763,3 +620,13 @@ value = 1.0
 scrollable = false
 tick_count = 3
 ticks_on_borders = true
+
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button" to="." method="restart_in_vr"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle" to="." method="toggle_vr_passthrough"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle" to="." method="toggle_hand_tracking"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal" to="." method="toggle_local_menu_lookat_x"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal" to="." method="toggle_local_menu_lookat_y"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal" to="." method="toggle_local_menu_lookat_z"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox" to="." method="inspector_update_interval_changed"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle" to="." method="toggle_ctrl_enter"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling/HSlider" to="." method="viewport_scaling_slider_changed"]

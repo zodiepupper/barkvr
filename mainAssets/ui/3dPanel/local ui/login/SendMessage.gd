@@ -5,10 +5,10 @@ const SEND_SHORTCUT_CTRL_ENTER = preload("res://mainAssets/ui/3dPanel/local ui/l
 const SEND_SHORTCUT_ENTER = preload("res://mainAssets/ui/3dPanel/local ui/login/send_shortcut_enter.tres")
 func _ready():
 	pressed.connect(ispressed)
-	if is_instance_valid(Engine.get_singleton("settings_manager")):
-		Engine.get_singleton("settings_manager").send_messages_with_ctrl_enter_changed.connect(func(val):
-			shortcut = SEND_SHORTCUT_CTRL_ENTER if val else SEND_SHORTCUT_ENTER
-			)
+	ConfigSingleton.changed.connect(func(name: StringName):
+		if name == &"send_messages_with_ctrl_enter":
+			shortcut = SEND_SHORTCUT_CTRL_ENTER if ConfigSingleton.send_messages_with_ctrl_enter else SEND_SHORTCUT_ENTER
+	)
 
 func ispressed()->void:
 	if is_instance_valid(Engine.get_singleton("user_manager")):

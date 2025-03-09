@@ -92,19 +92,19 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("scrollup"):
 			if Input.is_physical_key_pressed(KEY_SHIFT):
 				print(item.offset.basis)
-				item.offset.basis.x *= Engine.get_singleton("settings_manager").grabbed_object_scale_factor
-				item.offset.basis.y *= Engine.get_singleton("settings_manager").grabbed_object_scale_factor
-				item.offset.basis.z *= Engine.get_singleton("settings_manager").grabbed_object_scale_factor
+				item.offset.basis.x *= ConfigSingleton.grabbed_object_scale_factor
+				item.offset.basis.y *= ConfigSingleton.grabbed_object_scale_factor
+				item.offset.basis.z *= ConfigSingleton.grabbed_object_scale_factor
 			else:
-				item.offset.origin *= Engine.get_singleton("settings_manager").grabbed_object_scale_factor
+				item.offset.origin *= ConfigSingleton.grabbed_object_scale_factor
 		if Input.is_action_just_pressed("scrolldown"):
 			if Input.is_physical_key_pressed(KEY_SHIFT):
 				print(item.offset.basis)
-				item.offset.basis.x *= 1.0/Engine.get_singleton("settings_manager").grabbed_object_scale_factor
-				item.offset.basis.y *= 1.0/Engine.get_singleton("settings_manager").grabbed_object_scale_factor
-				item.offset.basis.z *= 1.0/Engine.get_singleton("settings_manager").grabbed_object_scale_factor
+				item.offset.basis.x *= 1.0/ConfigSingleton.grabbed_object_scale_factor
+				item.offset.basis.y *= 1.0/ConfigSingleton.grabbed_object_scale_factor
+				item.offset.basis.z *= 1.0/ConfigSingleton.grabbed_object_scale_factor
 			else:
-				item.offset.origin *= 1.0/Engine.get_singleton("settings_manager").grabbed_object_scale_factor
+				item.offset.origin *= 1.0/ConfigSingleton.grabbed_object_scale_factor
 		if self == righthand:
 			item.node.global_transform = righthand.global_transform * item.offset
 		else:

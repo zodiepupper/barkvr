@@ -16,11 +16,11 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 0)
-config/icon="res://assets/icons/barktail2trans.svg"
-config/windows_native_icon="res://assets/barkvrcorgi.ico"
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/image="res://assets/icons/barkiconrounded.png"
+config/icon="res://assets/icons/barktail2trans.svg"
+config/windows_native_icon="res://assets/barkvrcorgi.ico"
 
 [audio]
 
@@ -32,6 +32,7 @@ driver/mix_rate=48000
 LocalGlobals="*res://mainSystem/scripts/localGlobals.gd"
 BarkHelpers="*res://mainSystem/scripts/bark_helpers.gd"
 Notifyvr="*res://addons/notifyvr/notifyvr.gd"
+ConfigSingleton="*res://mainSystem/scripts/settings.gd"
 
 [bark]
 

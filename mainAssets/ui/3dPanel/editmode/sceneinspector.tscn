@@ -28,7 +28,6 @@ focus_mode = 0
 allow_reselect = true
 allow_search = false
 hide_root = true
-drop_mode_flags = 3
 select_mode = 2
 script = ExtResource("2_k0xmv")
 
@@ -40,9 +39,13 @@ layout_mode = 2
 layout_mode = 2
 text = "delete"
 
-[node name="export" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="export_scene" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "export"
+text = "export scene"
+
+[node name="export_gltf" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "export gltf"
 
 [node name="duplicate" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2

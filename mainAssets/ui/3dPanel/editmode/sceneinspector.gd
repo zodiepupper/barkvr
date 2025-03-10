@@ -8,7 +8,8 @@ var root:Node
 var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn")
 
 @onready var delete_btn: Button = $HBoxContainer/VBoxContainer/delete
-@onready var export_btn: Button = $HBoxContainer/VBoxContainer/export
+@onready var export_scene: Button = $HBoxContainer/VBoxContainer/export_scene
+@onready var export_gltf: Button = $HBoxContainer/VBoxContainer/export_gltf
 @onready var duplicate_btn: Button = $HBoxContainer/VBoxContainer/duplicate
 @onready var reparent_btn: Button = $HBoxContainer/VBoxContainer/reparent
 @onready var cut_btn: Button = $HBoxContainer/VBoxContainer/cut
@@ -24,11 +25,23 @@ func _ready():
 		for item in selected:
 			if "node" in item.get_metadata(0):
 				item.get_metadata(0).node.queue_free()
-		)
+	)
 	duplicate_btn.pressed.connect(_duplicate_targets)
 	reparent_btn.toggled.connect(func(on:bool):
 		reparenting = on
-		)
+	)
+	export_scene.pressed.connect(func():
+		var world_root = get_tree().get_first_node_in_group("localworldroot")
+		var target: Node = tree.get_selected().get_metadata(0).node
+		if world_root and target:
+			_export_node(target)
+	)
+	export_gltf.pressed.connect(func():
+		var world_root = get_tree().get_first_node_in_group("localworldroot")
+		var target: Node = tree.get_selected().get_metadata(0).node
+		if world_root and target:
+			_export_node(target, true)
+	)
 	
 	#print(tree.get_class())
 	tree.cell_selected.connect(func():
@@ -87,6 +100,39 @@ func _ready():
 	get_tree().node_removed.connect(func(node:Node):
 		tree.remove_item(node)
 		)
+
+func _export_node(tmp_target:Node, togltf:bool=false):
+	Thread.set_thread_safety_checks_enabled(false)
+	print('start export')
+	var downpath :String=OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)
+	downpath += "/"
+	if OS.get_name() == "Web":
+		Engine.get_singleton("event_manager").take_owner_of_node_and_all_children(tmp_target,tmp_target)
+		if togltf:
+			var gltf = GLTFDocument.new()
+			var gltfstate = GLTFState.new()
+			gltf.append_from_scene(tmp_target, gltfstate)
+			print("save path: "+downpath+tmp_target.name+".tres")
+			JavaScriptBridge.download_buffer(gltf.generate_buffer(gltfstate),tmp_target.name+".res")
+		else:
+			var packed := PackedScene.new()
+			packed.pack(tmp_target)
+			print("save path: "+downpath+tmp_target.name+".tres")
+			JavaScriptBridge.download_buffer(var_to_bytes_with_objects(packed),tmp_target.name+".res")
+			#print("export error: "+str(err))
+	elif DirAccess.dir_exists_absolute(downpath):
+		Engine.get_singleton("event_manager").take_owner_of_node_and_all_children(tmp_target,tmp_target)
+		if togltf:
+			var gltf = GLTFDocument.new()
+			var gltfstate = GLTFState.new()
+			gltf.append_from_scene(tmp_target, gltfstate)
+			gltf.write_to_filesystem(gltfstate, downpath+tmp_target.name+".glb")
+			#var err = ResourceSaver.save(packed, downpath+tmp_target.name+".tscn",ResourceSaver.FLAG_BUNDLE_RESOURCES)
+		else:
+			var packed := PackedScene.new()
+			packed.pack(tmp_target)
+			var err = ResourceSaver.save(packed, downpath+tmp_target.name+".tscn",ResourceSaver.FLAG_BUNDLE_RESOURCES)
+			print("export error: "+str(err))
 
 func _duplicate_targets() -> void:
 	var selected = get_all_selected()

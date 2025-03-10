@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c3i4ahamrqxcq"]
+[gd_scene load_steps=14 format=3 uid="uid://c3i4ahamrqxcq"]
 
 [ext_resource type="Script" uid="uid://uik6keiylg15" path="res://mainSystem/scripts/init.gd" id="1_gkt54"]
 [ext_resource type="PackedScene" uid="uid://dv0etfy0ao5" path="res://mainSystem/scenes/init_world.tscn" id="2_3jltp"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://d0e58hos64wvw" path="res://mainSystem/scripts/bark_singletons_manager.gd" id="3_hjfed"]
 [ext_resource type="Script" uid="uid://b4618ilskmgou" path="res://mainSystem/scripts/journaling.gd" id="4_yl0pk"]
 [ext_resource type="Script" uid="uid://co7b0xchpliyg" path="res://mainSystem/scripts/networkHandler.gd" id="5_36gsm"]
+[ext_resource type="Script" uid="uid://4a6yceroxafw" path="res://mainSystem/scripts/settings.gd" id="6_60o4m"]
 [ext_resource type="Script" uid="uid://b1ijrenh1x14d" path="res://addons/vector/vector.gd" id="7_ldaby"]
 [ext_resource type="Script" uid="uid://b3opf6aydu7h7" path="res://mainAssets/objects/pens/voxel_draw_test.gd" id="8_4ywql"]
 [ext_resource type="PackedScene" uid="uid://bmackcoarqct1" path="res://mainSystem/scenes/objects/toys/static_body_3d_grabbable.tscn" id="11_d8g3h"]
@@ -23,6 +24,7 @@ script = ExtResource("3_hjfed")
 singletons = {
 "event_manager": ExtResource("4_yl0pk"),
 "network_manager": ExtResource("5_36gsm"),
+"settings_manager": ExtResource("6_60o4m"),
 "user_manager": ExtResource("7_ldaby"),
 "voxel_manager": ExtResource("8_4ywql")
 }

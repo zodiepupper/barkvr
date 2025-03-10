@@ -479,21 +479,24 @@ func contextMenuSummon():
 		handmenu.summon(camera_3d.to_global(Vector3(0,0,-.5)), camera_3d.global_position)
 
 func place_grabbed_nodes():
+	var setsing_precast := Engine.get_singleton("settings_manager")
+	var settings_singleton := (setsing_precast as SettingsSingleton) if setsing_precast is SettingsSingleton else null
 	for item in grabbed.values():
-		if Input.is_action_just_pressed("scrollup"):
-			if Input.is_physical_key_pressed(KEY_SHIFT):
-				item.offset.basis.x *= ConfigSingleton.grabbed_object_scale_factor
-				item.offset.basis.y *= ConfigSingleton.grabbed_object_scale_factor
-				item.offset.basis.z *= ConfigSingleton.grabbed_object_scale_factor
-			else:
-				item.offset.origin *= ConfigSingleton.grabbed_object_scale_factor
-		if Input.is_action_just_pressed("scrolldown"):
-			if Input.is_physical_key_pressed(KEY_SHIFT):
-				item.offset.basis.x *= 1.0/ConfigSingleton.grabbed_object_scale_factor
-				item.offset.basis.y *= 1.0/ConfigSingleton.grabbed_object_scale_factor
-				item.offset.basis.z *= 1.0/ConfigSingleton.grabbed_object_scale_factor
-			else:
-				item.offset.origin *= 1.0/ConfigSingleton.grabbed_object_scale_factor
+		if settings_singleton:
+			if Input.is_action_just_pressed("scrollup"):
+				if Input.is_physical_key_pressed(KEY_SHIFT):
+					item.offset.basis.x *= settings_singleton.grabbed_object_scale_factor
+					item.offset.basis.y *= settings_singleton.grabbed_object_scale_factor
+					item.offset.basis.z *= settings_singleton.grabbed_object_scale_factor
+				else:
+					item.offset.origin *= settings_singleton.grabbed_object_scale_factor
+			if Input.is_action_just_pressed("scrolldown"):
+				if Input.is_physical_key_pressed(KEY_SHIFT):
+					item.offset.basis.x *= 1.0/settings_singleton.grabbed_object_scale_factor
+					item.offset.basis.y *= 1.0/settings_singleton.grabbed_object_scale_factor
+					item.offset.basis.z *= 1.0/settings_singleton.grabbed_object_scale_factor
+				else:
+					item.offset.origin *= 1.0/settings_singleton.grabbed_object_scale_factor
 		item.node.global_transform = camera_3d.global_transform * item.offset
 		if is_instance_valid(Engine.get_singleton("event_manager")):
 				print("apply")

@@ -26,17 +26,20 @@ func tween_button(button_ref: Button, rect_ref: ColorRect, toggled_on: bool, on_
 	create_tween().tween_property(rect_ref, ^"color", on_color if toggled_on else Color.GRAY, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 func _ready() -> void:
-	#if not LocalGlobals.vr_supported:
-		#($ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR as VBoxContainer).hide()
-	set_button(passthrough_button, passthrough_rect, ConfigSingleton.vr_passthrough, Color.GREEN)
-	set_button(hand_tracking_button, hand_tracking_rect, ConfigSingleton.hand_tracking_enabled, Color.GREEN)
-	set_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, ConfigSingleton.ui_local_menu_lookat_x, Color.RED)
-	set_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, ConfigSingleton.ui_local_menu_lookat_y, Color.GREEN)
-	set_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, ConfigSingleton.ui_local_menu_lookat_z, Color.BLUE)
-	ctrl_enter_button.button_pressed = ConfigSingleton.send_messages_with_ctrl_enter
-	ctrl_enter_button.text = "is enabled" if ConfigSingleton.send_messages_with_ctrl_enter else "is disabled"
-	inspector_update_interval_spinbox.value = ConfigSingleton.inspector_update_interval
-	scaling_slider.value = ConfigSingleton.viewport_scaling
+	if LocalGlobals.vr_supported:
+		($ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR as VBoxContainer).hide()
+	var settings_singleton := Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		var setsing_casted := settings_singleton as SettingsSingleton
+		set_button(passthrough_button, passthrough_rect, setsing_casted.vr_passthrough, Color.GREEN)
+		set_button(hand_tracking_button, hand_tracking_rect, setsing_casted.hand_tracking_enabled, Color.GREEN)
+		set_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, setsing_casted.ui_local_menu_lookat_x, Color.RED)
+		set_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, setsing_casted.ui_local_menu_lookat_y, Color.GREEN)
+		set_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, setsing_casted.ui_local_menu_lookat_z, Color.BLUE)
+		ctrl_enter_button.button_pressed = setsing_casted.send_messages_with_ctrl_enter
+		ctrl_enter_button.text = "is enabled" if setsing_casted.send_messages_with_ctrl_enter else "is disabled"
+		inspector_update_interval_spinbox.value = setsing_casted.inspector_update_interval
+		scaling_slider.value = setsing_casted.viewport_scaling
 	
 	restart_in_vr_button.pressed.connect(restart_in_vr)
 	passthrough_button.toggled.connect(toggle_vr_passthrough)
@@ -56,39 +59,55 @@ func restart_in_vr() -> void:
 		get_tree().quit(0)
 
 func toggle_vr_passthrough(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.vr_passthrough = toggled_on
-	tween_button(passthrough_button, passthrough_rect, toggled_on, Color.GREEN)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).vr_passthrough = toggled_on
+		tween_button(passthrough_button, passthrough_rect, toggled_on, Color.GREEN)
 
 func toggle_hand_tracking(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.hand_tracking_enabled = toggled_on
-	tween_button(hand_tracking_button, hand_tracking_rect, toggled_on, Color.GREEN)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).hand_tracking_enabled = toggled_on
+		tween_button(hand_tracking_button, hand_tracking_rect, toggled_on, Color.GREEN)
 
 func toggle_local_menu_lookat_x(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.ui_local_menu_lookat_x = toggled_on
-	tween_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, toggled_on, Color.RED)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).ui_local_menu_lookat_x = toggled_on
+		tween_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, toggled_on, Color.RED)
 
 func toggle_local_menu_lookat_y(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.ui_local_menu_lookat_y = toggled_on
-	tween_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, toggled_on, Color.GREEN)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).ui_local_menu_lookat_y = toggled_on
+		tween_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, toggled_on, Color.GREEN)
 
 func toggle_local_menu_lookat_z(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.ui_local_menu_lookat_z = toggled_on
-	tween_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, toggled_on, Color.BLUE)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).ui_local_menu_lookat_z = toggled_on
+		tween_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, toggled_on, Color.BLUE)
 
 func toggle_ctrl_enter(toggled_on: bool) -> void:
-	# change to global var
-	ConfigSingleton.send_messages_with_ctrl_enter = toggled_on
-	create_tween().tween_property(ctrl_enter_button, ^"text", "is enabled" if toggled_on else "is disabled", 0.5)
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).send_messages_with_ctrl_enter = toggled_on
+		create_tween().tween_property(ctrl_enter_button, ^"text", "is enabled" if toggled_on else "is disabled", 0.5)
 
 func inspector_update_interval_changed(value: float) -> void:
-	# change to global var
-	ConfigSingleton.inspector_update_interval = value
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).inspector_update_interval = value
 
 func viewport_scaling_slider_changed(value: float) -> void:
-	# change to global var
-	ConfigSingleton.viewport_scaling = value
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).viewport_scaling = value

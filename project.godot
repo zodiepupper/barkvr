@@ -32,7 +32,6 @@ driver/mix_rate=48000
 LocalGlobals="*res://mainSystem/scripts/localGlobals.gd"
 BarkHelpers="*res://mainSystem/scripts/bark_helpers.gd"
 Notifyvr="*res://addons/notifyvr/notifyvr.gd"
-ConfigSingleton="*res://mainSystem/scripts/settings.gd"
 
 [bark]
 

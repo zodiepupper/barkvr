@@ -12,7 +12,9 @@ script/source = "extends Node
 @export var z := true
 
 func _ready() -> void:
-	ConfigSingleton.changed.connect(on_settings_changed)
+	var settings_singleton := Engine.get_singleton(\"settings_manager\")
+	if settings_singleton is SettingsSingleton:
+		(settings_singleton as SettingsSingleton).changed.connect(on_settings_changed)
 
 func _process(_delta: float) -> void:
 	var prev_rot :Vector3= get_parent().rotation
@@ -25,13 +27,15 @@ func _process(_delta: float) -> void:
 		get_parent().rotation.z = prev_rot.z
 
 func on_settings_changed(name: StringName) -> void:
-	match name:
-		&\"ui_local_menu_lookat_x\":
-			x = ConfigSingleton.ui_local_menu_lookat_x
-		&\"ui_local_menu_lookat_y\":
-			y = ConfigSingleton.ui_local_menu_lookat_y
-		&\"ui_local_menu_lookat_z\":
-			z = ConfigSingleton.ui_local_menu_lookat_z
+	var settings_singleton := Engine.get_singleton(\"settings_manager\")
+	if settings_singleton is SettingsSingleton:
+		match name:
+			&\"ui_local_menu_lookat_x\":
+				x = (settings_singleton as SettingsSingleton).ui_local_menu_lookat_x
+			&\"ui_local_menu_lookat_y\":
+				y = (settings_singleton as SettingsSingleton).ui_local_menu_lookat_y
+			&\"ui_local_menu_lookat_z\":
+				z = (settings_singleton as SettingsSingleton).ui_local_menu_lookat_z
 "
 
 [node name="Panel3D" type="RigidBody3D" groups=["localuipanel"]]

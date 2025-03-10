@@ -3,9 +3,7 @@ class_name SettingsSingleton
 
 signal changed(name: StringName)
 
-const PATH := "user://config.ini"
-const SECTION := "BarkVR"
-var file := ConfigFile.new()
+const PATH := "user://config.json"
 
 var vr_passthrough: bool:
 	set(value):
@@ -15,45 +13,45 @@ var vr_passthrough: bool:
 				XRServer.primary_interface.start_passthrough()
 			else:
 				XRServer.primary_interface.stop_passthrough()
-		set_and_emit(&"vr_passthrough", value)
+		save_and_emit(&"vr_passthrough", value)
 var hand_tracking_enabled: bool:
 	set(value):
 		hand_tracking_enabled = value
-		set_and_emit(&"hand_tracking_enabled", value)
+		save_and_emit(&"hand_tracking_enabled", value)
 var ui_local_menu_lookat_x: bool:
 	set(value):
 		ui_local_menu_lookat_x = value
-		set_and_emit(&"ui_local_menu_lookat_x", value)
+		save_and_emit(&"ui_local_menu_lookat_x", value)
 var ui_local_menu_lookat_y: bool:
 	set(value):
 		ui_local_menu_lookat_y = value
-		set_and_emit(&"ui_local_menu_lookat_y", value)
+		save_and_emit(&"ui_local_menu_lookat_y", value)
 var ui_local_menu_lookat_z: bool:
 	set(value):
 		ui_local_menu_lookat_z = value
-		set_and_emit(&"ui_local_menu_lookat_z", value)
+		save_and_emit(&"ui_local_menu_lookat_z", value)
 ## inspector fields update at a specific interval starting from their instantiation.
 ## this changes the interval length in seconds. 
 var inspector_update_interval: float:
 	set(value):
 		inspector_update_interval = value
-		set_and_emit(&"inspector_update_interval", value)
+		save_and_emit(&"inspector_update_interval", value)
 ## the multiplier that is used for the speed held items should be scaled at
 var grabbed_object_scale_factor: float:
 	set(value):
 		grabbed_object_scale_factor = value
-		set_and_emit(&"grabbed_object_scale_factor", value)
+		save_and_emit(&"grabbed_object_scale_factor", value)
 ## sets whether chat messages should be sent with ctrl+enter as opposed
 ## to the default which is just by pressing enter
 var send_messages_with_ctrl_enter: bool:
 	set(value):
 		send_messages_with_ctrl_enter = value
-		set_and_emit(&"send_messages_with_ctrl_enter", value)
+		save_and_emit(&"send_messages_with_ctrl_enter", value)
 var viewport_scaling: float:
 	set(value):
 		viewport_scaling = value
 		get_window().get_viewport().scaling_3d_scale = value
-		set_and_emit(&"viewport_scaling", value)
+		save_and_emit(&"viewport_scaling", value)
 
 const DEFAULT_VALUES := {
 	vr_passthrough = false,
@@ -75,25 +73,35 @@ func _ready() -> void:
 			set(key, DEFAULT_VALUES[key])
 		save()
 
-func cast_or_default(key: String, to_type: int = -1) -> Variant:
-	var default = DEFAULT_VALUES[key] if key in DEFAULT_VALUES else null
-	return convert(file.get_value(SECTION, key, default), typeof(default) if to_type < 0 else to_type)
-
-func set_and_emit(key: StringName, value: Variant) -> void:
-	file.set_value(SECTION, String(key), value)
+func save_and_emit(key: StringName, value: Variant) -> void:
 	changed.emit(key)
 	save()
 
 func reload() -> void:
-	var file_error := file.load(PATH)
-	if file_error != OK:
-		printerr("failure to load config")
+	var json_file := FileAccess.open(PATH, FileAccess.READ)
+	if FileAccess.get_open_error() != OK:
+		printerr("failure to load config.json")
 		return
 	
+	var json_string := json_file.get_as_text()
+	json_file.close()
+	json_file = null
+	var json_parsed = JSON.parse_string(json_string)
+	if not json_parsed is Dictionary:
+		printerr("failure to load config.json, not valid json")
+		return
+	var json_dict := json_parsed as Dictionary
+	
 	for key in DEFAULT_VALUES:
-		set(key, cast_or_default(key))
+		set(key, json_dict[key] if json_dict.has(key) and typeof(json_dict[key]) == typeof(DEFAULT_VALUES[key]) else DEFAULT_VALUES[key])
 
 func save() -> void:
-	var error := file.save(PATH)
-	if error != OK:
-		printerr("failure to save config")
+	var json_file := FileAccess.open(PATH, FileAccess.WRITE)
+	if FileAccess.get_open_error() != OK:
+		printerr("failure to save config.json")
+		return
+	var dict_to_save := {}
+	for key in DEFAULT_VALUES:
+		dict_to_save[key] = get(key)
+	json_file.store_string(JSON.stringify(dict_to_save))
+	json_file.close()

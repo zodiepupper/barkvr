@@ -620,13 +620,3 @@ value = 1.0
 scrollable = false
 tick_count = 3
 ticks_on_borders = true
-
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button" to="." method="restart_in_vr"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle" to="." method="toggle_vr_passthrough"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle" to="." method="toggle_hand_tracking"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal" to="." method="toggle_local_menu_lookat_x"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal" to="." method="toggle_local_menu_lookat_y"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal" to="." method="toggle_local_menu_lookat_z"]
-[connection signal="value_changed" from="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox" to="." method="inspector_update_interval_changed"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle" to="." method="toggle_ctrl_enter"]
-[connection signal="value_changed" from="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling/HSlider" to="." method="viewport_scaling_slider_changed"]

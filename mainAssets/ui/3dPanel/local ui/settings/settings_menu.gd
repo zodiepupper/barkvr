@@ -1,6 +1,7 @@
 extends Control
 class_name SettingsMenu
 
+@onready var restart_in_vr_button := $ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button as Button
 @onready var passthrough_button := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle as Button
 @onready var passthrough_rect := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle/ColorRect as ColorRect
 @onready var hand_tracking_button := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle as Button
@@ -36,6 +37,16 @@ func _ready() -> void:
 	ctrl_enter_button.text = "is enabled" if ConfigSingleton.send_messages_with_ctrl_enter else "is disabled"
 	inspector_update_interval_spinbox.value = ConfigSingleton.inspector_update_interval
 	scaling_slider.value = ConfigSingleton.viewport_scaling
+	
+	restart_in_vr_button.pressed.connect(restart_in_vr)
+	passthrough_button.toggled.connect(toggle_vr_passthrough)
+	hand_tracking_button.toggled.connect(toggle_hand_tracking)
+	local_menu_lookat_x_button.toggled.connect(toggle_local_menu_lookat_x)
+	local_menu_lookat_y_button.toggled.connect(toggle_local_menu_lookat_y)
+	local_menu_lookat_z_button.toggled.connect(toggle_local_menu_lookat_z)
+	inspector_update_interval_spinbox.value_changed.connect(inspector_update_interval_changed)
+	ctrl_enter_button.toggled.connect(toggle_ctrl_enter)
+	scaling_slider.value_changed.connect(viewport_scaling_slider_changed)
 
 func restart_in_vr() -> void:
 	var args := OS.get_cmdline_args()

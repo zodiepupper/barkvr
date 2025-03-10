@@ -3,7 +3,7 @@ class_name SettingsSingleton
 
 signal changed(name: StringName)
 
-const PATH := "user://config.json"
+const PATH := "user://settings.json"
 
 var vr_passthrough: bool:
 	set(value):
@@ -13,45 +13,45 @@ var vr_passthrough: bool:
 				XRServer.primary_interface.start_passthrough()
 			else:
 				XRServer.primary_interface.stop_passthrough()
-		save_and_emit(&"vr_passthrough", value)
+		save_and_emit(&"vr_passthrough")
 var hand_tracking_enabled: bool:
 	set(value):
 		hand_tracking_enabled = value
-		save_and_emit(&"hand_tracking_enabled", value)
+		save_and_emit(&"hand_tracking_enabled")
 var ui_local_menu_lookat_x: bool:
 	set(value):
 		ui_local_menu_lookat_x = value
-		save_and_emit(&"ui_local_menu_lookat_x", value)
+		save_and_emit(&"ui_local_menu_lookat_x")
 var ui_local_menu_lookat_y: bool:
 	set(value):
 		ui_local_menu_lookat_y = value
-		save_and_emit(&"ui_local_menu_lookat_y", value)
+		save_and_emit(&"ui_local_menu_lookat_y")
 var ui_local_menu_lookat_z: bool:
 	set(value):
 		ui_local_menu_lookat_z = value
-		save_and_emit(&"ui_local_menu_lookat_z", value)
+		save_and_emit(&"ui_local_menu_lookat_z")
 ## inspector fields update at a specific interval starting from their instantiation.
 ## this changes the interval length in seconds. 
 var inspector_update_interval: float:
 	set(value):
 		inspector_update_interval = value
-		save_and_emit(&"inspector_update_interval", value)
+		save_and_emit(&"inspector_update_interval")
 ## the multiplier that is used for the speed held items should be scaled at
 var grabbed_object_scale_factor: float:
 	set(value):
 		grabbed_object_scale_factor = value
-		save_and_emit(&"grabbed_object_scale_factor", value)
+		save_and_emit(&"grabbed_object_scale_factor")
 ## sets whether chat messages should be sent with ctrl+enter as opposed
 ## to the default which is just by pressing enter
 var send_messages_with_ctrl_enter: bool:
 	set(value):
 		send_messages_with_ctrl_enter = value
-		save_and_emit(&"send_messages_with_ctrl_enter", value)
+		save_and_emit(&"send_messages_with_ctrl_enter")
 var viewport_scaling: float:
 	set(value):
 		viewport_scaling = value
 		get_window().get_viewport().scaling_3d_scale = value
-		save_and_emit(&"viewport_scaling", value)
+		save_and_emit(&"viewport_scaling")
 
 const DEFAULT_VALUES := {
 	vr_passthrough = false,
@@ -73,14 +73,14 @@ func _ready() -> void:
 			set(key, DEFAULT_VALUES[key])
 		save()
 
-func save_and_emit(key: StringName, value: Variant) -> void:
+func save_and_emit(key: StringName) -> void:
 	changed.emit(key)
 	save()
 
 func reload() -> void:
 	var json_file := FileAccess.open(PATH, FileAccess.READ)
 	if FileAccess.get_open_error() != OK:
-		printerr("failure to load config.json")
+		printerr("failure to load settings.json")
 		return
 	
 	var json_string := json_file.get_as_text()
@@ -88,7 +88,7 @@ func reload() -> void:
 	json_file = null
 	var json_parsed = JSON.parse_string(json_string)
 	if not json_parsed is Dictionary:
-		printerr("failure to load config.json, not valid json")
+		printerr("failure to load settings.json, not valid json")
 		return
 	var json_dict := json_parsed as Dictionary
 	
@@ -98,7 +98,7 @@ func reload() -> void:
 func save() -> void:
 	var json_file := FileAccess.open(PATH, FileAccess.WRITE)
 	if FileAccess.get_open_error() != OK:
-		printerr("failure to save config.json")
+		printerr("failure to save settings.json")
 		return
 	var dict_to_save := {}
 	for key in DEFAULT_VALUES:

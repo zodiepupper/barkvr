@@ -30,6 +30,8 @@ func _ready() -> void:
 		)
 
 ## sets the name, field target node, and the property name for the field to look for
+## above_targets field is for tracking previously added objects to prevent
+## ui recursion because of cyclical references
 ## name:String, new_target:Node, new_property_name:String
 func set_data(new_name:String, new_target:Object, new_property_name:String, above_targets=[]):
 	label.text = new_name

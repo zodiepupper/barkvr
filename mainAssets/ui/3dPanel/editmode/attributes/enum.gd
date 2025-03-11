@@ -17,7 +17,7 @@ func _ready():
 	val.item_selected.connect(func(index):
 		if is_instance_valid(target):
 			target[property_name] = index
-		)
+	)
 
 func _process(_delta):
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():

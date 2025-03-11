@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=7 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
 [ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://mainAssets/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
-[ext_resource type="Script" uid="uid://887ipat0423k" path="res://mainAssets/ui/3dPanel/local ui/settings/graphics_fields_setter.gd" id="2_6aatb"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
@@ -594,9 +593,8 @@ color = Color(1, 0, 0, 0.2)
 
 [node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
 layout_mode = 2
-script = ExtResource("2_6aatb")
 
-[node name="anti aliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
+[node name="AntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
 layout_mode = 2
 
 [node name="ViewportScaling" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics"]

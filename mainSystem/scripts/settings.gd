@@ -47,6 +47,11 @@ var send_messages_with_ctrl_enter: bool:
 	set(value):
 		send_messages_with_ctrl_enter = value
 		save_and_emit(&"send_messages_with_ctrl_enter")
+var anti_aliasing: int:
+	set(value):
+		print_stack()
+		anti_aliasing = value
+		save_and_emit(&"anti_aliasing")
 var viewport_scaling: float:
 	set(value):
 		viewport_scaling = value
@@ -62,6 +67,7 @@ const DEFAULT_VALUES := {
 	inspector_update_interval = 0.1,
 	grabbed_object_scale_factor = 1.1,
 	send_messages_with_ctrl_enter = false,
+	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
 	viewport_scaling = 1.0
 }
 

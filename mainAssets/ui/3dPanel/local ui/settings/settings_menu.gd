@@ -15,6 +15,7 @@ class_name SettingsMenu
 @onready var ctrl_enter_button := $ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle as Button
 @onready var inspector_update_interval_spinbox := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox as SpinBox
 @onready var scaling_slider := $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling/HSlider as HSlider
+@onready var anti_aliasing_dropdown := ($ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing as Enum_Attribute).val
 
 func set_button(button_ref: Button, rect_ref: ColorRect, toggled_on: bool, on_color: Color) -> void:
 	button_ref.button_pressed = toggled_on
@@ -26,6 +27,16 @@ func tween_button(button_ref: Button, rect_ref: ColorRect, toggled_on: bool, on_
 	create_tween().tween_property(rect_ref, ^"color", on_color if toggled_on else Color.GRAY, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 func _ready() -> void:
+	var anti_aliasing_control := $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing as Enum_Attribute
+	anti_aliasing_control.label.text = "Anti Aliasing"
+	anti_aliasing_control.property_name = "msaa_3d"
+	anti_aliasing_control.val.add_item("MSAA_DISABLED")
+	anti_aliasing_control.val.add_item("MSAA_2X")
+	anti_aliasing_control.val.add_item("MSAA_4X")
+	anti_aliasing_control.val.add_item("MSAA_8X")
+	anti_aliasing_control.val.add_item("MSAA_MAX")
+	anti_aliasing_control.target = get_window()
+	
 	if LocalGlobals.vr_supported:
 		($ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR as VBoxContainer).hide()
 	var settings_singleton := Engine.get_singleton("settings_manager")
@@ -40,6 +51,7 @@ func _ready() -> void:
 		ctrl_enter_button.text = "is enabled" if setsing_casted.send_messages_with_ctrl_enter else "is disabled"
 		inspector_update_interval_spinbox.value = setsing_casted.inspector_update_interval
 		scaling_slider.value = setsing_casted.viewport_scaling
+		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing
 	
 	restart_in_vr_button.pressed.connect(restart_in_vr)
 	passthrough_button.toggled.connect(toggle_vr_passthrough)
@@ -50,6 +62,7 @@ func _ready() -> void:
 	inspector_update_interval_spinbox.value_changed.connect(inspector_update_interval_changed)
 	ctrl_enter_button.toggled.connect(toggle_ctrl_enter)
 	scaling_slider.value_changed.connect(viewport_scaling_slider_changed)
+	anti_aliasing_dropdown.item_selected.connect(anti_aliasing_changed)
 
 func restart_in_vr() -> void:
 	var args := OS.get_cmdline_args()
@@ -105,6 +118,12 @@ func inspector_update_interval_changed(value: float) -> void:
 	if settings_singleton is SettingsSingleton:
 		# change to global var
 		(settings_singleton as SettingsSingleton).inspector_update_interval = value
+
+func anti_aliasing_changed(index: int) -> void:
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).anti_aliasing = index
 
 func viewport_scaling_slider_changed(value: float) -> void:
 	var settings_singleton = Engine.get_singleton("settings_manager")

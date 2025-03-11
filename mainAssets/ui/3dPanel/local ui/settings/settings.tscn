@@ -547,7 +547,7 @@ size_flags_vertical = 3
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Audio Input Device"
+text = "Audio Output Device"
 horizontal_alignment = 1
 vertical_alignment = 1
 

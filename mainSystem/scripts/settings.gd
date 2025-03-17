@@ -1,36 +1,113 @@
 extends Node
+class_name SettingsSingleton
 
-## emitted when the grabbed object scale factor setting is chaned
-signal grabbed_object_scale_factor_changed(value:float)
-## the multiplier that is used for the speed held items should be scaled at
-var grabbed_object_scale_factor := 1.1:
+signal changed(name: StringName)
+
+const PATH := "user://settings.json"
+
+var vr_passthrough: bool:
 	set(value):
-		grabbed_object_scale_factor = value
-		grabbed_object_scale_factor_changed.emit(grabbed_object_scale_factor)
-
-## emitted when the hand tracking enabled setting is chaned
-signal hand_tracking_enabled_changed(value:bool)
-## toggles whether hand tracking data is used if it's available
-var hand_tracking_enabled := true:
+		vr_passthrough = value
+		if XRServer.primary_interface and XRServer.primary_interface.is_passthrough_supported():
+			if value:
+				XRServer.primary_interface.start_passthrough()
+			else:
+				XRServer.primary_interface.stop_passthrough()
+		save_and_emit(&"vr_passthrough")
+var hand_tracking_enabled: bool:
 	set(value):
 		hand_tracking_enabled = value
-		hand_tracking_enabled_changed.emit(hand_tracking_enabled)
-
-## emitted when the inspector update interval setting is changed
-signal inspector_update_interval_changed(value:float)
+		save_and_emit(&"hand_tracking_enabled")
+var ui_local_menu_lookat_x: bool:
+	set(value):
+		ui_local_menu_lookat_x = value
+		save_and_emit(&"ui_local_menu_lookat_x")
+var ui_local_menu_lookat_y: bool:
+	set(value):
+		ui_local_menu_lookat_y = value
+		save_and_emit(&"ui_local_menu_lookat_y")
+var ui_local_menu_lookat_z: bool:
+	set(value):
+		ui_local_menu_lookat_z = value
+		save_and_emit(&"ui_local_menu_lookat_z")
 ## inspector fields update at a specific interval starting from their instantiation.
 ## this changes the interval length in seconds. 
-var inspector_update_interval := .1:
+var inspector_update_interval: float:
 	set(value):
 		inspector_update_interval = value
-		inspector_update_interval_changed.emit(inspector_update_interval)
-
-
-## emitted when the send message with ctrl+enter setting is changed
-signal send_messages_with_ctrl_enter_changed(value:bool)
+		save_and_emit(&"inspector_update_interval")
+## the multiplier that is used for the speed held items should be scaled at
+var grabbed_object_scale_factor: float:
+	set(value):
+		grabbed_object_scale_factor = value
+		save_and_emit(&"grabbed_object_scale_factor")
 ## sets whether chat messages should be sent with ctrl+enter as opposed
 ## to the default which is just by pressing enter
-var send_messages_with_ctrl_enter := false:
+var send_messages_with_ctrl_enter: bool:
 	set(value):
 		send_messages_with_ctrl_enter = value
-		send_messages_with_ctrl_enter_changed.emit(value)
+		save_and_emit(&"send_messages_with_ctrl_enter")
+var anti_aliasing: int:
+	set(value):
+		print_stack()
+		anti_aliasing = value
+		save_and_emit(&"anti_aliasing")
+var viewport_scaling: float:
+	set(value):
+		viewport_scaling = value
+		get_window().get_viewport().scaling_3d_scale = value
+		save_and_emit(&"viewport_scaling")
+
+const DEFAULT_VALUES := {
+	vr_passthrough = false,
+	hand_tracking_enabled = true,
+	ui_local_menu_lookat_x = true,
+	ui_local_menu_lookat_y = true,
+	ui_local_menu_lookat_z = true,
+	inspector_update_interval = 0.1,
+	grabbed_object_scale_factor = 1.1,
+	send_messages_with_ctrl_enter = false,
+	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
+	viewport_scaling = 1.0
+}
+
+func _ready() -> void:
+	if FileAccess.file_exists(PATH):
+		reload()
+	else:
+		for key in DEFAULT_VALUES:
+			set(key, DEFAULT_VALUES[key])
+		save()
+
+func save_and_emit(key: StringName) -> void:
+	changed.emit(key)
+	save()
+
+func reload() -> void:
+	var json_file := FileAccess.open(PATH, FileAccess.READ)
+	if FileAccess.get_open_error() != OK:
+		printerr("failure to load settings.json")
+		return
+	
+	var json_string := json_file.get_as_text()
+	json_file.close()
+	json_file = null
+	var json_parsed = JSON.parse_string(json_string)
+	if not json_parsed is Dictionary:
+		printerr("failure to load settings.json, not valid json")
+		return
+	var json_dict := json_parsed as Dictionary
+	
+	for key in DEFAULT_VALUES:
+		set(key, json_dict[key] if json_dict.has(key) and typeof(json_dict[key]) == typeof(DEFAULT_VALUES[key]) else DEFAULT_VALUES[key])
+
+func save() -> void:
+	var json_file := FileAccess.open(PATH, FileAccess.WRITE)
+	if FileAccess.get_open_error() != OK:
+		printerr("failure to save settings.json")
+		return
+	var dict_to_save := {}
+	for key in DEFAULT_VALUES:
+		dict_to_save[key] = get(key)
+	json_file.store_string(JSON.stringify(dict_to_save))
+	json_file.close()

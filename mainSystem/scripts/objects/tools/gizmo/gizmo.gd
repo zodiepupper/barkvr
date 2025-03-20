@@ -13,8 +13,9 @@ func _ready():
 
 func _physics_process(delta):
 	if is_instance_valid(target):
-		var dist = target.global_position.distance_to(get_tree().get_first_node_in_group("playerCamera").global_position)
-		scale = Vector3(1,1,1)*dist/size_factor
+		var dist = get_viewport().get_camera_3d().global_position.distance_to(get_tree().get_first_node_in_group("playerCamera").global_position)
+		var newscale :Vector3 = Vector3(1,1,1)*dist/size_factor
+		scale = newscale
 		global_position = target.global_position
 	else:
 		queue_free()

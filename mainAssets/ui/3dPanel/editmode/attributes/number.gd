@@ -15,15 +15,15 @@ var property_name:Variant = ''
 		type = val
 		if type_label:
 			if val == 0:
-				type_label.text = "float"
+				type_label.text = "float:"
 			else:
-				type_label.text = "int"
+				type_label.text = "int:"
 
 func _ready():
 	if type == 0:
-		type_label.text = "float"
+		type_label.text = "float:"
 	else:
-		type_label.text = "int"
+		type_label.text = "int:"
 	val.text_changed.connect(func(new_text:String):
 		#if ((type == 0 and new_text.is_valid_float()) or (type == 1 and new_text.is_valid_int())):
 		if ((type == 0) or (type == 1)):

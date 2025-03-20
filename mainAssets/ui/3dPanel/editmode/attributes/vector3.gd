@@ -2,13 +2,12 @@ class_name Vector3_Attribute
 extends Control
 
 @onready var label = $VBoxContainer/Panel2/Label
-@onready var xval = $VBoxContainer/position/x/xval
-@onready var yval = $VBoxContainer/position/y/yval
-@onready var zval = $VBoxContainer/position/z/zval
+@onready var xval : LineEdit = $VBoxContainer/position/x/xval
+@onready var yval : LineEdit = $VBoxContainer/position/y/yval
+@onready var zval : LineEdit = $VBoxContainer/position/z/zval
 @onready var v_box_container = $VBoxContainer
 
 var target:Object
-var _is_editing:bool = false
 var property_name:String = ''
 
 var event_supplier : Bark_Journal
@@ -16,25 +15,28 @@ var event_supplier : Bark_Journal
 func _ready():
 	event_supplier = Engine.get_singleton("event_manager")
 	xval.text_changed.connect(func(new_text):
-		event_supplier.set_property(
-			event_supplier.root.get_path_to(target),
-			property_name+":x",
-			float(new_text)
-			)
+		if _check_focus():
+			event_supplier.set_property(
+				event_supplier.root.get_path_to(target),
+				property_name+":x",
+				float(new_text)
+				)
 		)
 	yval.text_changed.connect(func(new_text):
-		event_supplier.set_property(
-			event_supplier.root.get_path_to(target),
-			property_name+":y",
-			float(new_text)
-			)
+		if _check_focus():
+			event_supplier.set_property(
+				event_supplier.root.get_path_to(target),
+				property_name+":y",
+				float(new_text)
+				)
 		)
 	zval.text_changed.connect(func(new_text):
-		event_supplier.set_property(
-			event_supplier.root.get_path_to(target),
-			property_name+":z",
-			float(new_text)
-			)
+		if _check_focus():
+			event_supplier.set_property(
+				event_supplier.root.get_path_to(target),
+				property_name+":z",
+				float(new_text)
+				)
 		)
 
 func _process(_delta):
@@ -45,7 +47,7 @@ func _process(_delta):
 
 func update_fields():
 	#print('vec3: ', property_name)
-	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
+	if target and !property_name.is_empty() and !_check_focus() and is_instance_valid(target) and !_check_focus():
 		xval.text = str(target.get(property_name).x)
 		yval.text = str(target.get(property_name).y)
 		zval.text = str(target.get(property_name).z)

@@ -33,42 +33,80 @@ extends Node
 ##		'candidates': [],
 ##		'set_remote': false
 ##		}
-var peers : Array[Dictionary] = []
+var peers: Array[Dictionary] = []
 
 ## current network packet to send stored as a class variable to
 ## prevent the need to re-allocate variables over and over again
-var pack : PackedByteArray = PackedByteArray()
+var pack: PackedByteArray = PackedByteArray()
 
 ## not sure??? some kind of incremented 
 ## variable i think maybe i was going to
-## use it for 
-var packsize : int = 0
+## use it for detecting packet offset while
+## receiving large transmissions but
+## i chose a different method. leaving it here for...
+## some reason idk
+var packsize: int = 0
 
 ## fixed network packet size, made it configurable
 ## so that the game can be adjusted to different
 ## network conditions in the future or can be used
 ## as an optimization step (it's kindof an optimization
 ## already)
-var packet_size : int = 100000
+var packet_size: int = 100000
 
-var bytes_to_send
+## reusable variable for accumulating and tracking
+## the bytes that need to be sent over the network
+## (for the event sync)
+var bytes_to_send: PackedByteArray
 
-var chat_timer :float = 0.0
-var event_sync_timer :float = 0.0
+## timer to track when to run the fixed interval player position
+## loop. chat timer/social sync is for player tracker positions
+## and any other data that isn't essential for scene changes
+## potentially including setting physics objects' simulating client
+## and similar stuff. i want to allow this to send other data later
+## for easier user shenanigans
+var chat_timer: float = 0.0
 
-var uname :String = ""
+## same purpose as chat timer but for scene essential data.
+## this is for sending delta updates for the scene
+var event_sync_timer: float = 0.0
 
-signal created_offer(data:Dictionary)
-signal created_answer(data:Dictionary)
-signal finished_candidates(data:Dictionary)
+## local class variable to track username so we don't have
+## to continuously call back to the user manager
+var uname: String = ""
 
+## webrtc signals (look at webrtc specification or the godot
+## documentation for more information)
+signal created_offer(data: Dictionary)
+signal created_answer(data: Dictionary)
+signal finished_candidates(data: Dictionary)
+
+## this is for tracking when the app is being closed so we can 
+## cleanup threads and stuff to make sure we don't throw any
+## unnecessary errors on app close (which used to happen a lot,
+## or the OS would think the app crashed because of the lingering
+## thread allocations)
 var close_requested := false
+
+## this is to track when the user is disconnecting from a session
+## so we can pause the threads and do some cleanup before allowing
+## new connections
 var reset_requested := false
 
+## used for tracking delta time between syncs. important for 
+## enforcing the local network sync tickrate especially for 
+## the `chat_sync_timer` and `event_sync_timer`
 @onready var prev_time:float = Time.get_unix_time_from_system()
 
-var thread = Thread.new()
-var voip_thread = Thread.new()
+## main thread for polling network actions (receiving and sending)
+## it might be a good idea to break this out into 2 threads later
+var thread := Thread.new()
+
+## thread for sending and receiving voip data... it might be a 
+## good idea to break this out into 2 threads as well
+var voip_thread := Thread.new()
+
+##
 var packetdict = {
 	'p_id': OS.get_unique_id(),
 	'uname': '',
@@ -90,10 +128,6 @@ func _input(event):
 			create_new_peer_connection()
 		elif event.keycode == KEY_F3:
 			get_clipboard_connection_string()
-		elif event.keycode == KEY_F4:
-			apply_connection_string('offer')
-		elif event.keycode == KEY_F5:
-			apply_connection_string('answer')
 		elif event.keycode == KEY_F6:
 			for peer in peers:
 				Notifyvr.send_notification("connection state: "+str(peer.peer.get_connection_state()))
@@ -116,16 +150,6 @@ func get_clipboard_connection_string():
 #	discord_sdk.join_secret = tmp
 #	discord_sdk.state = "testing a session"
 #	discord_sdk.refresh()
-
-func apply_connection_string(_type:String):
-	var data = JSON.parse_string(DisplayServer.clipboard_get())
-	if data and data.has('description') and data.has('candidates'):
-		for peer in peers:
-			if peer.peer.get_connection_state() == 1:
-				pass
-				#print('found peer1')
-				#print(peer.peer.set_remote_description(type, data.description))
-				#print('set remote desc1')
 
 func _ready():
 	if is_instance_valid(Engine.get_singleton("user_manager")):
@@ -297,6 +321,10 @@ func poll():
 					if !is_instance_valid(peer.peer):
 						break
 
+## the function to be run on the voip thread
+## manages sending and receiving voip data
+## could maybe be extended to provide other 
+## audio streams in the future
 func voip_poll():
 	while !close_requested:
 		var packet := PackedByteArray()
@@ -314,20 +342,14 @@ func voip_poll():
 								while chan.channel.get_available_packet_count() > 0:
 									if !is_instance_valid(peer.peer):
 										break
-									#var data = bytes_to_var(chan.channel.get_packet().decompress_dynamic(999999999999, 2))
 									var data = chan.channel.get_packet()
 									if "remote_player" in peer and is_instance_valid(peer.remote_player) and peer.remote_player.is_node_ready():
 										peer.remote_player.push_audio_buffer_bytes(data)
 								if !packet.is_empty():
 									if !is_instance_valid(peer.peer):
 										break
-									#var packet = var_to_bytes(packetdict).compress(3)
 									if chan.channel.get_ready_state() == 1:
 										chan.channel.put_packet( packet )
-								#if LocalGlobals.twovoip_capture.chunk_available():
-									#if chan.channel.get_ready_state() == 1:
-										#var packet :PackedByteArray = LocalGlobals.twovoip_capture.read_opus_packet(PackedByteArray())
-										#chan.channel.put_packet(packet)
 
 ## Takes an optional offer_string, and an optional for_user string
 ## offer_string will automatically set a remote offer description for the created peer

@@ -7,6 +7,8 @@ var root:Node
 
 var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn")
 
+@onready var focus_root_parent_btn: Button = $"HBoxContainer/VBoxContainer/focus root parent"
+@onready var focus_selected_btn: Button = $"HBoxContainer/VBoxContainer/focus selected"
 @onready var delete_btn: Button = $HBoxContainer/VBoxContainer/delete
 @onready var export_scene: Button = $HBoxContainer/VBoxContainer/export_scene
 @onready var export_gltf: Button = $HBoxContainer/VBoxContainer/export_gltf
@@ -20,6 +22,22 @@ var reparenting : bool = false
 var last_selected : Array
 
 func _ready():
+	focus_root_parent_btn.pressed.connect(func():
+		if root.get_parent():
+			tree.hashed_tree_clear()
+			tree_root = tree.create_item()
+			tree_root.set_text(0,"")
+			setRoot(root.get_parent())
+			tree.check_children()
+		)
+	focus_selected_btn.pressed.connect(func():
+		var new_target = tree.get_next_selected(null).get_metadata(0).node
+		tree.hashed_tree_clear()
+		tree_root = tree.create_item()
+		tree_root.set_text(0,"")
+		setRoot(new_target)
+		tree.check_children()
+		)
 	delete_btn.pressed.connect(func():
 		var selected = get_all_selected()
 		for item in selected:
@@ -72,7 +90,8 @@ func _ready():
 			giz.name = "gizmo"
 		)
 	#var root = get_tree().get_first_node_in_group('localworldroot')
-	root = get_window()
+	#root = get_window()
+	root = get_tree().get_first_node_in_group("localworldroot")
 	tree.add_item(root.name,{
 		'node':root
 	})
@@ -151,6 +170,7 @@ func init():
 	tree_root.set_text(0,"")
 
 func setRoot(item:Node):
+	root = item
 	addchildren(item)
 
 func addchildren(node:Node, parent:Node=null):

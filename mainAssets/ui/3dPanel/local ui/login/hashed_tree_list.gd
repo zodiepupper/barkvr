@@ -5,6 +5,10 @@ extends Tree
 ## their data, and corresponding TreeItem
 var tree:Dictionary = {}
 
+func hashed_tree_clear():
+	tree.clear()
+	clear()
+
 func add_item(text:String,metadata:Variant,replace:String=''):
 	if metadata and metadata.has('node'):
 		if is_instance_valid(metadata.node):

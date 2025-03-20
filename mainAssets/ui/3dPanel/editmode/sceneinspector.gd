@@ -31,12 +31,13 @@ func _ready():
 			tree.check_children()
 		)
 	focus_selected_btn.pressed.connect(func():
-		var new_target = tree.get_next_selected(null).get_metadata(0).node
-		tree.hashed_tree_clear()
-		tree_root = tree.create_item()
-		tree_root.set_text(0,"")
-		setRoot(new_target)
-		tree.check_children()
+		if is_instance_valid(tree.get_next_selected(null)):
+			var new_target = tree.get_next_selected(null).get_metadata(0).node
+			tree.hashed_tree_clear()
+			tree_root = tree.create_item()
+			tree_root.set_text(0,"")
+			setRoot(new_target)
+			tree.check_children()
 		)
 	delete_btn.pressed.connect(func():
 		var selected = get_all_selected()

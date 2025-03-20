@@ -37,41 +37,51 @@ layout_mode = 2
 
 [node name="focus root parent" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "focus root parents"
 
 [node name="focus selected" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "focus selected"
 
 [node name="delete" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "delete"
 
 [node name="export_scene" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "export scene"
 
 [node name="export_gltf" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "export gltf"
 
 [node name="duplicate" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "duplicate"
 
 [node name="reparent" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 toggle_mode = true
 text = "reparent"
 
 [node name="cut" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "cut"
 
 [node name="copy" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "copy"
 
 [node name="paste" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "paste"

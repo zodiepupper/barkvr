@@ -47,6 +47,20 @@ var event_manager
 #		update_fields()
 
 func set_target(new_target, above_targets=[]):
+	if !above_targets.is_empty():
+		#print("first above_targets: " + str(above_targets[0]))
+		#print("above_targets: " + str(above_targets) + "\n")
+		var num_of_resources_above: int = 0
+		for i in above_targets:
+			if i is Resource:
+				num_of_resources_above += 1
+		print("num_of_resources_above: ", num_of_resources_above)
+		if num_of_resources_above > 1:
+			print(above_targets.filter(func(val):
+				if val is Resource:
+					return true
+				return false
+				))
 	if new_target and new_target is Object and new_target not in above_targets:
 		target = new_target
 		if "name" in new_target and new_target.name:

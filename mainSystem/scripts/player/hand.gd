@@ -174,16 +174,16 @@ func contextMenuSummon():
 	print(contexttimer)
 	if contexttimer < contexteditortimeout:
 		handmenu.summon(hand_menu_point.global_position, global_position)
-	else:
-		if LocalGlobals.editor_refs.has('vreditor'):
-			LocalGlobals.editor_refs.mainpanel.global_position = hand_menu_point.global_position
-			LocalGlobals.editor_refs.mainpanel.global_rotation = hand_menu_point.global_rotation
-			LocalGlobals.editor_refs.mainpanel.global_rotation.x += deg_to_rad(90.0)
-		else:
-			var vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
-			get_tree().get_first_node_in_group("localroot").add_child(vreditor)
-			vreditor.set_items(local_player.selected)
-			vreditor.global_position = hand_menu_point.global_position
+	#else:
+		#if LocalGlobals.editor_refs.has('vreditor'):
+			#LocalGlobals.editor_refs.mainpanel.global_position = hand_menu_point.global_position
+			#LocalGlobals.editor_refs.mainpanel.global_rotation = hand_menu_point.global_rotation
+			#LocalGlobals.editor_refs.mainpanel.global_rotation.x += deg_to_rad(90.0)
+		#else:
+			#var vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
+			#get_tree().get_first_node_in_group("localroot").add_child(vreditor)
+			#vreditor.set_items(local_player.selected)
+			#vreditor.global_position = hand_menu_point.global_position
 
 func grip():
 	if ui_ray.is_colliding():

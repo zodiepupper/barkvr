@@ -40,8 +40,8 @@ var slide_start_pos
 @onready var script_toggle: Button = $\"../script_toggle\"
 @onready var add_node_toggle: Button = $\"../add_node_toggle\"
 
-func _ready() -> void:
-	manual_toggle(!button_pressed)
+#func _ready() -> void:
+	#manual_toggle(!button_pressed)
 
 func manual_toggle(toggled_on) -> void:
 	_toggled(toggled_on)
@@ -94,7 +94,6 @@ layout_mode = 1
 offset_left = 60.0
 
 [node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
-visible = false
 layout_mode = 1
 offset_left = 60.0
 
@@ -116,7 +115,6 @@ offset_right = 60.0
 offset_bottom = 180.0
 focus_mode = 0
 toggle_mode = true
-button_pressed = true
 icon = ExtResource("5_dxjhh")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
@@ -146,7 +144,6 @@ offset_right = 60.0
 offset_bottom = 240.0
 focus_mode = 0
 toggle_mode = true
-button_pressed = true
 icon = ExtResource("7_gjq0p")
 expand_icon = true
 script = SubResource("GDScript_mguyu")

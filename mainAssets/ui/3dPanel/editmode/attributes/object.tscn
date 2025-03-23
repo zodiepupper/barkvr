@@ -56,6 +56,57 @@ toggle_mode = true
 text = "\\/"
 flat = true
 
+[node name="create" type="Button" parent="VBoxContainer/Panel2"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -239.0
+offset_top = -30.0
+offset_right = -153.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "create"
+expand_icon = true
+
+[node name="copy" type="Button" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -148.0
+offset_top = -30.0
+offset_right = -81.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "copy"
+expand_icon = true
+
+[node name="paste" type="Button" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "paste"
+expand_icon = true
+
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 clip_contents = true
 layout_mode = 2

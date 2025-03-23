@@ -7,6 +7,9 @@ var ATTRIBUTES_SCENE = load("res://mainAssets/ui/3dPanel/editmode/attributes.tsc
 @onready var field_parent: HBoxContainer = $VBoxContainer/MarginContainer/object
 @onready var color_rect: ColorRect = $VBoxContainer/MarginContainer/ColorRect
 @onready var margin_container: MarginContainer = $VBoxContainer/MarginContainer
+@onready var create: Button = $VBoxContainer/Panel2/create
+@onready var copy: Button = $VBoxContainer/Panel2/copy
+@onready var paste: Button = $VBoxContainer/Panel2/paste
 
 var target:Object
 var property_name:String = '':
@@ -27,6 +30,21 @@ var property_name:String = '':
 		#print(property_name + " " + str( fmod(hash(property_name)/1000.0,1.0) ) + "\n" + str(hash(property_name)))
 
 func _ready() -> void:
+	create.pressed.connect(func():
+		pass
+		)
+	copy.pressed.connect(func():
+		if target[property_name]:
+			DisplayServer.clipboard_set(str(target[property_name].get_instance_id()))
+		)
+	paste.pressed.connect(func():
+		var pasted := DisplayServer.clipboard_get()
+		if !pasted.is_empty() and pasted.is_valid_int():
+			var derived = instance_from_id(pasted.to_int())
+			if is_instance_valid(derived) and typeof(derived) == typeof(target[property_name]):
+				target[property_name] = derived
+				print('pasted')
+		)
 	expand.toggled.connect(func(on:bool):
 		if on:
 			custom_minimum_size.y = 1000

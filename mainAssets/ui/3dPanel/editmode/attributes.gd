@@ -25,7 +25,6 @@ var array_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/array.ts
 var is_field_focused = false
 var target : Object = null
 
-
 #titlebar stuffs
 @onready var titlebar: VBoxContainer = $VBoxContainer/titlebar
 @onready var titlebar_top_row: HBoxContainer = $VBoxContainer/titlebar/HBoxContainer
@@ -41,10 +40,6 @@ var hide_titlebar := false:
 			titlebar_active.visible = !hide_titlebar
 
 var event_manager
-
-#func _process(delta):
-#	if !is_field_focused:
-#		update_fields()
 
 func set_target(new_target, above_targets=[]):
 	if !above_targets.is_empty():
@@ -160,13 +155,6 @@ func _add_fields(prop_list, new_target, above_targets) -> void:
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname
 				tmp.set_data(fieldname, new_target, prop.name)
-
-func update_fields():
-	if target and is_instance_valid(target):
-		if target.has_meta("display_name"):
-			targetname.text = target.get_meta("display_name")
-		else:
-			targetname.text = target.name
 
 func clear_fields():
 	if target:

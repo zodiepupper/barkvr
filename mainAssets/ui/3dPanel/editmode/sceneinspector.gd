@@ -112,7 +112,7 @@ func _ready():
 		)
 	get_tree().node_renamed.connect(func(node:Node):
 		#print('node renamed')
-		await get_tree().process_frame
+		#await get_tree().process_frame
 		if root:
 			if is_instance_valid(node):
 				tree.update_item(node)

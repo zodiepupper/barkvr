@@ -244,6 +244,7 @@ occlusion_culling/use_occlusion_culling=true
 
 [xr]
 
+openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
 openxr/extensions/hand_tracking=true

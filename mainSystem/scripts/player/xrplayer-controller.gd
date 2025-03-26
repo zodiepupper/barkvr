@@ -98,7 +98,7 @@ func _toggle_xr(value):
 	if !localui.is_node_ready():
 		await localui.ready
 	if value:
-		localui.ui.reparent(localui)
+		localui.ui.reparent(localui.viewport)
 		localui.colshape.disabled = false
 		headiktarget.reparent(xr_camera_3d,false)
 		if OS.get_name() != "Web":

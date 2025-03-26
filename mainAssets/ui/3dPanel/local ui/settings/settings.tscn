@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=8 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://mainAssets/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
 [ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://mainAssets/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://mainAssets/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
+[ext_resource type="PackedScene" uid="uid://dkaactpqyjgjn" path="res://mainAssets/ui/3dPanel/editmode/attributes/vector2.tscn" id="3_p8muu"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
 
@@ -270,7 +271,6 @@ script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../UISettingsMargin")
 
 [node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
@@ -435,6 +435,66 @@ value = 1.0
 allow_greater = true
 allow_lesser = true
 alignment = 1
+
+[node name="VRNotificationSize" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "VR Notification Size:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/Label"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VRNotificationSizeValue" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_icons/updown = SubResource("ImageTexture_5et3l")
+max_value = 1.0
+step = 0.0
+value = 1.0
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="VRNotificationOffset" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "VR Notification Size:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/Label"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VRNotificationOffset" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset" instance=ExtResource("3_p8muu")]
+layout_mode = 2
 
 [node name="ChatSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2

@@ -1,21 +1,33 @@
 extends Control
 class_name SettingsMenu
 
-@onready var restart_in_vr_button := $ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button as Button
-@onready var passthrough_button := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle as Button
-@onready var passthrough_rect := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle/ColorRect as ColorRect
-@onready var hand_tracking_button := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle as Button
-@onready var hand_tracking_rect := $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle/ColorRect as ColorRect
-@onready var local_menu_lookat_x_button := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal as Button
-@onready var local_menu_lookat_x_rect := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal/ColorRect as ColorRect
-@onready var local_menu_lookat_y_button := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal as Button
-@onready var local_menu_lookat_y_rect := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal/ColorRect as ColorRect
-@onready var local_menu_lookat_z_button := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal as Button
-@onready var local_menu_lookat_z_rect := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal/ColorRect as ColorRect
-@onready var ctrl_enter_button := $ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle as Button
-@onready var inspector_update_interval_spinbox := $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox as SpinBox
-@onready var scaling_slider := $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling/HSlider as HSlider
-@onready var anti_aliasing_dropdown := ($ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing as Enum_Attribute).val
+# general settings
+@onready var restart_in_vr_button: Button = $ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button
+
+# vr settings
+@onready var passthrough_button: Button = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle
+@onready var passthrough_rect: ColorRect = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle/ColorRect
+@onready var hand_tracking_button: Button = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle
+@onready var hand_tracking_rect: ColorRect = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle/ColorRect
+
+# ui settings
+@onready var local_menu_lookat_x_button: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal
+@onready var local_menu_lookat_x_rect: ColorRect = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal/ColorRect
+@onready var local_menu_lookat_y_button: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal
+@onready var local_menu_lookat_y_rect: ColorRect = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal/ColorRect
+@onready var local_menu_lookat_z_button: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal
+@onready var local_menu_lookat_z_rect: ColorRect = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal/ColorRect
+@onready var inspector_update_interval_spinbox: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox
+@onready var vr_notification_size_value: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/VRNotificationSizeValue
+@onready var vr_notification_offset: Vector2_Attribute = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/VRNotificationOffset
+
+# chat settings
+@onready var ctrl_enter_button: Button = $ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle
+
+# graphics settings
+@onready var scaling_slider: HSlider = $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling/HSlider
+@onready var anti_aliasing_dropdown: OptionButton = ($ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing as Enum_Attribute).val
+@onready var anti_aliasing_control: Enum_Attribute = $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing
 
 func set_button(button_ref: Button, rect_ref: ColorRect, toggled_on: bool, on_color: Color) -> void:
 	button_ref.button_pressed = toggled_on
@@ -27,7 +39,7 @@ func tween_button(button_ref: Button, rect_ref: ColorRect, toggled_on: bool, on_
 	create_tween().tween_property(rect_ref, ^"color", on_color if toggled_on else Color.GRAY, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 func _ready() -> void:
-	var anti_aliasing_control := $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/AntiAliasing as Enum_Attribute
+	#anti_aliasing_control.set_data("3d anti aliasing", get_window(), "msaa_3d", {})
 	anti_aliasing_control.label.text = "Anti Aliasing"
 	anti_aliasing_control.property_name = "msaa_3d"
 	anti_aliasing_control.val.add_item("MSAA_DISABLED")
@@ -39,18 +51,19 @@ func _ready() -> void:
 	
 	if LocalGlobals.vr_supported:
 		($ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR as VBoxContainer).hide()
-	var settings_singleton := Engine.get_singleton("settings_manager")
+	var settings_singleton: SettingsSingleton = Engine.get_singleton("settings_manager")
 	if settings_singleton is SettingsSingleton:
-		var setsing_casted := settings_singleton as SettingsSingleton
-		set_button(passthrough_button, passthrough_rect, setsing_casted.vr_passthrough, Color.GREEN)
-		set_button(hand_tracking_button, hand_tracking_rect, setsing_casted.hand_tracking_enabled, Color.GREEN)
-		set_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, setsing_casted.ui_local_menu_lookat_x, Color.RED)
-		set_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, setsing_casted.ui_local_menu_lookat_y, Color.GREEN)
-		set_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, setsing_casted.ui_local_menu_lookat_z, Color.BLUE)
-		ctrl_enter_button.button_pressed = setsing_casted.send_messages_with_ctrl_enter
-		ctrl_enter_button.text = "is enabled" if setsing_casted.send_messages_with_ctrl_enter else "is disabled"
-		inspector_update_interval_spinbox.value = setsing_casted.inspector_update_interval
-		scaling_slider.value = setsing_casted.viewport_scaling
+		set_button(passthrough_button, passthrough_rect, settings_singleton.vr_passthrough, Color.GREEN)
+		set_button(hand_tracking_button, hand_tracking_rect, settings_singleton.hand_tracking_enabled, Color.GREEN)
+		set_button(local_menu_lookat_x_button, local_menu_lookat_x_rect, settings_singleton.ui_local_menu_lookat_x, Color.RED)
+		set_button(local_menu_lookat_y_button, local_menu_lookat_y_rect, settings_singleton.ui_local_menu_lookat_y, Color.GREEN)
+		set_button(local_menu_lookat_z_button, local_menu_lookat_z_rect, settings_singleton.ui_local_menu_lookat_z, Color.BLUE)
+		ctrl_enter_button.button_pressed = settings_singleton.send_messages_with_ctrl_enter
+		ctrl_enter_button.text = "is enabled" if settings_singleton.send_messages_with_ctrl_enter else "is disabled"
+		inspector_update_interval_spinbox.value = settings_singleton.inspector_update_interval
+		vr_notification_size_value.value = settings_singleton.vr_notification_size
+		vr_notification_offset.set_data("VR Notification Offset", settings_singleton, "vr_notification_offset")
+		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing
 	
 	restart_in_vr_button.pressed.connect(restart_in_vr)
@@ -60,6 +73,8 @@ func _ready() -> void:
 	local_menu_lookat_y_button.toggled.connect(toggle_local_menu_lookat_y)
 	local_menu_lookat_z_button.toggled.connect(toggle_local_menu_lookat_z)
 	inspector_update_interval_spinbox.value_changed.connect(inspector_update_interval_changed)
+	vr_notification_size_value.value_changed.connect(vr_notification_size_changed)
+	
 	ctrl_enter_button.toggled.connect(toggle_ctrl_enter)
 	scaling_slider.value_changed.connect(viewport_scaling_slider_changed)
 	anti_aliasing_dropdown.item_selected.connect(anti_aliasing_changed)
@@ -118,6 +133,21 @@ func inspector_update_interval_changed(value: float) -> void:
 	if settings_singleton is SettingsSingleton:
 		# change to global var
 		(settings_singleton as SettingsSingleton).inspector_update_interval = value
+		
+
+func vr_notification_size_changed(value: float) -> void:
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).vr_notification_size = value
+		
+
+func vr_notification_offset_changed(value: Vector2) -> void:
+	var settings_singleton = Engine.get_singleton("settings_manager")
+	if settings_singleton is SettingsSingleton:
+		# change to global var
+		(settings_singleton as SettingsSingleton).vr_notification_offset = value
+		
 
 func anti_aliasing_changed(index: int) -> void:
 	var settings_singleton = Engine.get_singleton("settings_manager")

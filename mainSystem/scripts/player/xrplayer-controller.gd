@@ -15,6 +15,7 @@ extends CharacterBody3D
 @onready var handmenu: Node3D = %handmenu
 @onready var menuoffset: Node3D = %menuoffset
 @onready var headiktarget: Node3D = %headiktarget
+@onready var notificationparent: Node3D = %notificationparent
 @onready var localui: Panel3D = %localui
 
 var head_pos: =Vector3():
@@ -187,11 +188,9 @@ func _ready():
 			leftStick = value
 		)
 
-func _process(_delta):
+func _physics_process(delta):
 	if !vr_mode_enabled:
 		menuoffset.global_rotation = Vector3()
-
-func _physics_process(delta):
 	if global_position.length() > 100000:
 		respawn_player()
 		flymode = true

@@ -41,7 +41,7 @@ var hide_titlebar := false:
 
 var event_manager
 
-func set_target(new_target, above_targets=[]):
+func set_target(new_target, above_targets:=[]):
 	if !above_targets.is_empty():
 		#print("first above_targets: " + str(above_targets[0]))
 		#print("above_targets: " + str(above_targets) + "\n")
@@ -82,7 +82,7 @@ func set_target(new_target, above_targets=[]):
 #		update_fields()
 
 #func _add_fields(prop, new_target, above_targets) -> void:
-func _add_fields(prop_list, new_target, above_targets) -> void:
+func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 	var start_time : float = Time.get_ticks_msec()
 	for i in range(prop_list.size()):
 		var prop = prop_list[i]
@@ -92,25 +92,34 @@ func _add_fields(prop_list, new_target, above_targets) -> void:
 		var fieldname :String= prop.name
 		if prop.name.contains("bones/") and new_target is Skeleton3D:
 			fieldname = "bone: "+new_target.get_bone_name(int(prop.name.split("/")[1]))+" "+prop.name.split("/")[-1]
+		for targ in above_targets:
+			if targ == new_target:
+				return
+		if above_targets.size() > 3:
+			return
 		match prop.type:
 			TYPE_OBJECT:
-				if prop.hint_string == "Node" or prop.class_name in ClassDB.get_inheriters_from_class("Node"):
-					print('node don\'t add')
-				else:
-					var tmp :Object_Attribute = object_field.instantiate()
-					v_box_container.add_child(tmp)
-					tmp.name = fieldname
-					tmp.set_data(fieldname, target, prop.name,above_targets.duplicate(true))
+				var tmp :Object_Attribute = object_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, target, prop.name,above_targets.duplicate(true))
 			TYPE_ARRAY:
 				var tmp :Array_Attribute = array_field.instantiate()
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname
 				tmp.set_data(fieldname, new_target, prop.name)
 			TYPE_STRING_NAME:
-				var tmp :String_Attribute = string_field.instantiate()
-				v_box_container.add_child(tmp)
-				tmp.name = fieldname
-				tmp.set_data(fieldname, new_target, prop.name)
+				match prop.hint:
+					0:
+						var tmp :String_Attribute = string_field.instantiate()
+						v_box_container.add_child(tmp)
+						tmp.name = fieldname
+						tmp.set_data(fieldname, new_target, prop.name)
+					2:
+						var tmp :Enum_Attribute = enum_field.instantiate()
+						v_box_container.add_child(tmp)
+						tmp.name = fieldname
+						tmp.set_data(fieldname, new_target, prop.name, prop, true)
 			TYPE_STRING:
 				var tmp :String_Attribute = string_field.instantiate()
 				v_box_container.add_child(tmp)

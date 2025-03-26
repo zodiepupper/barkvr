@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7hvmu4rwi4fh"]
+
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_ta86q"]
+[ext_resource type="PackedScene" uid="uid://cn1wel2bnigbf" path="res://mainAssets/ui/3dPanel/2d scenes/video.tscn" id="2_rxrh6"]
+
+[node name="Video3d" type="RigidBody3D"]
+freeze = true
+freeze_mode = 1
+script = ExtResource("1_ta86q")
+_auto_load_ui = ExtResource("2_rxrh6")
+metadata/_custom_type_script = "uid://cb6a7hbfmnudr"

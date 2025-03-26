@@ -2,8 +2,8 @@ class_name Vector2_Attribute
 extends Control
 
 @onready var label = $VBoxContainer/Panel2/Label
-@onready var xval = $VBoxContainer/position/x/xval
-@onready var yval = $VBoxContainer/position/y/yval
+@onready var xval: LineEdit = $VBoxContainer/position/x/xval
+@onready var yval: LineEdit = $VBoxContainer/position/y/yval
 
 var target:Object
 var _is_editing:bool = false
@@ -53,3 +53,7 @@ func set_data(new_name:String, new_target:Object, new_property_name:String):
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name
+
+func set_value(new_value:Vector2):
+	xval.text = str(new_value.x)
+	yval.text = str(new_value.y)

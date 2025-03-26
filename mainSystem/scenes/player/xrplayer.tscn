@@ -36,6 +36,7 @@ fov = 90.0
 
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
+query_on_process = false
 query_exception_nodes = [NodePath("../../.."), NodePath("../../righthand/handproxy/grabArea"), NodePath("../../lefthand/handproxy/grabArea")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
@@ -44,6 +45,11 @@ world_collision_layers = 4294967295
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
 unique_name_in_owner = true
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="notificationparent" type="Node3D" parent="xrplayer/Camera3D" groups=["notificationparent"]]
+unique_name_in_owner = true
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+script = ExtResource("8_n4qtp")
 
 [node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" groups=["playerCamera"]]
 cull_mask = 1048573
@@ -65,6 +71,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 follow_mouse = false
+query_on_process = false
 query_exception_nodes = [NodePath("../../../..")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
@@ -99,6 +106,7 @@ script = ExtResource("2_npgyv")
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 follow_mouse = false
+query_on_process = false
 query_exception_nodes = [NodePath("../../../..")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
@@ -122,10 +130,6 @@ skeleton = NodePath("")
 
 [node name="handMenuPoint" type="Node3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
-
-[node name="notificationparent" type="Node3D" parent="xrplayer/lefthand/handproxy" groups=["notificationparent"]]
-transform = Transform3D(-4.37114e-09, -4.37114e-09, 0.1, -4.37114e-09, -0.1, -4.37114e-09, 0.1, -4.37114e-09, 4.37114e-09, 0.048, -0.064, -0.077)
-script = ExtResource("8_n4qtp")
 
 [node name="handiktarget" type="Node3D" parent="xrplayer/lefthand"]
 transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)

@@ -36,6 +36,16 @@ var inspector_update_interval: float:
 	set(value):
 		inspector_update_interval = value
 		save_and_emit(&"inspector_update_interval")
+## changes the size of the 3d notifications that appear on screen and in vr
+var vr_notification_size: float:
+	set(value):
+		vr_notification_size = value
+		save_and_emit(&"vr_notification_size")
+## changes the offset position of the 3d notifications
+var vr_notification_offset: Vector2:
+	set(value):
+		vr_notification_offset = value
+		save_and_emit(&"vr_notification_offset")
 ## the multiplier that is used for the speed held items should be scaled at
 var grabbed_object_scale_factor: float:
 	set(value):
@@ -47,6 +57,7 @@ var send_messages_with_ctrl_enter: bool:
 	set(value):
 		send_messages_with_ctrl_enter = value
 		save_and_emit(&"send_messages_with_ctrl_enter")
+## sets the anti-aliasing mode
 var anti_aliasing: int:
 	set(value):
 		print_stack()
@@ -68,7 +79,9 @@ const DEFAULT_VALUES := {
 	grabbed_object_scale_factor = 1.1,
 	send_messages_with_ctrl_enter = false,
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
-	viewport_scaling = 1.0
+	viewport_scaling = 1.0,
+	vr_notification_size = 10.0,
+	vr_notification_offset = Vector2(.2,.2)
 }
 
 func _ready() -> void:
@@ -96,10 +109,14 @@ func reload() -> void:
 	if not json_parsed is Dictionary:
 		printerr("failure to load settings.json, not valid json")
 		return
-	var json_dict := json_parsed as Dictionary
 	
 	for key in DEFAULT_VALUES:
-		set(key, json_dict[key] if json_dict.has(key) and typeof(json_dict[key]) == typeof(DEFAULT_VALUES[key]) else DEFAULT_VALUES[key])
+		if DEFAULT_VALUES[key] is Vector2:
+			var tmp: String = json_parsed[key]
+			tmp = tmp.lstrip("(")
+			tmp = tmp.rstrip(")")
+			json_parsed[key] = Vector2(float(tmp.split(",")[0]),float(tmp.split(",")[1]))
+		set(key, json_parsed[key] if json_parsed.has(key) and typeof(json_parsed[key]) == typeof(DEFAULT_VALUES[key]) else DEFAULT_VALUES[key])
 
 func save() -> void:
 	var json_file := FileAccess.open(PATH, FileAccess.WRITE)

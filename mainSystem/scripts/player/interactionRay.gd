@@ -178,7 +178,14 @@ func _process(_delta):
 		procrayvis()
 		# run the interaction function
 		interact()
-	
+
+func _physics_process(delta: float) -> void:
+	if enabled and !query_on_process:
+		query_raycast()
+		# updates the raycast visuals
+		procrayvis()
+		# run the interaction function
+		interact()
 
 func interact() -> void:
 	var tmpcol

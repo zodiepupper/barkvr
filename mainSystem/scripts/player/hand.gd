@@ -77,6 +77,11 @@ func _ready():
 		)
 
 func _physics_process(delta: float) -> void:
+	if !rays_disabled:
+		if isscalinggrabbedobject:
+			var ts = global_position.distance_to(otherhand.global_position)-scalinggrabbedstartdist
+			ts *= 4.0
+			scalinggrabbedobject.scale = scalinggrabbedstartscale+Vector3(ts,ts,ts)
 	#if local_player.vr_mode_enabled:
 		#if thishandtracking.tracking and !rays_disabled:
 			#rays_disabled = true
@@ -129,13 +134,6 @@ func _physics_process(delta: float) -> void:
 					"scale",
 					item.node.scale
 				)
-
-func _process(_delta: float) -> void:
-	if !rays_disabled:
-		if isscalinggrabbedobject:
-			var ts = global_position.distance_to(otherhand.global_position)-scalinggrabbedstartdist
-			ts *= 4.0
-			scalinggrabbedobject.scale = scalinggrabbedstartscale+Vector3(ts,ts,ts)
 
 func update_raycasts():
 	ui_ray.force_raycast_update()

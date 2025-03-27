@@ -5,6 +5,8 @@ compatibility_minimum = "4.3"
 [libraries]
 linux.debug.x86_64 = "bin/libik.so"
 linux.release.x86_64 = "bin/libik.so"
+linux.debug.arm64 = "bin/libik_arm64.so"
+linux.release.arm64 = "bin/libik_arm64.so"
 windows.debug.x86_64 = "bin/libik.dll"
 windows.release.x86_64 = "bin/libik.dll"
 macos.debug = "bin/libik.dylib"

@@ -271,6 +271,7 @@ script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../UISettingsMargin")
 
 [node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16

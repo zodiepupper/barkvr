@@ -100,11 +100,11 @@ func _display_message(event):
 				var tmp :Control = load("res://mainAssets/ui/3dPanel/local ui/login/message.tscn").instantiate()
 				tmp.name = event.event_id
 				if event['content'].has('body'):
-					tmp.text = (
-						"[b][u]"+displayname+'[/u][/b]:\n'+event.content.body
-						)
+					tmp.text = (event.content.body)
 				else:
 					tmp.text = str(event)
+				tmp.time = str(Time.get_datetime_string_from_unix_time((event.origin_server_ts/1000)+(Time.get_time_zone_from_system().bias*60),true))
+				tmp.sender = displayname+":"
 				# this part sets some data so files sent over matrix can be imported
 				# using the journal import_asset flow (the copy text button becomes
 				# an import asset button)
@@ -118,12 +118,15 @@ func _display_message(event):
 						# automatically convert the mxc uri for the matrix media
 						# repository to a useable uri
 						tmp.set_meta("asset_url", "https://matrix.pupper.dev/_matrix/client/v1/media/download/"+download_homeserver+"/"+download_content_id+"?allow_redirect=true")
-						tmp.text = "could not get asset name"
 						if "body" in event.content:
 							tmp.set_meta("import_asset_name", event.content.body)
 							tmp.text = event.content.body
+						else:
+							tmp.text = "could not get asset name"
 						if "info" in event.content and "mimetype" in event.content.info:
 							tmp.text += "\n[color=#8888]asset type: "+event.content.info.mimetype
+						else:
+							tmp.text += "\n[color=#8888]asset type: "+"binary file"
 						
 						Thread.set_thread_safety_checks_enabled(true)
 						

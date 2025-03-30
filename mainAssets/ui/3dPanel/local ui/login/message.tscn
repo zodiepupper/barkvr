@@ -54,21 +54,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3qcyn")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="Label" type="RichTextLabel" parent="Panel/MarginContainer"]
-clip_contents = false
-layout_mode = 2
-bbcode_enabled = true
-text = "fjawbeigojbwairgubiworuoarugbiougbiwaugbiaowuregoiawurgbiuawbgiouawregiuasbgiuwabigouwregilwaiwbeioubwqigbysiafgiuwagfiuwaawhiofuhwioauefhiowuaefhiouwahefiouwahiofeuwahioefuhaweiofuhwioufehiowufehioawuefh"
-fit_content = true
-context_menu_enabled = true
-
 [node name="Control" type="Control" parent="Panel"]
 layout_mode = 2
 
@@ -85,3 +70,35 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 script = SubResource("GDScript_xgvtk")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 22
+
+[node name="body" type="RichTextLabel" parent="Panel/MarginContainer"]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+bbcode_enabled = true
+text = "fjawbeigojbwairgubiworuoarugbiougbiwaugbiaowuregoiawurgbiuawbgiouawregiuasbgiuwabigouwregilwaiwbeioubwqigbysiafgiuwagfiuwaawhiofuhwioauefhiowuaefhiouwahefiouwahiofeuwahioefuhaweiofuhwioufehiowufehioawuefh"
+fit_content = true
+context_menu_enabled = true
+
+[node name="time" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 18
+text = "time dfkajflkajfl;a"
+
+[node name="username" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "username"

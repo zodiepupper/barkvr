@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://yk0dma18v2xm" path="res://addons/renik-gdscript/sample_models/godette.glb" id="1_hi3e7"]
 [ext_resource type="Script" uid="uid://d1xgdvhjhcp3l" path="res://addons/renik-gdscript/renik.gd" id="2_eba7d"]
-[ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://addons/renik-gdscript/quick_renik_setup.gd" id="2_oyd6d"]
+[ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://addons/renik-gdscript/quick_ik_setup.gd" id="2_oyd6d"]
 [ext_resource type="Script" uid="uid://vgywhcowlh6r" path="res://addons/renik-gdscript/renik_placement.gd" id="3_lrlos"]
 
 [sub_resource type="Resource" id="Resource_uo1ru"]

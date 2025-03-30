@@ -844,14 +844,14 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 	# add IK stuff if VRM
 	if node_name.ends_with(".vrm") or data.type == "vrm":
 		print('attempting ik')
-		var quickreniksetup :Node3D = load("res://addons/renik-gdscript/quick_renik_setup.tscn").instantiate()
-		node_to_add.add_child(quickreniksetup)
-		quickreniksetup.head.global_position += quickreniksetup.global_position
-		quickreniksetup.hips.global_position += quickreniksetup.global_position
-		quickreniksetup.left_hand.global_position += quickreniksetup.global_position
-		quickreniksetup.right_hand.global_position += quickreniksetup.global_position
-		quickreniksetup.left_foot.global_position += quickreniksetup.global_position
-		quickreniksetup.right_foot.global_position += quickreniksetup.global_position
+		var quickiksetup :Node3D = load("res://addons/renik-gdscript/quick_ik_setup.tscn").instantiate()
+		node_to_add.add_child(quickiksetup)
+		#quickiksetup.head.global_position += quickiksetup.global_position
+		#quickiksetup.hips.global_position += quickiksetup.global_position
+		#quickiksetup.left_hand.global_position += quickiksetup.global_position
+		#quickiksetup.right_hand.global_position += quickiksetup.global_position
+		#quickiksetup.left_foot.global_position += quickiksetup.global_position
+		#quickiksetup.right_foot.global_position += quickiksetup.global_position
 		var skele :Skeleton3D=null
 		for i in node_to_add.get_children():
 			if skele:
@@ -864,6 +864,6 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 						skele = a
 		if skele:
 			print('found skele')
-			quickreniksetup.armature_skeleton = skele
+			quickiksetup.armature_skeleton = skele
 	if "loader" in data:
 		data.loader.done()

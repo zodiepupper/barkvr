@@ -2,9 +2,13 @@ class_name message_bubble
 extends Control
 
 var panel:Panel
-var label:RichTextLabel
+@onready var body_lbl: RichTextLabel = %body
+@onready var time_lbl: Label = %time
+@onready var username_lbl: Label = %username
 
 @export var text = ''
+@export var sender = ''
+@export var time = ''
 
 @export var leftside:bool = true:
 	set(value):
@@ -17,8 +21,7 @@ var label:RichTextLabel
 				return
 			add_theme_constant_override("margin_left",par.size.x*.3)
 
-func _enter_tree():
+func _ready() -> void:
 	leftside = leftside
-	label = $Panel/MarginContainer/Label
 	if text:
-		label.text = text
+		body_lbl.text = text

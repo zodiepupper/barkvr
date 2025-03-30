@@ -29,7 +29,8 @@ func _ready() -> void:
 [sub_resource type="GDScript" id="GDScript_mguyu"]
 script/source = "extends Button
 
-## The node that will have it's [code]visibility[/code] field toggled when this button is pressed
+## The node that will have it's [code]visibility[/code]
+## field toggled when this button is pressed
 @export var node_to_toggle : Node
 
 @export var slide := false
@@ -55,6 +56,12 @@ func _toggled(toggled_on):
 			if !slide_start_pos:
 				slide_start_pos = node_to_toggle.position
 			node_to_toggle.show()
+			if toggled_on:
+				create_tween().tween_property(node_to_toggle,\"position:x\",slide_start_pos.x,.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+			else:
+				create_tween().tween_property(node_to_toggle,\"position:x\",-(node_to_toggle.size.x+slide_start_pos.x),.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 			if toggled_on and is_instance_valid(attributes_toggle) and attributes_toggle != self and attributes_toggle.button_pressed:
 				attributes_toggle.manual_toggle(false)
 			if toggled_on and is_instance_valid(inspector_toggle) and inspector_toggle != self and inspector_toggle.button_pressed:
@@ -63,12 +70,6 @@ func _toggled(toggled_on):
 				script_toggle.manual_toggle(false)
 			if toggled_on and is_instance_valid(add_node_toggle) and add_node_toggle != self and add_node_toggle.button_pressed:
 				add_node_toggle.manual_toggle(false)
-			if toggled_on:
-				create_tween().tween_property(node_to_toggle,\"position:x\",slide_start_pos.x,.5).\\
-				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
-			else:
-				create_tween().tween_property(node_to_toggle,\"position:x\",-(node_to_toggle.size.x+slide_start_pos.x),.5).\\
-				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kfbv"]

@@ -2,6 +2,9 @@
 class_name GridMenuButton
 extends StaticBody3D
 
+# a signal to be thrown when clicked
+signal clicked
+
 @onready var mesh_instance_3d : MeshInstance3D = $MeshInstance3D
 @onready var label_3d :Label3D = $Label3D
 @onready var collision_shape_3d :CollisionShape3D = $CollisionShape3D
@@ -67,9 +70,6 @@ var hover := false
 # for tracking whether the button is currently
 # being clicked
 var isclicked := false
-
-# a signal to be thrown when clicked
-signal clicked
 
 # resets the label text once the node has
 # entered the tree so it can run the proper

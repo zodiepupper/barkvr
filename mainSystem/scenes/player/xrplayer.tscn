@@ -36,7 +36,6 @@ fov = 90.0
 
 [node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
-query_on_process = false
 query_exception_nodes = [NodePath("../../.."), NodePath("../../righthand/handproxy/grabArea"), NodePath("../../lefthand/handproxy/grabArea")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
@@ -71,7 +70,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 follow_mouse = false
-query_on_process = false
 query_exception_nodes = [NodePath("../../../..")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
@@ -106,7 +104,6 @@ script = ExtResource("2_npgyv")
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 follow_mouse = false
-query_on_process = false
 query_exception_nodes = [NodePath("../../../..")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4

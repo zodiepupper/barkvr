@@ -256,8 +256,8 @@ func send_room_event(room_id:String, event_type:String, body:Dictionary):
 func get_turn_server():
 	api.get_turn_server(base_url,headers)
 
-func get_room_messages(room_id:String):
-	api.get_room_messages(base_url,headers,room_id,'b','','',10)
+func get_room_messages(room_id:String, count:int=10):
+	api.get_room_messages(base_url,headers,room_id,'b','','',count)
 
 func get_room_state(room_id):
 	api.get_room_state(base_url, headers, room_id)

@@ -123,10 +123,13 @@ func _display_message(event):
 							tmp.text = event.content.body
 						else:
 							tmp.text = "could not get asset name"
-						if "info" in event.content and "mimetype" in event.content.info:
-							tmp.text += "\n[color=#8888]asset type: "+event.content.info.mimetype
-						else:
-							tmp.text += "\n[color=#8888]asset type: "+"binary file"
+						if "info" in event.content:
+							if "mimetype" in event.content.info:
+								tmp.text += "\n[color=#8888][font_size=14]asset type: "+event.content.info.mimetype
+							else:
+								tmp.text += "\n[color=#8888][font_size=14]asset type: "+"binary file"
+							if "size" in event.content.info:
+								tmp.text += ", asset size: "+str(int(event.content.info.size))+" bytes"
 						
 						Thread.set_thread_safety_checks_enabled(true)
 						

@@ -128,4 +128,4 @@ func _ready():
 
 func _check_room_messages():
 	if target_room and is_instance_valid(Engine.get_singleton("user_manager")):
-		Engine.get_singleton("user_manager").get_room_messages(target_room)
+		Engine.get_singleton("user_manager").get_room_messages(target_room,50)

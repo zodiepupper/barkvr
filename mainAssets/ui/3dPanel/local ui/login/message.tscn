@@ -8,14 +8,13 @@ bg_color = Color(0, 0, 0, 0.509804)
 
 [sub_resource type="GDScript" id="GDScript_xgvtk"]
 script/source = "extends Button
-@onready var label: RichTextLabel = $\"../../MarginContainer/Label\"
+@onready var body: RichTextLabel = %body
 @onready var message: message_bubble = $\"../../..\"
 
 #func _ready() -> void:
 	#BarkHelpers.invert_image(icon.get_image())
 
 func _pressed() -> void:
-	print(get_meta_list()) ## ITS NOT GETTING THE METADA SOMEHOW
 	if message.has_meta(\"import\") and message.has_meta(\"asset_url\"):
 		if message.has_meta(\"import_asset_name\"):
 			var loader :LoadingHalo = load(\"res://mainAssets/ui/3dui/loading_halo.tscn\").instantiate()
@@ -34,7 +33,7 @@ func _pressed() -> void:
 			)
 #import_asset('uri',url.text,'', false, {\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult})
 	else:
-		DisplayServer.clipboard_set(label.text)
+		DisplayServer.clipboard_set(body.text)
 "
 
 [node name="message" type="MarginContainer"]
@@ -54,22 +53,28 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3qcyn")
 
-[node name="Control" type="Control" parent="Panel"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel"]
 layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 0
 
-[node name="Button" type="Button" parent="Panel/Control"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -55.0
-offset_bottom = 45.0
-grow_horizontal = 0
-icon = ExtResource("2_4knqr")
-flat = true
-icon_alignment = 1
-expand_icon = true
-script = SubResource("GDScript_xgvtk")
+[node name="time" type="Label" parent="Panel/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 18
+text = "time dfkajflkajfl;a"
+
+[node name="username" type="Label" parent="Panel/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "username"
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 2
@@ -87,18 +92,20 @@ text = "fjawbeigojbwairgubiworuoarugbiougbiwaugbiaowuregoiawurgbiuawbgiouawregiu
 fit_content = true
 context_menu_enabled = true
 
-[node name="time" type="Label" parent="Panel"]
-unique_name_in_owner = true
+[node name="Control" type="Control" parent="Panel"]
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 18
-text = "time dfkajflkajfl;a"
 
-[node name="username" type="Label" parent="Panel"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 18
-text = "username"
+[node name="Button" type="Button" parent="Panel/Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -55.0
+offset_bottom = 45.0
+grow_horizontal = 0
+focus_mode = 0
+icon = ExtResource("2_4knqr")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = SubResource("GDScript_xgvtk")

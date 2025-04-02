@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://boug2ukv43nh6"]
 
 [ext_resource type="Script" uid="uid://c6bt157m3koq0" path="res://mainAssets/ui/3dPanel/local ui/about panel and supporter stuff/support messages.gd" id="1_6uopc"]
-[ext_resource type="Script" uid="uid://hrgrf8ahjfno" path="res://mainAssets/ui/3dPanel/local ui/about panel and supporter stuff/parse_patreon_csv.gd" id="2_w0crj"]
+[ext_resource type="Script" uid="uid://hrgrf8ahjfno" path="res://mainAssets/ui/3dPanel/local ui/about panel and supporter stuff/parse_donors_csv.gd" id="2_w0crj"]
 
 [node name="about" type="Control"]
 clip_contents = true

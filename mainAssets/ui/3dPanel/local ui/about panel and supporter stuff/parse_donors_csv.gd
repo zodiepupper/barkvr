@@ -1,8 +1,50 @@
 extends FlowContainer
 
-var members :String = "paste names
-with newlines
-in between"
+var members :String = "Talha
+ParkerK
+74hc595
+Cubiix
+Em
+prumbrok
+Philiflake
+rawpie
+Genova
+fragilegirl
+Nafi
+EleanorjMorel
+Klaxus
+JNP
+jeana
+Todd
+Kostas
+Cuddly
+Moondancer
+koalou
+Ginger
+John
+Luna
+NatBard
+3x1t_5tyl3
+Kitt3ns
+Billy
+Moonshine
+Lyuma
+APnda
+SemiRandomSevens
+Lou
+Kloom
+Lexevo
+laker
+glyphli
+Pikario
+Meow
+JNP
+Andromeda
+Myriad
+PlayerDeer
+jeana
+NatBard
+iris"
 
 var MEMBERBOX = load("res://assets/patreon/memberbox.tscn")
 

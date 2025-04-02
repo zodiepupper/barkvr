@@ -72,3 +72,5 @@ func player_init(isvr:bool):
 
 func clear_gizmos_func():
 	clear_gizmos.emit()
+
+var is_inspector_loading: bool = false

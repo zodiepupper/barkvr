@@ -72,10 +72,10 @@ func set_target(new_target, above_targets:=[]):
 		
 		var start_time : float = Time.get_ticks_msec()
 		for child in v_box_container.get_children():
+			if start_time + 1 < Time.get_ticks_msec():
+				await get_tree().process_frame
+				start_time = Time.get_ticks_msec()
 			child.queue_free()
-		if start_time + 5 > Time.get_ticks_msec():
-			await get_tree().process_frame
-			start_time = Time.get_ticks_msec()
 		var prop_list :Array[Dictionary]= new_target.get_property_list()
 		#call_deferred("_add_fields", prop, new_target, above_targets)
 		call_deferred("_add_fields", prop_list, new_target, above_targets)
@@ -83,12 +83,16 @@ func set_target(new_target, above_targets:=[]):
 
 #func _add_fields(prop, new_target, above_targets) -> void:
 func _add_fields(prop_list, new_target, above_targets:Array) -> void:
+	while LocalGlobals.is_inspector_loading:
+		await get_tree().process_frame
+	LocalGlobals.is_inspector_loading = true
 	var start_time : float = Time.get_ticks_msec()
 	for i in range(prop_list.size()):
-		var prop = prop_list[i]
-		if start_time + 5 > Time.get_ticks_msec():
+		if start_time + 1 < Time.get_ticks_msec():
 			await get_tree().process_frame
 			start_time = Time.get_ticks_msec()
+		#await get_tree().process_frame
+		var prop = prop_list[i]
 		var fieldname :String= prop.name
 		if prop.name.contains("bones/") and new_target is Skeleton3D:
 			fieldname = "bone: "+new_target.get_bone_name(int(prop.name.split("/")[1]))+" "+prop.name.split("/")[-1]
@@ -164,6 +168,7 @@ func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname
 				tmp.set_data(fieldname, new_target, prop.name)
+	LocalGlobals.is_inspector_loading = false
 
 func clear_fields():
 	if target:

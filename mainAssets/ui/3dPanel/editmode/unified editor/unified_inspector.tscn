@@ -18,9 +18,29 @@ script/source = "extends Control
 @onready var gdscriptpanel: Control = $gdscriptpanel
 @onready var add_node: Control = $AddNode
 
+@onready var script_toggle: Button = $script_toggle
+@onready var inspector_toggle: Button = $inspector_toggle
+@onready var add_node_toggle: Button = $add_node_toggle
+@onready var attributes_toggle: Button = $attributes_toggle
+
 func _ready() -> void:
 	sceneinspector.selected.connect(func(target):
+		var tmpvis := attributes.visible
+		var tmplayout := attributes.layout_mode
+		var tmpanchors := attributes.anchors_preset
+		var tmpsize := attributes.size
+		var tmppos := attributes.position
+		attributes.queue_free()
+		attributes = load(\"res://mainAssets/ui/3dPanel/editmode/attributes.tscn\").instantiate()
+		add_child(attributes)
+		attributes_toggle.node_to_toggle = attributes
+		attributes.visible = tmpvis
+		attributes.layout_mode = tmplayout
+		attributes.anchors_preset = tmpanchors
+		attributes.size = tmpsize
+		attributes.position = tmppos
 		attributes.set_target(target)
+		LocalGlobals.is_inspector_loading = false
 		gdscriptpanel.set_target(target)
 		add_node.set_target(target)
 		)

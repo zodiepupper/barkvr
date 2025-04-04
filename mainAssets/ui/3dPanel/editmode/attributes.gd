@@ -147,17 +147,17 @@ func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 				tmp.set_data(fieldname, new_target, prop.name)
 			TYPE_INT:
 				match prop.hint:
-					0:
-						var tmp :Number_Attribute = number_field.instantiate()
-						tmp.type = 1
-						v_box_container.add_child(tmp)
-						tmp.name = fieldname
-						tmp.set_data(fieldname, new_target, prop.name)
 					2:
 						var tmp :Enum_Attribute = enum_field.instantiate()
 						v_box_container.add_child(tmp)
 						tmp.name = fieldname
 						tmp.set_data(fieldname, new_target, prop.name, prop)
+					_:
+						var tmp :Number_Attribute = number_field.instantiate()
+						tmp.type = 1
+						v_box_container.add_child(tmp)
+						tmp.name = fieldname
+						tmp.set_data(fieldname, new_target, prop.name)
 			TYPE_VECTOR3:
 				var tmp :Vector3_Attribute = vector_3_field.instantiate()
 				v_box_container.add_child(tmp)

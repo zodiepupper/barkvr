@@ -323,7 +323,10 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 					'data': data
 				})
 			"image":
-				data.image_data = asset_to_import.data
+				if asset_to_import is PackedByteArray and !asset_to_import.is_empty():
+					data.image_data = asset_to_import
+				elif asset_to_import is Image:
+					data.image_data = asset_to_import.get_data()
 				_add_action({
 					'action_name': 'import_asset',
 					'type': type,

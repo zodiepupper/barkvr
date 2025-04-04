@@ -355,7 +355,8 @@ func _load_user_dictionary(file:FileAccess):
 		#user_logged_in.emit()
 		call_deferred("emit_signal","user_logged_in")
 		#saveUserDict()
-		call_deferred("saveUserDict")
+		#call_deferred("saveUserDict")
+		WorkerThreadPool.add_task(saveUserDict)
 
 func sync():
 	var reqData = {}

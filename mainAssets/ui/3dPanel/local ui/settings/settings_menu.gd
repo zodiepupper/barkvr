@@ -20,6 +20,7 @@ class_name SettingsMenu
 @onready var inspector_update_interval_spinbox: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox
 @onready var vr_notification_size_value: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/VRNotificationSizeValue
 @onready var vr_notification_offset: Vector2_Attribute = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/VRNotificationOffset
+@onready var vr_notification_test: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest/VRNotificationTest
 
 # chat settings
 @onready var ctrl_enter_button: Button = $ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle
@@ -63,6 +64,7 @@ func _ready() -> void:
 		inspector_update_interval_spinbox.value = settings_singleton.inspector_update_interval
 		vr_notification_size_value.value = settings_singleton.vr_notification_size
 		vr_notification_offset.set_data("VR Notification Offset", settings_singleton, "vr_notification_offset")
+		vr_notification_test.pressed.connect(test_vr_notification)
 		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing
 	
@@ -78,6 +80,9 @@ func _ready() -> void:
 	ctrl_enter_button.toggled.connect(toggle_ctrl_enter)
 	scaling_slider.value_changed.connect(viewport_scaling_slider_changed)
 	anti_aliasing_dropdown.item_selected.connect(anti_aliasing_changed)
+
+func test_vr_notification():
+	Notifyvr.send_notification("awwwooooooooooooo")
 
 func restart_in_vr() -> void:
 	var args := OS.get_cmdline_args()

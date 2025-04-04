@@ -1,4 +1,3 @@
-class_name matrix_api
 extends Node
 
 # comment info:

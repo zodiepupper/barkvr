@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://i3pxsgqnbjly"]
+[gd_scene load_steps=9 format=3 uid="uid://i3pxsgqnbjly"]
 
 [ext_resource type="Script" uid="uid://cd4decvrgrn6l" path="res://mainAssets/ui/3dPanel/local ui/login/loginbutton.gd" id="1_18njo"]
 [ext_resource type="Script" uid="uid://btdchjgl5dxaa" path="res://mainAssets/ui/3dPanel/local ui/login/matrix.gd" id="1_ptvo5"]
@@ -8,13 +8,6 @@
 [ext_resource type="Script" uid="uid://42i7d81qu0hm" path="res://mainAssets/ui/3dPanel/local ui/login/messages.gd" id="4_ydkch"]
 [ext_resource type="Script" uid="uid://bv6kqq01s1tyi" path="res://mainAssets/ui/3dPanel/local ui/login/SendMessage.gd" id="5_wc8jy"]
 [ext_resource type="Shortcut" uid="uid://uy4hmt5wg7yr" path="res://mainAssets/ui/3dPanel/local ui/login/send_shortcut_enter.tres" id="6_7jghc"]
-
-[sub_resource type="GDScript" id="GDScript_tbgkt"]
-script/source = "extends LineEdit
-
-func _gui_input(event: InputEvent) -> void:
-	print(event)
-"
 
 [node name="matrix" type="Control"]
 layout_mode = 3
@@ -99,7 +92,6 @@ layout_mode = 2
 placeholder_text = "password"
 alignment = 1
 secret = true
-script = SubResource("GDScript_tbgkt")
 
 [node name="hidepasswordbutton" type="Button" parent="login/HBoxContainer/VBoxContainer/pword"]
 layout_mode = 1

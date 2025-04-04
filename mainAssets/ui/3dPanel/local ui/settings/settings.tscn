@@ -271,7 +271,6 @@ script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../UISettingsMargin")
 
 [node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
@@ -496,6 +495,34 @@ grow_vertical = 2
 
 [node name="VRNotificationOffset" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset" instance=ExtResource("3_p8muu")]
 layout_mode = 2
+
+[node name="VRNotificationTest" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "send test notification"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest/Label"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VRNotificationTest" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "send test notification"
 
 [node name="ChatSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
 layout_mode = 2

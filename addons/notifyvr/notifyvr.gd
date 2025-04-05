@@ -9,6 +9,7 @@ func send_notification(message):
 	lbl.text = message
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl.set_script(load("res://addons/notifyvr/textscript.gd"))
+	lbl.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
 	queuedmessages.append(lbl)
 
 func _process(delta):

@@ -53,20 +53,20 @@ var grabbed_object_scale_factor: float:
 		save_and_emit(&"grabbed_object_scale_factor")
 ## sets whether chat messages should be sent with ctrl+enter as opposed
 ## to the default which is just by pressing enter
-var send_messages_with_ctrl_enter: bool:
+var send_messages_with_ctrl_enter: bool = false:
 	set(value):
 		send_messages_with_ctrl_enter = value
 		save_and_emit(&"send_messages_with_ctrl_enter")
 ## sets the anti-aliasing mode
-var anti_aliasing: int:
+var anti_aliasing: int = 0:
 	set(value):
-		print_stack()
 		anti_aliasing = value
+		get_window().msaa_3d = value
 		save_and_emit(&"anti_aliasing")
-var viewport_scaling: float:
+var viewport_scaling: float = 1.0:
 	set(value):
 		viewport_scaling = value
-		get_window().get_viewport().scaling_3d_scale = value
+		get_window().scaling_3d_scale = value
 		save_and_emit(&"viewport_scaling")
 
 const DEFAULT_VALUES := {

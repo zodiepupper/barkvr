@@ -69,6 +69,7 @@ import/blender/enabled=false
 
 player_xr_origin=""
 localuinode=""
+startxr="group specifically for the XR init node"
 
 [gui]
 
@@ -243,8 +244,10 @@ occlusion_culling/use_occlusion_culling=true
 
 [xr]
 
+openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
+openxr/startup_alert=false
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true

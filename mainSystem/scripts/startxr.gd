@@ -114,6 +114,7 @@ func _setup_for_openxr() -> bool:
 
 	# Switch the viewport to XR
 	get_viewport().use_xr = true
+	LocalGlobals.vr_supported = true
 
 	# Report success
 	return true
@@ -158,7 +159,7 @@ func _on_openxr_visible_state() -> void:
 	if xr_active:
 		print("OpenXR: XR ended (visible_state)")
 		xr_active = false
-		emit_signal("xr_ended")
+		xr_ended.emit()
 
 
 # Handle OpenXR focused state
@@ -201,6 +202,7 @@ func _setup_for_webxr() -> bool:
 
 	# If the viewport is already in XR mode then we are done.
 	if get_viewport().use_xr:
+		LocalGlobals.vr_supported = true
 		return true
 
 	# This returns immediately - our _webxr_session_supported() method
@@ -230,6 +232,7 @@ func _on_webxr_session_started() -> void:
 	# Hide the canvas and switch the viewport to XR
 	$EnterWebXR.visible = false
 	get_viewport().use_xr = true
+	LocalGlobals.vr_supported = true
 
 	# Report the XR starting
 	xr_active = true
@@ -243,10 +246,11 @@ func _on_webxr_session_ended() -> void:
 	# Show the canvas and switch the viewport to non-XR
 	$EnterWebXR.visible = true
 	get_viewport().use_xr = false
+	LocalGlobals.vr_supported = false
 
 	# Report the XR ending
 	xr_active = false
-	emit_signal("xr_ended")
+	xr_ended.emit()
 
 
 # Called when the immersive VR session fails to start

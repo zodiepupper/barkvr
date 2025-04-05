@@ -58,7 +58,6 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var selected : Array = []
 var grabbed : Dictionary = {}
 var grabbing : bool = false
-var vreditor : Node3D = null
 
 # flat vars
 var MOUSE_SPEED := .1
@@ -77,7 +76,7 @@ var screen_just_touched := false
 
 @export var force_set_vr_enabled := false
 
-var vr_mode_enabled := true:
+var vr_mode_enabled := false:
 	set(value):
 		if force_set_vr_enabled:
 			value = true
@@ -133,7 +132,7 @@ func respawn_player():
 func _ready():
 	name = OS.get_unique_id()
 	ui_ray.add_exception(self)
-	vr_mode_enabled = vr_mode_enabled
+	vr_mode_enabled = LocalGlobals.vr_supported
 	lefthand.rays_disabled = !vr_mode_enabled
 	righthand.rays_disabled = !vr_mode_enabled
 	respawn_player()
@@ -425,7 +424,7 @@ func flat_movement():
 			grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
 		#vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
-		vreditor = load("res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
+		var vreditor = load("res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
 		get_tree().get_first_node_in_group("localworldroot").add_child(vreditor)
 		vreditor.global_position = camera_3d.to_global(Vector3(0,0,-.5))
 		vreditor.look_at(camera_3d.global_position, Vector3.UP, true)

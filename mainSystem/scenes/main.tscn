@@ -34,7 +34,7 @@ autoplay = true
 bus = &"mic"
 playback_type = 1
 
-[node name="StartXR" type="Node" parent="."]
+[node name="StartXR" type="Node" parent="." groups=["startxr"]]
 script = ExtResource("2_3r3cq")
 target_refresh_rate = 1000.0
 

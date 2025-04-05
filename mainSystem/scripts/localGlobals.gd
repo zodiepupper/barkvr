@@ -3,7 +3,7 @@ extends Node
 var editor_refs : Dictionary = {}
 var interface : XRInterface
 var webxr_interface
-var vr_supported = true
+var vr_supported = false
 
 var local_uis:Array = []
 
@@ -62,10 +62,6 @@ var voice_capture :GDOpusEncoder:
 signal playerinit(isvr: bool)
 signal playerreleaseuifocus
 signal clear_gizmos
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	vr_supported = ProjectSettings.get_setting('xr/openxr/enabled', false)
 
 func player_init(isvr:bool):
 	playerinit.emit(isvr)

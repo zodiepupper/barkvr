@@ -188,6 +188,8 @@ func addchildren(node:Node, parent:Node=null):
 			'node':node
 		})
 	if node.get_child_count() > 0:
+		while !is_inside_tree():
+			pass
 		await get_tree().process_frame
 		if is_instance_valid(node):
 			for i in node.get_children():

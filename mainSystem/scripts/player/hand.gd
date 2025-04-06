@@ -13,9 +13,6 @@ extends XRController3D
 @onready var righthand :Node = %righthand
 @onready var lefthand :Node = %lefthand
 #TODO readd handtracking stuffs
-#@onready var lefthandtracking :SimpleOpenXRHand= %lefthandtracking
-#@onready var righthandtracking :SimpleOpenXRHand= %righthandtracking
-var thishandtracking :SimpleOpenXRHand
 var otherhand : XRController3D
 
 var grabbed :Dictionary

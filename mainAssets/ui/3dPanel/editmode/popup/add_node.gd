@@ -32,6 +32,7 @@ func _ready():
 		item_list.deselect_all()
 		item_list.clear()
 		new_text = new_text.to_lower()
+		var filtered := Array()
 		for node_class in ClassDB.get_class_list():
 			if ClassDB.is_parent_class(node_class, "Node"):
 				var contains_all_chars :bool = true
@@ -41,8 +42,13 @@ func _ready():
 						contains_all_chars = false
 						break
 				if contains_all_chars or node_class_lower.contains(new_text) or node_class_lower.similarity(new_text) > .6:
-					item_list.add_item(node_class)
+					filtered.append(node_class)
+		filtered.sort_custom(func(a:String, b:String):
+			return true if new_text.similarity(a.to_lower()) > new_text.similarity(b.to_lower()) else false
 		)
+		for item in filtered:
+			item_list.add_item(item)
+	)
 	for cls in ClassDB.get_class_list():
 		if ClassDB.is_parent_class(cls, "Node"):
 			item_list.add_item(cls)

@@ -27,6 +27,7 @@ radius = 0.1
 script = ExtResource("1_iwrfe")
 noclip = true
 metadata/health = SubResource("GDScript_swjn5")
+metadata/grabbable = false
 
 [node name="xrplayer" type="XROrigin3D" parent="." groups=["player_xr_origin"]]
 

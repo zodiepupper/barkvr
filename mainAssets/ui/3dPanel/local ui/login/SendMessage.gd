@@ -7,10 +7,9 @@ func _ready():
 	pressed.connect(ispressed)
 	var settings_singleton := Engine.get_singleton("settings_manager")
 	if settings_singleton is SettingsSingleton:
-		var setsing_casted := settings_singleton as SettingsSingleton
-		setsing_casted.changed.connect(func(name: StringName):
-			if name == &"send_messages_with_ctrl_enter":
-				shortcut = SEND_SHORTCUT_CTRL_ENTER if setsing_casted.send_messages_with_ctrl_enter else SEND_SHORTCUT_ENTER
+		settings_singleton.changed.connect(func(setting_name: StringName):
+			if setting_name == &"send_messages_with_ctrl_enter":
+				shortcut = SEND_SHORTCUT_CTRL_ENTER if settings_singleton.send_messages_with_ctrl_enter else SEND_SHORTCUT_ENTER
 		)
 
 func ispressed()->void:

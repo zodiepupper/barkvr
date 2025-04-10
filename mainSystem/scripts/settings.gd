@@ -5,7 +5,7 @@ signal changed(name: StringName)
 
 const PATH := "user://settings.json"
 
-var vr_passthrough: bool:
+var vr_passthrough: bool = false:
 	set(value):
 		vr_passthrough = value
 		if XRServer.primary_interface and XRServer.primary_interface.is_passthrough_supported():
@@ -14,7 +14,7 @@ var vr_passthrough: bool:
 			else:
 				XRServer.primary_interface.stop_passthrough()
 		save_and_emit(&"vr_passthrough")
-var hand_tracking_enabled: bool:
+var hand_tracking_enabled: bool = true:
 	set(value):
 		hand_tracking_enabled = value
 		save_and_emit(&"hand_tracking_enabled")
@@ -22,32 +22,32 @@ var ui_local_menu_lookat_x: bool:
 	set(value):
 		ui_local_menu_lookat_x = value
 		save_and_emit(&"ui_local_menu_lookat_x")
-var ui_local_menu_lookat_y: bool:
+var ui_local_menu_lookat_y: bool = true:
 	set(value):
 		ui_local_menu_lookat_y = value
 		save_and_emit(&"ui_local_menu_lookat_y")
-var ui_local_menu_lookat_z: bool:
+var ui_local_menu_lookat_z: bool = true:
 	set(value):
 		ui_local_menu_lookat_z = value
 		save_and_emit(&"ui_local_menu_lookat_z")
 ## inspector fields update at a specific interval starting from their instantiation.
 ## this changes the interval length in seconds. 
-var inspector_update_interval: float:
+var inspector_update_interval: float = .1:
 	set(value):
 		inspector_update_interval = value
 		save_and_emit(&"inspector_update_interval")
 ## changes the size of the 3d notifications that appear on screen and in vr
-var vr_notification_size: float:
+var vr_notification_size: float = 40.0:
 	set(value):
 		vr_notification_size = value
 		save_and_emit(&"vr_notification_size")
 ## changes the offset position of the 3d notifications
-var vr_notification_offset: Vector2:
+var vr_notification_offset: Vector2 = Vector2(.1,.9):
 	set(value):
 		vr_notification_offset = value
 		save_and_emit(&"vr_notification_offset")
 ## the multiplier that is used for the speed held items should be scaled at
-var grabbed_object_scale_factor: float:
+var grabbed_object_scale_factor: float = 1.1:
 	set(value):
 		grabbed_object_scale_factor = value
 		save_and_emit(&"grabbed_object_scale_factor")
@@ -61,7 +61,7 @@ var send_messages_with_ctrl_enter: bool = false:
 var anti_aliasing: int = 0:
 	set(value):
 		anti_aliasing = value
-		get_window().msaa_3d = value
+		get_window().msaa_3d = value as Viewport.MSAA
 		save_and_emit(&"anti_aliasing")
 var viewport_scaling: float = 1.0:
 	set(value):
@@ -80,8 +80,8 @@ const DEFAULT_VALUES := {
 	send_messages_with_ctrl_enter = false,
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
 	viewport_scaling = 1.0,
-	vr_notification_size = 10.0,
-	vr_notification_offset = Vector2(.2,.2)
+	vr_notification_size = 40.0,
+	vr_notification_offset = Vector2(.1,.9)
 }
 
 func _ready() -> void:

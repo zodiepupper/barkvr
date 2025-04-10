@@ -68,7 +68,7 @@ var query_exceptions : Array[RID]
 	set(val):
 		query_exception_nodes = val
 		for i : CollisionObject3D in val:
-			if i not in query_exceptions:
+			if i.get_rid() not in query_exceptions:
 				query_exceptions.append(i.get_rid())
 
 ## the collision layers the ui raycast should collide with
@@ -123,7 +123,7 @@ func query_raycast() -> Dictionary:
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
 	var rayquery := PhysicsRayQueryParameters3D.new()
-	last_to_position # TODO finish raycast smoothing
+	#last_to_position # TODO finish raycast smoothing
 	rayquery.from = global_position
 	if target_position_is_local:
 		rayquery.to = to_global(target_position)
@@ -179,7 +179,7 @@ func _process(_delta):
 		# run the interaction function
 		interact()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if enabled and !query_on_process:
 		query_raycast()
 		# updates the raycast visuals

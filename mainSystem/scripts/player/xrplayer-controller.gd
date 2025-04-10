@@ -468,8 +468,7 @@ func contextMenuSummon():
 		handmenu.summon(camera_3d.to_global(Vector3(0,0,-.5)), camera_3d.global_position)
 
 func place_grabbed_nodes():
-	var setsing_precast := Engine.get_singleton("settings_manager")
-	var settings_singleton := (setsing_precast as SettingsSingleton) if setsing_precast is SettingsSingleton else null
+	var settings_singleton := Engine.get_singleton("settings_manager")
 	for item in grabbed.values():
 		if settings_singleton:
 			if Input.is_action_just_pressed("scrollup"):

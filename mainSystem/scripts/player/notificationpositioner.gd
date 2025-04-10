@@ -2,7 +2,7 @@ extends Node3D
 
 var offset = 0
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	var vr_offset := Vector2(
 		get_viewport().size.x*Engine.get_singleton("settings_manager").vr_notification_offset.x,
 		get_viewport().size.y*Engine.get_singleton("settings_manager").vr_notification_offset.y

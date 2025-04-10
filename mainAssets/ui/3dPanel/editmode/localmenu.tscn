@@ -26,10 +26,10 @@ func _process(_delta: float) -> void:
 	if !z:
 		get_parent().rotation.z = prev_rot.z
 
-func on_settings_changed(name: StringName) -> void:
+func on_settings_changed(setting_name: StringName) -> void:
 	var settings_singleton := Engine.get_singleton(\"settings_manager\")
 	if settings_singleton is SettingsSingleton:
-		match name:
+		match setting_name:
 			&\"ui_local_menu_lookat_x\":
 				x = (settings_singleton as SettingsSingleton).ui_local_menu_lookat_x
 			&\"ui_local_menu_lookat_y\":

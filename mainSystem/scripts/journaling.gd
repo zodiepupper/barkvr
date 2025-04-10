@@ -164,7 +164,7 @@ func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
 	tmp.name = "ERROR"
 	return tmp
 
-func delete_node(target: NodePath, recieved := false, undid := false) -> void:
+func delete_node(target: NodePath, recieved := false, _undid := false) -> void:
 	check_root()
 	var target_node := root.get_node(target)
 	var deleted_node_as_packed_scene := PackedScene.new()
@@ -326,7 +326,8 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 				if asset_to_import is PackedByteArray and !asset_to_import.is_empty():
 					data.image_data = asset_to_import
 				elif asset_to_import is Image:
-					data.image_data = asset_to_import.get_data()
+					data.image_data = var_to_bytes_with_objects(asset_to_import)
+					data.image_image_alt = true
 				_add_action({
 					'action_name': 'import_asset',
 					'type': type,
@@ -612,8 +613,12 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 		err = img.load_svg_from_buffer(content)
 	if err != OK:
 		err = img.load_ktx_from_buffer(content)
+	if err != OK and "image_data" in data and "image_image_alt" in data:
+		img = bytes_to_var_with_objects(data.image_data)
+		if !img.is_empty():
+			err = OK
 	if err != OK and "image_data" in data:
-		var img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
+		var _img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
 		"FORMAT_BPTC_RGBF": 23,
 		"FORMAT_BPTC_RGBFU": 24,
 		"FORMAT_ETC": 25,
@@ -630,18 +635,15 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 		"FORMAT_ASTC_4x4_HDR": 36,
 		"FORMAT_ASTC_8x8": 37,
 		"FORMAT_ASTC_8x8_HDR": 38}
-		for format in img_formats_lookup.keys():
-			if data.image_data.format in format:
-				data.image_data.format = format
-				break
+		#for format in img_formats_lookup.keys():
+			#if data.image_data.format in format:
+				#data.image_data.format = format
+				#break
 		img = null
-		#img = Image.create_from_data(data.image_data.width, data.image_data.height, data.image_data.mipmaps, img_formats_lookup[data.image_data.format], data.image_data.data)
-		#img.set_data(data.image_data.width, data.image_data.height, data.image_data.mipmaps, img_formats_lookup[data.image_data.format], data.image_data.data)
 		img = Image.new()
-		img.data = data.image_data
-		img
+		img.data.data = data.image_data
 		print('create image from data:')
-		print(img.data)
+		print(img.data.size())
 		print(img.is_empty())
 		err = OK
 	
@@ -684,15 +686,6 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 ## Imports an image from an existing image resource.
 func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> void:
 	check_root()
-	
-	var test_image := Image.create_from_data(
-		img.data.width,
-		img.data.height,
-		img.data.mipmaps,
-		Image.FORMAT_ETC2_RGB8,
-		img.data.data
-	)
-	var test = test_image.data
 	
 	var tex := ImageTexture.create_from_image(img)
 	var plane := MeshInstance3D.new()

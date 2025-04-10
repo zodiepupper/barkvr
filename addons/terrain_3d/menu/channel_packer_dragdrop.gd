@@ -1,3 +1,5 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Channel Packer Dragdropper for Terrain3D
 @tool
 extends Button
 

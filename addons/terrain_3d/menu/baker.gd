@@ -1,6 +1,8 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Baker for Terrain3D
 extends Node
 
-const BakeLodDialog: PackedScene = preload("res://addons/terrain_3d/src/bake_lod_dialog.tscn")
+const BakeLodDialog: PackedScene = preload("res://addons/terrain_3d/menu/bake_lod_dialog.tscn")
 const BAKE_MESH_DESCRIPTION: String = "This will create a child MeshInstance3D. LOD4+ is recommended. LOD0 is slow and dense with vertices every 1 unit. It is not an optimal mesh."
 const BAKE_OCCLUDER_DESCRIPTION: String = "This will create a child OccluderInstance3D. LOD4+ is recommended and will take 5+ seconds per region to generate. LOD0 is unnecessarily dense and slow."
 const SET_UP_NAVIGATION_DESCRIPTION: String = "This operation will:
@@ -194,7 +196,7 @@ func _bake_nav_region_nav_mesh(p_nav_region: NavigationRegion3D) -> void:
 	assert(nav_mesh != null)
 	
 	var source_geometry_data := NavigationMeshSourceGeometryData3D.new()
-	NavigationMeshGenerator.parse_source_geometry_data(nav_mesh, source_geometry_data, p_nav_region)
+	NavigationServer3D.parse_source_geometry_data(nav_mesh, source_geometry_data, p_nav_region)
 	
 	for terrain in find_nav_region_terrains(p_nav_region):
 		var aabb: AABB = nav_mesh.filter_baking_aabb
@@ -204,7 +206,7 @@ func _bake_nav_region_nav_mesh(p_nav_region: NavigationRegion3D) -> void:
 		if not faces.is_empty():
 			source_geometry_data.add_faces(faces, Transform3D.IDENTITY)
 	
-	NavigationMeshGenerator.bake_from_source_geometry_data(nav_mesh, source_geometry_data)
+	NavigationServer3D.bake_from_source_geometry_data(nav_mesh, source_geometry_data)
 	
 	_postprocess_nav_mesh(nav_mesh)
 	

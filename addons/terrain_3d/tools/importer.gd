@@ -1,3 +1,5 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Importer for Terrain3D
 @tool
 extends Terrain3D
 
@@ -20,10 +22,14 @@ func reset_settings(p_value) -> void:
 		r16_size = Vector2i(1024, 1024)
 		material = null
 		assets = null
+		reset_terrain(true)
 
 
 func reset_terrain(p_value) -> void:
 	data_directory = ""
+	for region:Terrain3DRegion in data.get_regions_active():
+		data.remove_region(region, false)
+	data.update_maps(Terrain3DRegion.TYPE_MAX, true, false)
 
 
 func update_heights(p_value) -> void:

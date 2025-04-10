@@ -1,3 +1,5 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Transform Changed Notifier for Terrain3D
 @tool
 extends Node3D
 

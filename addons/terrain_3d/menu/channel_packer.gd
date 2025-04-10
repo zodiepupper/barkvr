@@ -1,8 +1,10 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Channel Packer for Terrain3D
 extends RefCounted
 
-const WINDOW_SCENE: String = "res://addons/terrain_3d/src/channel_packer.tscn"
-const TEMPLATE_PATH: String = "res://addons/terrain_3d/src/channel_packer_import_template.txt"
-const DRAG_DROP_SCRIPT: String = "res://addons/terrain_3d/src/channel_packer_dragdrop.gd"
+const WINDOW_SCENE: String = "res://addons/terrain_3d/menu/channel_packer.tscn"
+const TEMPLATE_PATH: String = "res://addons/terrain_3d/menu/channel_packer_import_template.txt"
+const DRAG_DROP_SCRIPT: String = "res://addons/terrain_3d/menu/channel_packer_dragdrop.gd"
 enum { 
 	INFO,
 	WARN,
@@ -392,8 +394,8 @@ func _set_normal_vector(source: Image, quiet: bool = false) -> void:
 	# Calculate texture normal sum direction
 	var normal: Image = source
 	var sum: Color = Color(0.0, 0.0, 0.0, 0.0)
-	for x in normal.get_height():
-		for y in normal.get_width():
+	for x in normal.get_width():
+		for y in normal.get_height():
 			sum += normal.get_pixel(x, y)
 	var div: float = normal.get_height() * normal.get_width()
 	sum /= Color(div, div, div)
@@ -408,8 +410,8 @@ func _align_normals(source: Image, iteration: int = 0) -> void:
 	# generate matrix to re-align the normalmap
 	var mat3: Basis = _alignment_basis(normal_vector)
 	# re-align the normal map pixels
-	for x in source.get_height():
-		for y in source.get_width():
+	for x in source.get_width():
+		for y in source.get_height():
 			var old_pixel: Color = source.get_pixel(x, y)
 			var vector_pixel: Vector3 = Vector3(old_pixel.r, old_pixel.g, old_pixel.b)
 			vector_pixel *= 2.0

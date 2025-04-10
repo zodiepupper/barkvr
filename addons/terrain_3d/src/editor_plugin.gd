@@ -1,6 +1,7 @@
+# Copyright © 2025 Cory Petkovsek, Roope Palmroos, and Contributors.
+# Editor Plugin for Terrain3D
 @tool
 extends EditorPlugin
-#class_name Terrain3DEditorPlugin Cannot be named until Godot #75388
 
 
 # Includes
@@ -13,6 +14,7 @@ var modifier_alt: bool
 var modifier_shift: bool
 var _last_modifiers: int = 0
 var _input_mode: int = 0 # -1: camera move, 0: none, 1: operating
+var _use_meta: bool = false
 
 var terrain: Terrain3D
 var _last_terrain: Terrain3D
@@ -29,6 +31,9 @@ var godot_editor_window: Window # The Godot Editor window
 
 
 func _init() -> void:
+	if OS.get_name() == "macOS":
+		_use_meta = true
+	
 	# Get the Godot Editor window. Structure is root:Window/EditorNode/Base Control
 	godot_editor_window = EditorInterface.get_base_control().get_parent().get_parent()
 	godot_editor_window.focus_entered.connect(_on_godot_focus_entered)
@@ -113,10 +118,6 @@ func _edit(p_object: Object) -> void:
 		ui.set_visible(true)
 		terrain.set_meta("_edit_lock_", true)
 
-		# Deprecated 0.9.3 - Remove 1.0
-		if terrain.storage:
-			ui.terrain_menu.directory_setup.directory_setup_popup()
-		
 		# Get alerted when a new asset list is loaded
 		if not terrain.assets_changed.is_connected(asset_dock.update_assets):
 			terrain.assets_changed.connect(asset_dock.update_assets)
@@ -153,40 +154,43 @@ func _clear() -> void:
 func _forward_3d_gui_input(p_viewport_camera: Camera3D, p_event: InputEvent) -> int:
 	if not is_terrain_valid():
 		return AFTER_GUI_INPUT_PASS
-	
+
 	_read_input(p_event)
+	ui.update_decal()
+	
+	## Setup active camera & viewport
+	# Always update this for all inputs, as the mouse position can move without
+	# necessarily being a InputEventMouseMotion object. get_intersection() also
+	# returns the last frame position, and should be updated more frequently.
+	
+	# Snap terrain to current camera 
+	terrain.set_camera(p_viewport_camera)
+
+	# Detect if viewport is set to half_resolution
+	# Structure is: Node3DEditorViewportContainer/Node3DEditorViewport(4)/SubViewportContainer/SubViewport/Camera3D
+	var editor_vpc: SubViewportContainer = p_viewport_camera.get_parent().get_parent()
+	var full_resolution: bool = false if editor_vpc.stretch_shrink == 2 else true
+
+	## Get mouse location on terrain
+	# Project 2D mouse position to 3D position and direction
+	var vp_mouse_pos: Vector2 = editor_vpc.get_local_mouse_position()
+	var mouse_pos: Vector2 = vp_mouse_pos if full_resolution else vp_mouse_pos / 2
+	var camera_pos: Vector3 = p_viewport_camera.project_ray_origin(mouse_pos)
+	var camera_dir: Vector3 = p_viewport_camera.project_ray_normal(mouse_pos)
+
+	# If region tool, grab mouse position without considering height
+	if editor.get_tool() == Terrain3DEditor.REGION:
+		var t = -Vector3(0, 1, 0).dot(camera_pos) / Vector3(0, 1, 0).dot(camera_dir)
+		mouse_global_position = (camera_pos + t * camera_dir)
+	else:
+	#Else look for intersection with terrain
+		var intersection_point: Vector3 = terrain.get_intersection(camera_pos, camera_dir, true)
+		if intersection_point.z > 3.4e38 or is_nan(intersection_point.y): # max double or nan
+			return AFTER_GUI_INPUT_PASS
+		mouse_global_position = intersection_point
 	
 	## Handle mouse movement
 	if p_event is InputEventMouseMotion:
-		## Setup active camera & viewport
-
-		# Snap terrain to current camera 
-		terrain.set_camera(p_viewport_camera)
-
-		# Detect if viewport is set to half_resolution
-		# Structure is: Node3DEditorViewportContainer/Node3DEditorViewport(4)/SubViewportContainer/SubViewport/Camera3D
-		var editor_vpc: SubViewportContainer = p_viewport_camera.get_parent().get_parent()
-		var full_resolution: bool = false if editor_vpc.stretch_shrink == 2 else true
-
-		## Get mouse location on terrain
-		
-		# Project 2D mouse position to 3D position and direction
-		var mouse_pos: Vector2 = p_event.position if full_resolution else p_event.position/2
-		var camera_pos: Vector3 = p_viewport_camera.project_ray_origin(mouse_pos)
-		var camera_dir: Vector3 = p_viewport_camera.project_ray_normal(mouse_pos)
-
-		# If region tool, grab mouse position without considering height
-		if editor.get_tool() == Terrain3DEditor.REGION:
-			var t = -Vector3(0, 1, 0).dot(camera_pos) / Vector3(0, 1, 0).dot(camera_dir)
-			mouse_global_position = (camera_pos + t * camera_dir)
-		else:			
-			# Else look for intersection with terrain
-			var intersection_point: Vector3 = terrain.get_intersection(camera_pos, camera_dir)
-			if intersection_point.z > 3.4e38 or is_nan(intersection_point.y): # max double or nan
-				return AFTER_GUI_INPUT_STOP
-			mouse_global_position = intersection_point
-
-		ui.update_decal()
 
 		if _input_mode != -1: # Not cam rotation
 			## Update region highlight
@@ -205,8 +209,6 @@ func _forward_3d_gui_input(p_viewport_camera: Camera3D, p_event: InputEvent) -> 
 			
 		return AFTER_GUI_INPUT_PASS
 
-	ui.update_decal()
-
 	if p_event is InputEventMouseButton and _input_mode > 0:
 		if p_event.is_pressed():
 			# If picking
@@ -215,6 +217,11 @@ func _forward_3d_gui_input(p_viewport_camera: Camera3D, p_event: InputEvent) -> 
 				if not ui.operation_builder or not ui.operation_builder.is_ready():
 					return AFTER_GUI_INPUT_STOP
 			
+			if modifier_ctrl and editor.get_tool() == Terrain3DEditor.HEIGHT:
+				var height: float = terrain.data.get_height(mouse_global_position)
+				ui.brush_data["height"] = height
+				ui.tool_settings.set_setting("height", height)
+				
 			# If adjusting regions
 			if editor.get_tool() == Terrain3DEditor.REGION:
 				# Skip regions that already exist or don't
@@ -273,7 +280,7 @@ func _read_input(p_event: InputEvent = null) -> void:
 
 	## Determine modifiers pressed
 	modifier_shift = Input.is_key_pressed(KEY_SHIFT)
-	modifier_ctrl = Input.is_key_pressed(KEY_CTRL)
+	modifier_ctrl = Input.is_key_pressed(KEY_META) if _use_meta else Input.is_key_pressed(KEY_CTRL)
 	# Keybind enum: Alt,Space,Meta,Capslock
 	var alt_key: int
 	match get_setting("terrain3d/config/alt_key_bind", 0):
@@ -369,29 +376,6 @@ func setup_editor_settings() -> void:
 		"hint_string": "Alt,Space,Meta,Capslock"
 	}
 	editor_settings.add_property_info(property_info)
-
-	_cleanup_old_settings()
-
-	
-# Remove or rename old settings
-func _cleanup_old_settings() -> void:
-	# Rename deprecated settings - Remove in 1.0
-	var value: Variant
-	var rename_arr := [ "terrain3d/config/dock_slot", "terrain3d/config/dock_tile_size", 
-	"terrain3d/config/dock_floating", "terrain3d/config/dock_always_on_top",
-	"terrain3d/config/dock_window_size", "terrain3d/config/dock_window_position", ]
-	for es: String in rename_arr:
-		if editor_settings.has_setting(es):
-			value = editor_settings.get_setting(es)
-			editor_settings.erase(es)
-			editor_settings.set_setting(es.replace("/config/dock_", "/dock/"), value)
-
-	# Special handling
-	var es: String = "terrain3d/tool_settings/slope"
-	if editor_settings.has_setting(es):
-		value = editor_settings.get_setting(es)
-		if typeof(value) == TYPE_FLOAT:
-			editor_settings.erase(es)
 	
 
 func set_setting(p_str: String, p_value: Variant) -> void:

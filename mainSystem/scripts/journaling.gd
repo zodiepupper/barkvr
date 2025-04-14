@@ -803,7 +803,12 @@ func _import_file(asset_name: String, content: PackedByteArray, data:Dictionary=
 	#tmpmesh.orientation = PlaneMesh.FACE_Z
 	plane.mesh = tmpmesh
 	tmpbody.add_child(plane)
-	tmpbody.set_meta("file_bytes",content.compress())
+
+	#var compressed := content.compress()
+	#print(compressed)
+	#print(content)
+	
+	tmpbody.set_meta("file_bytes",str(content.compress(2)))
 	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
 
 ## Accept an incoming network message and handle it appropriately.

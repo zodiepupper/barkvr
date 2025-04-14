@@ -46,6 +46,11 @@ var vr_notification_offset: Vector2 = Vector2(.1,.9):
 	set(value):
 		vr_notification_offset = value
 		save_and_emit(&"vr_notification_offset")
+var interface_scaling_factor: float = 1.0:
+	set(value):
+		interface_scaling_factor = value
+		get_window().content_scale_factor = value
+		save_and_emit(&"interface_scaling_factor")
 ## the multiplier that is used for the speed held items should be scaled at
 var grabbed_object_scale_factor: float = 1.1:
 	set(value):

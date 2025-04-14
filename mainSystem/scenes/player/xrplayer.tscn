@@ -40,7 +40,7 @@ unique_name_in_owner = true
 query_exception_nodes = [NodePath("../../.."), NodePath("../../righthand/handproxy/grabArea"), NodePath("../../lefthand/handproxy/grabArea")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
-world_collision_layers = 4294967295
+world_collision_layers = 4294966779
 
 [node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
 unique_name_in_owner = true

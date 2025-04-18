@@ -40,8 +40,8 @@ func _ready():
 			tree.check_children()
 		)
 	delete_btn.pressed.connect(func():
-		var selected = get_all_selected()
-		for item in selected:
+		var current_selected = get_all_selected()
+		for item in current_selected:
 			if "node" in item.get_metadata(0):
 				item.get_metadata(0).node.queue_free()
 	)

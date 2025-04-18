@@ -20,7 +20,7 @@ func _ready():
 				event_supplier.root.get_path_to(target),
 				property_name+":x",
 				float(new_text)
-				)
+			)
 		)
 	yval.text_changed.connect(func(new_text):
 		if _check_focus():
@@ -28,7 +28,7 @@ func _ready():
 				event_supplier.root.get_path_to(target),
 				property_name+":y",
 				float(new_text)
-				)
+			)
 		)
 	zval.text_changed.connect(func(new_text):
 		if _check_focus():
@@ -36,7 +36,7 @@ func _ready():
 				event_supplier.root.get_path_to(target),
 				property_name+":z",
 				float(new_text)
-				)
+			)
 		)
 
 func _process(_delta):

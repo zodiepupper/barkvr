@@ -16,7 +16,9 @@ func _ready():
 			if session.ends_with("data"):
 				login_existing.add_item(session)
 		Engine.get_singleton("user_manager").user_logged_in.connect(func():
-			if Engine.get_singleton("user_manager").joinedRooms:
+			if Engine.get_singleton("user_manager").joinedRooms and Engine.get_singleton("user_manager").uid:
+				var tmp = Engine.get_singleton("user_manager").uid
+				get_window().title += " ("+tmp+")"
 				for room in Engine.get_singleton("user_manager").joinedRooms:
 					if "state" in Engine.get_singleton("user_manager").joinedRooms[room] and "events" in Engine.get_singleton("user_manager").joinedRooms[room]['state']:
 						Engine.get_singleton("user_manager").got_room_state.emit({

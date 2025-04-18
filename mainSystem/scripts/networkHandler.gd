@@ -258,7 +258,8 @@ func poll():
 									if chan.channel.get_ready_state() == 1:
 										var packet = var_to_bytes(packetdict)
 										chan.channel.put_packet(packet)
-										chat_timer = 0.0
+										if peers.find(peer) == peers.size()-1:
+											chat_timer = 0.0
 							#end of social sync
 							'event_sync_channel':
 								if event_sync_timer > 8.3:
@@ -285,7 +286,8 @@ func poll():
 													print("got action: "+str(action))
 													Engine.get_singleton("event_manager").call_deferred("receive",action)
 										# Send all new network events to the other users
-										event_sync_timer = 0.0
+										if peers.find(peer) == peers.size()-1:
+											event_sync_timer = 0.0
 										if !currentactions.is_empty() and chan.channel.get_ready_state() == 1:
 											if !is_instance_valid(peer.peer):
 												break

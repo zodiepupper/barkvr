@@ -7,6 +7,9 @@ var new_actions: Array[Dictionary] = []
 
 var actions_mutex := Mutex.new()
 
+var JournalTreeClass = load("res://mainSystem/scripts/journal_tree.gd")
+var journal_tree: Node 
+
 var root: Node:
 	get:
 		if !is_instance_valid(root):
@@ -36,6 +39,8 @@ func _init():
 
 func _ready() -> void:
 	check_root()
+	journal_tree = JournalTreeClass.new()
+	add_child(journal_tree)
 
 func _add_action(data:Dictionary, undid:=false) -> void:
 	actions_mutex.lock()

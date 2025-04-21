@@ -240,6 +240,7 @@ func interact() -> void:
 func procrayvis():
 	if query_is_colliding:
 		vispos = query_position
+		line_3d.target = line_3d.to_local(query_position)
 		if is_instance_valid(query_collider):
 			if query_collider.is_class("RigidBody3D"):
 				vis.setType('rigidbody')
@@ -247,6 +248,8 @@ func procrayvis():
 				vis.setType('pointer')
 	else:
 		vispos = target_position
+		# set the endpoint of the line3d to the target_position of the raycast
+		line_3d.target = target_position
 	vis.target = vispos
 
 func _input(event):
@@ -277,14 +280,6 @@ func _input(event):
 			else:
 				# set the target_position to be very far straight ahead
 				target_position = Vector3(0,0,-10000)
-		# if the raycast is colliding for the most recent query...
-		if is_colliding():
-			# set the endpoint of the line3d to the collision point
-			line_3d.target = to_local(get_collision_point())
-		# if the raycast is not colliding..
-		else:
-			# set the endpoint of the line3d to the target_position of the raycast
-			line_3d.target = target_position
 		if event is InputEventMouseButton and event.pressed:
 			match event.button_index:
 				4:

@@ -46,27 +46,27 @@ func add_item(text:String,metadata:Variant,_replace:String=''):
 	if metadata and metadata.has('node'):
 		if is_instance_valid(metadata.node):
 			var item_id = metadata.node.get_instance_id()
-			if tree.has(item_id):
-				if metadata.has('parent'):
-					var parent = tree[item_id].tree_item.get_parent()
-					tree[metadata.parent.get_instance_id()].tree_item.add_child(tree[item_id].tree_item)
-				tree[item_id].tree_item.text = text
-				tree[item_id].tree_item.metadata = metadata
-			else:
-				tree[item_id] = {
-					'node': metadata.node,
-					'tree_item': {}
-				}
-				if metadata.has('parent'):
-					if !tree.has(metadata.parent.get_instance_id()):
-						add_item(metadata.parent.name, {
-							'node':metadata.parent,
-							'parent':metadata.parent.get_parent()
-						})
-				
-				tree[item_id].tree_item.collapsed = true
-				tree[item_id].tree_item.text = text
-				tree[item_id].tree_item.metadata = metadata
+			#if tree.has(item_id):
+				#if metadata.has('parent'):
+					#var parent = tree[item_id].tree_item.get_parent()
+					#tree[metadata.parent.get_instance_id()].tree_item.add_child(tree[item_id].tree_item)
+				#tree[item_id].tree_item.text = text
+				#tree[item_id].tree_item.metadata = metadata
+			#else:
+				#tree[item_id] = {
+					#'node': metadata.node,
+					#'tree_item': {}
+				#}
+				#if metadata.has('parent'):
+					#if !tree.has(metadata.parent.get_instance_id()):
+						#add_item(metadata.parent.name, {
+							#'node':metadata.parent,
+							#'parent':metadata.parent.get_parent()
+						#})
+				#
+				#tree[item_id].tree_item.collapsed = true
+				#tree[item_id].tree_item.text = text
+				#tree[item_id].tree_item.metadata = metadata
 
 func check_children() -> void:
 	for key in tree:

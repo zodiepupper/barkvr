@@ -13,6 +13,10 @@ signal clicked
 ## you can set that scene file with this variable
 @export_file var itemToSpawn
 
+## this allows you to set a global point where the
+## spawned object should point toward when spawned
+@export var look_at_point := Vector3()
+
 ## sets how many of the set item should be created
 ## each time the button is pressed
 @export var item_spawn_multiplier:float = 1
@@ -118,6 +122,13 @@ func laser_input(data:Dictionary):
 							get_tree().get_first_node_in_group("localworldroot").add_child(tmp)
 							# set the global position immediately to the location of the button
 							tmp.global_position = global_position
+							if tmp is Node3D:
+								if look_at_point.is_zero_approx():
+									tmp.look_at(to_global(Vector3(0,.1,0)), Vector3.UP, true)
+									##tmp.global_position = global_position
+									##tmp.global_rotation = global_rotation
+								else:
+									tmp.look_at(look_at_point)
 					# if the callscript instance exists and has the onclick method...
 					if callscriptinstance != null and 'onclick' in callscriptinstance:
 						# call onclick on it

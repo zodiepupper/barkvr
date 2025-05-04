@@ -9,6 +9,7 @@ extends Node
 var registered_singletons : Dictionary
 
 func _ready():
+	add_singleton("bark_singleton_manager", self)
 	for singleton in singletons:
 		var tmp = singletons[singleton].new()
 		Engine.register_singleton(singleton, tmp)
@@ -16,3 +17,6 @@ func _ready():
 		if tmp is Node:
 			tmp.name = singleton
 			get_tree().root.call_deferred("add_child",tmp)
+
+func add_singleton(name:String, instance:Object):
+	Engine.register_singleton(name, instance)

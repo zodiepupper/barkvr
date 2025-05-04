@@ -14,6 +14,7 @@ var resizing := false
 var resize_start_position := Vector2()
 
 func _ready():
+	Engine.register_singleton("local_menu", self)
 	expanded = tab_container.visible
 	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():

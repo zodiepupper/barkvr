@@ -682,6 +682,7 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 	
 	var tmpbody := StaticBody3D.new()
 	tmpbody.set_meta("grabbable",true)
+	tmpbody.set_meta("image_texture", tex)
 	var tmpcol := CollisionShape3D.new()
 	var tmpcolshape := BoxShape3D.new()
 	tmpcolshape.size.y = 1.0

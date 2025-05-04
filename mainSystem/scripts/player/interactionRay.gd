@@ -333,6 +333,7 @@ func scrolldown():
 				})
 
 func click():
+	LocalGlobals.playerreleaseuifocus.emit()
 	if is_colliding():
 		var tmpcol = get_collider()
 		if tmpcol.has_method("laser_input"):

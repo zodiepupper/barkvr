@@ -389,9 +389,13 @@ func flat_movement():
 		camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
 	if Input.is_action_just_pressed("click"):
 		if grabbed.size() > 0:
+			var did_activate_held := false
 			for item in grabbed.values():
 				if "node" in item and "primary" in item.node:
 					item.node.primary()
+					did_activate_held = true
+			if !did_activate_held:
+				ui_ray.click()
 		else:
 			LocalGlobals.playerreleaseuifocus.emit()
 			ui_ray.click()
@@ -417,11 +421,10 @@ func flat_movement():
 			righthand.contextMenuSummon()
 		else:
 			contextMenuSummon()
-	if !Input.is_action_pressed("rightclick"):
-		if ui_ray.is_colliding():
-			grab_point = camera_3d.to_local(ui_ray.get_collision_point())
-		else:
-			grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
+	if ui_ray.is_colliding():
+		grab_point = camera_3d.to_local(ui_ray.get_collision_point())
+	else:
+		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
 		#vreditor = load("res://mainAssets/ui/3dPanel/editmode/vreditor.tscn").instantiate()
 		var vreditor = load("res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
@@ -485,24 +488,25 @@ func place_grabbed_nodes():
 					item.offset.basis.z *= 1.0/settings_singleton.grabbed_object_scale_factor
 				else:
 					item.offset.origin *= 1.0/settings_singleton.grabbed_object_scale_factor
-		item.node.global_transform = camera_3d.global_transform * item.offset
-		if is_instance_valid(Engine.get_singleton("event_manager")):
-				print("apply")
-				Engine.get_singleton("event_manager").set_property(
-					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
-					"position",
-					item.node.position
-				)
-				Engine.get_singleton("event_manager").set_property(
-					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
-					"rotation",
-					item.node.rotation
-				)
-				Engine.get_singleton("event_manager").set_property(
-					get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
-					"scale",
-					item.node.scale
-				)
+		if is_instance_valid(item.node):
+			item.node.global_transform = camera_3d.global_transform * item.offset
+			if is_instance_valid(Engine.get_singleton("event_manager")):
+					print("apply")
+					Engine.get_singleton("event_manager").set_property(
+						get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+						"position",
+						item.node.position
+					)
+					Engine.get_singleton("event_manager").set_property(
+						get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+						"rotation",
+						item.node.rotation
+					)
+					Engine.get_singleton("event_manager").set_property(
+						get_tree().get_first_node_in_group('localworldroot').get_path_to(item.node),
+						"scale",
+						item.node.scale
+					)
 
 func grip():
 	print('grip')
@@ -514,7 +518,8 @@ func grip():
 
 func ungrip():
 	for item in grabbed.values():
-		releasegrab(item.node)
+		if is_instance_valid(item.node):
+			releasegrab(item.node)
 
 func grab(node:Node, laser:bool=false):
 	var tmpgrab = node.get_meta("grabbable")
@@ -545,4 +550,28 @@ func releasegrab(node:Node):
 		if node is RigidBody3D:
 			node.freeze = grabbed[node.name].isfrozen
 		grabbed.erase(node.name)
-		
+		return
+	grabbed.clear()
+
+## deletes the held item(s) for whichever hand is
+## passed (0 for left, 1 for right, and we will handle
+## detecting index for more arms in the future)
+func delete_held(chirality: int = -1) -> void:
+	for item in grabbed.values():
+		item.node.queue_free()
+	match chirality:
+		0:
+			if !lefthand.grabbed.is_empty():
+				for item in lefthand.grabbed.values():
+					item.node.queue_free()
+		1:
+			if !righthand.grabbed.is_empty():
+				for item in righthand.grabbed.values():
+					item.node.queue_free()
+		_:
+			if !righthand.grabbed.is_empty():
+				for item in righthand.grabbed.values():
+					item.node.queue_free()
+			if !lefthand.grabbed.is_empty():
+				for item in lefthand.grabbed.values():
+					item.node.queue_free()

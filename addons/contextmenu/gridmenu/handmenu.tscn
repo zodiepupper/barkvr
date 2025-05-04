@@ -22,6 +22,7 @@ script/source = "extends Node
 
 func onclick():
 	print(get_tree().get_first_node_in_group(\"player\").flymode)
+	get_tree().get_first_node_in_group(\"player\").noclip = !get_tree().get_first_node_in_group(\"player\").noclip
 	get_tree().get_first_node_in_group(\"player\").flymode = !get_tree().get_first_node_in_group(\"player\").flymode
 "
 
@@ -30,8 +31,6 @@ script/source = "extends Node
 
 func onclick():
 	print(get_tree().get_first_node_in_group(\"player\").noclip)
-	get_tree().get_first_node_in_group(\"player\").noclip = !get_tree().get_first_node_in_group(\"player\").noclip
-	queue_free()
 "
 
 [sub_resource type="GDScript" id="GDScript_djyhs"]
@@ -40,7 +39,7 @@ script/source = "extends Node
 func onclick():
 	var player = get_tree().get_first_node_in_group(\"player\")
 	if player and \"delete_held\" in player:
-		pass #TODO this is supposed to be a delete button if something is being and summon menu otherwise
+		get_tree().get_first_node_in_group(\"player\").delete_held()
 "
 
 [sub_resource type="GDScript" id="GDScript_wrd3g"]
@@ -88,18 +87,18 @@ collision_mask = 512
 text = "fly mode"
 callscript = SubResource("GDScript_3v3kl")
 
-[node name="noclip" parent="." instance=ExtResource("1_1fmp6")]
+[node name="menu" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, 0, 0, 0)
 collision_layer = 512
 collision_mask = 512
-text = "noclip"
+text = "menu"
 callscript = SubResource("GDScript_ft12v")
 
-[node name="menu" parent="." instance=ExtResource("1_1fmp6")]
+[node name="delete" parent="." instance=ExtResource("1_1fmp6")]
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, 0, 8.74228e-09)
 collision_layer = 512
 collision_mask = 512
-text = "menu"
+text = "delete"
 callscript = SubResource("GDScript_djyhs")
 
 [node name="undo" parent="." instance=ExtResource("1_1fmp6")]

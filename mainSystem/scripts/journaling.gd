@@ -518,32 +518,40 @@ const SAVE_DEBUG_GLTFSTATE_RES: bool = false
 
 func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	check_root()
+	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
 	#Thread.set_thread_safety_checks_enabled(false)
 	var logging_prefix := asset_name+" : "
-	print("Import VRM/GLTF/GLB: " + asset_name + " ----------------------")
+	print("Import VRM/GLTF/GLB/FBX: " + asset_name + " ----------------------")
 	var gltf : GLTFDocument
 	if "type" in data and data.type == 'fbx':
+		#gltf = FBXDocument.new()
 		gltf = FBXDocument.new()
 	else:
 		gltf = GLTFDocument.new()
+		GLTFDocument.register_gltf_document_extension(vrm_extension, true)
 	var flags := 16+8
-	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
-	GLTFDocument.register_gltf_document_extension(vrm_extension, true)
 	var state : GLTFState
 	if "type" in data and data.type == 'fbx':
 		state = FBXState.new()
 		#state.allow_geometry_helper_nodes = true
 	else:
 		state = GLTFState.new()
-	#if content is String and asset_name in content:
-		#state.base_path = content.trim_suffix(asset_name)
-	# HANDLE_BINARY_EMBED_AS_BASISU crashes on some files in 4.0 and 4.1
-	state.handle_binary_image = GLTFState.HANDLE_BINARY_EMBED_AS_UNCOMPRESSED  # GLTFState.HANDLE_BINARY_EXTRACT_TEXTURES
+	if content is String and asset_name in content:
+		state.base_path = content.trim_suffix(asset_name)
 	var err :int
 	if content is String:
 		err = gltf.append_from_file(content, state, flags)
 	elif content is PackedByteArray:
 		err = gltf.append_from_buffer(content, '', state, flags)
+	match err:
+		43:
+			if "alreadytried" in data:
+				return
+			data.type = "fbx"
+			data.alreadytried = 1
+			GLTFDocument.unregister_gltf_document_extension(vrm_extension)
+			_import_glb(content, asset_name, data)
+			return
 	if err != OK:
 		GLTFDocument.unregister_gltf_document_extension(vrm_extension)
 		if "loader" in data:

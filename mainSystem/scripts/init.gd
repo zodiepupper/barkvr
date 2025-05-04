@@ -7,6 +7,9 @@ extends Node3D
 @export var game_startup_scene :PackedScene
 
 func _ready():
+	XRServer.tracker_added.connect(func(tracker_name: StringName, type: int):
+		print("AAAAAAAA")
+		)
 	#OS.set_use_file_access_save_and_swap(true)
 	OS.request_permissions()
 	if game_startup_scene:

@@ -156,7 +156,8 @@ freeze = true
 freeze_mode = 1
 script = ExtResource("5_ykx2e")
 _auto_load_ui = ExtResource("12_r71vt")
-viewport_size = Vector2i(1170, 460)
+viewport_size = Vector2i(1265, 720)
+panel_thickness = 0.01
 metadata/grabbable = true
 
 [node name="Node3D" type="Node3D" parent="multiplayer world root"]

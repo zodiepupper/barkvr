@@ -10,7 +10,6 @@ enum KeyboardMode {
 	ALTERNATE		## Alternate keys mode
 }
 
-
 # Shift button down
 var _shift_down := false
 
@@ -43,12 +42,33 @@ func on_key_pressed(scan_code_text: String, unicode: int, shift: bool):
 
 	# Dispatch the input event
 	Input.parse_input_event(input)
+	# instantly force a release press event
+	#input = input.duplicate(true)
+	#input.pressed = false
+	#Input.parse_input_event(input)
 
 	# Pop any temporary shift key
 	if _shift_down:
 		$Background/Standard/ToggleShift.set_pressed_no_signal(false)
 		_shift_down = false
 		_update_visible()
+
+# Handle key released from VirtualKey
+func on_key_released(scan_code_text: String, unicode: int, shift: bool):
+	# Find the scan code
+	var scan_code := OS.find_keycode_from_string(scan_code_text)
+
+	# Create the InputEventKey
+	var input := InputEventKey.new()
+	input.physical_keycode = scan_code
+	input.unicode = unicode if unicode else scan_code
+	input.pressed = false
+	input.keycode = scan_code
+	input.shift_pressed = shift
+
+	# Dispatch the input event
+	Input.parse_input_event(input)
+
 
 func on_shift_toggle(button_pressed):
 	# Update toggle keys

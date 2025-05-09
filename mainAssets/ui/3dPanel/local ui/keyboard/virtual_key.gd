@@ -16,6 +16,7 @@ func _ready():
 	var keyboard = _get_virtual_keyboard()
 	if keyboard:
 		button_down.connect(keyboard.on_key_pressed.bind(scan_code_text, unicode, shift_modifier))
+		button_up.connect(keyboard.on_key_released.bind(scan_code_text, unicode, shift_modifier))
 
 # Get our virtual keyboard parent
 func _get_virtual_keyboard() -> XRToolsVirtualKeyboard2D:

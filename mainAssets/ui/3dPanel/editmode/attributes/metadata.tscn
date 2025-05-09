@@ -66,7 +66,7 @@ text = "name:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="name" type="LineEdit" parent="VBoxContainer/metadata/name"]
+[node name="meta_name" type="LineEdit" parent="VBoxContainer/metadata/name"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -87,15 +87,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "value:"
+text = "type:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="value" type="LineEdit" parent="VBoxContainer/metadata/v2"]
+[node name="type" type="OptionButton" parent="VBoxContainer/metadata/v2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="VBoxContainer/metadata"]
+[node name="add" type="Button" parent="VBoxContainer/metadata"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "add"

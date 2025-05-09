@@ -3,7 +3,6 @@
 class_name Panel3D
 extends RigidBody3D
 var viewport : SubViewport
-var viewport_container : SubViewportContainer
 var mesh : MeshInstance3D
 var colshape : CollisionShape3D
 var material : StandardMaterial3D
@@ -20,6 +19,7 @@ var tex : ViewportTexture
 			material.next_pass = background_material
 		else:
 			material.next_pass = null
+
 ## PackedScene of the scene you want to load into the panel (you can also use the "set_viewport_scene(Node)")
 @export var _auto_load_ui : PackedScene:
 	set(val):
@@ -125,6 +125,7 @@ const BOTTOM_RIGHT = 8
 		render_priority = val
 		material.render_priority = render_priority
 
+## makes the panel render on top of everything else
 @export var on_top := false:
 	set(val):
 		on_top = val
@@ -136,40 +137,56 @@ const BOTTOM_RIGHT = 8
 		shading_mode = val
 		material.shading_mode = shading_mode
 		
-##
+## enables using the screen texture as a depth texture
 @export var heightmap_enabled:bool=false:
 	set(val):
 		heightmap_enabled = val
 		material.heightmap_enabled = heightmap_enabled
+
+## enabled deep parallax for the heightmap
 @export var heightmap_deep_parallax:bool=false:
 	set(val):
 		heightmap_deep_parallax = val
 		material.heightmap_deep_parallax = heightmap_deep_parallax
+
+## sets the minimum layers for heightmap
 @export_range(1,10000) var heightmap_min_layers:int=8:
 	set(val):
 		heightmap_min_layers = val
 		material.heightmap_min_layers = heightmap_min_layers
+
+## sets the maximum layers for heightmap
 @export_range(1,10000) var heightmap_max_layers:int=32:
 	set(val):
 		heightmap_max_layers = val
 		material.heightmap_max_layers = heightmap_max_layers
+
+## sets the scale for heightmap (it's basically how exaggerated the depth is)
 @export var heightmap_scale:float=5.0:
 	set(val):
 		heightmap_scale = val
 		material.heightmap_scale = heightmap_scale
 
 func _init():
+	# since we use a rigid body for funny options we need to free the body
 	freeze = true
+	# this makes it so when the frozen body is moved manually, it preserves
+	# calculations like velocity for collisions making it feel more natural
 	freeze_mode = FREEZE_MODE_KINEMATIC
+	# initialize and assign the subviewport
 	viewport = SubViewport.new()
-	viewport.is_processing_input()
+	# capture subwindows to prevent issues with popups like with OptionButton
 	viewport.gui_embed_subwindows = true
+	# isolates the physics and world inside the viewport 
 	viewport.own_world_3d = true
+	# set the viewport to only update when visible, intended as an optimization
 	viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
+	# create and assign the visuals and collision stuff
 	mesh = MeshInstance3D.new()
 	mesh.mesh = QuadMesh.new()
 	colshape = CollisionShape3D.new()
 	colshape.shape = BoxShape3D.new()
+	# setup for the material to apply all the settings listed in the exports
 	material = StandardMaterial3D.new()
 	mesh.mesh.surface_set_material(0,material)
 	if is_instance_valid(find_child("3dpanel_viewport")):
@@ -188,16 +205,22 @@ func _init():
 	else:
 		add_child(colshape,false)
 		colshape.name = "3dpanel_colshape"
+	# set the viewport to not repeat by default to prevent weird visual issues
+	# at the edges of the mes
 	material.texture_repeat = false
 	material.albedo_texture = viewport.get_texture()
 	material.metallic_specular = 0.0
 	material.roughness = 1.0
+	# disabled culling to make it visible on both sides of the quad
+	# this was an issue before because the panels were invisible from the back
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.heightmap_texture = material.albedo_texture
-	if transparent and OS.get_name() != "Android" and OS.get_name() != 'Web':
-		viewport.transparent_bg = true
-	else:
-		viewport.transparent_bg = false
+	# UNUSED: automatically disable transparency on android for performance
+	# reasons
+	#if transparent and OS.get_name() != "Android" and OS.get_name() != 'Web':
+		#viewport.transparent_bg = true
+	#else:
+		#viewport.transparent_bg = false
 	_auto_load_ui = _auto_load_ui
 	transparent = transparent
 	viewport_size = viewport_size
@@ -226,6 +249,11 @@ func _ready():
 		LocalGlobals.playerreleaseuifocus.connect(func():
 			viewport.gui_release_focus()
 			)
+
+func _process(delta: float) -> void:
+	var embedded := viewport.get_embedded_subwindows()
+	if !embedded.is_empty():
+		print(embedded)
 
 func laser_input(data:Dictionary):
 	var event

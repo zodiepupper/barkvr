@@ -77,7 +77,7 @@ func push_audio_buffer_bytes(buffer:PackedByteArray) -> void:
 		player_audio_thread.start(push_audio_thread)
 
 func push_audio_thread():
-	while !close_requested:
+	while !close_requested and !is_queued_for_deletion():
 		if is_instance_valid(audio_playback):
 			if audio_playback.can_push_buffer(960):
 				if !audio_frames.is_empty():

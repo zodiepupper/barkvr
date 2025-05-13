@@ -261,7 +261,7 @@ func _process(delta: float) -> void:
 			var tmppanel := Panel3D.new()
 			add_child(tmppanel)
 			tmppanel.global_position = tmppanel.to_global(Vector3(0, 0, .1))
-			# TODO set size to exactly fit the popouts
+			tmppanel.viewport_size = window.size
 			# TODO set world position to reflect relative position of the popout
 			# on it's origin viewport
 			

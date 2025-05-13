@@ -10,6 +10,8 @@ var material : StandardMaterial3D
 var ui : Node
 var tex : ViewportTexture
 
+var popouts: Array[Window] = []
+
 ## material rendered in "next_pass" of the default material good for backgrounds
 ## behind transparent panels
 @export var background_material : Material:
@@ -252,8 +254,21 @@ func _ready():
 
 func _process(delta: float) -> void:
 	var embedded := viewport.get_embedded_subwindows()
-	if !embedded.is_empty():
-		print(embedded)
+	for window in embedded:
+		if !popouts.has(window) and !window.has_meta("already_moved"):
+			window.set_meta("already_moved", true)
+			popouts.append(window)
+			var tmppanel := Panel3D.new()
+			add_child(tmppanel)
+			tmppanel.global_position = tmppanel.to_global(Vector3(0, 0, .1))
+			# TODO set size to exactly fit the popouts
+			# TODO set world position to reflect relative position of the popout
+			# on it's origin viewport
+			
+			# TODO make popout render on top of inspectors but only if it comes from an inspector
+			# might be able to do this by grabbing the viewport from the node before reparenting
+			window.get_parent().remove_child(window)
+			tmppanel.viewport.add_child(window)
 
 func laser_input(data:Dictionary):
 	var event

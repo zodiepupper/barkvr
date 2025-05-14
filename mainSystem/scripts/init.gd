@@ -2,7 +2,13 @@ extends Node3D
 
 @onready var start_xr = $StartXR
 
-#var gltf_document_extension_class = load("res://addons/vrm/vrm_extension.gd")
+var vrm_ext_vrm_extension_0 = load("res://addons/vrm/vrm_extension.gd")
+var vrm_ext_emmissive_multiplier = load("res://addons/vrm/1.0/VRMC_materials_hdr_emissiveMultiplier.gd")
+var vrm_ext_materials_mtoon = load("res://addons/vrm/1.0/VRMC_materials_mtoon.gd")
+var vrm_ext_node_constraint = load("res://addons/vrm/1.0/VRMC_node_constraint.gd")
+var vrm_ext_springbone = load("res://addons/vrm/1.0/VRMC_springBone.gd")
+var vrm_ext_vrm = load("res://addons/vrm/1.0/VRMC_vrm.gd")
+var vrm_ext_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 
 @export var game_startup_scene :PackedScene
 
@@ -10,6 +16,15 @@ func _ready():
 	XRServer.tracker_added.connect(func(tracker_name: StringName, type: int):
 		print("AAAAAAAA")
 		)
+	
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0.new(),true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier.new(), true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_materials_mtoon.new(), true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_node_constraint.new(), true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_springbone.new(), true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm.new(), true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_animation.new(), true)
+	
 	#OS.set_use_file_access_save_and_swap(true)
 	OS.request_permissions()
 	if game_startup_scene:

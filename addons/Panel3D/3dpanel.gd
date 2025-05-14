@@ -255,7 +255,7 @@ func _ready():
 func _process(delta: float) -> void:
 	var embedded := viewport.get_embedded_subwindows()
 	for window in embedded:
-		if !popouts.has(window) and !window.has_meta("already_moved"):
+		if false and !popouts.has(window) and !window.has_meta("already_moved"):
 			window.set_meta("already_moved", true)
 			popouts.append(window)
 			var tmppanel := Panel3D.new()
@@ -307,11 +307,23 @@ func laser_input(data:Dictionary):
 	# Set event pressed value (should be false if not explicitly changed)
 	if data.has('pressed') and "pressed" in event:
 		event.pressed = data.pressed
+	
+	# Sets the position of the event to the calculated mouse position in 2D space.
+	event.position = project_position_to_panel(data.position)
+	
+	# Set the event to be handled locally (workaround for Godot 4.x bug)
+	#	The bug causes the viewport to not consistently receive input events
+	viewport.handle_input_locally = true
+	# Push the event to the viewport
+	viewport.push_input(event,true)
+	viewport.handle_input_locally = false
+
+func project_position_to_panel(global_point:Vector3) -> Vector2:
 	# Get the size of the quad mesh we're rendering to
 	var quad_size = mesh.mesh.size
+	global_point = to_local(global_point)
 	# Convert GLOBAL collision point from to be in local space of the panel
-	var mouse_pos3D = to_local(data.position) # data.position must be global
-	var mouse_pos2D = Vector2(mouse_pos3D.x, -mouse_pos3D.y)
+	var mouse_pos2D = Vector2(global_point.x, -global_point.y)
 	# Translate the 2D mouse position to the center of the quad
 	#	by adding half of the quad size to both x and y coordinates.
 	mouse_pos2D.x += quad_size.x / 2
@@ -322,14 +334,27 @@ func laser_input(data:Dictionary):
 	# Convert the 2D mouse position to viewport coordinates
 	mouse_pos2D.x = mouse_pos2D.x * viewport.size.x
 	mouse_pos2D.y = mouse_pos2D.y * viewport.size.y
-	# Sets the position of the event to the calculated mouse position in 2D space.
-	event.position = mouse_pos2D
-	# Set the event to be handled locally (workaround for Godot 4.x bug)
-	#	The bug causes the viewport to not consistently receive input events
-	viewport.handle_input_locally = true
-	# Push the event to the viewport
-	viewport.push_input(event,true)
-	viewport.handle_input_locally = false
+	return mouse_pos2D
+
+func project_global_position_from_panel(panel_point:Vector2) -> Vector3:
+	## TODO this doesn't return the exactly correct coordinate, needs to be fixed
+	
+	# Get the size of the quad mesh we're rendering to
+	var quad_size = mesh.mesh.size
+	
+	var output2d := Vector2()
+	output2d.x = (panel_point / Vector2(viewport.size)).x
+	output2d.y = (panel_point / Vector2(viewport.size)).y
+	
+	output2d.x = output2d.x * quad_size.x
+	output2d.y = output2d.y * quad_size.y
+	
+	output2d.x = output2d.x - quad_size.x/2
+	output2d.y = output2d.y - quad_size.y/2
+	
+	var panel_pos_3d := Vector3(output2d.x, output2d.y, 0)
+	
+	return to_global(panel_pos_3d)
 
 func set_viewport_scene(node):
 	# Clears the current nodes from within the viewport first

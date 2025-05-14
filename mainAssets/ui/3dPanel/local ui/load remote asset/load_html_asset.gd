@@ -33,7 +33,9 @@ func _ready():
 			if is_instance_valid(get_tree().get_first_node_in_group("player")):
 				var tmpscale = get_tree().get_first_node_in_group("player").global_basis.get_scale()
 				player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
-			Engine.get_singleton("event_manager").import_asset('text',body.get_string_from_utf8(),'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			WorkerThreadPool.add_task(func():
+				Engine.get_singleton("event_manager").import_asset('text',body.get_string_from_utf8(),'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+				)
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 			if loader.text.is_empty():
 				loader.text = "nothing?"

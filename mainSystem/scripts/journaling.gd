@@ -394,9 +394,7 @@ func _import_uri(uri:String, data:Dictionary={}):
 		call_deferred("add_child",req)
 		if !req.is_node_ready():
 			await req.ready
-		Thread.set_thread_safety_checks_enabled(false)
 		req.request_completed.connect(_uri_request_completed.bind(req,data,uri))
-		Thread.set_thread_safety_checks_enabled(true)
 		var headers = Engine.get_singleton("user_manager").headers
 		req.request(uri, headers)
 
@@ -427,7 +425,7 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 						return
 					elif trimmed.contains("gltf-binary"):
 						content_type = "gltf-binary"
-					elif trimmed.contains("vrm"):
+					elif trimmed.contains("vrm") or uri.ends_with("vrm"):
 						content_type = "vrm"
 			print('uri returned text')
 			print('uri: '+uri)
@@ -523,21 +521,20 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	var logging_prefix := asset_name+" : "
 	print("Import VRM/GLTF/GLB/FBX: " + asset_name + " ----------------------")
 	var gltf : GLTFDocument
-	if "type" in data and data.type == 'fbx':
-		#gltf = FBXDocument.new()
-		gltf = FBXDocument.new()
-	else:
-		gltf = GLTFDocument.new()
-		GLTFDocument.register_gltf_document_extension(vrm_extension, true)
 	var flags := 16+8
 	var state : GLTFState
 	if "type" in data and data.type == 'fbx':
+		gltf = FBXDocument.new()
 		state = FBXState.new()
 		#state.allow_geometry_helper_nodes = true
 	else:
+		gltf = GLTFDocument.new()
 		state = GLTFState.new()
-	if content is String and asset_name in content:
-		state.base_path = content.trim_suffix(asset_name)
+		if data.type != "vrm":
+			state.set_additional_data(&"vrm/already_processed",true)
+	
+	#if content is String and asset_name in content:
+		#state.base_path = content.trim_suffix(asset_name)
 	var err :int
 	if content is String:
 		err = gltf.append_from_file(content, state, flags)
@@ -549,11 +546,9 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 				return
 			data.type = "fbx"
 			data.alreadytried = 1
-			GLTFDocument.unregister_gltf_document_extension(vrm_extension)
 			_import_glb(content, asset_name, data)
 			return
 	if err != OK:
-		GLTFDocument.unregister_gltf_document_extension(vrm_extension)
 		if "loader" in data:
 			data.loader.done('failed')
 		return
@@ -567,7 +562,6 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 		#if !ResourceLoader.exists(content + ".res"):
 			#state.take_over_path(content + ".res")
 			#ResourceSaver.save(state, content + ".res")
-	GLTFDocument.unregister_gltf_document_extension(vrm_extension)
 	print('post importing glb/gltf/vrm')
 	_post_import.call_deferred(root, generated_scene, asset_name, data, false)
 
@@ -859,26 +853,20 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 	# add IK stuff if VRM
 	if node_name.ends_with(".vrm") or data.type == "vrm":
 		print('attempting ik')
-		var quickiksetup :Node3D = load("res://addons/renik-gdscript/quick_ik_setup.tscn").instantiate()
-		node_to_add.add_child(quickiksetup)
-		#quickiksetup.head.global_position += quickiksetup.global_position
-		#quickiksetup.hips.global_position += quickiksetup.global_position
-		#quickiksetup.left_hand.global_position += quickiksetup.global_position
-		#quickiksetup.right_hand.global_position += quickiksetup.global_position
-		#quickiksetup.left_foot.global_position += quickiksetup.global_position
-		#quickiksetup.right_foot.global_position += quickiksetup.global_position
-		var skele :Skeleton3D=null
-		for i in node_to_add.get_children():
-			if skele:
-				break
-			if i is Skeleton3D:
-				skele = i
-			elif i.get_child_count() > 0:
-				for a in i.get_children():
-					if a is Skeleton3D:
-						skele = a
-		if skele:
-			print('found skele')
-			quickiksetup.armature_skeleton = skele
+		#var quickiksetup :Node3D = load("res://mainAssets/ik testing/libik auto setup for avatars/quick_ik_setup.tscn").instantiate()
+		#node_to_add.add_child(quickiksetup)
+		#var skele :Skeleton3D=null
+		#for i in node_to_add.get_children():
+			#if skele:
+				#break
+			#if i is Skeleton3D:
+				#skele = i
+			#elif i.get_child_count() > 0:
+				#for a in i.get_children():
+					#if a is Skeleton3D:
+						#skele = a
+		#if skele:
+			#print('found skele')
+			#quickiksetup.armature_skeleton = skele
 	if "loader" in data:
 		data.loader.done()

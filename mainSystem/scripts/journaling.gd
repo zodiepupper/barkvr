@@ -558,6 +558,9 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 				mesh.mesh.generate_lods(25,60,[])
 	print("generated scene")
 	var generated_scene = gltf.generate_scene(state)
+	var packed_scene_workaround := PackedScene.new()
+	packed_scene_workaround.pack(generated_scene)
+	generated_scene = packed_scene_workaround.instantiate()
 	#if SAVE_DEBUG_GLTFSTATE_RES and content != "":
 		#if !ResourceLoader.exists(content + ".res"):
 			#state.take_over_path(content + ".res")

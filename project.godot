@@ -50,7 +50,6 @@ gdscript/warnings/unused_signal=0
 window/size/viewport_width=1500
 window/size/viewport_height=800
 window/subwindows/embed_subwindows=false
-window/vsync/vsync_mode=0
 
 [editor]
 
@@ -253,4 +252,3 @@ openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
 shaders/enabled=true
 openxr/extensions/hand_tracking_aim=true
-openxr/hybrid_app=1

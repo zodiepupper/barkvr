@@ -26,7 +26,7 @@ func _ready():
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_animation.new(), true)
 	
 	#OS.set_use_file_access_save_and_swap(true)
-	OS.request_permissions()
+	#OS.request_permissions()
 	if game_startup_scene:
 		call_deferred("add_child",game_startup_scene.instantiate())
 	var dir = DirAccess.open('user://')

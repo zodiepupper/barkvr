@@ -20,6 +20,10 @@ The project is still in the very early stages. Please feel free to support the p
 
 [Liberapay](https://liberapay.com/zodiepupper)
 
+## Socials:
+[discord](https://discord.gg/VW9qhmjuXM)
+[matrix](https://matrix.to/#/#pupperdev:matrix.pupper.dev)
+
 ## Core Focus:
 - Accessibility: Making BarkVR welcoming to everyone, regardless of background or ability.
 - Decentralized Design: Giving users the power to shape BarkVR's world through decentralization.

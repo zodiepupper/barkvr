@@ -22,6 +22,7 @@ The project is still in the very early stages. Please feel free to support the p
 
 ## Socials:
 [discord](https://discord.gg/VW9qhmjuXM)
+
 [matrix](https://matrix.to/#/#pupperdev:matrix.pupper.dev)
 
 ## Core Focus:

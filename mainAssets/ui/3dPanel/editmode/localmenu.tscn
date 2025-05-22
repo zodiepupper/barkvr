@@ -39,7 +39,6 @@ func on_settings_changed(setting_name: StringName) -> void:
 "
 
 [node name="Panel3D" type="RigidBody3D" groups=["localuipanel"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884321, -0.55546)
 collision_layer = 512
 collision_mask = 512
 freeze = true

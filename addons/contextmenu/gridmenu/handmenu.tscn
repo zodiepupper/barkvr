@@ -27,10 +27,14 @@ func onclick():
 "
 
 [sub_resource type="GDScript" id="GDScript_ft12v"]
-script/source = "extends Node
+script/source = "extends Node3D
 
 func onclick():
-	print(get_tree().get_first_node_in_group(\"player\").noclip)
+	get_tree().get_first_node_in_group(\"localuinode\").reveal(true)
+	var localui = get_tree().get_first_node_in_group(\"localuipanel\")
+	localui.global_position = global_position
+	if localui and localui is Node3D:
+		localui.look_at(to_global(Vector3(0,.1,0)), Vector3.UP, true)
 "
 
 [sub_resource type="GDScript" id="GDScript_djyhs"]

@@ -52,6 +52,10 @@ const LOOP_APEX_OUT: int = 3
 const LOOP_DROP: int = 4
 const LOOP_GROUND_OUT: int = 5
 
+@export var live_preview: bool
+
+@export_group("Walking Gait")
+
 @export var forward_gait: renik_gait_class:
 	set(value):
 		forward_gait = value
@@ -101,11 +105,7 @@ func set_default_gaits():
 				0.0, 0.01, 0.1, PI / 8, 0.01, 0.05, 0.25, 0.0, 0.1, 0.4, 0.85)
 		sideways_gait.resource_name = "SidewaysGait"
 
-# Calculated using bones.
-var spine_length: float = 1
-var left_leg_length: float = 1
-var right_leg_length: float = 1
-var hip_offset: Vector3
+@export_group("Body Ratios")
 
 @export var left_foot_length: float = 0.125
 @export var right_foot_length: float = 0.125
@@ -121,24 +121,24 @@ var hip_offset: Vector3
 @export var floor_offset: float = 0.05
 @export var raycast_allowance: float = 0.15 # how far past the max length of the limb
 								# we'll still consider close enough
-@export var min_threshold: float = 0.025
-@export var max_threshold: float = 0.05 # when all scaling stops and the legs just move faster
-@export var min_transition_speed: float = 0.04
-@export var rotation_threshold: float = PI / 4.0
-@export var balance_threshold: float = 0.03
-# distance between hips and head that we'll call the center of balance. 0 is at head
-@export var center_of_balance_position: float = 0.5
 
 @export var dangle_ratio: float = 0.9
 @export var dangle_stiffness: float = 3
 @export var dangle_angle: float = PI / 8
 @export var dangle_follow_head: float = 0.5
-@export var left_hip_offset: Vector3
-@export var right_hip_offset: Vector3
+# distance between hips and head that we'll call the center of balance. 0 is at head
+@export var center_of_balance_position: float = 0.5
+@export var step_pace: float = 0.015
+
+@export_group("Thresholds")
+@export var min_threshold: float = 0.025
+@export var max_threshold: float = 0.05 # when all scaling stops and the legs just move faster
+@export var min_transition_speed: float = 0.04
+@export var rotation_threshold: float = PI / 4.0
+@export var balance_threshold: float = 0.03
 
 # Everything scales logarithmically
 @export var strafe_angle_limit: float = cos(deg_to_rad(30.0))
-@export var step_pace: float = 0.015
 
 var prev_hip: Transform3D # relative to world
 var prev_left_foot: Transform3D # relative to world
@@ -190,7 +190,17 @@ func update_skeleton():
 		calculate_leg_lengths()
 		calculate_hip_offset()
 
-@export var live_preview: bool
+
+# Calculated using bones.
+
+@export_group("Calculated Armature Measurements")
+
+@export var spine_length: float = 1
+@export var left_leg_length: float = 1
+@export var right_leg_length: float = 1
+@export var hip_offset: Vector3
+@export var left_hip_offset: Vector3
+@export var right_hip_offset: Vector3
 
 @export_group("Armature", "armature_")
 
@@ -451,7 +461,6 @@ func dangle_foot(p_head: Transform3D, p_distance: float,
 		Quaternion(), 1 - dangle_follow_head)
 	var dangle_vector: Vector3 = Vector3(0, spine_length + p_leg_length, 0) - p_hip_offset
 	var dangle_basis: Basis = p_head.basis * upright_head
-	var rand_vect :Vector3 = Vector3()
 	foot.basis = dangle_basis * Basis(Vector3(1, 0, 0), dangle_angle)
 	foot.origin = p_head.origin + dangle_basis * (-dangle_vector)
 	return foot

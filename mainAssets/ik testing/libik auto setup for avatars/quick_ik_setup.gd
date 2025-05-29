@@ -5,9 +5,17 @@ extends Node3D
 # pre-allocate the ik nodes
 # we will just move these around when a new skeleton is set
 var root_ik := GodotIK.new()
-var left_hand_ik_effector := GodotIKEffector.new()
-var right_hand_ik_effector := GodotIKEffector.new()
-var head_ik_effector := GodotIKEffector.new()
+#var left_hand_ik_effector := GodotIKEffector.new()
+#var right_hand_ik_effector := GodotIKEffector.new()
+#var head_ik_effector := GodotIKEffector.new()
+@onready var ren_ik_spine_modifier_3d: RenIKSpineModifier3D = %RenIKSpineModifier3D
+@onready var left_hand_ren_ik_limb_modifier_3d: RenIKLimbModifier3D = %LeftHandRenIKLimbModifier3D
+@onready var right_hand_ren_ik_limb_modifier_3d: RenIKLimbModifier3D = %RightHandRenIKLimbModifier3D
+@onready var left_foot_ren_ik_limb_modifier_3d: RenIKLimbModifier3D = %LeftFootRenIKLimbModifier3D
+@onready var right_foot_ren_ik_limb_modifier_3d: RenIKLimbModifier3D = %RightFootRenIKLimbModifier3D
+@onready var logic_container: Node3D = $LogicContainer
+@onready var ren_ik_foot_placement: RenIKPlacement3D = %RenIKFootPlacement
+
 var head_remote_transform : RemoteTransform3D
 var right_hand_remote_transform : RemoteTransform3D
 var left_hand_remote_transform : RemoteTransform3D
@@ -19,33 +27,23 @@ var calculated_height_coefficient : float = 0.0
 @export var armature_skeleton: Skeleton3D:
 	set(value):
 		armature_skeleton = value
-		_determine_avatar_height() 
-		armature_skeleton.add_child(root_ik)
-		root_ik.add_child(left_hand_ik_effector)
-		root_ik.add_child(right_hand_ik_effector)
-		root_ik.add_child(head_ik_effector)
-		right_hand_ik_effector.bone_idx = armature_skeleton.find_bone("RightHand")
-		left_hand_ik_effector.bone_idx = armature_skeleton.find_bone("LeftHand")
-		head_ik_effector.bone_idx = armature_skeleton.find_bone("Head")
-		right_hand_ik_effector.chain_length = 3
-		left_hand_ik_effector.chain_length = 3
-		head_ik_effector.chain_length = 4
-		right_hand_ik_effector.transform_mode = GodotIKEffector.FULL_TRANSFORM
-		left_hand_ik_effector.transform_mode = GodotIKEffector.FULL_TRANSFORM
-		head_ik_effector.transform_mode = GodotIKEffector.FULL_TRANSFORM
-		_check_and_fix_remote_transform_nodes()
+		#_determine_avatar_height() 
+		ren_ik_spine_modifier_3d.reparent(armature_skeleton)
 		
-
-func _check_and_fix_remote_transform_nodes():
-	if !is_instance_valid(head_remote_transform):
-		head_remote_transform = RemoteTransform3D.new()
-		head_remote_transform.remote_path = head_remote_transform.get_path_to(head_ik_effector)
-	if !is_instance_valid(right_hand_remote_transform):
-		right_hand_remote_transform = RemoteTransform3D.new()
-		right_hand_remote_transform.remote_path = right_hand_remote_transform.get_path_to(right_hand_ik_effector)
-	if !is_instance_valid(left_hand_remote_transform):
-		left_hand_remote_transform = RemoteTransform3D.new()
-		left_hand_remote_transform.remote_path = left_hand_remote_transform.get_path_to(left_hand_ik_effector)
+		left_hand_ren_ik_limb_modifier_3d.reparent(armature_skeleton)
+		
+		right_hand_ren_ik_limb_modifier_3d.reparent(armature_skeleton)
+		
+		left_foot_ren_ik_limb_modifier_3d.reparent(armature_skeleton)
+		
+		right_foot_ren_ik_limb_modifier_3d.reparent(armature_skeleton)
+		
+		logic_container.reparent(armature_skeleton)
+		ren_ik_foot_placement.armature_skeleton_path = armature_skeleton
+		ren_ik_foot_placement.enable_hip_placement = true
+		ren_ik_foot_placement.enable_left_foot_placement = true
+		ren_ik_foot_placement.enable_right_foot_placement = true
+		
 
 func _ready() -> void:
 	equip_avatar.clicked.connect(func():
@@ -53,17 +51,25 @@ func _ready() -> void:
 		var parent := get_parent()
 		parent.reparent(player, false)
 		parent.position = Vector3()
-		parent.rotation = Vector3(0,PI,0)
+		parent.rotation = Vector3(0,0,0)
 		equipped = true
+		ren_ik_spine_modifier_3d.head_target.reparent(get_viewport().get_camera_3d())
+		ren_ik_spine_modifier_3d.head_target.position = Vector3()
+		ren_ik_spine_modifier_3d.head_target.rotation = Vector3(0,PI,0)
+		ren_ik_spine_modifier_3d.head_target.scale = Vector3(1,1,1)
+		
+		
+		
+		left_hand_ren_ik_limb_modifier_3d.target.reparent(player.lefthand.handiktarget)
+		left_hand_ren_ik_limb_modifier_3d.target.position = Vector3()
+		left_hand_ren_ik_limb_modifier_3d.target.rotation = Vector3()
+		left_hand_ren_ik_limb_modifier_3d.target.scale = Vector3(1,1,1)
+		
+		right_hand_ren_ik_limb_modifier_3d.target.reparent(player.righthand.handiktarget)
+		right_hand_ren_ik_limb_modifier_3d.target.position = Vector3()
+		right_hand_ren_ik_limb_modifier_3d.target.rotation = Vector3()
+		right_hand_ren_ik_limb_modifier_3d.target.scale = Vector3(1,1,1)
 		)
-
-func _physics_process(delta: float) -> void:
-	var player = get_tree().get_first_node_in_group('player')
-	if is_instance_valid(armature_skeleton) and player and equipped:
-		right_hand_ik_effector.global_transform = player.righthand.handiktarget.global_transform
-		left_hand_ik_effector.global_transform = player.lefthand.handiktarget.global_transform
-		head_ik_effector.global_transform = player.headiktarget.global_transform
-
 
 func _determine_avatar_height() -> void:
 	var tmpright := armature_skeleton.find_bone("RightFoot")

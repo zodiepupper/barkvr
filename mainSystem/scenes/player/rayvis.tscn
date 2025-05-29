@@ -7,6 +7,7 @@
 
 [node name="rayvis" type="Node3D"]
 script = ExtResource("1_6wvgr")
+mouse_cursor = true
 
 [node name="pointer" type="Sprite3D" parent="."]
 transform = Transform3D(0.81, 0, 0, 0, 0.81, 0, 0, 0, 0.81, 0, 0, 0)
@@ -29,12 +30,23 @@ render_priority = 127
 texture = ExtResource("3_j7jdp")
 
 [node name="cursor" type="Node3D" parent="."]
-visible = false
 
 [node name="cursor" type="Sprite3D" parent="cursor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403815, -0.976471, 0)
+visible = false
 sorting_offset = 99.0
 no_depth_test = true
 texture_filter = 0
 render_priority = 127
 texture = ExtResource("4_3x516")
+
+[node name="Label3D" type="Label3D" parent="cursor"]
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.805523, 1.08032, 2.38419e-07)
+pixel_size = 0.0643
+no_depth_test = true
+render_priority = 127
+outline_render_priority = 126
+text = "◂"
+outline_size = 3
+horizontal_alignment = 0
+vertical_alignment = 0

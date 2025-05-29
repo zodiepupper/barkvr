@@ -2,6 +2,7 @@ class_name BarkHand
 extends XRController3D
 
 @onready var grabArea : Area3D = $handproxy/grabArea
+@onready var handbody: StaticBody3D = $"handproxy/handbody"
 @onready var ui_ray : Node3D = $handproxy/uiRay
 @onready var handmenu :Node3D = %"handmenu"
 @onready var hand_menu_point :Node3D = $handproxy/handMenuPoint
@@ -12,7 +13,7 @@ extends XRController3D
 @onready var handiktarget: Node3D = $handiktarget
 @onready var righthand :Node = %righthand
 @onready var lefthand :Node = %lefthand
-#TODO readd handtracking stuffs
+#TODO read handtracking stuffs
 var otherhand : XRController3D
 
 var grabbed :Dictionary
@@ -181,14 +182,15 @@ func contextMenuSummon():
 			#vreditor.global_position = hand_menu_point.global_position
 
 func grip():
+	if grabArea.get_overlapping_bodies().size() > 0:
+		for item in grabArea.get_overlapping_bodies():
+			if item.has_meta("grabbable"):
+				grab(item,true)
+				return
 	if ui_ray.is_colliding():
 		var rayCollided = ui_ray.get_collider()
 		if rayCollided.has_meta("grabbable"):
 			grab(rayCollided,true)
-	elif grabArea.get_overlapping_bodies().size() > 0:
-		for item in grabArea.get_overlapping_bodies():
-			grab(item,true)
-	grabbing = true
 
 func ungrip():
 	for item in grabbed.values():
@@ -199,6 +201,7 @@ func ungrip():
 		isscalinggrabbedobject = false
 
 func grab(node:Node, laser:bool=false):
+	grabbing = true
 	var tmpgrab = node.get_meta("grabbable")
 	if tmpgrab:
 		if node.is_class("RigidBody3D"):

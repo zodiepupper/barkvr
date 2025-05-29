@@ -50,7 +50,9 @@ var upper_id: int = -1
 
 @export_tool_button("Assign Arm Defaults") var assign_arm_defaults: Callable:
 	get:
-		return func():
+		return _assign_arm_defaults
+
+func _assign_arm_defaults() -> void:
 			upper_twist_offset = -0.5*PI
 			lower_twist_offset = -0.5*PI
 			roll_offset = deg_to_rad(-120.0)
@@ -64,7 +66,9 @@ var upper_id: int = -1
 
 @export_tool_button("Assign Leg Defaults") var assign_leg_defaults: Callable:
 	get:
-		return func():
+		return _assign_leg_defaults
+
+func _assign_leg_defaults() -> void:
 			upper_twist_offset = 0
 			lower_twist_offset = PI
 			roll_offset = 0
@@ -177,7 +181,9 @@ var overflow_state: int = 0 # 0 means no twist overflow. -1 means underflow. 1 m
 
 @export_tool_button("Create Target") var create_target: Callable:
 	get:
-		return func():
+		return _create_target
+
+func _create_target() -> void:
 			var skel = get_skeleton()
 			if skel != null:
 				if skel.has_node(NodePath(leaf_bone + "Target")):
@@ -192,7 +198,9 @@ var overflow_state: int = 0 # 0 means no twist overflow. -1 means underflow. 1 m
 
 @export_tool_button("Reset Targets to Rest") var reset_targets_to_rest: Callable:
 	get:
-		return func():
+		return _reset_targets_to_rest
+
+func _reset_targets_to_rest() -> void:
 			var skel = get_skeleton()
 			if skel != null:
 				var target_or_self: Node3D = target if target != null else self

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://r68jre2w5k33"]
+[gd_scene load_steps=13 format=3 uid="uid://r68jre2w5k33"]
 
 [ext_resource type="Script" uid="uid://darqhbrhd2pbt" path="res://mainSystem/scripts/player/xrplayer-controller.gd" id="1_iwrfe"]
 [ext_resource type="Script" uid="uid://dtrj0wbyv5rjp" path="res://mainSystem/scripts/player/hand.gd" id="2_npgyv"]
@@ -17,6 +17,9 @@ albedo_color = Color(0.6, 0.466667, 0.866667, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_mky8q"]
 material = SubResource("StandardMaterial3D_cw1w7")
+size = Vector3(0.05, 0.05, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_abacp"]
 size = Vector3(0.05, 0.05, 0.15)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_clvwe"]
@@ -79,7 +82,6 @@ world_collision_layers = 4294967295
 [node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.05, 0, 4.37114e-09)
 input_ray_pickable = false
-monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/grabArea"]
 shape = SubResource("SphereShape3D_1q63w")
@@ -91,6 +93,13 @@ skeleton = NodePath("")
 
 [node name="handMenuPoint" type="Node3D" parent="xrplayer/righthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
+
+[node name="handbody" type="StaticBody3D" parent="xrplayer/righthand/handproxy"]
+collision_layer = 1024
+collision_mask = 1024
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/handbody"]
+shape = SubResource("BoxShape3D_abacp")
 
 [node name="handiktarget" type="Node3D" parent="xrplayer/righthand"]
 transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -117,7 +126,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 [node name="grabArea" type="Area3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.05, 0, -4.37114e-09)
 input_ray_pickable = false
-monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/grabArea"]
 shape = SubResource("SphereShape3D_1q63w")
@@ -130,6 +138,13 @@ skeleton = NodePath("")
 [node name="handMenuPoint" type="Node3D" parent="xrplayer/lefthand/handproxy"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
 
+[node name="handbody" type="StaticBody3D" parent="xrplayer/lefthand/handproxy"]
+collision_layer = 1024
+collision_mask = 1024
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/handbody"]
+shape = SubResource("BoxShape3D_abacp")
+
 [node name="handiktarget" type="Node3D" parent="xrplayer/lefthand"]
 transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
 
@@ -141,10 +156,8 @@ unique_name_in_owner = true
 
 [node name="localui" parent="xrplayer/menuoffset" instance=ExtResource("8_8rqii")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 freeze_mode = 0
-
-[node name="XRAnchor3D" type="XRAnchor3D" parent="xrplayer"]
-tracker = &"/user/vive_tracker_htcx/role/waist"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true

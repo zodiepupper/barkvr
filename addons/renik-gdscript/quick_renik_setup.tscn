@@ -1,13 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbsk2rbssxhh0"]
+[gd_scene load_steps=9 format=3 uid="uid://b4lw3mfk4itm0"]
 
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik.gd" id="1_1aghp"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/quick_renik_setup.gd" id="1_ak3r4"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik_placement.gd" id="2_6e7rw"]
+[ext_resource type="Script" uid="uid://0olxixemdo6b" path="res://addons/renik-gdscript/quick_renik_setup.gd" id="1_ak3r4"]
+[ext_resource type="Script" uid="uid://cd1tfr1w8y75e" path="res://addons/renik-gdscript/renik_placement.gd" id="2_6e7rw"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="2_8t1mr"]
 [ext_resource type="Script" path="res://addons/renik-gdscript/renik_placement_gait.gd" id="3_rnvnt"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/quick_renik_avatar_equip_button_script.tres.gd" id="3_wi7s6"]
+[ext_resource type="Script" uid="uid://h2ygmunt5l4u" path="res://addons/renik-gdscript/quick_renik_avatar_equip_button_script.tres.gd" id="3_wi7s6"]
 
-[sub_resource type="Resource" id="Resource_gfc6f"]
+[sub_resource type="Resource" id="Resource_q7xlm"]
 resource_name = "ForwardGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 1.0
@@ -39,7 +38,7 @@ contact_point_ease = 0.05
 contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_gyb05"]
+[sub_resource type="Resource" id="Resource_58ykj"]
 resource_name = "BackwardGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 0.5
@@ -71,7 +70,7 @@ contact_point_ease = 0.1
 contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_kct4q"]
+[sub_resource type="Resource" id="Resource_jpqlg"]
 resource_name = "SidewaysGait"
 script = ExtResource("3_rnvnt")
 speed_scalar_min = 0.75
@@ -114,46 +113,16 @@ callscript = ExtResource("3_wi7s6")
 
 [node name="RenIK" type="Node3D" parent="."]
 transform = Transform3D(1, 9.31323e-09, 0, -6.89179e-08, 1, 2.98023e-08, -7.45058e-09, -2.98023e-08, 1, 0, 0, 0)
-script = ExtResource("1_1aghp")
-live_preview = true
-armature_head_target = NodePath("../Targets/Head")
-armature_left_hand_target = NodePath("../Targets/LeftHand")
-armature_right_hand_target = NodePath("../Targets/RightHand")
-armature_hip_target = NodePath("../Targets/Hips")
-armature_left_foot_target = NodePath("../Targets/LeftFoot")
-armature_right_foot_target = NodePath("../Targets/RightFoot")
-arm_elbow_direction_offset = 1.22173
-arm_upper_arm_twisting = 0.5
-arm_upper_arm_twist_offset = -0.872665
-arm_forearm_twisting = 0.66666
-arm_forearm_twist_offset = -0.872665
-arm_twist_inflection_point = 0.349066
-arm_twist_overflow = 0.785398
-arm_pole_offset = Quaternion(0.113039, -0.0652631, 0.495722, 0.858616)
-arm_target_position_influence = Vector3(2, -1.5, -1)
-arm_target_rotation_influence = 0.33
-arm_shoulder_offset = Quaternion(0, 0, 0, 1)
-arm_shoulder_pole_offset = Quaternion(0, 0, 0, 1)
-leg_thigh_twisting = 0.25
-leg_lower_leg_twisting = 0.25
-leg_lower_leg_twist_offset = 3.14159
-leg_twist_overflow = 0.785398
-leg_pole_offset = Quaternion(0, 0, 1, -4.37114e-08)
-leg_target_rotation_influence = 0.5
-torso_spine_curve = Vector3(0, 15, -15)
-torso_upper_spine_stiffness = 0.5
-torso_lower_spine_stiffness = 0.5
-torso_spine_twist = 1.0
 
 [node name="RenIKFootPlacement" type="Node3D" parent="."]
 transform = Transform3D(1, 1.11759e-08, 0, -6.70552e-08, 1, 0, -7.45058e-09, 0, 1, 0, 0, 0)
 script = ExtResource("2_6e7rw")
-forward_gait = SubResource("Resource_gfc6f")
-backward_gait = SubResource("Resource_gyb05")
-sideways_gait = SubResource("Resource_kct4q")
+live_preview = true
+forward_gait = SubResource("Resource_q7xlm")
+backward_gait = SubResource("Resource_58ykj")
+sideways_gait = SubResource("Resource_jpqlg")
 left_hip_offset = Vector3(0.109996, -0.149882, -0.047796)
 right_hip_offset = Vector3(-0.109996, -0.149882, -0.047796)
-live_preview = true
 enable_hip_placement = true
 armature_head_target = NodePath("../Targets/Head")
 armature_hip_target = NodePath("../Targets/Hips")
@@ -166,7 +135,7 @@ armature_right_foot_target = NodePath("../Targets/RightFoot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.34462e-09, 0.940317, 0.0437589)
 
 [node name="Hips" type="Marker3D" parent="Targets"]
-transform = Transform3D(1, -1.59871e-09, 1.09481e-09, 1.61109e-09, 0.999935, -0.0114077, -1.0765e-09, 0.0114077, 0.999935, -3.34462e-09, 0.940317, 0.0437589)
+transform = Transform3D(1, -5.67159e-05, 3.95838e-05, 5.75073e-05, 0.999794, -0.0202894, -3.8425e-05, 0.0202894, 0.999794, -3.34462e-09, 0.940317, 0.0437589)
 
 [node name="LeftHand" type="Marker3D" parent="Targets"]
 transform = Transform3D(-1.62921e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -1.62921e-07, 7.12149e-15, 0.454643, 0.8601, 0.00588896)
@@ -175,7 +144,7 @@ transform = Transform3D(-1.62921e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 
 transform = Transform3D(1.31134e-07, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.31134e-07, -5.73206e-15, -0.454643, 0.8601, 0.00588913)
 
 [node name="LeftFoot" type="Marker3D" parent="Targets"]
-transform = Transform3D(-1, 0, 0, 0, -0.382684, 0.92388, 0, 0.92388, 0.382684, 0.109946, -1.20937, -0.00402464)
+transform = Transform3D(-1, 0, 0, 0, -0.382684, 0.92388, 0, 0.92388, 0.382684, 0.104144, -1.20937, 0.0468382)
 
 [node name="RightFoot" type="Marker3D" parent="Targets"]
-transform = Transform3D(-1, 0, 0, 0, -0.382684, 0.92388, 0, 0.92388, 0.382684, -0.109946, -1.20937, -0.00402464)
+transform = Transform3D(-1, 0, 0, 0, -0.382684, 0.92388, 0, 0.92388, 0.382684, -0.103906, -1.20937, -0.0920619)

@@ -3,6 +3,8 @@ extends Node3D
 @onready var physics = $physics
 @onready var cursor = $cursor
 
+@export var mouse_cursor := false
+
 var cursor_size_factor = 50.0
 
 var target := Vector3()
@@ -21,10 +23,14 @@ func _process(_delta):
 func setType(type:String):
 	pass
 	if type == "rigidbody":
-		physics.show()
-		pointer.hide()
-		#cursor.show()
+		if mouse_cursor:
+			cursor.show()
+		else:
+			physics.show()
+			pointer.hide()
 	if type == "pointer":
-		physics.hide()
-		pointer.show()
-		#cursor.show()
+		if mouse_cursor:
+			cursor.show()
+		else:
+			physics.hide()
+			pointer.show()

@@ -174,16 +174,16 @@ func _ready():
 	_is_ready = true
 	update_skeleton()
 	set_default_gaits()
-	head_target_spatial = get_node_or_null(armature_head_target) as Node3D
-	hip_target_spatial = get_node_or_null(armature_hip_target) as Node3D
-	foot_left_target_spatial = get_node_or_null(armature_left_foot_target) as Node3D
-	foot_right_target_spatial = get_node_or_null(armature_right_foot_target) as Node3D
+	head_target_spatial = armature_head_target
+	hip_target_spatial = armature_hip_target
+	foot_left_target_spatial = armature_left_foot_target
+	foot_right_target_spatial = armature_right_foot_target
 	set_process_internal(true)
 	set_physics_process_internal(true)
 
 func update_skeleton():
 	if _is_ready:
-		skeleton = get_node_or_null(armature_skeleton_path) as Skeleton3D
+		skeleton = (armature_skeleton_path) as Skeleton3D
 	if skeleton != null:
 		left_foot_id = skeleton.find_bone(armature_left_foot)
 		right_foot_id = skeleton.find_bone(armature_right_foot)
@@ -208,7 +208,7 @@ var skeleton: Skeleton3D
 var left_foot_id: int
 var right_foot_id: int
 
-@export_node_path("Skeleton3D") var armature_skeleton_path: NodePath:
+@export var armature_skeleton_path: Skeleton3D:
 	set(value):
 		armature_skeleton_path = value
 		update_skeleton()
@@ -232,32 +232,32 @@ var right_foot_id: int
 @export_group("Targets")
 
 var head_target_spatial: Node3D
-@export_node_path("Node3D") var armature_head_target: NodePath:
+@export var armature_head_target: Node3D:
 	set(value):
 		armature_head_target = value
 		if _is_ready:
-			head_target_spatial = get_node_or_null(armature_head_target) as Node3D
+			head_target_spatial = (armature_head_target)
 
 var hip_target_spatial: Node3D
-@export_node_path("Node3D") var armature_hip_target: NodePath:
+@export var armature_hip_target: Node3D:
 	set(value):
 		armature_hip_target = value
 		if _is_ready:
-			hip_target_spatial = get_node_or_null(armature_hip_target) as Node3D
+			hip_target_spatial = (armature_hip_target)
 
 var foot_left_target_spatial: Node3D
-@export_node_path("Node3D") var armature_left_foot_target: NodePath:
+@export var armature_left_foot_target: Node3D:
 	set(value):
 		armature_left_foot_target = value
 		if _is_ready:
-			foot_left_target_spatial = get_node_or_null(armature_left_foot_target) as Node3D
+			foot_left_target_spatial = (armature_left_foot_target)
 
 var foot_right_target_spatial: Node3D
-@export_node_path("Node3D") var armature_right_foot_target: NodePath:
+@export var armature_right_foot_target: Node3D:
 	set(value):
 		armature_right_foot_target = value
 		if _is_ready:
-			foot_right_target_spatial = get_node_or_null(armature_right_foot_target) as Node3D
+			foot_right_target_spatial = (armature_right_foot_target)
 
 
 const foot_basis_offset: Basis = Basis(Vector3(-1, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0))
@@ -351,7 +351,6 @@ func update_placement (delta: float) -> void:
 				target_right_xform = skeleton.get_bone_global_pose(right_foot_id)
 		hip_place(delta, head_target_spatial.global_transform,
 				target_left_xform, target_right_xform, twist, false)
-
 
 
 
@@ -463,6 +462,11 @@ func dangle_foot(p_head: Transform3D, p_distance: float,
 	var dangle_basis: Basis = p_head.basis * upright_head
 	foot.basis = dangle_basis * Basis(Vector3(1, 0, 0), dangle_angle)
 	foot.origin = p_head.origin + dangle_basis * (-dangle_vector)
+	#foot.origin += Vector3(
+		#sin(Time.get_ticks_msec()/1000.0)*.05,
+		#0,
+		#cos(Time.get_ticks_msec()/1000.0)*.1
+		#)
 	return foot
 
 
@@ -943,9 +947,18 @@ func foot_place_raycasts(
 		FALLING:
 			var left_dangle: Transform3D = dangle_foot(p_head, (spine_length + left_leg_length) * dangle_ratio,
 							left_leg_length, left_hip_offset)
+			left_dangle.origin += Vector3(
+				sin(Time.get_ticks_msec()/1000.0)*.01,
+				0,
+				cos(Time.get_ticks_msec()/1500.0)*.1
+				)
 			var right_dangle: Transform3D = dangle_foot(p_head, (spine_length + right_leg_length) * dangle_ratio,
 							right_leg_length, right_hip_offset)
-
+			right_dangle.origin += Vector3(
+				cos(Time.get_ticks_msec()/1500.0)*.01,
+				0,
+				sin(Time.get_ticks_msec()/1000.0)*.1
+				)
 			target_left_foot.basis = target_left_foot.basis.slerp(left_dangle.basis * foot_basis_offset,
 							1.0 - (1.0 / dangle_stiffness))
 			target_left_foot.origin = renik_helper.log_clamp(

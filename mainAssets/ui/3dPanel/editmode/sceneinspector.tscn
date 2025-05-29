@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_apb1e")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Tree" type="Tree" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tree" type="Tree" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -31,57 +35,67 @@ hide_root = true
 select_mode = 2
 script = ExtResource("2_k0xmv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="focus root parent" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="focus root parent" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "focus root parents"
 
-[node name="focus selected" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="focus selected" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "focus selected"
 
-[node name="delete" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="delete" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "delete"
 
-[node name="export_scene" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="export_scene" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "export scene"
 
-[node name="export_gltf" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="export_gltf" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "export gltf"
 
-[node name="duplicate" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="duplicate" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "duplicate"
 
-[node name="reparent" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="reparent" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 text = "reparent"
 
-[node name="cut" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="cut" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "cut"
 
-[node name="copy" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="copy" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "copy"
 
-[node name="paste" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="paste" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "paste"

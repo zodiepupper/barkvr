@@ -9,7 +9,8 @@ func hashed_tree_clear():
 	tree.clear()
 	clear()
 
-func add_item(text:String,metadata:Variant,replace:String=''):
+func add_item(text:String,metadata:Variant,replace:String='') -> TreeItem:
+	var tmp_tree_item:TreeItem
 	if metadata and metadata.has('node'):
 		if is_instance_valid(metadata.node):
 			var item_id = metadata.node.get_instance_id()
@@ -19,10 +20,10 @@ func add_item(text:String,metadata:Variant,replace:String=''):
 					if is_instance_valid(parent):
 						parent.remove_child(tree[item_id].tree_item)
 					tree[metadata.parent.get_instance_id()].tree_item.add_child(tree[item_id].tree_item)
-				tree[item_id].tree_item.set_text(0,text)
-				tree[item_id].tree_item.set_metadata(0,metadata)
+				tmp_tree_item = tree[item_id].tree_item
+				tmp_tree_item.set_text(0,text)
+				tmp_tree_item.set_metadata(0,metadata)
 			else:
-				var tmp_tree_item:TreeItem
 				tree[item_id] = {
 					'node': metadata.node
 				}
@@ -43,8 +44,10 @@ func add_item(text:String,metadata:Variant,replace:String=''):
 					#tree[item_id].tree_item.add_button(0, load("res://assets/icons/teenyicons/outline/drag.svg"), -1, false, "equip avatar")
 					
 				tree[item_id].tree_item.collapsed = true
+				get_root().get_child(0).collapsed = false
 				tree[item_id].tree_item.set_text(0,text)
 				tree[item_id].tree_item.set_metadata(0,metadata)
+	return tmp_tree_item
 
 func check_children() -> void:
 	for key in tree:

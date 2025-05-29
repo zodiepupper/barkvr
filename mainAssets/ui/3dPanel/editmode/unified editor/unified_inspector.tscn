@@ -172,8 +172,8 @@ slide = true
 [node name="attributes" parent="." instance=ExtResource("1_f3gci")]
 visible = false
 layout_mode = 1
-anchors_preset = -1
 offset_left = 60.0
+grow_vertical = 2
 
 [node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
 layout_mode = 1

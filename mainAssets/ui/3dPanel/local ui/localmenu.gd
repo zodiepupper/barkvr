@@ -33,8 +33,9 @@ func _input(event:InputEvent):
 func reveal(force_open:bool=false) -> void:
 	if force_open:
 		expanded = true
-		get_viewport().get_parent().viewport_size.x = big_height
-		get_viewport().get_parent().viewport_size.y = big_width
+		if get_viewport().get_parent() is Panel3D:
+			get_viewport().get_parent().viewport_size.x = big_height
+			get_viewport().get_parent().viewport_size.y = big_width
 		resize.visible = expanded
 		tab_container.visible = expanded
 		return

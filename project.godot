@@ -223,6 +223,7 @@ pointing/emulate_mouse_from_touch=false
 3d_physics/layer_4="world"
 3d_physics/layer_9="gizmos"
 3d_physics/layer_10="private ui"
+3d_physics/layer_11="3dkeyboard"
 
 [memory]
 

@@ -11,7 +11,8 @@ extends Control
 @onready var activetoggle: CheckButton = $"VBoxContainer/titlebar/properties header/active/HBoxContainer/activetoggle"
 @onready var targetname: LineEdit = $VBoxContainer/titlebar/HBoxContainer/Panel/targetname
 
-@onready var v_box_container = $VBoxContainer/ScrollContainer/VBoxContainer
+@onready var scroll_container: ScrollContainer = %ScrollContainer
+@onready var v_box_container: VBoxContainer = %VBoxContainer
 
 var vector_3_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/vector3.tscn")
 var vector_2_field = load("res://mainAssets/ui/3dPanel/editmode/attributes/vector2.tscn")
@@ -38,6 +39,20 @@ var hide_titlebar := false:
 			titlebar_top_row.visible = !hide_titlebar
 		if is_instance_valid(titlebar_active):
 			titlebar_active.visible = !hide_titlebar
+
+@export var full_height := false:
+	set(val):
+		full_height = val
+		set_full_height_deferred.call_deferred()
+
+func set_full_height_deferred():
+	if full_height:
+		scroll_container.hide()
+		custom_minimum_size.y = get_child(0).size.y
+		v_box_container.reparent(scroll_container.get_parent())
+	else:
+		scroll_container.show()
+		v_box_container.reparent(scroll_container)
 
 var event_manager
 
@@ -100,6 +115,8 @@ func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 			if targ == new_target:
 				return
 		if above_targets.size() > 3:
+			return
+		if !is_instance_valid(new_target):
 			return
 		match prop.type:
 			TYPE_OBJECT:
@@ -178,6 +195,10 @@ func clear_fields():
 			targetname.text = target.name
 
 func _ready():
+	get_child(0).resized.connect(func():
+		if full_height:
+			custom_minimum_size.y = get_child(0).size.y
+		)
 	titlebar_top_row.visible = !hide_titlebar
 	titlebar_active.visible = !hide_titlebar
 	event_manager = Engine.get_singleton("event_manager")

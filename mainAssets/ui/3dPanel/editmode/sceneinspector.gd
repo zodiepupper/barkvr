@@ -7,16 +7,16 @@ var root:Node
 
 var create_node := preload("res://mainAssets/ui/3dPanel/editmode/popup/add_node.tscn")
 
-@onready var focus_root_parent_btn: Button = $"HBoxContainer/VBoxContainer/focus root parent"
-@onready var focus_selected_btn: Button = $"HBoxContainer/VBoxContainer/focus selected"
-@onready var delete_btn: Button = $HBoxContainer/VBoxContainer/delete
-@onready var export_scene: Button = $HBoxContainer/VBoxContainer/export_scene
-@onready var export_gltf: Button = $HBoxContainer/VBoxContainer/export_gltf
-@onready var duplicate_btn: Button = $HBoxContainer/VBoxContainer/duplicate
-@onready var reparent_btn: Button = $HBoxContainer/VBoxContainer/reparent
-@onready var cut_btn: Button = $HBoxContainer/VBoxContainer/cut
-@onready var copy_btn: Button = $HBoxContainer/VBoxContainer/copy
-@onready var paste_btn: Button = $HBoxContainer/VBoxContainer/paste
+@onready var focus_root_parent_btn: Button = %"focus root parent"
+@onready var focus_selected_btn: Button = %"focus selected"
+@onready var delete_btn: Button = %delete
+@onready var export_scene: Button = %export_scene
+@onready var export_gltf: Button = %export_gltf
+@onready var duplicate_btn: Button = %duplicate
+@onready var reparent_btn: Button = %reparent
+@onready var cut_btn: Button = %cut
+@onready var copy_btn: Button = %copy
+@onready var paste_btn: Button = %paste
 
 var reparenting : bool = false
 var last_selected : Array
@@ -176,15 +176,16 @@ func setRoot(item:Node):
 
 func addchildren(node:Node, parent:Node=null):
 	var nodename :String = node.name
+	var tree_item: TreeItem
 	if node.has_meta("display_name"):
 		nodename = node.get_meta("display_name")
 	if parent:
-		tree.add_item(nodename, {
+		tree_item = tree.add_item(nodename, {
 			'node':node,
 			'parent':parent,
 		})
 	else:
-		tree.add_item(nodename,{
+		tree_item = tree.add_item(nodename,{
 			'node':node
 		})
 	if node.get_child_count() > 0:

@@ -110,7 +110,7 @@ func _ready():
 				if msgJson.has('retry_after_ms'):
 					Notifyvr.send_notification("Please try again after: "+str(msgJson.retry_after_ms/1000)+" seconds")
 				return
-			if msgJson.has('access_token') and msgJson.has('well_known'):
+			if msgJson.has('access_token'):
 				if !userData.has("login"):
 					userData.login = {}
 				userData.login.user_id = msgJson.user_id
@@ -119,6 +119,7 @@ func _ready():
 				userToken = msgJson.access_token
 				#base_url = msgJson.well_known["m.homeserver"].base_url
 				userData['login'] = msgJson
+				home_server = userData.login.user_id.split(':')[1]
 				userData['login']['home_server'] = home_server
 				saveUserDict()
 				if userToken != "":

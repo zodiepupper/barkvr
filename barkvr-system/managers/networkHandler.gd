@@ -163,6 +163,7 @@ func _ready():
 		close_requested = true
 		thread.wait_to_finish()
 		)
+	_go()
 
 func user_logged_in():
 	if is_instance_valid(Engine.get_singleton("user_manager")):
@@ -181,7 +182,7 @@ func reset():
 	print('start reset')
 	reset_requested = true
 
-func _process(_delta):
+func _go() -> void:
 	var player = get_tree().get_first_node_in_group('player')
 	if player:
 		packetdict.trackers.body_approx = player.global_position
@@ -204,6 +205,7 @@ func _process(_delta):
 			if chan.channel.get_ready_state() != WebRTCDataChannel.STATE_OPEN:
 				tmp = false
 		peer.channels_ready = tmp
+	create_tween().tween_callback(_go).set_delay(1/120)
 
 func poll():
 	while !close_requested:

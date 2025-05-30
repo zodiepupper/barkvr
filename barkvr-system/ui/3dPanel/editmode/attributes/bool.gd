@@ -29,14 +29,16 @@ func _ready():
 				#on
 			#)
 		)
+	_go()
 
-func _process(_delta):
+func _go() -> void:
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 	var scrollparent = get_parent_control().get_parent_control()
 	if scrollparent is ScrollContainer:
 		var rect = get_global_rect()
 		if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
 				update_fields()
+	create_tween().tween_callback(_go).set_delay(.05)
 
 func build_path_to_property() -> String:
 	var out := ""

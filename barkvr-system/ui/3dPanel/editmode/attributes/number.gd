@@ -33,7 +33,8 @@ func _ready():
 				target[property_name] = int(new_text)
 		)
 
-func _process(_delta):
+func _draw() -> void:
+	print("drawing")
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 	var scrollparent = get_parent_control().get_parent_control()
 	if scrollparent is ScrollContainer:

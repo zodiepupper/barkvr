@@ -24,8 +24,9 @@ func _ready():
 			else:
 				target[property_name] = index
 	)
+	_go()
 
-func _process(_delta):
+func _go() -> void:
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
 		var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 		var scrollparent = get_parent_control().get_parent_control()
@@ -37,6 +38,7 @@ func _process(_delta):
 		target = null
 		val.button_pressed = false
 		val.text = ''
+	create_tween().tween_callback(_go).set_delay(.05)
 
 func update_fields():
 	#print('enum: ', property_name)

@@ -94,12 +94,14 @@ func _ready():
 			#)
 		target[property_name]= Color.html((new_text))
 		)
+	_go()
 
-func _process(_delta):
+func _go() -> void:
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 	var rect = get_global_rect()
 	if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
 		update_fields()
+	create_tween().tween_callback(_go).set_delay(.05)
 
 func update_fields():
 	#print('color: ', property_name)

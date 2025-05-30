@@ -38,11 +38,12 @@ func primary() -> void:
 	vertices.push_back(current_meshinstance.to_local(tippoint.global_position))
 	current_amesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINE_STRIP,mesh_arrays)
 	current_meshinstance.mesh = current_amesh
+	draw()
 
 func primary_released() -> void:
 	drawing = false
 
-func _process(_delta: float) -> void:
+func draw() -> void:
 	if drawing:
 		mesh_arrays[Mesh.ARRAY_VERTEX] = vertices
 		vertices.push_back(current_meshinstance.to_local(tippoint.global_position))
@@ -52,3 +53,4 @@ func _process(_delta: float) -> void:
 		# length of the vertex array by 1000 and use the update_region function so we 
 		# have to update the full surface less often
 		current_meshinstance.mesh = current_amesh
+		get_tree().create_timer(1/60).timeout.connect(draw)

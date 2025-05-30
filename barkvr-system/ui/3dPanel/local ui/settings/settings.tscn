@@ -5,96 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://barkvr-system/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
 [ext_resource type="PackedScene" uid="uid://cbmgba1q1d8q5" path="res://barkvr-system/ui/3dPanel/editmode/attributes/number.tscn" id="3_6t4ur"]
 [ext_resource type="PackedScene" uid="uid://dkaactpqyjgjn" path="res://barkvr-system/ui/3dPanel/editmode/attributes/vector2.tscn" id="3_p8muu"]
+[ext_resource type="Script" uid="uid://dtd6mffjg2rvw" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_input_selector.gd" id="5_dbica"]
+[ext_resource type="Script" uid="uid://6p36kkj4jsaf" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_output_selector.gd" id="6_sna4b"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
-
-[sub_resource type="GDScript" id="GDScript_46aot"]
-script/source = "extends OptionButton
-
-@onready var color_rect = $ColorRect
-
-func _ready():
-	for device in AudioServer.get_input_device_list():
-		if !has_item_label(device):
-			add_item(device, hash(device))
-	for item in item_count:
-		if get_item_text(item) not in AudioServer.get_input_device_list():
-			remove_item(item)
-	get_popup().hide_on_checkable_item_selection = false
-	get_popup().hide_on_item_selection = false
-	get_popup().hide_on_state_item_selection = false
-	toggled.connect(func(toggled_on:bool):
-		var _selected_id = get_item_id(selected)
-		if toggled_on:
-			for device in AudioServer.get_input_device_list():
-				if !has_item_label(device):
-					add_item(device, hash(device))
-			for item in item_count:
-				if get_item_text(item) not in AudioServer.get_input_device_list():
-					remove_item(item)
-		)
-	item_selected.connect(func(index:int):
-		AudioServer.input_device = get_item_text(index)
-		)
-
-func _process(_delta):
-	if LocalGlobals.voice_analyzer:
-		color_rect.color.a = LocalGlobals.voice_analyzer.get_magnitude_for_frequency_range(0,40000,AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_MAX).length()*100.0
-
-func has_item_label(item_label:String) -> bool:
-	for item in range(item_count):
-		if get_item_text(item) == item_label:
-			return true
-	return false
-
-func items() -> PackedStringArray:
-	var output :PackedStringArray
-	for item in range(item_count):
-		output.append(get_item_text(item))
-	return output
-"
-
-[sub_resource type="GDScript" id="GDScript_f8k8b"]
-script/source = "extends OptionButton
-
-@onready var color_rect = $ColorRect
-
-func _ready():
-	for device in AudioServer.get_output_device_list():
-		if !has_item_label(device):
-			add_item(device, hash(device))
-	for item in item_count:
-		if get_item_text(item) not in AudioServer.get_output_device_list():
-			remove_item(item)
-	get_popup().hide_on_checkable_item_selection = false
-	get_popup().hide_on_item_selection = false
-	get_popup().hide_on_state_item_selection = false
-	toggled.connect(func(toggled_on:bool):
-		var _selected_id = get_item_id(selected)
-		if toggled_on:
-			for device in AudioServer.get_output_device_list():
-				if !has_item_label(device):
-					add_item(device, hash(device))
-			for item in item_count:
-				if get_item_text(item) not in AudioServer.get_output_device_list():
-					remove_item(item)
-		)
-	item_selected.connect(func(index:int):
-		AudioServer.output_device = get_item_text(index)
-		)
-
-func has_item_label(item_label:String):
-	for item in range(item_count):
-		if get_item_text(item) ==  item_label:
-			return true
-	return false
-
-func items() -> PackedStringArray:
-	var output :PackedStringArray
-	for item in range(item_count):
-		output.append(get_item_text(item))
-	return output
-"
 
 [node name="settings" type="Control"]
 layout_mode = 3
@@ -618,7 +532,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 icon_alignment = 1
 expand_icon = true
-script = SubResource("GDScript_46aot")
+script = ExtResource("5_dbica")
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection/Options"]
 custom_minimum_size = Vector2(0, 5)
@@ -651,7 +565,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 icon_alignment = 1
 expand_icon = true
-script = SubResource("GDScript_f8k8b")
+script = ExtResource("6_sna4b")
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection/Options"]
 custom_minimum_size = Vector2(0, 5)

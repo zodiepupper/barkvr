@@ -1,0 +1,875 @@
+class_name Bark_Journal
+extends Node
+
+var actions: Array[Dictionary] = []
+var undid_actions: Array[Dictionary] = []
+var new_actions: Array[Dictionary] = []
+
+var actions_mutex := Mutex.new()
+
+var JournalTreeClass = load("res://barkvr-system/managers/journal_tree.gd")
+var journal_tree: Node 
+
+var root: Node:
+	get:
+		if !is_instance_valid(root):
+			_get_root()
+		return root
+
+var local_root: Node:
+	get:
+		if !is_instance_valid(local_root):
+			local_root = get_tree().root
+		return local_root
+
+func is_path_remote(path:NodePath, from_journal_root:bool=true):
+	var target_node :Node
+	if from_journal_root:
+		target_node = root.get_node_or_null(path)
+	else:
+		target_node = get_tree().root.get_node_or_null(path)
+	if target_node != null and root.is_ancestor_of(target_node):
+		print('root is ancestor')
+		return true
+	print('root not ancestor')
+	return false
+
+func _init():
+	print('journal init')
+
+func _ready() -> void:
+	check_root()
+	journal_tree = JournalTreeClass.new()
+	add_child(journal_tree)
+
+func _add_action(data:Dictionary, undid:=false) -> void:
+	actions_mutex.lock()
+	if undid:
+		#undid_actions.append(data)
+		new_actions.append(data)
+	else:
+		actions.append(data)
+		new_actions.append(data)
+	actions_mutex.unlock()
+
+func undo_action() -> void:
+	check_root()
+	actions_mutex.lock()
+	if !actions.is_empty():
+		var action_to_undo :Dictionary = actions.pop_back()
+		if action_to_undo and "action_name" in action_to_undo:
+			match action_to_undo.action_name:
+				'set_property':
+					set_property(action_to_undo.target, action_to_undo.prop_name, action_to_undo.previous_value, false, true)
+				'delete_node':
+					pass
+				'add_node':
+					pass
+	actions_mutex.unlock()
+
+func get_actions() -> Array[Dictionary]:
+	actions_mutex.lock()
+	var tmp := new_actions.duplicate(true)
+	new_actions.clear()
+	actions_mutex.unlock()
+	return tmp
+
+func check_root() -> void:
+	if !is_instance_valid(root):
+		_get_root()
+
+func _get_root() -> void:
+	root = get_tree().get_first_node_in_group('localworldroot')
+
+# TODO create function to iterate over the current scene and prepare it for remote syncing
+func _prepare_root_for_remote_sync() -> void:
+	pass
+
+func set_parent(target: NodePath, new_parent: NodePath) -> void:
+	check_root()
+	var target_node := root.get_node(target)
+	var np_node := root.get_node(new_parent)
+	target_node.reparent(np_node)
+	actions.append({
+		'action_name': 'set_parent',
+		'target': target,
+		'new_parent': new_parent
+	})
+
+## Adds a node to the scene[br]
+## should provide the nodepath for the node that will be the parent of the added
+## nodes.[br]
+## the nodes dictionary should be a heirarchy that directly reflects the desired
+## node heirarchy once added to the scene and have parameters as follows:
+## [code] {node_class: "ClassStringForThisNode", properties: ArrayOfPropertyDictionaries, children: ArrayOfChildren}
+## [br]the array of property dictionaries should be an array of dictionaries 
+## where each dictionary contains {name: "property_name", value: "property_value"}
+## [br]the array of children should be an array of nodes with an identical format
+## to the example dictionary.
+## [br]if you do not wish to change the properties from default you can exclude the properties array
+## [br]if you do not wish to have children added to a given node, you can exclude the children array
+## [br]node_class is always required
+## [br]if you would like to add metadata to the node use "metadata/property_name"
+## as the name for the property so it will get parsed as a metadata property
+func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := false):
+	check_root()
+	print("journal_add_node")
+	var p_node := root.get_node(parent)
+	if is_instance_valid(p_node):
+		var target_node :Node = _read_add_node_nodes_dict(nodes, recieved)
+		if !recieved:
+			while p_node.has_node("./"+target_node.name):
+				var placeholder_name :String=  str(str(str(nodes.node_class) + str( str(nodes) + str( Time.get_unix_time_from_system() + float(Time.get_ticks_usec()) ))).hash())
+				target_node.name = placeholder_name
+				if "properties" in nodes:
+					nodes.properties.append({"name":"name","value":placeholder_name})
+				else:
+					nodes.properties = [{"name":"name","value":placeholder_name}]
+		p_node.add_child(target_node)
+		if !recieved and !undid:
+			_add_action({
+				'action_name': 'add_node',
+				'parent': parent,
+				'added_node_path': root.get_path_to(target_node),
+				'nodes': nodes
+			})
+		if undid:
+			_add_action({
+				'action_name': 'add_node',
+				'parent': parent,
+				'added_node_path': root.get_path_to(target_node),
+				'nodes': nodes
+			},true)
+
+func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
+	check_root()
+	if "node_class" in node_dict and ClassDB.can_instantiate(node_dict.node_class):
+		var node = ClassDB.instantiate(node_dict.node_class)
+		var _node_props = node.get_property_list()
+		if "properties" in node_dict and node_dict.properties is Array:
+			for prop in node_dict.properties:
+				if prop is Dictionary and "name" in prop and "value" in prop:
+					if prop.name in node and !(typeof(node[prop.name]) in [TYPE_CALLABLE, TYPE_OBJECT, TYPE_SIGNAL]):
+						node[prop.name] = prop.value
+					elif prop.name.begins_with('metadata/'):
+						node.set_meta(prop.name.trim_prefix("metadata/"), prop.value)
+		if !recieved:
+			var placeholder_name :String= str(str(str(node_dict.node_class) + str( str(node) + str( Time.get_unix_time_from_system() + float(Time.get_ticks_usec()) ))).hash())
+			if "properties" in node_dict:
+				node_dict.properties.append({"name":"name","value":placeholder_name})
+			else:
+				node_dict.properties = [{"name":"name","value":placeholder_name}]
+			node.name = placeholder_name
+		if "children" in node_dict:
+			for child in node_dict.children:
+				node.add_child(_read_add_node_nodes_dict(child))
+				
+		return node
+	var tmp = Node.new()
+	tmp.name = "ERROR"
+	return tmp
+
+func delete_node(target: NodePath, recieved := false, _undid := false) -> void:
+	check_root()
+	var target_node := root.get_node(target)
+	var deleted_node_as_packed_scene := PackedScene.new()
+	take_owner_of_node_and_all_children(target_node, target_node)
+	deleted_node_as_packed_scene.pack(target_node)
+	target_node.queue_free()
+	if !recieved:
+		_add_action({
+			'action_name': 'delete_node',
+			'target': target,
+			'deleted_node': target_node.name#Marshalls.variant_to_base64(deleted_node_as_packed_scene,true)
+		})
+
+func set_property(target: NodePath, prop_name: String, value: Variant, recieved := false, undid := false) -> void:
+	print(target)
+	check_root()
+	var target_node := root.get_node(target)
+	if is_instance_valid(target_node) and prop_name.split(':')[0] in target_node:
+		var previous_value = target_node.get_indexed(prop_name)
+		target_node.set_indexed(prop_name,value)
+		if !recieved and !undid:
+			_add_action({
+				'action_name': 'set_property',
+				'target': target,
+				'prop_name': prop_name,
+				'value': value,
+				'previous_value': previous_value
+			})
+		if undid:
+			_add_action({
+				'action_name': 'set_property',
+				'target': target,
+				'prop_name': prop_name,
+				'value': value,
+				'previous_value': previous_value
+			},true)
+
+func take_owner_of_node_and_all_children(node:Node,new_owner:Node):
+	check_root()
+	node.owner = new_owner
+	if node.get_child_count() > 0:
+		for child in node.get_children():
+			take_owner_of_node_and_all_children(child, new_owner)
+
+func net_propagate_node(node_string: String, parent := ^'', node_name := '', recieved := false) -> void:
+	check_root()
+	if node_name.is_empty():
+		node_name = node_string.sha256_text()
+	var node = BarkHelpers.var_to_node(node_string)
+	if parent:
+		root.get_node(parent).add_child(node)
+		if !recieved:
+			actions.append({
+				'action_name': 'net_propagate_node',
+				'node_string': node_string,
+				'parent': parent
+			})
+	else:
+		root.add_child(node)
+		if !recieved:
+			actions.append({
+				'action_name': 'net_propagate_node',
+				'node_string': node_string
+			})
+
+## Imports an asset and adds that to the action log unless it was a recieved action.
+func import_asset( type: String, asset_to_import: Variant, asset_name := '', recieved := false, data := {} ) -> void:
+	print(type)
+	# Make sure root is valid.
+	check_root()
+	# if the loader isn't in the scene, add it
+	if "loader" in data and data.loader is Node:
+		if !data.loader.is_inside_tree():
+			if recieved:
+				data.loader = load("res://barkvr-system/ui/3dui/loading_halo.tscn").instantiate()
+				data.loader.text = "remote asset"
+			root.add_child(data.loader)
+			data.loader.global_position = data.position
+	# Generate an asset name if not given.
+	if asset_name.is_empty():
+		# If we have a string path for the asset import, use that instead.
+		if asset_to_import is String:
+			asset_name = asset_to_import.split('/')[-1]
+		else:
+			asset_name = str(Time.get_unix_time_from_system())
+	# Get asset content if needed.
+	var content := PackedByteArray()
+	if type != "res":
+		if asset_to_import is PackedByteArray:
+			content = asset_to_import
+		elif asset_to_import is String:
+			content = FileAccess.get_file_as_bytes(asset_to_import)
+			if content.is_empty():
+				print(FileAccess.get_open_error())
+		elif asset_to_import is Image:
+			content = asset_to_import.data.data
+	# Decide how to import asset based on type.
+	# TODO pck support
+	data.type = type
+	match type:
+		"text":
+			_import_text(asset_to_import,asset_to_import, data)
+		"glb", "vrm":
+			_import_glb(asset_to_import, asset_name, data)
+		"res":
+			# TODO scenes and resources can't easily be sent to peers because of
+			# possible dependencies in other files.
+			_import_res(asset_name, asset_to_import, data)
+		"image":
+			if asset_to_import is Image:
+				_import_image_image(asset_name, asset_to_import, data)
+			else:
+				_import_image_bytes(asset_name, content, data)
+		"audio":
+			if !content.is_empty():
+				_import_audio(asset_name, content, data)
+			elif asset_to_import is String:
+				pass
+		"file":
+			_import_file(asset_name, content, data)
+		"uri":
+			_import_uri(asset_to_import, data)
+		"zip":
+			_import_zip(asset_name, asset_to_import, data)
+		_:
+			if "loader" in data:
+				data.loader.done('failed')
+	# Send message to peers.
+	if !recieved:
+		match type:
+			"text":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"glb", "vrm":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"res":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"image":
+				if asset_to_import is PackedByteArray and !asset_to_import.is_empty():
+					data.image_data = asset_to_import
+				elif asset_to_import is Image:
+					data.image_data = var_to_bytes_with_objects(asset_to_import)
+					data.image_image_alt = true
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"audio":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"file":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"uri":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			"zip":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
+			_:
+				if "loader" in data:
+					data.loader.done('failed')
+
+func _import_uri(uri:String, data:Dictionary={}):
+	var tmpdir:String = "user://tmp/"+str(hash(uri))
+	if !("iterations" in data):
+		data.iterations = 0
+	if uri.begins_with("http://") or uri.begins_with("https://"):
+		if "iterations" in data and data.iterations > 4:
+			print("loop while trying to import uri, cancelling import")
+			return
+		var req := HTTPRequest.new()
+		req.download_file = tmpdir
+		call_deferred("add_child",req)
+		if !req.is_node_ready():
+			await req.ready
+		req.request_completed.connect(_uri_request_completed.bind(req,data,uri))
+		var headers = Engine.get_singleton("user_manager").headers
+		req.request(uri, headers)
+
+func _uri_request_completed(_result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, req:HTTPRequest, data:Dictionary, uri:String):
+			print('req completed')
+			print('response code: '+str(response_code))
+			var content_type:String = ""
+			var _msg = body.get_string_from_ascii()
+			for header in headers:
+				if header.begins_with("Content-Type:"):
+					print('content')
+					print(header.trim_prefix("Content-Type: "))
+					var trimmed := header.trim_prefix("Content-Type: ")
+					if trimmed.begins_with("image") and !trimmed.contains("gif"):
+						print('importing uri image')
+						while body.size() < 1:
+							if data.iterations > 4:
+								data.loader.done()
+								return
+							data.iterations += 1
+							body = (FileAccess.get_file_as_bytes(req.download_file))
+						_import_image_bytes(uri, body, data)
+						data.loader.done()
+						return
+					elif trimmed == "application/json":
+						print('woof')
+						data.loader.done()
+						return
+					elif trimmed.contains("gltf-binary"):
+						content_type = "gltf-binary"
+					elif trimmed.contains("vrm") or uri.ends_with("vrm"):
+						content_type = "vrm"
+			print('uri returned text')
+			print('uri: '+uri)
+			if uri.contains('.gltf') or uri.contains('.glb') or content_type == "gltf-binary":
+				WorkerThreadPool.add_task(import_asset.bind('glb', req.download_file, uri, false, data))
+			elif uri.contains('.vrm') or content_type == "vrm":
+				WorkerThreadPool.add_task(import_asset.bind('vrm', req.download_file, uri, false, data))
+			elif uri.contains('.res') or uri.contains('.tres') or uri.contains('.scn') or uri.contains('.tscn'):
+				import_asset('res',req.download_file, uri, false, data)
+			#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
+			elif uri.contains('.pck'):
+				import_asset('pck', req.download_file, uri, false, data)
+			elif uri.contains('.png') or \
+				uri.contains('.jpg') or \
+				uri.contains('.jpeg') or \
+				uri.contains('.bmp') or \
+				uri.contains('.svg') or \
+				uri.contains('.tga') or \
+				uri.contains('.ktx') or \
+				uri.contains('.webp'):
+				import_asset('image', req.download_file, uri, false, data)
+			else:
+				# hit "https://image.thum.io/get/" to grab an image of the website
+				if !uri.begins_with("https://image.thum.io/get/"):
+					uri = "https://image.thum.io/get/"+uri
+				if "iterations" in data:
+					data.iterations += 1
+				else:
+					data.iterations = 1
+				print("get preview:\n"+uri)
+				_import_uri(uri,data)
+				#elif dropped.ends_with(".zip"):
+					#import_asset('zip', reader.read_file(dropped), asset_name, false, data)
+				#else:
+					#import_asset('file', reader.read_file(dropped), asset_name, false, data)
+			req.queue_free()
+
+func _import_zip(asset_name:String, asset_path:String, data:Dictionary={}):
+	var reader := ZIPReader.new()
+	if reader.open(asset_path) == 0:
+		for dropped in reader.get_files():
+			print('dropped: '+dropped)
+			if reader.file_exists(dropped):
+				print('is file')
+				if dropped.contains('.gltf') or dropped.contains('.glb'):
+					import_asset('glb', reader.read_file(dropped), asset_name, false, data)
+				elif dropped.contains('.vrm'):
+					import_asset('vrm',reader.read_file(dropped), asset_name, false, data)
+				elif dropped.ends_with('.res') or dropped.ends_with('.tres') or dropped.ends_with('.scn') or dropped.ends_with('.tscn'):
+					import_asset('res',reader.read_file(dropped), asset_name, false, data)
+				#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
+				elif dropped.ends_with('.pck'):
+					import_asset('pck', reader.read_file(dropped), asset_name, false, data)
+				elif dropped.ends_with('.png') or \
+					dropped.ends_with('.jpg') or \
+					dropped.ends_with('.jpeg') or \
+					dropped.ends_with('.bmp') or \
+					dropped.ends_with('.svg') or \
+					dropped.ends_with('.tga') or \
+					dropped.ends_with('.ktx') or \
+					dropped.ends_with('.webp'):
+					import_asset('image', reader.read_file(dropped), asset_name, false, data)
+				#elif dropped.ends_with(".zip"):
+					#import_asset('zip', reader.read_file(dropped), asset_name, false, data)
+				#else:
+					#import_asset('file', reader.read_file(dropped), asset_name, false, data)
+
+func _check_loaded(path: String, asset_name:String, data:Dictionary={}, _last_time:float=0.0) -> void:
+	check_root()
+	while ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		pass
+		#get_tree().create_timer(1).timeout.connect(_check_loaded.bind(path, asset_name, position))
+	if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
+		var res := ResourceLoader.load_threaded_get(path)
+		if res != null:
+			var node = res.instantiate()
+			_post_import.call_deferred(root,node,asset_name,data)
+
+#
+var gltf_document_extension_class = load("res://addons/vrm/vrm_extension.gd")
+const SAVE_DEBUG_GLTFSTATE_RES: bool = false
+
+#COPIED FROM https://github.com/godotengine/godot/blob/c4279fe3e0b27d0f40857c00eece7324a967285f/modules/gltf/gltf_document.cpp#L62
+#define GLTF_IMPORT_GENERATE_TANGENT_ARRAYS 8
+#define GLTF_IMPORT_USE_NAMED_SKIN_BINDS 16
+#define GLTF_IMPORT_DISCARD_MESHES_AND_MATERIALS 32
+#define GLTF_IMPORT_FORCE_DISABLE_MESH_COMPRESSION 64
+
+func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
+	check_root()
+	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
+	#Thread.set_thread_safety_checks_enabled(false)
+	var logging_prefix := asset_name+" : "
+	print("Import VRM/GLTF/GLB/FBX: " + asset_name + " ----------------------")
+	var gltf : GLTFDocument
+	var flags := 16+8
+	var state : GLTFState
+	if "type" in data and data.type == 'fbx':
+		gltf = FBXDocument.new()
+		state = FBXState.new()
+		#state.allow_geometry_helper_nodes = true
+	else:
+		gltf = GLTFDocument.new()
+		state = GLTFState.new()
+		if data.type != "vrm":
+			state.set_additional_data(&"vrm/already_processed",true)
+	
+	#if content is String and asset_name in content:
+		#state.base_path = content.trim_suffix(asset_name)
+	var err :int
+	if content is String:
+		err = gltf.append_from_file(content, state, flags)
+	elif content is PackedByteArray:
+		err = gltf.append_from_buffer(content, '', state, flags)
+	match err:
+		43:
+			if "alreadytried" in data:
+				return
+			data.type = "fbx"
+			data.alreadytried = 1
+			_import_glb(content, asset_name, data)
+			return
+	if err != OK:
+		if "loader" in data:
+			data.loader.done('failed')
+		return
+	for mesh in state.meshes:
+			if mesh.mesh.get_surface_lod_count(0) == 0:
+				print(logging_prefix+'generating lods')
+				mesh.mesh.generate_lods(25,60,[])
+	print("generated scene")
+	var generated_scene = gltf.generate_scene(state)
+	var packed_scene_workaround := PackedScene.new()
+	packed_scene_workaround.pack(generated_scene)
+	generated_scene = packed_scene_workaround.instantiate()
+	#if SAVE_DEBUG_GLTFSTATE_RES and content != "":
+		#if !ResourceLoader.exists(content + ".res"):
+			#state.take_over_path(content + ".res")
+			#ResourceSaver.save(state, content + ".res")
+	print('post importing glb/gltf/vrm')
+	_post_import.call_deferred(root, generated_scene, asset_name, data, false)
+
+## Imports a Godot resource.
+func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={}) -> void:
+	check_root()
+	# If asset to import is not a path, create a path.
+	# Note that this may mean assets might not load for peers.
+	if asset_to_import is PackedByteArray:
+		# Write the content to a temporary file.
+		# TODO cleanup of the file?
+		var path := "user://tmp/" + str(str(asset_to_import).hash()) + ".res"
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		file.store_buffer(asset_to_import)
+		file.flush()
+		file.close()
+		asset_to_import = path
+	ResourceLoader.set_abort_on_missing_resources(false)
+	print(asset_to_import)
+	var res :Resource
+	#print(ResourceLoader.get_dependencies(asset_to_import)[0])
+	#print(asset_to_import)
+	res = ResourceLoader.load(asset_to_import,'',ResourceLoader.CACHE_MODE_IGNORE)
+	#res = load(asset_to_import)
+	#print(res.resource_path)
+	#res = _load_res_with_dependencies(asset_to_import)
+	if res != null:
+		var node = res.instantiate()
+		_post_import.call_deferred(root,node,asset_name,data)
+	ResourceLoader.load_threaded_request(asset_to_import, '', false, ResourceLoader.CACHE_MODE_IGNORE)
+	_check_loaded(asset_to_import,asset_name,data)
+
+func _load_res_with_dependencies(path:String) -> Resource:
+	var res :Resource
+	for dep in ResourceLoader.get_dependencies(path):
+		_load_res_with_dependencies(dep)
+	res = ResourceLoader.load(path)
+	return res
+
+## Imports an image from bytes.
+func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dictionary={}) -> void:
+	check_root()
+	var img := Image.new()
+	var err: Error
+	
+	err = img.load_webp_from_buffer(content)
+	if err != OK:
+		err = img.load_png_from_buffer(content)
+	if err != OK:
+		err = img.load_bmp_from_buffer(content)
+	if err != OK:
+		err = img.load_tga_from_buffer(content)
+	if err != OK:
+		err = img.load_jpg_from_buffer(content)
+	if err != OK:
+		err = img.load_svg_from_buffer(content)
+	if err != OK:
+		err = img.load_ktx_from_buffer(content)
+	if err != OK and "image_data" in data and "image_image_alt" in data:
+		img = bytes_to_var_with_objects(data.image_data)
+		if !img.is_empty():
+			err = OK
+	if err != OK and "image_data" in data:
+		var _img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
+		"FORMAT_BPTC_RGBF": 23,
+		"FORMAT_BPTC_RGBFU": 24,
+		"FORMAT_ETC": 25,
+		"FORMAT_ETC2_R11": 26,
+		"FORMAT_ETC2_R11S": 27,
+		"FORMAT_ETC2_RG11": 28,
+		"FORMAT_ETC2_RG11S": 29,
+		"FORMAT_ETC2_RGB8": 30,
+		"FORMAT_ETC2_RGBA8": 31,
+		"FORMAT_ETC2_RGB8A1": 32,
+		"FORMAT_ETC2_RA_AS_RG": 33,
+		"FORMAT_DXT5_RA_AS_RG": 34,
+		"FORMAT_ASTC_4x4": 35,
+		"FORMAT_ASTC_4x4_HDR": 36,
+		"FORMAT_ASTC_8x8": 37,
+		"FORMAT_ASTC_8x8_HDR": 38}
+		#for format in img_formats_lookup.keys():
+			#if data.image_data.format in format:
+				#data.image_data.format = format
+				#break
+		img = null
+		img = Image.new()
+		img.data.data = data.image_data
+		print('create image from data:')
+		print(img.data.size())
+		print(img.is_empty())
+		err = OK
+	
+	if err != OK or img.is_empty():
+		if "loader" in data:
+			data.loader.done('failed')
+			printerr("image failed to load:\n",data)
+		return
+	
+	var tex := ImageTexture.create_from_image(img)
+	var plane := MeshInstance3D.new()
+	var tmpmesh := PlaneMesh.new()
+	var tmpmat := StandardMaterial3D.new()
+	tmpmat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	tmpmesh.size.y = 1.0
+	tmpmesh.size.x = ((tex.get_size()).x/(tex.get_size()).y)
+	tmpmat.albedo_texture = tex
+	tmpmat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	tmpmat.shading_mode = tmpmat.SHADING_MODE_UNSHADED
+	tmpmesh.material = tmpmat
+	tmpmesh.orientation = PlaneMesh.FACE_Z
+	plane.mesh = tmpmesh
+	
+	var tmpbody := StaticBody3D.new()
+	tmpbody.set_meta("grabbable",true)
+	tmpbody.set_meta("image_texture", tex)
+	var tmpcol := CollisionShape3D.new()
+	var tmpcolshape := BoxShape3D.new()
+	tmpcolshape.size.y = 1.0
+	tmpcolshape.size.x = ((tex.get_size()).x/(tex.get_size()).y)
+	tmpcolshape.size.z = .001
+	tmpcol.shape = tmpcolshape
+	tmpbody.add_child(tmpcol)
+	tmpbody.collision_layer = 2
+	tmpbody.collision_mask = 2
+	
+	tmpbody.add_child(plane)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+
+
+## Imports an image from an existing image resource.
+func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> void:
+	check_root()
+	
+	var tex := ImageTexture.create_from_image(img)
+	var plane := MeshInstance3D.new()
+	var tmpmesh := PlaneMesh.new()
+	var tmpmat := StandardMaterial3D.new()
+	tmpmat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	tmpmesh.size.y = 1.0
+	tmpmesh.size.x = ((tex.get_size()).x/(tex.get_size()).y)
+	tmpmat.albedo_texture = tex
+	tmpmat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	tmpmat.shading_mode = tmpmat.SHADING_MODE_UNSHADED
+	tmpmesh.material = tmpmat
+	tmpmesh.orientation = PlaneMesh.FACE_Z
+	plane.mesh = tmpmesh
+	
+	var tmpbody := StaticBody3D.new()
+	tmpbody.set_meta("grabbable",true)
+	var tmpcol := CollisionShape3D.new()
+	var tmpcolshape := BoxShape3D.new()
+	tmpcolshape.size.y = 1.0
+	tmpcolshape.size.x = ((tex.get_size()).x/(tex.get_size()).y)
+	tmpcolshape.size.z = .001
+	tmpcol.shape = tmpcolshape
+	tmpbody.add_child(tmpcol)
+	tmpbody.collision_layer = 2
+	tmpbody.collision_mask = 2
+	
+	tmpbody.add_child(plane)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+
+## Imports an audio file.
+func _import_audio(asset_name: String, content: PackedByteArray, data:Dictionary={} ) -> void:
+	check_root()
+	var audio3d: Audio3D = load("res://barkvr-system/ui/3dui/import helpers/audio3d.tscn").instantiate()
+	audio3d.load_audio_from_bytes(content, "mp3")
+	_post_import.call_deferred(root, audio3d, asset_name, data, true)
+
+## Imports some text.
+func _import_text(asset_name: String, _content: String, data:Dictionary={} ) -> void:
+	check_root()
+	var tex := NoiseTexture2D.new()
+	var noise := FastNoiseLite.new()
+	noise.seed = asset_name.hash()
+	tex.height = 100
+	tex.width = 100
+	tex.noise = noise
+	var mesh := MeshInstance3D.new()
+	#var tmpmesh := PlaneMesh.new()
+	var tmpmesh := TextMesh.new()
+	tmpmesh.text = asset_name
+	tmpmesh.autowrap_mode = TextServer.AUTOWRAP_WORD
+	tmpmesh.font_size = 4
+	tmpmesh.depth = .01
+	#tmpmesh.size = tex.get_size()*.001
+	var tmpmat := StandardMaterial3D.new()
+	
+	var tmpbody := StaticBody3D.new()
+	tmpbody.set_meta("grabbable",true)
+	var tmpcol := CollisionShape3D.new()
+	var tmpcolshape := BoxShape3D.new()
+	#tmpcolshape.size.x = (tex.get_size()*.001).x
+	#tmpcolshape.size.y = (tex.get_size()*.001).y
+	tmpcolshape.size = tmpmesh.get_aabb().size
+	
+	#tmpcolshape.size.z = .001
+	tmpcol.shape = tmpcolshape
+	tmpbody.add_child(tmpcol)
+	tmpbody.collision_layer = 2
+	tmpbody.collision_mask = 2
+	
+	tmpmat.albedo_texture = tex
+	tmpmat.shading_mode = tmpmat.SHADING_MODE_UNSHADED
+	tmpmesh.material = tmpmat
+	#tmpmesh.orientation = PlaneMesh.FACE_Z
+	mesh.mesh = tmpmesh
+	tmpbody.add_child(mesh)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+
+## Imports a file.
+func _import_file(asset_name: String, content: PackedByteArray, data:Dictionary={} ) -> void:
+	check_root()
+	var tex := NoiseTexture2D.new()
+	var noise := FastNoiseLite.new()
+	noise.seed = asset_name.hash()
+	tex.height = 100
+	tex.width = 100
+	tex.noise = noise
+	var plane := MeshInstance3D.new()
+	#var tmpmesh := PlaneMesh.new()
+	var tmpmesh := TextMesh.new()
+	tmpmesh.text = asset_name
+	tmpmesh.autowrap_mode = TextServer.AUTOWRAP_WORD
+	tmpmesh.font_size = 4
+	tmpmesh.depth = .01
+	#tmpmesh.size = tex.get_size()*.001
+	var tmpmat := StandardMaterial3D.new()
+	
+	var tmpbody := StaticBody3D.new()
+	tmpbody.set_meta("grabbable",true)
+	var tmpcol := CollisionShape3D.new()
+	var tmpcolshape := BoxShape3D.new()
+	#tmpcolshape.size.x = (tex.get_size()*.001).x
+	#tmpcolshape.size.y = (tex.get_size()*.001).y
+	tmpcolshape.size = tmpmesh.get_aabb().size
+	
+	#tmpcolshape.size.z = .001
+	tmpcol.shape = tmpcolshape
+	tmpbody.add_child(tmpcol)
+	tmpbody.collision_layer = 2
+	tmpbody.collision_mask = 2
+	
+	tmpmat.albedo_texture = tex
+	tmpmat.shading_mode = tmpmat.SHADING_MODE_UNSHADED
+	tmpmesh.material = tmpmat
+	#tmpmesh.orientation = PlaneMesh.FACE_Z
+	plane.mesh = tmpmesh
+	tmpbody.add_child(plane)
+
+	#var compressed := content.compress()
+	#print(compressed)
+	#print(content)
+	
+	tmpbody.set_meta("file_bytes",str(content.compress(2)))
+	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+
+## Accept an incoming network message and handle it appropriately.
+func receive(action: Dictionary) -> void:
+	check_root()
+	if "content" in action and !action.content.is_empty():
+		action.asset_to_import = action.content
+	match action.action_name:
+		"set_property":
+			set_property(action.target, action.prop_name, action.value, true)
+		"import_asset":
+			import_asset(action.type, action.asset_to_import, action.asset_name, true, action.data)
+		"delete_node":
+			delete_node(action.target, true)
+		"add_node":
+			add_node(action.parent,action.nodes,true)
+
+func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Dictionary={},lookatuser:bool=false):
+	check_root()
+	var position = Vector3()
+	if "position" in data:
+		position = data.position
+	var scale = 1.0
+	if "scale" in data:
+		scale = data.scale
+	root.add_child(node_to_add)
+	if node_to_add is Node3D:
+		if lookatuser:
+			node_to_add.look_at_from_position(position,get_viewport().get_camera_3d().global_position,Vector3.UP,true)
+		node_to_add.global_position = position
+		node_to_add.scale *= scale
+	node_to_add.name = node_name
+	print(node_name)
+	# add IK stuff if VRM
+	if node_name.ends_with(".vrm") or data.type == "vrm":
+		print('attempting ik')
+		var quickiksetup :Node3D = load("res://barkvr-system/ik/libik auto setup for avatars/quick_ik_setup.tscn").instantiate()
+		node_to_add.add_child(quickiksetup)
+		var skele :Skeleton3D=null
+		for i in node_to_add.get_children():
+			if skele:
+				break
+			if i is Skeleton3D:
+				skele = i
+			elif i.get_child_count() > 0:
+				for a in i.get_children():
+					if a is Skeleton3D:
+						skele = a
+		if skele:
+			print('found skele')
+			quickiksetup.armature_skeleton = skele
+	if "loader" in data:
+		data.loader.done()

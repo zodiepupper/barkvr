@@ -81,7 +81,7 @@ callscript = SubResource("GDScript_apv3r")
 transform = Transform3D(-1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.1, 0.1, 8.74228e-09)
 collision_layer = 512
 collision_mask = 512
-itemToSpawn = "res://mainAssets/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn"
+itemToSpawn = "uid://ec0mqh35i2in"
 text = "editor"
 
 [node name="fly mode" parent="." instance=ExtResource("1_1fmp6")]

@@ -1,0 +1,191 @@
+[gd_scene load_steps=19 format=3 uid="uid://dv0etfy0ao5"]
+
+[ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://barkvr-system/startup/basic_starter.tscn" id="1_ad4cs"]
+[ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://barkvr-system/startup/playerSpawnLocation.tscn" id="2_humgq"]
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
+[ext_resource type="PackedScene" uid="uid://djw2ch2x4mclg" path="res://barkvr-system/ui/3dui/import helpers/audio3d.tscn" id="6_nx2sb"]
+[ext_resource type="PackedScene" uid="uid://dj84bcm2jv1wq" path="res://barkvr-system/objects/pens/linepen.tscn" id="7_8hxdm"]
+[ext_resource type="PackedScene" uid="uid://cg5f0nrs0w6h5" path="res://barkvr-system/player/local/xrplayer.tscn" id="11_qw71v"]
+[ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://barkvr-system/ui/3dPanel/local ui/keyboard/virtual_keyboard_2d.tscn" id="12_r71vt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xtqms"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(0.6, 0.466667, 1, 1)
+emission_energy_multiplier = 2.0
+point_size = 5.0
+
+[sub_resource type="GDScript" id="GDScript_pli2f"]
+script/source = "extends CSGBox3D
+
+var drawing := false
+
+func _process(_delta):
+	if drawing and is_instance_valid(Engine.get_singleton(\"voxel_manager\")):
+		Engine.get_singleton(\"voxel_manager\").set_true_sphere(global_position, 1.0)
+
+func primary():
+	drawing = true
+
+func primary_released():
+	drawing = false
+"
+
+[sub_resource type="Gradient" id="Gradient_vmob3"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gruoj"]
+noise_type = 3
+frequency = 0.1105
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ugxtn"]
+width = 128
+height = 128
+in_3d_space = true
+seamless = true
+color_ramp = SubResource("Gradient_vmob3")
+noise = SubResource("FastNoiseLite_gruoj")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3nls"]
+render_priority = 127
+transparency = 2
+alpha_scissor_threshold = 0.0
+alpha_antialiasing_mode = 0
+cull_mode = 1
+depth_draw_mode = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("NoiseTexture2D_ugxtn")
+uv1_scale = Vector3(1.72, 1, 1.72)
+texture_filter = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_ffpko"]
+material = SubResource("StandardMaterial3D_f3nls")
+radius = 10.0
+height = 20.0
+
+[sub_resource type="Animation" id="Animation_knd3g"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_s1a5l"]
+resource_name = "launch"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:mesh:material:alpha_scissor_threshold")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:mesh:material:albedo_texture:noise:offset")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 15)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qxavp"]
+_data = {
+&"RESET": SubResource("Animation_knd3g"),
+&"launch": SubResource("Animation_s1a5l")
+}
+
+[sub_resource type="GDScript" id="GDScript_dw37y"]
+script/source = "extends AnimationPlayer
+
+@onready var mesh_instance_3d_2: MeshInstance3D = $\"..\"
+
+func _ready() -> void:
+	mesh_instance_3d_2.get_active_material(0).albedo_texture.noise.seed = randi()
+	create_tween().tween_property(mesh_instance_3d_2.get_active_material(0),\\
+		\"albedo_color\",\\
+		Color(randf_range(.1,.4),randf_range(.1,.4),randf_range(.1,.4)),\\
+		2)
+	play(\"launch\")
+
+func _process(_delta: float) -> void:
+	get_parent().global_position = get_viewport().get_camera_3d().global_position
+"
+
+[node name="init_world" type="Node3D"]
+
+[node name="multiplayer world root" type="Node3D" parent="." groups=["localworldroot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="basic starter world" parent="multiplayer world root" instance=ExtResource("1_ad4cs")]
+
+[node name="playerSpawnLocation" parent="multiplayer world root/basic starter world" instance=ExtResource("2_humgq")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.76036, 0.0923181, 2.56459)
+
+[node name="playercontainer" parent="multiplayer world root" instance=ExtResource("11_qw71v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08992, 0.91664, 2.46325)
+
+[node name="local_ui" type="Node3D" parent="multiplayer world root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="keyboard panel" type="RigidBody3D" parent="multiplayer world root/local_ui"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4736, 1.7588, -4.28413)
+collision_layer = 4
+collision_mask = 4
+freeze = true
+freeze_mode = 1
+script = ExtResource("5_ykx2e")
+_auto_load_ui = ExtResource("12_r71vt")
+viewport_size = Vector2i(1265, 720)
+panel_thickness = 0.01
+metadata/grabbable = true
+
+[node name="Node3D" type="Node3D" parent="multiplayer world root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="multiplayer world root/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08259, 1.78338, 3.40336)
+use_collision = true
+size = Vector3(0.05, 0.05, 0.05)
+material = SubResource("StandardMaterial3D_xtqms")
+script = SubResource("GDScript_pli2f")
+metadata/grabbable = true
+
+[node name="Audio3d" parent="multiplayer world root" instance=ExtResource("6_nx2sb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0567468, 1.55099, 2.56656)
+
+[node name="Linepen" parent="multiplayer world root" instance=ExtResource("7_8hxdm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38342, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.33328, 1.91664, 2.46325)
+visible = false
+mesh = SubResource("SphereMesh_ffpko")
+skeleton = NodePath("../multiplayer world root")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D2"]
+deterministic = true
+libraries = {
+&"": SubResource("AnimationLibrary_qxavp")
+}
+script = SubResource("GDScript_dw37y")

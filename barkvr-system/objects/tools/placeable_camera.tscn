@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bay38na2jeq1o"]
+
+[ext_resource type="Script" uid="uid://b06fvg7775ob" path="res://barkvr-system/objects/tools/placeable_camera.gd" id="1_huwvn"]
+[ext_resource type="PackedScene" uid="uid://wk11tl1w3f3d" path="res://barkvr-system/objects/tools/camerIndicator.tscn" id="2_qbxhf"]
+
+[node name="placeableCamera" type="Node3D"]
+script = ExtResource("1_huwvn")
+metadata/grabbable = true
+
+[node name="Window" type="Window" parent="."]
+title = "camera"
+position = Vector2i(40, 40)
+size = Vector2i(500, 500)
+
+[node name="Camera3d" type="Camera3D" parent="Window"]
+
+[node name="Cube" parent="." instance=ExtResource("2_qbxhf")]
+transform = Transform3D(-0.25, 0, -3.7749e-08, 0, 0.25, 0, 3.7749e-08, 0, -0.25, 0, 0, -0.1)

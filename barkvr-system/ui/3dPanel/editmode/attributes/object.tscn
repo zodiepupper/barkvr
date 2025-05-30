@@ -1,0 +1,125 @@
+[gd_scene load_steps=2 format=3 uid="uid://dddtbbin6ty1l"]
+
+[ext_resource type="Script" uid="uid://bgsuycn851owg" path="res://barkvr-system/ui/3dPanel/editmode/attributes/object.gd" id="1_bl13v"]
+
+[node name="object" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+script = ExtResource("1_bl13v")
+full_height = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel2" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "object"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="expand" type="Button" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.45
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "\\/"
+flat = true
+
+[node name="create" type="Button" parent="VBoxContainer/Panel2"]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -239.0
+offset_top = -30.0
+offset_right = -153.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "create"
+expand_icon = true
+
+[node name="copy" type="Button" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -148.0
+offset_top = -30.0
+offset_right = -81.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "copy"
+expand_icon = true
+
+[node name="paste" type="Button" parent="VBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "paste"
+expand_icon = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+color = Color(1, 1, 1, 0.254902)
+
+[node name="object" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+clip_contents = true
+layout_mode = 2

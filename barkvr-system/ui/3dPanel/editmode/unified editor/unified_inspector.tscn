@@ -1,0 +1,200 @@
+[gd_scene load_steps=12 format=3 uid="uid://djp6k7l4t71pi"]
+
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
+[ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://barkvr-system/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
+[ext_resource type="Texture2D" uid="uid://5jr0w6im4k6n" path="res://barkvr-system/assets/icons/teenyicons/solid/adjust-horizontal.svg" id="3_44k0f"]
+[ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="3_io3sm"]
+[ext_resource type="PackedScene" uid="uid://oyjnngbldb6v" path="res://barkvr-system/ui/3dPanel/editmode/popup/add_node.tscn" id="4_07uq0"]
+[ext_resource type="Texture2D" uid="uid://jruwnps6bpen" path="res://barkvr-system/assets/icons/teenyicons/solid/align-left.svg" id="5_751a0"]
+[ext_resource type="Texture2D" uid="uid://bndqcjjxuinwt" path="res://barkvr-system/assets/icons/teenyicons/solid/code.svg" id="5_dxjhh"]
+[ext_resource type="Texture2D" uid="uid://d0qwy3uq2r6q6" path="res://barkvr-system/assets/icons/teenyicons/solid/send-down.svg" id="7_gjq0p"]
+
+[sub_resource type="GDScript" id="GDScript_qoabx"]
+script/source = "extends Control
+
+
+@onready var sceneinspector: Control = $sceneinspector
+@onready var attributes: Control = $attributes
+@onready var gdscriptpanel: Control = $gdscriptpanel
+@onready var add_node: Control = $AddNode
+
+@onready var script_toggle: Button = $script_toggle
+@onready var inspector_toggle: Button = $inspector_toggle
+@onready var add_node_toggle: Button = $add_node_toggle
+@onready var attributes_toggle: Button = $attributes_toggle
+
+func _ready() -> void:
+	sceneinspector.selected.connect(func(target):
+		var tmpvis := attributes.visible
+		var tmplayout := attributes.layout_mode
+		var tmpanchors := attributes.anchors_preset
+		var tmpsize := attributes.size
+		var tmppos := attributes.position
+		attributes.queue_free()
+		attributes = load(\"res://barkvr-system/ui/3dPanel/editmode/attributes.tscn\").instantiate()
+		add_child(attributes)
+		attributes_toggle.node_to_toggle = attributes
+		attributes.visible = tmpvis
+		attributes.layout_mode = tmplayout
+		attributes.anchors_preset = tmpanchors
+		attributes.size = tmpsize
+		attributes.position = tmppos
+		attributes.set_target(target)
+		LocalGlobals.is_inspector_loading = false
+		gdscriptpanel.set_target(target)
+		add_node.set_target(target)
+		)
+"
+
+[sub_resource type="GDScript" id="GDScript_mguyu"]
+script/source = "extends Button
+
+## The node that will have it's [code]visibility[/code]
+## field toggled when this button is pressed
+@export var node_to_toggle : Node
+
+@export var slide := false
+var slide_start_pos
+
+@onready var attributes_toggle: Button = $\"../attributes_toggle\"
+@onready var inspector_toggle: Button = $\"../inspector_toggle\"
+@onready var script_toggle: Button = $\"../script_toggle\"
+@onready var add_node_toggle: Button = $\"../add_node_toggle\"
+
+#func _ready() -> void:
+	#manual_toggle(!button_pressed)
+
+func manual_toggle(toggled_on) -> void:
+	_toggled(toggled_on)
+	button_pressed = toggled_on
+
+func _toggled(toggled_on):
+	if is_instance_valid(node_to_toggle):
+		if !slide:
+			node_to_toggle.visible = toggled_on
+		if slide:
+			if !slide_start_pos:
+				slide_start_pos = node_to_toggle.position
+			node_to_toggle.show()
+			if toggled_on:
+				create_tween().tween_property(node_to_toggle,\"position:x\",slide_start_pos.x,.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+			else:
+				create_tween().tween_property(node_to_toggle,\"position:x\",-(node_to_toggle.size.x+slide_start_pos.x),.5).\\
+				set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+			if toggled_on and is_instance_valid(attributes_toggle) and attributes_toggle != self and attributes_toggle.button_pressed:
+				attributes_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(inspector_toggle) and inspector_toggle != self and inspector_toggle.button_pressed:
+				inspector_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(script_toggle) and script_toggle != self and script_toggle.button_pressed:
+				script_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(add_node_toggle) and add_node_toggle != self and add_node_toggle.button_pressed:
+				add_node_toggle.manual_toggle(false)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kfbv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[node name="UnifiedInspector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_qoabx")
+
+[node name="script_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+z_index = 10
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 120.0
+offset_right = 60.0
+offset_bottom = 180.0
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("5_dxjhh")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../gdscriptpanel")
+slide = true
+
+[node name="inspector_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+z_index = 10
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 60.0
+offset_right = 60.0
+offset_bottom = 120.0
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+icon = ExtResource("5_751a0")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../sceneinspector")
+slide = true
+
+[node name="add_node_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+z_index = 10
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 180.0
+offset_right = 60.0
+offset_bottom = 240.0
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("7_gjq0p")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../AddNode")
+slide = true
+
+[node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+z_index = 10
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 60.0
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("3_44k0f")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../attributes")
+slide = true
+
+[node name="attributes" parent="." instance=ExtResource("1_f3gci")]
+visible = false
+layout_mode = 1
+offset_left = 60.0
+grow_vertical = 2
+
+[node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
+layout_mode = 1
+offset_left = 60.0
+
+[node name="gdscriptpanel" parent="." instance=ExtResource("3_io3sm")]
+visible = false
+layout_mode = 1
+offset_left = 60.0
+
+[node name="AddNode" parent="." instance=ExtResource("4_07uq0")]
+visible = false
+layout_mode = 1
+offset_left = 60.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8kfbv")

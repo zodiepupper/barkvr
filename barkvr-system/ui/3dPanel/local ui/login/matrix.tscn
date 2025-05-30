@@ -1,0 +1,272 @@
+[gd_scene load_steps=9 format=3 uid="uid://i3pxsgqnbjly"]
+
+[ext_resource type="Script" uid="uid://cd4decvrgrn6l" path="res://barkvr-system/ui/3dPanel/local ui/login/loginbutton.gd" id="1_18njo"]
+[ext_resource type="Script" uid="uid://btdchjgl5dxaa" path="res://barkvr-system/ui/3dPanel/local ui/login/matrix.gd" id="1_ptvo5"]
+[ext_resource type="Script" uid="uid://lsrd3cblmpyk" path="res://barkvr-system/ui/3dPanel/local ui/login/hidepasswordbutton.gd" id="2_d3b4t"]
+[ext_resource type="Script" uid="uid://dhiddmra0k1s0" path="res://barkvr-system/ui/3dPanel/local ui/login/roomlist.gd" id="4_f325r"]
+[ext_resource type="Texture2D" uid="uid://dq6wx5duagvu5" path="res://barkvr-system/assets/icons/vr-headset.svg" id="4_keerj"]
+[ext_resource type="Script" uid="uid://42i7d81qu0hm" path="res://barkvr-system/ui/3dPanel/local ui/login/messages.gd" id="4_ydkch"]
+[ext_resource type="Script" uid="uid://bv6kqq01s1tyi" path="res://barkvr-system/ui/3dPanel/local ui/login/SendMessage.gd" id="5_wc8jy"]
+[ext_resource type="Shortcut" uid="uid://uy4hmt5wg7yr" path="res://barkvr-system/ui/3dPanel/local ui/login/send_shortcut_enter.tres" id="6_7jghc"]
+
+[node name="matrix" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ptvo5")
+
+[node name="login" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="login"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="login/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "homeserver"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="base_url" type="Label" parent="login/HBoxContainer/VBoxContainer/Label"]
+modulate = Color(1, 1, 1, 0.498039)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -16.75
+offset_bottom = 16.75
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "base_url: matrix.pupper.dev"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="homeserver" type="LineEdit" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "matrix.pupper.dev"
+placeholder_text = "enter your homeserver url"
+alignment = 1
+
+[node name="Label2" type="Label" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "username"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="uname" type="LineEdit" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "username"
+alignment = 1
+
+[node name="Label3" type="Label" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "password"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pword" type="LineEdit" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "password"
+alignment = 1
+secret = true
+
+[node name="hidepasswordbutton" type="Button" parent="login/HBoxContainer/VBoxContainer/pword"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -6.0
+offset_bottom = 6.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+toggle_mode = true
+text = "👀"
+script = ExtResource("2_d3b4t")
+
+[node name="Button" type="Button" parent="login/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+disabled = true
+text = "log in"
+script = ExtResource("1_18njo")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="login/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="Label" type="Label" parent="login/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "existing sessions:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="login_existing" type="ItemList" parent="login/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+focus_mode = 0
+item_count = 1
+
+[node name="chat" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HSplitContainer" parent="chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/autohide = 0
+split_offset = -120
+
+[node name="VBoxContainer" type="VBoxContainer" parent="chat/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="chat/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="user" type="Button" parent="chat/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "name"
+
+[node name="roomlist" type="Tree" parent="chat/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+allow_reselect = true
+allow_search = false
+hide_root = true
+script = ExtResource("4_f325r")
+
+[node name="RoomSplitContainer" type="VSplitContainer" parent="chat/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+dragger_visibility = 2
+
+[node name="Panel" type="Panel" parent="chat/HBoxContainer/RoomSplitContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="join button" type="Button" parent="chat/HBoxContainer/RoomSplitContainer/Panel"]
+unique_name_in_owner = true
+z_index = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_top = -25.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "join"
+icon = ExtResource("4_keerj")
+clip_text = true
+expand_icon = true
+
+[node name="MessageSplitContainer" type="VSplitContainer" parent="chat/HBoxContainer/RoomSplitContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="messagetext" type="TextEdit" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.85
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+placeholder_text = "type message to send here"
+wrap_mode = 1
+scroll_fit_content_height = true
+draw_tabs = true
+
+[node name="Button" type="Button" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer/Control" node_paths=PackedStringArray("shortcut_context")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+shortcut_context = NodePath("../..")
+shortcut = ExtResource("6_7jghc")
+text = "send"
+script = ExtResource("5_wc8jy")
+
+[node name="Control2" type="Control" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer/Control2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -0.00238037
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+
+[node name="messages" type="VBoxContainer" parent="chat/HBoxContainer/RoomSplitContainer/MessageSplitContainer/Control2/ScrollContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("4_ydkch")

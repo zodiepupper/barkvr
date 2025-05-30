@@ -1,0 +1,47 @@
+[gd_scene load_steps=9 format=3 uid="uid://ec0mqh35i2in"]
+
+[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_2f3s4"]
+[ext_resource type="PackedScene" uid="uid://djp6k7l4t71pi" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector.tscn" id="2_420i3"]
+
+[sub_resource type="Gradient" id="Gradient_lcqgf"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pnq8w"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h7rv1"]
+color_ramp = SubResource("Gradient_lcqgf")
+noise = SubResource("FastNoiseLite_pnq8w")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bsfdt"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ttheo"]
+width = 128
+height = 128
+in_3d_space = true
+seamless = true
+seamless_blend_skirt = 1.0
+as_normal_map = true
+normalize = false
+noise = SubResource("FastNoiseLite_bsfdt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5mcw"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.095, 0.093, 0.18, 0.416)
+albedo_texture = SubResource("NoiseTexture2D_h7rv1")
+roughness = 0.3
+normal_scale = 16.0
+normal_texture = SubResource("NoiseTexture2D_ttheo")
+texture_filter = 1
+
+[node name="UnifiedInspector3d" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 4
+freeze = true
+freeze_mode = 1
+continuous_cd = true
+script = ExtResource("1_2f3s4")
+background_material = SubResource("StandardMaterial3D_o5mcw")
+_auto_load_ui = ExtResource("2_420i3")
+render_priority = 124
+on_top = true
+metadata/grabbable = true

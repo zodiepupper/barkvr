@@ -38,7 +38,7 @@ func _go() -> void:
 		target = null
 		val.button_pressed = false
 		val.text = ''
-	create_tween().tween_callback(_go).set_delay(.05)
+	create_tween().tween_callback(_go).set_delay(Engine.get_singleton("settings_manager").inspector_update_interval)
 
 func update_fields():
 	#print('enum: ', property_name)

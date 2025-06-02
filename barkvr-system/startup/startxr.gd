@@ -97,7 +97,7 @@ func _setup_for_openxr() -> bool:
 	if not xr_interface.is_initialized():
 		print("OpenXR: Initializing interface")
 		if not xr_interface.initialize():
-			push_error("OpenXR: Failed to initialize")
+			push_warning("OpenXR: Failed to initialize")
 			return false
 
 	# Connect the OpenXR events

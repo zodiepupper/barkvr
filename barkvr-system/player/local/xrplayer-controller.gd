@@ -20,7 +20,7 @@ extends CharacterBody3D
 
 var head_pos: =Vector3():
 	get:
-		return xr_camera_3d.global_position if vr_mode_enabled else camera_3d.global_position
+		return get_viewport().get_camera_3d().global_position
 
 #controller input vars:
 var rightStick :Vector2 = Vector2()
@@ -44,6 +44,7 @@ var camPrevPos : Vector3 = Vector3()
 			if noclip:
 				noclip = false
 			motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
+
 @export var noclip := false:
 	set(value):
 		if value and !flymode:
@@ -143,114 +144,161 @@ func _ready():
 		vr_mode_enabled = false
 	
 	righthand.connect("button_pressed",func(input_name):
-		#Notifyvr.send_notification(name)
 		if input_name == "ax_button":
 			rightaxbtn = true
 		)
 	righthand.connect("button_released",func(input_name):
-#		print("released: "+input_name)
-		pass
 		if input_name == "ax_button":
 			rightaxbtn = false
 		)
-	righthand.input_float_changed.connect(func(input_name:String,value:float):
-		print('value {0}, {1}'.format([input_name,value]))
-		pass
-		)
 	righthand.input_vector2_changed.connect(func(input_name:String,value):
-		print('axis {0}, {1}'.format([input_name,value]))
-		pass
 		if input_name == "primary":
 			rightStick = value
 		)
 	lefthand.connect("button_pressed",func(input_name):
-		#print("pressed: "+name)
-		pass
 		if input_name == "ax_button":
 			leftaxbtn = true
 		)
 	lefthand.connect("button_released",func(input_name):
-		#print("released: "+name)
-		pass
 		if input_name == "ax_button":
 			leftaxbtn = false
 		)
-	#lefthand.input_float_changed.connect(func(name:String,value:float):
-		##print('value {0}, {1}'.format([name,value]))
-		#pass
-		#)
 	lefthand.input_vector2_changed.connect(func(input_name:String,value):
-#		print('axis {0}, {1}'.format([name,value]))
-		pass
 		if input_name == "primary":
 			leftStick = value
 		)
 
-func _physics_process(delta):
+func _physics_process(delta:float) -> void:
 	if !vr_mode_enabled:
 		menuoffset.global_rotation = Vector3()
 	if global_position.length() > 100000:
 		respawn_player()
 		flymode = true
-	# Add the gravity.
-	if not is_on_floor() and not flymode:
-		velocity.y -= (gravity*( (scale.x+scale.y+scale.z)/3.0 )) * delta
 	
 	# Flat mode toggle
 	if Input.is_action_just_pressed("desktoptoggle"):
 		vr_mode_enabled = !vr_mode_enabled
 
-	if vr_mode_enabled || OS.get_name() == "Android":
-		#LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-		#if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
-		xrplayer.position.x = -xr_camera_3d.position.x
-		xrplayer.position.z = -xr_camera_3d.position.z
-		position.x += (transform.basis*(xr_camera_3d.position-camPrevPos)).x
-		position.z += (transform.basis*(xr_camera_3d.position-camPrevPos)).z
-		playercamoffset.global_position.x -= (transform.basis*(xr_camera_3d.position-camPrevPos)).x
-		playercamoffset.global_position.z -= (transform.basis*(xr_camera_3d.position-camPrevPos)).z
-		camPrevPos = xr_camera_3d.position
-		transform = transform.rotated_local(Vector3.UP,-rightStick.x*delta)
-		xrplayer.position = xrplayer.position.rotated(Vector3.UP,rightStick.x*delta)
-		
-		var input_dir = leftStick
-		var direction = ((xr_camera_3d.transform.basis*transform.basis) * Vector3(input_dir.x, 0, -input_dir.y))
-		if flymode:
-			direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
-		if direction:
-			velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-			velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-			if flymode:
-				velocity.y = direction.y * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-		else:
-			velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			if flymode:
-				velocity.y = move_toward(velocity.y, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			
-		#if direction:
-			#velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-			#velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-		#else:
-			#velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-			#velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-		#if xr_camera_3d.position.y > 0.1:
-			#collision_shape_3d.shape.height = xr_camera_3d.position.y/2.0
-		#else:
-			#collision_shape_3d.shape.height = 0.1
-#		collision_shape_3d.position = xr_camera_3d.position.y/2.0
+	if vr_mode_enabled:
+		vr_movement(delta)
+	
+	if !vr_mode_enabled:
+		flat_movement(delta)
+	
+	var prevyvel = velocity.y
+	velocity = velocity.move_toward(Vector3(), SPEED*.5)
+	
+	# Add the gravity.
+	if not is_on_floor() and not flymode:
+		velocity.y = prevyvel
+		velocity.y -= (gravity*1.0*( (scale.x+scale.y+scale.z)/3.0 )) * delta
 	
 	# Handle Jump.
-	if rightaxbtn and (is_on_floor() or flymode):
-		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
-	if !vr_mode_enabled:
-		flat_movement()
-	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump"))) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
-		velocity.y = (JUMP_VELOCITY*( (scale.x+scale.y+scale.z)/3.0 ))
-		
-	
+	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump")) or rightaxbtn) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
+		velocity.y = (JUMP_VELOCITY*1*( (scale.x+scale.y+scale.z)/3.0 ))
 	
 	move_and_slide()
+
+func vr_movement(delta:float) -> void:
+	xrplayer.position.x = -xr_camera_3d.position.x
+	xrplayer.position.z = -xr_camera_3d.position.z
+	position.x += (transform.basis*(xr_camera_3d.position-camPrevPos)).x
+	position.z += (transform.basis*(xr_camera_3d.position-camPrevPos)).z
+	playercamoffset.global_position.x -= (transform.basis*(xr_camera_3d.position-camPrevPos)).x
+	playercamoffset.global_position.z -= (transform.basis*(xr_camera_3d.position-camPrevPos)).z
+	camPrevPos = xr_camera_3d.position
+	transform = transform.rotated_local(Vector3.UP,-rightStick.x*delta)
+	xrplayer.position = xrplayer.position.rotated(Vector3.UP,rightStick.x*delta)
+	
+	var input_dir = leftStick
+	var direction: Vector3
+	if flymode:
+		direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
+	else:
+		direction = ((global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
+
+func flat_movement(delta:float) -> void:
+	place_grabbed_nodes()
+	var joy_look_vector = Input.get_vector('lookleft','lookright','lookdown','lookup')
+	if joy_look_vector.length()>.05:
+		rotate_y(-joy_look_vector.x*JOY_SPEED)
+		xr_camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
+		camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
+	if Input.is_action_just_pressed("click"):
+		if grabbed.size() > 0:
+			var did_activate_held := false
+			for item in grabbed.values():
+				if "node" in item and "primary" in item.node:
+					item.node.primary()
+					did_activate_held = true
+			if !did_activate_held:
+				ui_ray.click()
+		else:
+			LocalGlobals.playerreleaseuifocus.emit()
+			ui_ray.click()
+	if Input.is_action_just_released("click"):
+		if grabbed.size() > 0:
+			for item in grabbed.values():
+				if "node" in item and "primary_released" in item.node:
+					item.node.primary_released()
+		ui_ray.release()
+		#world_ray.release()
+	if Input.is_action_just_pressed("rightclick"):
+		if vr_mode_enabled:
+			righthand.grip()
+		else:
+			grip()
+	if Input.is_action_just_released("rightclick"):
+		if vr_mode_enabled:
+			righthand.ungrip()
+		else:
+			ungrip()
+	if Input.is_action_just_pressed("middleclick"):
+		if vr_mode_enabled:
+			righthand.contextMenuSummon()
+		else:
+			contextMenuSummon()
+	if ui_ray.is_colliding():
+		grab_point = camera_3d.to_local(ui_ray.get_collision_point())
+	else:
+		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
+	if Input.is_action_just_pressed("desktop_secondary"):
+		#vreditor = load("res://barkvr-system/ui/3dPanel/editmode/vreditor.tscn").instantiate()
+		var vreditor = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
+		get_tree().get_first_node_in_group("localworldroot").add_child(vreditor)
+		vreditor.global_position = camera_3d.to_global(Vector3(0,0,-.5))
+		vreditor.look_at(camera_3d.global_position, Vector3.UP, true)
+	
+	righthand.look_at(camera_3d.to_global(grab_point))
+	
+	var input_dir : Vector2
+	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
+		input_dir = Input.get_vector("left", "right", "up", "down")
+	
+	if !movedrag.is_empty():
+		if -touch_move_left > input_dir.x:
+			input_dir.x = -touch_move_left
+		if touch_move_right < input_dir.x:
+			input_dir.x = touch_move_right
+		if -touch_move_forward > input_dir.y:
+			input_dir.y = -touch_move_forward
+		if touch_move_backward < input_dir.y:
+			input_dir.y = touch_move_backward
+	var direction: Vector3
+	if flymode:
+		direction = (camera_3d.global_basis * Vector3(input_dir.x, 0.0, input_dir.y))
+	else:
+		direction = (global_basis * Vector3(input_dir.x, 0.0, input_dir.y))
+	if direction:
+		# used a ternary to preserve the y velocity if they player is not flying
+		# this prevents this lazy ass code from exponentially increasing vertical
+		# speed while flying
+		velocity = (direction*SPEED)+Vector3(0, velocity.y, 0) if !flymode else (direction*SPEED)
+	if lookdrag:
+		if touchsticklook:
+			rotate_y( -(lookdrag.position.x-lookdrag.startposition.x)*(MOUSE_SPEED/800) )
+			xr_camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
+			camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 
 func _input(event):
 	if event is InputEventJoypadMotion:
@@ -379,93 +427,6 @@ func _screen_tap_click(_event:InputEvent) -> void:
 	LocalGlobals.playerreleaseuifocus.emit()
 	ui_ray.click()
 	ui_ray.release()
-	
-
-func flat_movement():
-	place_grabbed_nodes()
-	var joy_look_vector = Input.get_vector('lookleft','lookright','lookdown','lookup')
-	if joy_look_vector.length()>.05:
-		rotate_y(-joy_look_vector.x*JOY_SPEED)
-		xr_camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
-		camera_3d.rotate_x(joy_look_vector.y*JOY_SPEED)
-	if Input.is_action_just_pressed("click"):
-		if grabbed.size() > 0:
-			var did_activate_held := false
-			for item in grabbed.values():
-				if "node" in item and "primary" in item.node:
-					item.node.primary()
-					did_activate_held = true
-			if !did_activate_held:
-				ui_ray.click()
-		else:
-			LocalGlobals.playerreleaseuifocus.emit()
-			ui_ray.click()
-	if Input.is_action_just_released("click"):
-		if grabbed.size() > 0:
-			for item in grabbed.values():
-				if "node" in item and "primary_released" in item.node:
-					item.node.primary_released()
-		ui_ray.release()
-		#world_ray.release()
-	if Input.is_action_just_pressed("rightclick"):
-		if vr_mode_enabled:
-			righthand.grip()
-		else:
-			grip()
-	if Input.is_action_just_released("rightclick"):
-		if vr_mode_enabled:
-			righthand.ungrip()
-		else:
-			ungrip()
-	if Input.is_action_just_pressed("middleclick"):
-		if vr_mode_enabled:
-			righthand.contextMenuSummon()
-		else:
-			contextMenuSummon()
-	if ui_ray.is_colliding():
-		grab_point = camera_3d.to_local(ui_ray.get_collision_point())
-	else:
-		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
-	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
-		#vreditor = load("res://barkvr-system/ui/3dPanel/editmode/vreditor.tscn").instantiate()
-		var vreditor = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
-		get_tree().get_first_node_in_group("localworldroot").add_child(vreditor)
-		vreditor.global_position = camera_3d.to_global(Vector3(0,0,-.5))
-		vreditor.look_at(camera_3d.global_position, Vector3.UP, true)
-	if !vr_mode_enabled:
-		righthand.look_at(camera_3d.to_global(grab_point))
-	
-	var input_dir : Vector2
-	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
-		input_dir = Input.get_vector("left", "right", "up", "down")
-	
-	if !movedrag.is_empty():
-		if -touch_move_left > input_dir.x:
-			input_dir.x = -touch_move_left
-		if touch_move_right < input_dir.x:
-			input_dir.x = touch_move_right
-		if -touch_move_forward > input_dir.y:
-			input_dir.y = -touch_move_forward
-		if touch_move_backward < input_dir.y:
-			input_dir.y = touch_move_backward
-	var direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()*input_dir.length()
-	if flymode:
-		direction.y = (camera_3d.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized().y
-	if direction:
-		velocity.x = direction.x * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-		velocity.z = direction.z * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-		if flymode:
-			velocity.y = direction.y * (SPEED*( (scale.x+scale.y+scale.z)/3.0 ))
-	else:
-		velocity.x = move_toward(velocity.x, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-		velocity.z = move_toward(velocity.z, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-		if flymode:
-			velocity.y = move_toward(velocity.y, 0, (SPEED*( (scale.x+scale.y+scale.z)/3.0 )))
-	if lookdrag:
-		if touchsticklook:
-			rotate_y( -(lookdrag.position.x-lookdrag.startposition.x)*(MOUSE_SPEED/800) )
-			xr_camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
-			camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 
 func contextMenuSummon():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:

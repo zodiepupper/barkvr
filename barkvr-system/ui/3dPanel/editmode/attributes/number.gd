@@ -32,17 +32,16 @@ func _ready():
 			else:
 				target[property_name] = int(new_text)
 		)
+	_go()
 
-func _draw() -> void:
-	print("drawing")
+func _go() -> void:
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 	var scrollparent = get_parent_control().get_parent_control()
 	if scrollparent is ScrollContainer:
 		var rect = get_global_rect()
 		if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
-				update_fields.call_deferred()
-	else:
-		update_fields()
+				update_fields()
+	create_tween().tween_callback(_go).set_delay(Engine.get_singleton("settings_manager").inspector_update_interval)
 
 func update_fields():
 	#print('number: ', property_name)

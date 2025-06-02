@@ -159,6 +159,98 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 freeze_mode = 0
 
+[node name="XRNode3D" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/hand_tracker/left"
+show_when_tracked = true
+
+[node name="XRNode3D2" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/hand_tracker/right"
+show_when_tracked = true
+
+[node name="XRNode3D3" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/body_tracker"
+show_when_tracked = true
+
+[node name="XRNode3D4" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/face_tracker"
+show_when_tracked = true
+
+[node name="XRNode3D5" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/treadmill"
+show_when_tracked = true
+
+[node name="XRNode3D6" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/fbhandaim/left"
+show_when_tracked = true
+
+[node name="XRNode3D7" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/fbhandaim/right"
+show_when_tracked = true
+
+[node name="XRNode3D8" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/hand_htc/left"
+show_when_tracked = true
+
+[node name="XRNode3D9" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/hand_htc/right"
+show_when_tracked = true
+
+[node name="XRNode3D10" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/handheld_object"
+show_when_tracked = true
+
+[node name="XRNode3D11" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/left_foot"
+show_when_tracked = true
+
+[node name="XRNode3D12" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/right_foot"
+show_when_tracked = true
+
+[node name="XRNode3D13" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/left_shoulder"
+show_when_tracked = true
+
+[node name="XRNode3D14" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/right_shoulder"
+show_when_tracked = true
+
+[node name="XRNode3D15" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/left_elbow"
+show_when_tracked = true
+
+[node name="XRNode3D16" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/right_elbow"
+show_when_tracked = true
+
+[node name="XRNode3D17" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/left_knee"
+show_when_tracked = true
+
+[node name="XRNode3D18" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/right_knee"
+show_when_tracked = true
+
+[node name="XRNode3D19" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/waist"
+show_when_tracked = true
+
+[node name="XRNode3D20" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/chest"
+show_when_tracked = true
+
+[node name="XRNode3D21" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/camera"
+show_when_tracked = true
+
+[node name="XRNode3D22" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/vive_tracker_htcx/role/keyboard"
+show_when_tracked = true
+
+[node name="XRNode3D23" type="XRNode3D" parent="xrplayer"]
+tracker = &"/user/eyes_ext"
+show_when_tracked = true
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.496656, 0)

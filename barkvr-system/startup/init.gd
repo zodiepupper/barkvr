@@ -66,13 +66,13 @@ func _ready():
 			loader.global_position = import_position
 	)# end of files dropped
 
-func _process(_delta:float) -> void:
-	if !is_instance_valid(get_tree().get_first_node_in_group("player")):
-		var tmp_target_parent = get_tree().get_first_node_in_group("localworldroot")
-		if is_instance_valid(tmp_target_parent):
-			tmp_target_parent.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
-		else:
-			get_tree().root.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
+#func _process(_delta:float) -> void:
+	#if !is_instance_valid(get_tree().get_first_node_in_group("player")):
+		#var tmp_target_parent = get_tree().get_first_node_in_group("localworldroot")
+		#if is_instance_valid(tmp_target_parent):
+			#tmp_target_parent.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
+		#else:
+			#get_tree().root.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
 
 func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Vector3=Vector3(), player_size_mult:float=1.0):
 	var offset := -1.0

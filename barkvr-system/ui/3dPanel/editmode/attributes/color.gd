@@ -101,7 +101,7 @@ func _go() -> void:
 	var rect = get_global_rect()
 	if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
 		update_fields()
-	create_tween().tween_callback(_go).set_delay(.05)
+	create_tween().tween_callback(_go).set_delay(Engine.get_singleton("settings_manager").inspector_update_interval)
 
 func update_fields():
 	#print('color: ', property_name)

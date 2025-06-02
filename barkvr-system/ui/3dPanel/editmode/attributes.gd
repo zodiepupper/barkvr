@@ -64,7 +64,6 @@ func set_target(new_target, above_targets:=[]):
 		for i in above_targets:
 			if i is Resource:
 				num_of_resources_above += 1
-		print("num_of_resources_above: ", num_of_resources_above)
 		if num_of_resources_above > 1:
 			print(above_targets.filter(func(val):
 				if val is Resource:

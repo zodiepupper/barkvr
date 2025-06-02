@@ -604,58 +604,120 @@ func _load_res_with_dependencies(path:String) -> Resource:
 	res = ResourceLoader.load(path)
 	return res
 
+func _load_image_bytes_from_header(content: PackedByteArray):
+	var img := Image.new()
+	
+	var format_signatures = [
+		# WEBP
+		{
+			"callable": Callable(img, "load_webp_from_buffer"),
+			"magic": [0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50]
+		},
+		# PNG
+		{
+			"callable": Callable(img, "load_png_from_buffer"),
+			"magic": [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
+		},
+		# BMP
+		{
+			"callable": Callable(img, "load_bmp_from_buffer"),
+			"magic": [0x42, 0x4D]
+		},
+		# TGA does not have a static header
+		
+		# JPG
+		{
+			"callable": Callable(img, "load_jpg_from_buffer"),
+			# I think there are other possible magics
+			# This could possibly miss some kinds of JPEGs!
+			# TODO: Add more JPEG magics
+			"magic": [0xFF, 0xD8, 0xFF, 0xE0]
+		},
+		# SVG does not have a static header
+		
+		# KTX
+		{
+			"callable": Callable(img, "load_ktx_from_buffer"),
+			"magic": [0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A]
+		}
+	]
+	
+	# Check each signature on the image to find a match
+	for signature in format_signatures:
+		var magic = signature.magic
+		
+		# Check to make sure there are enough bytes to read
+		if content.size() >= magic.size():
+			var matches = true
+			
+			# Loop over bytes until our signature is done
+			# or there is a mismatch
+			for i in range(magic.size()):
+				# Dont read null (wildcard) magic bytes
+				if magic[i] == null:
+					continue
+				
+				if content[i] != magic[i]:
+					# There was a mismatch
+					matches = false
+					break
+			
+			if matches:
+				# We have a signature match!
+				# Load the image
+				signature.callable.call(content)
+	
+	return img
+
 ## Imports an image from bytes.
 func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dictionary={}) -> void:
 	check_root()
-	var img := Image.new()
+	
+	var img: Image = _load_image_bytes_from_header(content)
 	var err: Error
 	
-	err = img.load_webp_from_buffer(content)
-	if err != OK:
-		err = img.load_png_from_buffer(content)
-	if err != OK:
-		err = img.load_bmp_from_buffer(content)
-	if err != OK:
+	# `img` will be empty if no signature was matched or loading failed
+	if img.is_empty():
+		# The image did not have a signature
+		# The image could be TGA, SVG, or in the data dict
+		
 		err = img.load_tga_from_buffer(content)
-	if err != OK:
-		err = img.load_jpg_from_buffer(content)
-	if err != OK:
-		err = img.load_svg_from_buffer(content)
-	if err != OK:
-		err = img.load_ktx_from_buffer(content)
-	if err != OK and "image_data" in data and "image_image_alt" in data:
-		img = bytes_to_var_with_objects(data.image_data)
-		if !img.is_empty():
+		if err != OK:
+			err = img.load_svg_from_buffer(content)
+		if err != OK and "image_data" in data and "image_image_alt" in data:
+			# Image was not TGA or SVG, test the data argument for image data
+			img = bytes_to_var_with_objects(data.image_data)
+			if !img.is_empty():
+				err = OK
+		if err != OK and "image_data" in data:
+			var _img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
+			"FORMAT_BPTC_RGBF": 23,
+			"FORMAT_BPTC_RGBFU": 24,
+			"FORMAT_ETC": 25,
+			"FORMAT_ETC2_R11": 26,
+			"FORMAT_ETC2_R11S": 27,
+			"FORMAT_ETC2_RG11": 28,
+			"FORMAT_ETC2_RG11S": 29,
+			"FORMAT_ETC2_RGB8": 30,
+			"FORMAT_ETC2_RGBA8": 31,
+			"FORMAT_ETC2_RGB8A1": 32,
+			"FORMAT_ETC2_RA_AS_RG": 33,
+			"FORMAT_DXT5_RA_AS_RG": 34,
+			"FORMAT_ASTC_4x4": 35,
+			"FORMAT_ASTC_4x4_HDR": 36,
+			"FORMAT_ASTC_8x8": 37,
+			"FORMAT_ASTC_8x8_HDR": 38}
+			#for format in img_formats_lookup.keys():
+				#if data.image_data.format in format:
+					#data.image_data.format = format
+					#break
+			img = null
+			img = Image.new()
+			img.data.data = data.image_data
+			print('create image from data:')
+			print(img.data.size())
+			print(img.is_empty())
 			err = OK
-	if err != OK and "image_data" in data:
-		var _img_formats_lookup = {"FORMAT_BPTC_RGBA": 22,
-		"FORMAT_BPTC_RGBF": 23,
-		"FORMAT_BPTC_RGBFU": 24,
-		"FORMAT_ETC": 25,
-		"FORMAT_ETC2_R11": 26,
-		"FORMAT_ETC2_R11S": 27,
-		"FORMAT_ETC2_RG11": 28,
-		"FORMAT_ETC2_RG11S": 29,
-		"FORMAT_ETC2_RGB8": 30,
-		"FORMAT_ETC2_RGBA8": 31,
-		"FORMAT_ETC2_RGB8A1": 32,
-		"FORMAT_ETC2_RA_AS_RG": 33,
-		"FORMAT_DXT5_RA_AS_RG": 34,
-		"FORMAT_ASTC_4x4": 35,
-		"FORMAT_ASTC_4x4_HDR": 36,
-		"FORMAT_ASTC_8x8": 37,
-		"FORMAT_ASTC_8x8_HDR": 38}
-		#for format in img_formats_lookup.keys():
-			#if data.image_data.format in format:
-				#data.image_data.format = format
-				#break
-		img = null
-		img = Image.new()
-		img.data.data = data.image_data
-		print('create image from data:')
-		print(img.data.size())
-		print(img.is_empty())
-		err = OK
 	
 	if err != OK or img.is_empty():
 		if "loader" in data:

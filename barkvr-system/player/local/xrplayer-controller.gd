@@ -235,6 +235,10 @@ func flat_movement(delta:float) -> void:
 				ui_ray.click()
 		else:
 			LocalGlobals.playerreleaseuifocus.emit()
+			if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+			else:
+				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
 			ui_ray.click()
 	if Input.is_action_just_released("click"):
 		if grabbed.size() > 0:
@@ -425,6 +429,10 @@ func _input(event):
 
 func _screen_tap_click(_event:InputEvent) -> void:
 	LocalGlobals.playerreleaseuifocus.emit()
+	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+	else:
+		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
 	ui_ray.click()
 	ui_ray.release()
 

@@ -1,22 +1,24 @@
-[gd_scene load_steps=12 format=3 uid="uid://djp6k7l4t71pi"]
+[gd_scene load_steps=14 format=3 uid="uid://djp6k7l4t71pi"]
 
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
 [ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://barkvr-system/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
 [ext_resource type="Texture2D" uid="uid://5jr0w6im4k6n" path="res://barkvr-system/assets/icons/teenyicons/solid/adjust-horizontal.svg" id="3_44k0f"]
 [ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="3_io3sm"]
 [ext_resource type="PackedScene" uid="uid://oyjnngbldb6v" path="res://barkvr-system/ui/3dPanel/editmode/popup/add_node.tscn" id="4_07uq0"]
+[ext_resource type="Texture2D" uid="uid://ctm1a1jtrioxn" path="res://barkvr-system/assets/icons/teenyicons/solid/paw.svg" id="5_07iyw"]
 [ext_resource type="Texture2D" uid="uid://jruwnps6bpen" path="res://barkvr-system/assets/icons/teenyicons/solid/align-left.svg" id="5_751a0"]
 [ext_resource type="Texture2D" uid="uid://bndqcjjxuinwt" path="res://barkvr-system/assets/icons/teenyicons/solid/code.svg" id="5_dxjhh"]
 [ext_resource type="Texture2D" uid="uid://d0qwy3uq2r6q6" path="res://barkvr-system/assets/icons/teenyicons/solid/send-down.svg" id="7_gjq0p"]
+[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="10_8v8x7"]
 
 [sub_resource type="GDScript" id="GDScript_qoabx"]
 script/source = "extends Control
 
-
-@onready var sceneinspector: Control = $sceneinspector
-@onready var attributes: Control = $attributes
-@onready var gdscriptpanel: Control = $gdscriptpanel
-@onready var add_node: Control = $AddNode
+@onready var attributes: Control = %attributes
+@onready var sceneinspector: Control = %sceneinspector
+@onready var gdscriptpanel: Control = %gdscriptpanel
+@onready var add_node: Control = %AddNode
+@onready var bvs_ui: GraphEdit = %bvs_ui
 
 @onready var script_toggle: Button = $script_toggle
 @onready var inspector_toggle: Button = $inspector_toggle
@@ -56,13 +58,15 @@ script/source = "extends Button
 @export var slide := false
 var slide_start_pos
 
-@onready var attributes_toggle: Button = $\"../attributes_toggle\"
+@onready var script_toggle: Button = $\".\"
 @onready var inspector_toggle: Button = $\"../inspector_toggle\"
-@onready var script_toggle: Button = $\"../script_toggle\"
 @onready var add_node_toggle: Button = $\"../add_node_toggle\"
+@onready var attributes_toggle: Button = $\"../attributes_toggle\"
+@onready var bvs_ui_toggle: Button = $\"../bvs_ui_toggle\"
 
-#func _ready() -> void:
-	#manual_toggle(!button_pressed)
+
+func _ready() -> void:
+	get_viewport()
 
 func manual_toggle(toggled_on) -> void:
 	_toggled(toggled_on)
@@ -121,7 +125,7 @@ toggle_mode = true
 icon = ExtResource("5_dxjhh")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../gdscriptpanel")
+node_to_toggle = NodePath("../panels/gdscriptpanel")
 slide = true
 
 [node name="inspector_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
@@ -137,7 +141,7 @@ button_pressed = true
 icon = ExtResource("5_751a0")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../sceneinspector")
+node_to_toggle = NodePath("../panels/sceneinspector")
 slide = true
 
 [node name="add_node_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
@@ -152,7 +156,7 @@ toggle_mode = true
 icon = ExtResource("7_gjq0p")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../AddNode")
+node_to_toggle = NodePath("../panels/AddNode")
 slide = true
 
 [node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
@@ -166,28 +170,23 @@ toggle_mode = true
 icon = ExtResource("3_44k0f")
 expand_icon = true
 script = SubResource("GDScript_mguyu")
-node_to_toggle = NodePath("../attributes")
+node_to_toggle = NodePath("../panels/attributes")
 slide = true
 
-[node name="attributes" parent="." instance=ExtResource("1_f3gci")]
-visible = false
-layout_mode = 1
-offset_left = 60.0
-grow_vertical = 2
-
-[node name="sceneinspector" parent="." instance=ExtResource("2_m06d0")]
-layout_mode = 1
-offset_left = 60.0
-
-[node name="gdscriptpanel" parent="." instance=ExtResource("3_io3sm")]
-visible = false
-layout_mode = 1
-offset_left = 60.0
-
-[node name="AddNode" parent="." instance=ExtResource("4_07uq0")]
-visible = false
-layout_mode = 1
-offset_left = 60.0
+[node name="bvs_ui_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+z_index = 10
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_top = 241.0
+offset_right = 60.0
+offset_bottom = 301.0
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("5_07iyw")
+expand_icon = true
+script = SubResource("GDScript_mguyu")
+node_to_toggle = NodePath("../panels/bvs_ui")
+slide = true
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -198,3 +197,38 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8kfbv")
+
+[node name="panels" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="attributes" parent="panels" instance=ExtResource("1_f3gci")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="sceneinspector" parent="panels" instance=ExtResource("2_m06d0")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="gdscriptpanel" parent="panels" instance=ExtResource("3_io3sm")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="AddNode" parent="panels" instance=ExtResource("4_07uq0")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="bvs_ui" parent="panels" instance=ExtResource("10_8v8x7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+scroll_offset = Vector2(0, -40)

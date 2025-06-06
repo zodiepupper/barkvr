@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bpqyj01fpsek7"]
+
+[node name="process" type="GraphNode"]
+offset_left = 404.0
+offset_top = 204.0
+offset_right = 479.0
+offset_bottom = 282.0
+mouse_filter = 1
+position_offset = Vector2(404, 204)
+title = "process"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "woof"

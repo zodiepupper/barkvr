@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhwovnnr04rri"]
+
+[ext_resource type="Script" path="res://barkvr-system/systems/vbs/ui/visscripttest.gd" id="1_rrgds"]
+[ext_resource type="PackedScene" uid="uid://bpqyj01fpsek7" path="res://barkvr-system/systems/vbs/ui/process.tscn" id="2_flbyy"]
+[ext_resource type="PackedScene" path="res://barkvr-system/systems/vbs/ui/interval_bvs.tscn" id="3_aies2"]
+[ext_resource type="PackedScene" path="res://barkvr-system/systems/vbs/ui/float_bvs.tscn" id="4_mdaeo"]
+[ext_resource type="PackedScene" path="res://barkvr-system/systems/vbs/ui/variable_bvs.tscn" id="5_v85pq"]
+
+[node name="bvs_ui" type="GraphEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+right_disconnects = true
+script = ExtResource("1_rrgds")
+
+[node name="process" parent="." instance=ExtResource("2_flbyy")]
+layout_mode = 0
+
+[node name="interval" parent="." instance=ExtResource("3_aies2")]
+layout_mode = 0
+
+[node name="float" parent="." instance=ExtResource("4_mdaeo")]
+layout_mode = 0
+
+[node name="variable" parent="." instance=ExtResource("5_v85pq")]
+layout_mode = 0

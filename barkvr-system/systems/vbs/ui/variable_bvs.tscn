@@ -1,0 +1,37 @@
+[gd_scene load_steps=0 format=3 uid="uid://ceamctffi58n0"]
+
+[node name="variable" type="GraphNode"]
+offset_left = 659.0
+offset_top = 128.0
+offset_right = 781.0
+offset_bottom = 239.0
+mouse_filter = 1
+position_offset = Vector2(659, 128)
+title = "variable"
+ignore_invalid_connection_type = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 0
+slot/1/left_color = Color(0, 1, 0, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 0
+slot/1/right_color = Color(0, 1, 0, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "variable name"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "value"

@@ -907,7 +907,8 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 	var scale = 1.0
 	if "scale" in data:
 		scale = data.scale
-	root.add_child(node_to_add)
+	root.call_deferred("add_child", node_to_add)
+	await get_tree().process_frame
 	if node_to_add is Node3D:
 		if lookatuser:
 			node_to_add.look_at_from_position(position,get_viewport().get_camera_3d().global_position,Vector3.UP,true)

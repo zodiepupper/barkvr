@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://6thah7fkm67m"]
+
+[sub_resource type="GDScript" id="GDScript_b7p2o"]
+script/source = "extends GraphNode
+
+var tween = create_tween()
+
+var timer := 0.0
+var timer_interval := .5
+@onready var label: LineEdit = $timer_interval
+
+func _process(delta: float) -> void:
+	label.text_changed.connect(func(new_text:String):
+		timer_interval = float(new_text)
+		)
+	if (Time.get_ticks_msec()-timer)/1000.0 > timer_interval:
+		timer = Time.get_ticks_msec()
+		tween.kill()
+		tween = create_tween()
+		tween.tween_method(ping, .5, 0., timer_interval).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+
+func ping(val):
+	set_slot_color_right(0, Color.from_hsv(0, val, 1))
+"
+
+[node name="interval" type="GraphNode"]
+offset_left = 406.0
+offset_top = 363.0
+offset_right = 510.0
+offset_bottom = 449.0
+mouse_filter = 1
+position_offset = Vector2(406, 363)
+title = "interval"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = SubResource("GDScript_b7p2o")
+
+[node name="timer_interval" type="LineEdit" parent="."]
+layout_mode = 2
+text = ".1"
+placeholder_text = "seconds"

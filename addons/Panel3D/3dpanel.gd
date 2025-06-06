@@ -245,7 +245,8 @@ func _ready():
 				viewport.push_input(event)
 			)
 		viewport.gui_focus_changed.connect(func(node):
-			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_TYPING
+			if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
+				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_TYPING
 			get_window().grab_focus()
 			)
 		LocalGlobals.playerreleaseuifocus.connect(func():

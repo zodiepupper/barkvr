@@ -25,11 +25,12 @@ var VRMC_vrm_inst = VRMC_vrm.new()
 var VRMC_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 var VRMC_vrm_animation_inst = VRMC_vrm_animation.new()
 
+signal player_state_changed(state:int)
+
 @export_enum("PAUSED", "PLAYING", "TYPING") var player_state : int = 0:
 	set(value):
 		player_state = value
-		if value != 2 and !vr_supported:
-			playerreleaseuifocus.emit()
+		player_state_changed.emit(value)
 const PLAYER_STATE_PAUSED := 0
 const PLAYER_STATE_PLAYING:= 1
 const PLAYER_STATE_TYPING := 2

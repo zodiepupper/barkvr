@@ -131,6 +131,21 @@ func respawn_player():
 		global_position = Vector3(0,4,0)
 
 func _ready():
+	get_window().gui_focus_changed.connect(func(node):
+		if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
+			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_TYPING
+		)
+	LocalGlobals.player_state_changed.connect(func(state):
+		match state:
+			LocalGlobals.PLAYER_STATE_TYPING:
+				LocalGlobals.emit_signal("playerreleaseuifocus")
+			LocalGlobals.PLAYER_STATE_PLAYING:
+				LocalGlobals.emit_signal("playerreleaseuifocus")
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			LocalGlobals.PLAYER_STATE_PAUSED:
+				LocalGlobals.emit_signal("playerreleaseuifocus")
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		)
 	name = OS.get_unique_id()
 	ui_ray.add_exception(self)
 	vr_mode_enabled = LocalGlobals.vr_supported
@@ -169,6 +184,8 @@ func _ready():
 		)
 
 func _physics_process(delta:float) -> void:
+	if !DisplayServer.window_is_focused(0) and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_PAUSED:
+		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 	if !vr_mode_enabled:
 		menuoffset.global_rotation = Vector3()
 	if global_position.length() > 100000:
@@ -234,11 +251,11 @@ func flat_movement(delta:float) -> void:
 			if !did_activate_held:
 				ui_ray.click()
 		else:
-			LocalGlobals.playerreleaseuifocus.emit()
-			if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
-				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-			else:
-				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+			if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_TYPING:
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+				else:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 			ui_ray.click()
 	if Input.is_action_just_released("click"):
 		if grabbed.size() > 0:
@@ -246,7 +263,6 @@ func flat_movement(delta:float) -> void:
 				if "node" in item and "primary_released" in item.node:
 					item.node.primary_released()
 		ui_ray.release()
-		#world_ray.release()
 	if Input.is_action_just_pressed("rightclick"):
 		if vr_mode_enabled:
 			righthand.grip()
@@ -266,7 +282,7 @@ func flat_movement(delta:float) -> void:
 		grab_point = camera_3d.to_local(ui_ray.get_collision_point())
 	else:
 		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
-	if Input.is_action_just_pressed("desktop_secondary"):
+	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 		#vreditor = load("res://barkvr-system/ui/3dPanel/editmode/vreditor.tscn").instantiate()
 		var vreditor = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
 		get_tree().get_first_node_in_group("localworldroot").add_child(vreditor)
@@ -346,16 +362,15 @@ func _input(event):
 		if event.is_pressed():
 			match LocalGlobals.player_state:
 				LocalGlobals.PLAYER_STATE_TYPING:
-					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-					LocalGlobals.emit_signal("playerreleaseuifocus")
-					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+					if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+					else:
+						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 				LocalGlobals.PLAYER_STATE_PLAYING:
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-					LocalGlobals.emit_signal("playerreleaseuifocus")
 					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 				LocalGlobals.PLAYER_STATE_PAUSED:
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-					LocalGlobals.emit_signal("playerreleaseuifocus")
 					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event is InputEventMouseButton:
 		if event.pressed:

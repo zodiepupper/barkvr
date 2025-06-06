@@ -334,6 +334,11 @@ func scrolldown():
 
 func click():
 	LocalGlobals.playerreleaseuifocus.emit()
+	match LocalGlobals.player_state:
+		LocalGlobals.PLAYER_STATE_PLAYING:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		LocalGlobals.PLAYER_STATE_PAUSED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if is_colliding():
 		var tmpcol = get_collider()
 		if tmpcol.has_method("laser_input"):

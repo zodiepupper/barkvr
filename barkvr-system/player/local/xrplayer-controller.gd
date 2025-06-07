@@ -254,8 +254,6 @@ func flat_movement(delta:float) -> void:
 			if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_TYPING:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-				else:
-					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 			ui_ray.click()
 	if Input.is_action_just_released("click"):
 		if grabbed.size() > 0:

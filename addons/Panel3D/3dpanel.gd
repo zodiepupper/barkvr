@@ -8,7 +8,6 @@ var colshape : CollisionShape3D
 var material : StandardMaterial3D
 
 var last_input_position := Vector2()
-var last_laser_position := Vector2()
 
 var ui : Node
 var tex : ViewportTexture
@@ -178,6 +177,8 @@ func _init():
 	# this makes it so when the frozen body is moved manually, it preserves
 	# calculations like velocity for collisions making it feel more natural
 	freeze_mode = FREEZE_MODE_KINEMATIC
+	# add metatdata for making the panel grabbable
+	set_meta("grabbable", true)
 	# initialize and assign the subviewport
 	viewport = SubViewport.new()
 	# capture subwindows to prevent issues with popups like with OptionButton
@@ -275,10 +276,9 @@ func _process(delta: float) -> void:
 			tmppanel.viewport.add_child(window)
 
 func laser_input(data:Dictionary):
-	if viewport.gui_is_dragging():
-		print("DRAGGING")
 	var event
 	# Setup event
+	# detect which event type is being requested by the input data
 	match data.action:
 		"hover":
 			event = InputEventMouseMotion.new()
@@ -300,12 +300,18 @@ func laser_input(data:Dictionary):
 	
 	# Sets the position of the event to the calculated mouse position in 2D space.
 	event.position = project_position_to_panel(data.position)
-	
-	if "pressed" in data and data.pressed and "button_mask" in event:
-		event.button_mask = MOUSE_BUTTON_MASK_LEFT
+	# if the button is pressed...
+	if "pressed" in data and data.pressed:
+		# and the event supports button_mask
+		if "button_mask" in event:
+			# set the button mask to be the left button (hardcoded for prototyping)
+			event.button_mask = MOUSE_BUTTON_MASK_LEFT
+		# if the current event is a hover even and the event is mouse motion...
 		if data.action == "hover" and event is InputEventMouseMotion:
+			# calculate the event relative position and the velocity
 			event.relative = event.position - last_input_position
-			event.velocity = (event.position - last_input_position) * 100.0
+			event.velocity = (event.position - last_input_position) * 40.0
+	# apply key modifiers if they're relevant to the type of input event
 	if event is InputEventWithModifiers:
 		if Input.is_key_pressed(KEY_CTRL):
 			event.ctrl_pressed = true
@@ -319,7 +325,7 @@ func laser_input(data:Dictionary):
 	# Set event pressed value (should be false if not explicitly changed)
 	if data.has('pressed') and "pressed" in event:
 		event.pressed = data.pressed
-	
+	# track last input position for calculating velocity and relative
 	last_input_position = event.position
 	
 	# Set the event to be handled locally (workaround for Godot 4.x bug)

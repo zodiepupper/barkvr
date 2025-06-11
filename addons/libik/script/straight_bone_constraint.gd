@@ -1,12 +1,21 @@
 @tool
 class_name StraightBoneConstraint extends GodotIKConstraint
+## Ensures a joint remains straight between the parent and child bones.
+##
+## This constraint forces the mid-bone to align perfectly along the axis
+## between the parent and child bones, removing any bending.
 
-## Straightens a given joint between parent and child.
-
+## Whether the constraint is currently active.
 @export var active : bool = true
+
+## If true, the constraint applies when the IK solver iterates forward.
 @export var forward : bool = true
+
+## If true, the constraint applies when the IK solver iterates backward.
 @export var backward : bool = true
 
+## This function overwrite modifies the mid-bone position to ensure it stays in a straight line
+## between the parent and child bones.
 func apply(
 		pos_parent_bone: Vector3,
 		pos_bone: Vector3,

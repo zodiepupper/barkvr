@@ -7,7 +7,8 @@ var mesh : MeshInstance3D
 var colshape : CollisionShape3D
 var material : StandardMaterial3D
 
-var last_input_position : Vector2
+var last_input_position := Vector2()
+var last_laser_position := Vector2()
 
 var ui : Node
 var tex : ViewportTexture
@@ -304,6 +305,7 @@ func laser_input(data:Dictionary):
 		event.button_mask = MOUSE_BUTTON_MASK_LEFT
 		if data.action == "hover" and event is InputEventMouseMotion:
 			event.relative = event.position - last_input_position
+			event.velocity = (event.position - last_input_position) * 100.0
 	if event is InputEventWithModifiers:
 		if Input.is_key_pressed(KEY_CTRL):
 			event.ctrl_pressed = true

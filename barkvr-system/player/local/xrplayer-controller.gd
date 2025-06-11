@@ -376,69 +376,69 @@ func _input(event):
 				scale *= 1.1
 			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.ctrl_pressed:
 				scale *= .9
-	if event is InputEventScreenTouch:
-		if event.pressed:
-			if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
-				lookdrag = {
-					'index': event.index,
-					'relative': Vector2(),
-					'velocity': Vector2(),
-					'startposition': event.position,
-					'position': event.position,
-					'dragstarttime': Time.get_ticks_msec()
-				}
-			else:
-				movedrag = {
-					'index': event.index,
-					'relative': Vector2(),
-					'velocity': Vector2(),
-					'startposition': event.position,
-					'position': event.position,
-					'dragstarttime': Time.get_ticks_msec()
-				}
-				screen_just_touched = true
-		
-		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
-			if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
-				_screen_tap_click(event)
-			lookdrag = {}
-		if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
-			if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			and Time.get_ticks_msec()-movedrag.dragstarttime<100:
-				_screen_tap_click(event)
-			movedrag = {}
-			touch_move_left = 0.0
-			touch_move_right = 0.0
-			touch_move_forward = 0.0
-			touch_move_backward = 0.0
-	if event is InputEventScreenDrag:
-		if movedrag and event.index == movedrag.index:
-			movedrag = {
-				'index': event.index,
-				'relative': event.relative,
-				'velocity': event.velocity,
-				'startposition': movedrag.startposition,
-				'position': event.position,
-				'dragstarttime': movedrag.dragstarttime
-			}
-			touch_move_left = (movedrag.startposition.x-event.position.x)*.01
-			touch_move_right = (event.position.x-movedrag.startposition.x)*.01
-			touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
-			touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
-		if lookdrag and event.index == lookdrag.index:
-			lookdrag = {
-				'index': event.index,
-				'relative': event.relative,
-				'velocity': event.velocity,
-				'startposition': lookdrag.startposition,
-				'position': event.position,
-				'dragstarttime': lookdrag.dragstarttime
-			}
-			if !touchsticklook:
-				rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
-				xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-				camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+	#if event is InputEventScreenTouch:
+		#if event.pressed:
+			#if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
+				#lookdrag = {
+					#'index': event.index,
+					#'relative': Vector2(),
+					#'velocity': Vector2(),
+					#'startposition': event.position,
+					#'position': event.position,
+					#'dragstarttime': Time.get_ticks_msec()
+				#}
+			#else:
+				#movedrag = {
+					#'index': event.index,
+					#'relative': Vector2(),
+					#'velocity': Vector2(),
+					#'startposition': event.position,
+					#'position': event.position,
+					#'dragstarttime': Time.get_ticks_msec()
+				#}
+				#screen_just_touched = true
+		#
+		#if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
+			#if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			#and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
+				#_screen_tap_click(event)
+			#lookdrag = {}
+		#if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
+			#if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			#and Time.get_ticks_msec()-movedrag.dragstarttime<100:
+				#_screen_tap_click(event)
+			#movedrag = {}
+			#touch_move_left = 0.0
+			#touch_move_right = 0.0
+			#touch_move_forward = 0.0
+			#touch_move_backward = 0.0
+	#if event is InputEventScreenDrag:
+		#if movedrag and event.index == movedrag.index:
+			#movedrag = {
+				#'index': event.index,
+				#'relative': event.relative,
+				#'velocity': event.velocity,
+				#'startposition': movedrag.startposition,
+				#'position': event.position,
+				#'dragstarttime': movedrag.dragstarttime
+			#}
+			#touch_move_left = (movedrag.startposition.x-event.position.x)*.01
+			#touch_move_right = (event.position.x-movedrag.startposition.x)*.01
+			#touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
+			#touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
+		#if lookdrag and event.index == lookdrag.index:
+			#lookdrag = {
+				#'index': event.index,
+				#'relative': event.relative,
+				#'velocity': event.velocity,
+				#'startposition': lookdrag.startposition,
+				#'position': event.position,
+				#'dragstarttime': lookdrag.dragstarttime
+			#}
+			#if !touchsticklook:
+				#rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
+				#xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+				#camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 
 func _screen_tap_click(_event:InputEvent) -> void:
 	LocalGlobals.playerreleaseuifocus.emit()

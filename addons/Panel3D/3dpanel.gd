@@ -7,6 +7,8 @@ var mesh : MeshInstance3D
 var colshape : CollisionShape3D
 var material : StandardMaterial3D
 
+var last_input_position : Vector2
+
 var ui : Node
 var tex : ViewportTexture
 
@@ -272,6 +274,8 @@ func _process(delta: float) -> void:
 			tmppanel.viewport.add_child(window)
 
 func laser_input(data:Dictionary):
+	if viewport.gui_is_dragging():
+		print("DRAGGING")
 	var event
 	# Setup event
 	match data.action:
@@ -293,8 +297,13 @@ func laser_input(data:Dictionary):
 		_:
 			pass
 	
+	# Sets the position of the event to the calculated mouse position in 2D space.
+	event.position = project_position_to_panel(data.position)
+	
 	if "pressed" in data and data.pressed and "button_mask" in event:
 		event.button_mask = MOUSE_BUTTON_MASK_LEFT
+		if data.action == "hover" and event is InputEventMouseMotion:
+			event.relative = event.position - last_input_position
 	if event is InputEventWithModifiers:
 		if Input.is_key_pressed(KEY_CTRL):
 			event.ctrl_pressed = true
@@ -309,8 +318,7 @@ func laser_input(data:Dictionary):
 	if data.has('pressed') and "pressed" in event:
 		event.pressed = data.pressed
 	
-	# Sets the position of the event to the calculated mouse position in 2D space.
-	event.position = project_position_to_panel(data.position)
+	last_input_position = event.position
 	
 	# Set the event to be handled locally (workaround for Godot 4.x bug)
 	#	The bug causes the viewport to not consistently receive input events

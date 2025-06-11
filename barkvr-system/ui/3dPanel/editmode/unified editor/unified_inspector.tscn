@@ -24,6 +24,7 @@ script/source = "extends Control
 @onready var inspector_toggle: Button = $inspector_toggle
 @onready var add_node_toggle: Button = $add_node_toggle
 @onready var attributes_toggle: Button = $attributes_toggle
+@onready var panels: Control = %panels
 
 func _ready() -> void:
 	sceneinspector.selected.connect(func(target):
@@ -34,7 +35,7 @@ func _ready() -> void:
 		var tmppos := attributes.position
 		attributes.queue_free()
 		attributes = load(\"res://barkvr-system/ui/3dPanel/editmode/attributes.tscn\").instantiate()
-		add_child(attributes)
+		panels.add_child(attributes)
 		attributes_toggle.node_to_toggle = attributes
 		attributes.visible = tmpvis
 		attributes.layout_mode = tmplayout
@@ -56,14 +57,13 @@ script/source = "extends Button
 @export var node_to_toggle : Node
 
 @export var slide := false
-var slide_start_pos
+var slide_start_pos := Vector2()
 
-@onready var script_toggle: Button = $\".\"
-@onready var inspector_toggle: Button = $\"../inspector_toggle\"
-@onready var add_node_toggle: Button = $\"../add_node_toggle\"
-@onready var attributes_toggle: Button = $\"../attributes_toggle\"
-@onready var bvs_ui_toggle: Button = $\"../bvs_ui_toggle\"
-
+@onready var script_toggle: Button = %script_toggle
+@onready var inspector_toggle: Button = %inspector_toggle
+@onready var add_node_toggle: Button = %add_node_toggle
+@onready var attributes_toggle: Button = %attributes_toggle
+@onready var bvs_ui_toggle: Button = %bvs_ui_toggle
 
 func _ready() -> void:
 	get_viewport()
@@ -78,7 +78,8 @@ func _toggled(toggled_on):
 			node_to_toggle.visible = toggled_on
 		if slide:
 			if !slide_start_pos:
-				slide_start_pos = node_to_toggle.position
+				#slide_start_pos = node_to_toggle.position
+				slide_start_pos = Vector2()
 			node_to_toggle.show()
 			if toggled_on:
 				create_tween().tween_property(node_to_toggle,\"position:x\",slide_start_pos.x,.5).\\
@@ -94,6 +95,8 @@ func _toggled(toggled_on):
 				script_toggle.manual_toggle(false)
 			if toggled_on and is_instance_valid(add_node_toggle) and add_node_toggle != self and add_node_toggle.button_pressed:
 				add_node_toggle.manual_toggle(false)
+			if toggled_on and is_instance_valid(bvs_ui_toggle) and bvs_ui_toggle != self and bvs_ui_toggle.button_pressed:
+				bvs_ui_toggle.manual_toggle(false)
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kfbv"]
@@ -114,6 +117,7 @@ grow_vertical = 2
 script = SubResource("GDScript_qoabx")
 
 [node name="script_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+unique_name_in_owner = true
 z_index = 10
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
@@ -129,6 +133,7 @@ node_to_toggle = NodePath("../panels/gdscriptpanel")
 slide = true
 
 [node name="inspector_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+unique_name_in_owner = true
 z_index = 10
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
@@ -145,6 +150,7 @@ node_to_toggle = NodePath("../panels/sceneinspector")
 slide = true
 
 [node name="add_node_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+unique_name_in_owner = true
 z_index = 10
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
@@ -160,6 +166,7 @@ node_to_toggle = NodePath("../panels/AddNode")
 slide = true
 
 [node name="attributes_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+unique_name_in_owner = true
 z_index = 10
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
@@ -174,6 +181,7 @@ node_to_toggle = NodePath("../panels/attributes")
 slide = true
 
 [node name="bvs_ui_toggle" type="Button" parent="." node_paths=PackedStringArray("node_to_toggle")]
+unique_name_in_owner = true
 z_index = 10
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 0
@@ -199,6 +207,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8kfbv")
 
 [node name="panels" type="Control" parent="."]
+unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -231,4 +240,3 @@ layout_mode = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-scroll_offset = Vector2(0, -40)

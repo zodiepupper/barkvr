@@ -1,6 +1,6 @@
 extends Node
 
-@export var flipped := false
+@export var flipped := true
 @export var x := true
 @export var y := true
 @export var z := true

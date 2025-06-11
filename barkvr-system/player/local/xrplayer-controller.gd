@@ -559,3 +559,6 @@ func delete_held(chirality: int = -1) -> void:
 			if !lefthand.grabbed.is_empty():
 				for item in lefthand.grabbed.values():
 					item.node.queue_free()
+	righthand.grabbed.clear()
+	lefthand.grabbed.clear()
+	grabbed.clear()

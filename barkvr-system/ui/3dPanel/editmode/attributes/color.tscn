@@ -21,6 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 script = ExtResource("1_51r0t")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -36,6 +37,7 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(100, 60)
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/Panel2"]
 layout_mode = 1
@@ -44,6 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "position"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -68,6 +71,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(1, 0, 0, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/r/ColorRect"]
@@ -83,6 +87,7 @@ offset_right = 5.0
 offset_bottom = 16.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "r"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -100,6 +105,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0, 1, 0, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/g/ColorRect"]
@@ -115,6 +121,7 @@ offset_right = 7.0
 offset_bottom = 16.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "g"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -132,6 +139,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0, 0, 1, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/b/ColorRect"]
@@ -141,6 +149,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "b"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -158,6 +167,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/a/ColorRect"]
@@ -167,6 +177,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "a"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -191,6 +202,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/h/ColorRect"]
@@ -200,6 +212,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "h"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -217,6 +230,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/s/ColorRect"]
@@ -226,6 +240,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "s"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -243,6 +258,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/v/ColorRect"]
@@ -252,6 +268,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "v"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -269,6 +286,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/a/ColorRect"]
@@ -278,6 +296,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "a"
 label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
@@ -302,6 +321,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
+mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/hex/h/ColorRect"]
@@ -311,6 +331,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "hex
 color"
 label_settings = SubResource("LabelSettings_ta0h6")

@@ -14,6 +14,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
+mouse_filter = 1
 script = ExtResource("1_bl13v")
 full_height = true
 
@@ -30,6 +31,7 @@ size_flags_vertical = 3
 [node name="Panel2" type="Panel" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/Panel2"]
 layout_mode = 1
@@ -38,6 +40,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 text = "object"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -51,6 +54,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
+mouse_filter = 1
 theme_override_font_sizes/font_size = 24
 toggle_mode = true
 text = "\\/"
@@ -71,6 +75,7 @@ offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
+mouse_filter = 1
 text = "create"
 expand_icon = true
 
@@ -88,6 +93,7 @@ offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
+mouse_filter = 1
 text = "copy"
 expand_icon = true
 
@@ -104,6 +110,7 @@ offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
+mouse_filter = 1
 text = "paste"
 expand_icon = true
 
@@ -118,6 +125,7 @@ theme_override_constants/margin_bottom = 8
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 1
 color = Color(1, 1, 1, 0.254902)
 
 [node name="object" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]

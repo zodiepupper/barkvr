@@ -1,4 +1,4 @@
-[gd_scene load_steps=0 format=3 uid="uid://djy728levmhch"]
+[gd_scene format=3 uid="uid://djy728levmhch"]
 
 [node name="float" type="GraphNode"]
 offset_left = 647.0

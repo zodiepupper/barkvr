@@ -54,7 +54,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-mouse_filter = 1
 theme_override_font_sizes/font_size = 24
 toggle_mode = true
 text = "\\/"
@@ -93,7 +92,6 @@ offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
-mouse_filter = 1
 text = "copy"
 expand_icon = true
 
@@ -110,7 +108,6 @@ offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
-mouse_filter = 1
 text = "paste"
 expand_icon = true
 

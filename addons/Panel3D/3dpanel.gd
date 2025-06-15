@@ -281,6 +281,9 @@ func laser_input(data:Dictionary):
 	# detect which event type is being requested by the input data
 	match data.action:
 		"hover":
+			#if "pressed" in data and data.pressed:
+				#event = InputEventScreenDrag.new()
+			#else:
 			event = InputEventMouseMotion.new()
 		"scrollup":
 			event = InputEventMouseButton.new()
@@ -292,12 +295,16 @@ func laser_input(data:Dictionary):
 			event = InputEventMouseButton.new()
 			event.button_index = 1
 			#event = InputEventScreenTouch.new()
+			#event.device = -2
+			#if "index" in data:
+				#event.index = data.index
 		"custom":
 			# Use this to pass a different event type or add event strings below
 			event = data.event
 		_:
 			pass
 	
+	#event.window_id = data.index
 	# Sets the position of the event to the calculated mouse position in 2D space.
 	event.position = project_position_to_panel(data.position)
 	# if the button is pressed...
@@ -307,10 +314,11 @@ func laser_input(data:Dictionary):
 			# set the button mask to be the left button (hardcoded for prototyping)
 			event.button_mask = MOUSE_BUTTON_MASK_LEFT
 		# if the current event is a hover even and the event is mouse motion...
-		if data.action == "hover" and event is InputEventMouseMotion:
+		if data.action == "hover" and "relative" in event and "velocity" in event:
 			# calculate the event relative position and the velocity
 			event.relative = event.position - last_input_position
 			event.velocity = (event.position - last_input_position) * 40.0
+	event.position = round(event.position)
 	# apply key modifiers if they're relevant to the type of input event
 	if event is InputEventWithModifiers:
 		if Input.is_key_pressed(KEY_CTRL):
@@ -330,10 +338,10 @@ func laser_input(data:Dictionary):
 	
 	# Set the event to be handled locally (workaround for Godot 4.x bug)
 	#	The bug causes the viewport to not consistently receive input events
-	viewport.handle_input_locally = true
+	#viewport.handle_input_locally = true
 	# Push the event to the viewport
 	viewport.push_input(event,true)
-	viewport.handle_input_locally = false
+	#viewport.handle_input_locally = false
 
 func project_position_to_panel(global_point:Vector3) -> Vector2:
 	# Get the size of the quad mesh we're rendering to

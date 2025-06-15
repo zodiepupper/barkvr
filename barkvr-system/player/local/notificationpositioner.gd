@@ -12,4 +12,4 @@ func _process(_delta) -> void:
 	offset = 0
 	for i in get_children():
 		i.position.y = offset
-		offset += i.get_aabb().size.y
+		offset += i.get_aabb().size.y*.1

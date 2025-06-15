@@ -1,5 +1,91 @@
 extends Node
 
+static func detect_file_type_from_header(content:PackedByteArray) -> String:
+	
+	var format_signatures = [
+		# WEBP
+		{
+			"type":'img',
+			"magics": [
+				[0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50],
+				]
+		},
+		# PNG
+		{
+			"type":'img',
+			"magics": [
+				[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A],
+				]
+		},
+		# BMP
+		{
+			"type":'img',
+			"magics": [
+				[0x42, 0x4D],
+				]
+		},
+		# TGA does not have a static header
+		
+		# JPG
+		{
+			"type":'img',
+			# I think there are other possible magics
+			# This could possibly miss some kinds of JPEGs!
+			# TODO: Add more JPEG magics
+			"magics": [
+				[0xFF, 0xD8, 0xFF, 0xE0],
+				]
+		},
+		# SVG does not have a static header
+		
+		# KTX
+		{
+			"type":'img',
+			"magics": [
+				[0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A],
+				]
+		},
+		
+		# MeshX
+		{
+			"type":'meshx',
+			"magics": [
+				[0x05, 0x4d, 0x65, 0x73, 0x68, 0x58],
+				]
+		}
+	]
+	
+	# Check each signature on the image to find a match
+	for signature in format_signatures:
+		var magics = signature.magics
+					
+		# loop over all known magic numbers for the filetype
+		for magic in magics:
+			# Check to make sure there are enough bytes to read
+			if content.size() >= magic.size():
+				var matches = true
+
+				# Loop over bytes until our signature is done
+				# or there is a mismatch
+				for i in range(magic.size()):
+					# Dont read null (wildcard) magic bytes
+					if magic[i] == null:
+						continue
+					
+					if content[i] != magic[i]:
+						# There was a mismatch
+						matches = false
+						break
+				
+				if matches:
+					# We have a signature match!
+					# return the corresponding type string
+					if signature.type == "meshx":
+						Notifyvr.send_notification("meshx detected")
+					return signature.type
+	
+	return ""
+
 func normalize_float32_array(array:PackedFloat32Array):
 	# holder for normalized array
 	var norm_array :PackedFloat32Array = PackedFloat32Array(array)

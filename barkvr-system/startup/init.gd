@@ -90,6 +90,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		if !file:
 			print('failed to open import file')
 			continue
+		# try to detect the file type:
+		var type = BarkHelpers.detect_file_type_from_header(FileAccess.get_file_as_bytes(dropped))
 		var new_import_position :Vector3=import_position+Vector3(0,0,offset)
 		if dropped.to_lower().ends_with('.gltf') or \
 			dropped.to_lower().ends_with('.glb'):
@@ -118,9 +120,10 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			dropped.to_lower().ends_with('.svg')  or \
 			dropped.to_lower().ends_with('.tga')  or \
 			dropped.to_lower().ends_with('.ktx')  or \
-			dropped.to_lower().ends_with('.webp'):
+			dropped.to_lower().ends_with('.webp') or \
+			type == "img":
 			Engine.get_singleton("event_manager").import_asset('image', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
-		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck'):
+		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck') or dropped.to_lower().ends_with(".resonitepackage"):
 			Engine.get_singleton("event_manager").import_asset('zip', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.ends_with(".mp3") or dropped.ends_with(".ogg") or dropped.ends_with(".wav"):
 			Engine.get_singleton("event_manager").import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})

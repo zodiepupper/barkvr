@@ -465,11 +465,14 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 
 func _import_zip(asset_name:String, asset_path:String, data:Dictionary={}):
 	var reader := ZIPReader.new()
+	data.nolookatuser = true
 	if reader.open(asset_path) == 0:
 		for dropped in reader.get_files():
 			print('dropped: '+dropped)
 			if reader.file_exists(dropped):
 				print('is file')
+				var type = BarkHelpers.detect_file_type_from_header(reader.read_file(dropped))
+				data.position = data.position+Vector3(0,0,-.01*get_tree().get_first_node_in_group("player").scale.length())
 				if dropped.contains('.gltf') or dropped.contains('.glb'):
 					import_asset('glb', reader.read_file(dropped), asset_name, false, data)
 				elif dropped.contains('.vrm'):
@@ -486,7 +489,8 @@ func _import_zip(asset_name:String, asset_path:String, data:Dictionary={}):
 					dropped.ends_with('.svg') or \
 					dropped.ends_with('.tga') or \
 					dropped.ends_with('.ktx') or \
-					dropped.ends_with('.webp'):
+					dropped.ends_with('.webp') or \
+					type == "img":
 					import_asset('image', reader.read_file(dropped), asset_name, false, data)
 				#elif dropped.ends_with(".zip"):
 					#import_asset('zip', reader.read_file(dropped), asset_name, false, data)
@@ -502,7 +506,7 @@ func _check_loaded(path: String, asset_name:String, data:Dictionary={}, _last_ti
 		var res := ResourceLoader.load_threaded_get(path)
 		if res != null:
 			var node = res.instantiate()
-			_post_import.call_deferred(root,node,asset_name,data)
+			_post_import.call_deferred(root,node,asset_name,data, !data.has("nolookatuser"))
 
 #
 var gltf_document_extension_class = load("res://addons/vrm/vrm_extension.gd")
@@ -566,7 +570,8 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 			#state.take_over_path(content + ".res")
 			#ResourceSaver.save(state, content + ".res")
 	print('post importing glb/gltf/vrm')
-	_post_import.call_deferred(root, generated_scene, asset_name, data, false)
+	data.nolookatuser = true
+	_post_import.call_deferred(root, generated_scene, asset_name, data, !data.has("nolookatuser"))
 
 ## Imports a Godot resource.
 func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={}) -> void:
@@ -593,7 +598,7 @@ func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={
 	#res = _load_res_with_dependencies(asset_to_import)
 	if res != null:
 		var node = res.instantiate()
-		_post_import.call_deferred(root,node,asset_name,data)
+		_post_import.call_deferred(root,node,asset_name,data, !data.has("nolookatuser"))
 	ResourceLoader.load_threaded_request(asset_to_import, '', false, ResourceLoader.CACHE_MODE_IGNORE)
 	_check_loaded(asset_to_import,asset_name,data)
 
@@ -604,7 +609,7 @@ func _load_res_with_dependencies(path:String) -> Resource:
 	res = ResourceLoader.load(path)
 	return res
 
-func _load_image_bytes_from_header(content: PackedByteArray):
+func _load_image_bytes_from_header(content: PackedByteArray) -> Image:
 	var img := Image.new()
 	
 	var format_signatures = [
@@ -753,7 +758,7 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, data:Dict
 	tmpbody.collision_mask = 2
 	
 	tmpbody.add_child(plane)
-	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
 
 
 ## Imports an image from an existing image resource.
@@ -787,14 +792,14 @@ func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> 
 	tmpbody.collision_mask = 2
 	
 	tmpbody.add_child(plane)
-	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
 
 ## Imports an audio file.
 func _import_audio(asset_name: String, content: PackedByteArray, data:Dictionary={} ) -> void:
 	check_root()
 	var audio3d: Audio3D = load("res://barkvr-system/ui/3dui/import helpers/audio3d.tscn").instantiate()
 	audio3d.load_audio_from_bytes(content, "mp3")
-	_post_import.call_deferred(root, audio3d, asset_name, data, true)
+	_post_import.call_deferred(root, audio3d, asset_name, data, !data.has("nolookatuser"))
 
 ## Imports some text.
 func _import_text(asset_name: String, _content: String, data:Dictionary={} ) -> void:
@@ -835,7 +840,7 @@ func _import_text(asset_name: String, _content: String, data:Dictionary={} ) -> 
 	#tmpmesh.orientation = PlaneMesh.FACE_Z
 	mesh.mesh = tmpmesh
 	tmpbody.add_child(mesh)
-	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
 
 ## Imports a file.
 func _import_file(asset_name: String, content: PackedByteArray, data:Dictionary={} ) -> void:
@@ -882,7 +887,7 @@ func _import_file(asset_name: String, content: PackedByteArray, data:Dictionary=
 	#print(content)
 	
 	tmpbody.set_meta("file_bytes",str(content.compress(2)))
-	_post_import.call_deferred(root, tmpbody, asset_name, data, true)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
 
 ## Accept an incoming network message and handle it appropriately.
 func receive(action: Dictionary) -> void:
@@ -931,6 +936,7 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 				for a in i.get_children():
 					if a is Skeleton3D:
 						skele = a
+			await get_tree().process_frame
 		if skele:
 			print('found skele')
 			quickiksetup.armature_skeleton = skele

@@ -856,7 +856,11 @@ func sync(base_url:String, headers:PackedStringArray, options:Dictionary):
 	client.use_threads = false
 	add_child(client)
 	client.request_completed.connect(func(result:int,response_code:int,headers:PackedStringArray,body:PackedByteArray):
-		synced.emit(result,response_code,headers,body)
+		if result == HTTPRequest.RESULT_SUCCESS:
+			synced.emit(result,response_code,headers,body)
+			print('got sync')
+		else:
+			print("error getting sync data:\n	result: {0}\n	response_code: {1}\n".format([result,response_code]))
 		client.queue_free()
 		)
 	var qp = ''

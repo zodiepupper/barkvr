@@ -8,9 +8,9 @@ var attributes: Control
 @onready var field_parent: HBoxContainer = $VBoxContainer/MarginContainer/object
 @onready var color_rect: ColorRect = $VBoxContainer/MarginContainer/ColorRect
 @onready var margin_container: MarginContainer = $VBoxContainer/MarginContainer
-@onready var create: Button = $VBoxContainer/Panel2/create
-@onready var copy: Button = $VBoxContainer/Panel2/copy
-@onready var paste: Button = $VBoxContainer/Panel2/paste
+@onready var create: Button = %create
+@onready var copy: Button = %copy
+@onready var paste: Button = %paste
 
 @export var full_height := false
 

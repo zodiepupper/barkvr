@@ -29,7 +29,7 @@ func _ready():
 			tree_root.set_text(0,"")
 			setRoot(root.get_parent())
 			tree.check_children()
-		)
+	)
 	focus_selected_btn.pressed.connect(func():
 		if is_instance_valid(tree.get_next_selected(null)):
 			var new_target = tree.get_next_selected(null).get_metadata(0).node
@@ -38,7 +38,7 @@ func _ready():
 			tree_root.set_text(0,"")
 			setRoot(new_target)
 			tree.check_children()
-		)
+	)
 	delete_btn.pressed.connect(func():
 		var current_selected = get_all_selected()
 		for item in current_selected:

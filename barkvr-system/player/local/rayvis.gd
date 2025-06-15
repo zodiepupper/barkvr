@@ -12,25 +12,9 @@ var target := Vector3()
 func _process(_delta):
 	if get_tree().get_first_node_in_group("player"):
 		var dist = target.distance_to(get_viewport().get_camera_3d().global_position)
-		pointer.scale = Vector3(1,1,1)*dist/cursor_size_factor
-		physics.scale = Vector3(1,1,1)*dist/cursor_size_factor
 		cursor.scale = Vector3(1,1,1)*dist/cursor_size_factor
-		pointer.global_position = target
-		physics.global_position = target
 		cursor.global_position = target
 		cursor.look_at(get_viewport().get_camera_3d().global_position,Vector3.UP,true)
 
 func setType(type:String):
-	pass
-	if type == "rigidbody":
-		if mouse_cursor:
-			cursor.show()
-		else:
-			physics.show()
-			pointer.hide()
-	if type == "pointer":
-		if mouse_cursor:
-			cursor.show()
-		else:
-			physics.hide()
-			pointer.show()
+	cursor.show()

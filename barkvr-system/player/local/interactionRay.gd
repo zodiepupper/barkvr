@@ -22,6 +22,8 @@ var otherray : InteractionRay
 var last_point := Vector3()
 var last_dist := float()
 
+
+
 ## set whether the node should cast a ray every frame or not
 @export var enabled := true
 

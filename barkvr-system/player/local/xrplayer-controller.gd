@@ -121,6 +121,9 @@ func _toggle_xr(value):
 		lefthand.rotation_degrees = Vector3(-90.0,0,0)
 		ui_ray.enabled = true
 		ui_ray.show()
+		
+		# Fix incorrect player transform in desktop mode
+		xrplayer.position = Vector3.ZERO
 
 func respawn_player():
 	velocity = Vector3()

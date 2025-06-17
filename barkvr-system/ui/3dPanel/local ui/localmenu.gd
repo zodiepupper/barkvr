@@ -1,6 +1,6 @@
 extends Control
 
-@onready var button = $Button
+@onready var close: Button = %close
 @onready var window_properties = $TabContainer/window_properties
 @onready var resize = $resize
 @onready var tab_container = $TabContainer
@@ -13,6 +13,14 @@ var expanded := true
 var resizing := false
 var resize_start_position := Vector2()
 
+var viewport: Viewport:
+	get:
+		return get_viewport()
+
+var panel: Panel3D:
+	get:
+		return viewport.get_parent() if viewport.get_parent() is Panel3D else null
+
 func _ready():
 	Engine.register_singleton("local_menu", self)
 	expanded = tab_container.visible
@@ -22,7 +30,13 @@ func _ready():
 		,4)
 	if get_viewport().get_parent() is Panel3D:
 		get_viewport().get_parent().minimum_viewport_size = Vector2i(small_height,small_height)
-	button.pressed.connect(reveal)
+	close.pressed.connect(_close)
+	panel.visibility_changed.connect(func():
+		if panel.visible:
+			panel.colshape.disabled = false
+		else:
+			panel.colshape.disabled = true
+		)
 
 func _input(event:InputEvent):
 	if resize.button_pressed and event is InputEventMouseMotion and get_viewport().get_parent() is Panel3D:
@@ -31,17 +45,25 @@ func _input(event:InputEvent):
 		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 
 func reveal(force_open:bool=false) -> void:
-	if force_open:
-		expanded = true
-		if get_viewport().get_parent() is Panel3D:
-			get_viewport().get_parent().viewport_size.x = big_height
-			get_viewport().get_parent().viewport_size.y = big_width
-		resize.visible = expanded
-		tab_container.visible = expanded
-		return
-	expanded = !expanded
-	resize.visible = expanded
-	tab_container.visible = expanded
-	if get_viewport().get_parent() is Panel3D:
-		get_viewport().get_parent().viewport_size.x = big_height if expanded else small_height
-		get_viewport().get_parent().viewport_size.y = big_width if expanded else small_height
+	show()
+	if panel:
+		panel.show()
+	#if force_open:
+		#expanded = true
+		#if get_viewport().get_parent() is Panel3D:
+			#get_viewport().get_parent().viewport_size.x = big_height
+			#get_viewport().get_parent().viewport_size.y = big_width
+		#resize.visible = expanded
+		#tab_container.visible = expanded
+		#return
+	#expanded = !expanded
+	#resize.visible = expanded
+	#tab_container.visible = expanded
+	#if get_viewport().get_parent() is Panel3D:
+		#get_viewport().get_parent().viewport_size.x = big_height if expanded else small_height
+		#get_viewport().get_parent().viewport_size.y = big_width if expanded else small_height
+
+func _close() -> void:
+	if panel:
+		panel.visible = false
+	visible = false

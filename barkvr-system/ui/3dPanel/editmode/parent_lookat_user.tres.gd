@@ -1,9 +1,15 @@
 extends Node
 
 @export var flipped := true
-@export var x := true
-@export var y := true
-@export var z := true
+@export var x: bool:
+	get:
+		return (Engine.get_singleton("settings_manager") as SettingsSingleton).ui_local_menu_lookat_x
+@export var y: bool:
+	get:
+		return (Engine.get_singleton("settings_manager") as SettingsSingleton).ui_local_menu_lookat_y
+@export var z: bool:
+	get:
+		return (Engine.get_singleton("settings_manager") as SettingsSingleton).ui_local_menu_lookat_z
 
 func _ready() -> void:
 	var settings_singleton := Engine.get_singleton("settings_manager")

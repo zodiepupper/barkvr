@@ -34,7 +34,6 @@ texture = ExtResource("3_j7jdp")
 
 [node name="cursor" type="Sprite3D" parent="cursor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403815, -0.976471, 0)
-visible = false
 sorting_offset = 99.0
 no_depth_test = true
 texture_filter = 0
@@ -42,7 +41,8 @@ render_priority = 127
 texture = ExtResource("4_3x516")
 
 [node name="Label3D" type="Label3D" parent="cursor"]
-transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.805523, 1.08032, 2.38419e-07)
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.98646027, 0.931352, 2.38419e-07)
+visible = false
 pixel_size = 0.0643
 no_depth_test = true
 render_priority = 127

@@ -235,7 +235,7 @@ func vr_movement(delta:float) -> void:
 	if flymode:
 		direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
 	else:
-		direction = ((global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
+		direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
 	if direction:
 		# used a ternary to preserve the y velocity if they player is not flying
 		# this prevents this lazy ass code from exponentially increasing vertical

@@ -1,8 +1,6 @@
 class_name InteractionRay
 extends Node3D
 
-@export var interaction_index :int = 0
-
 @onready var line_3d = $Line3D
 @onready var vis: Node3D = $rayvis
 var vispos := Vector3()
@@ -22,7 +20,24 @@ var otherray : InteractionRay
 var last_point := Vector3()
 var last_dist := float()
 
+@export_category("interaction ray options") ## INTERACTION OPTIONS
 
+@export var interaction_index :int = 0
+
+@export var no_line: bool = false:
+	set(val):
+		if val and is_instance_valid(line_3d):
+			line_3d.hide()
+			return
+		line_3d.show()
+
+@export var stay_at_parent_origin: bool = true:
+	set(val):
+		stay_at_parent_origin = val
+		if val:
+			position = Vector3()
+
+@export_category("raycast options") ## RAYCAST OPTIONS
 
 ## set whether the node should cast a ray every frame or not
 @export var enabled := true
@@ -122,6 +137,8 @@ var query_is_colliding : bool
 ## this now uses 2 raycasts to enforce a selection bias
 ## on what object is being interacted with (ui, vs world objects)
 func query_raycast() -> Dictionary:
+	if stay_at_parent_origin:
+		position = Vector3()
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
 	var rayquery := PhysicsRayQueryParameters3D.new()
@@ -134,12 +151,14 @@ func query_raycast() -> Dictionary:
 	rayquery.exclude = query_exceptions
 	rayquery.collision_mask = private_ui_collision_layers
 	query_collision_data = physspace.intersect_ray(rayquery)
-	if query_collision_data.is_empty():
-		rayquery.collision_mask = edit_ui_collision_layers
-		query_collision_data = physspace.intersect_ray(rayquery)
-	if query_collision_data.is_empty():
-		rayquery.collision_mask = world_collision_layers
-		query_collision_data = physspace.intersect_ray(rayquery)
+	if query_collision_data:
+		return query_collision_data
+	rayquery.collision_mask = edit_ui_collision_layers
+	query_collision_data = physspace.intersect_ray(rayquery)
+	if query_collision_data:
+		return query_collision_data
+	rayquery.collision_mask = world_collision_layers
+	query_collision_data = physspace.intersect_ray(rayquery)
 	return query_collision_data
 
 ## returns the query position from the last raycast
@@ -168,6 +187,8 @@ func add_exception_rid(rid : RID) -> void:
 		query_exceptions.erase(rid)
 
 func _ready() -> void:
+	no_line = no_line
+	stay_at_parent_origin = stay_at_parent_origin
 	add_child(touch_timer)
 	touch_timer.timeout.connect(func():
 		using_touch = false

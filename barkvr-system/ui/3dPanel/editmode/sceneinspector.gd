@@ -53,13 +53,13 @@ func _ready():
 		var world_root = get_tree().get_first_node_in_group("localworldroot")
 		var target: Node = tree.get_selected().get_metadata(0).node
 		if world_root and target:
-			_export_node(target)
+			WorkerThreadPool.add_task(_export_node.bind(target))
 	)
 	export_gltf.pressed.connect(func():
 		var world_root = get_tree().get_first_node_in_group("localworldroot")
 		var target: Node = tree.get_selected().get_metadata(0).node
 		if world_root and target:
-			_export_node(target, true)
+			WorkerThreadPool.add_task(_export_node.bind(target, true))
 	)
 	
 	#print(tree.get_class())

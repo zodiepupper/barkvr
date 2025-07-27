@@ -117,6 +117,8 @@ func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 			return
 		if !is_instance_valid(new_target):
 			return
+		if prop.name == "owner":
+			continue
 		match prop.type:
 			TYPE_OBJECT:
 				var tmp :Object_Attribute = object_field.instantiate()

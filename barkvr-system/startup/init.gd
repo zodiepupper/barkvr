@@ -13,10 +13,6 @@ var vrm_ext_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 @export var game_startup_scene :PackedScene
 
 func _ready():
-	XRServer.tracker_added.connect(func(tracker_name: StringName, type: int):
-		print("AAAAAAAA")
-		)
-	
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0.new(),true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier.new(), true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_materials_mtoon.new(), true)

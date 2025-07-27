@@ -1,6 +1,6 @@
 extends Node
 
-static func detect_file_type_from_header(content:PackedByteArray) -> String:
+func detect_file_type_from_header(content:PackedByteArray) -> String:
 	
 	var format_signatures = [
 		# WEBP

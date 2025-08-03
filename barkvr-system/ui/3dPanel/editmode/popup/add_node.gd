@@ -33,8 +33,10 @@ func _ready():
 		item_list.clear()
 		new_text = new_text.to_lower()
 		var filtered := Array()
-		for node_class in ClassDB.get_class_list():
-			if ClassDB.is_parent_class(node_class, "Node"):
+		var class_list := ClassDB.get_class_list()
+		class_list.append_array(Bark_Journal.extra_classes)
+		for node_class in class_list:
+			if ClassDB.is_parent_class(node_class, "Node") or node_class in Bark_Journal.extra_classes:
 				var contains_all_chars :bool = true
 				var node_class_lower := node_class.to_lower()
 				for character in new_text:
@@ -49,6 +51,6 @@ func _ready():
 		for item in filtered:
 			item_list.add_item(item)
 	)
-	for cls in ClassDB.get_class_list():
-		if ClassDB.is_parent_class(cls, "Node"):
+	for cls in ClassDB.get_class_list()+Bark_Journal.extra_classes:
+		if ClassDB.is_parent_class(cls, "Node") or cls in Bark_Journal.extra_classes:
 			item_list.add_item(cls)

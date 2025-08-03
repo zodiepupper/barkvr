@@ -10,6 +10,14 @@ var actions_mutex := Mutex.new()
 var JournalTreeClass = load("res://barkvr-system/managers/journal_tree.gd")
 var journal_tree: Node 
 
+static var extra_classes : PackedStringArray = [
+	"Panel3D"
+]
+
+static var extra_classes_spawn : Array[PackedScene] = [
+	load("res://addons/Panel3D/Panel3D.tscn")
+]
+
 var root: Node:
 	get:
 		if !is_instance_valid(root):
@@ -144,7 +152,10 @@ func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := fa
 func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
 	check_root()
 	if "node_class" in node_dict and ClassDB.can_instantiate(node_dict.node_class):
-		var node = ClassDB.instantiate(node_dict.node_class)
+		var node : Node
+		if node_dict.node_class in extra_classes:
+			node = extra_classes_spawn[extra_classes.find(node_dict.node_class)].instantiate()
+		node = ClassDB.instantiate(node_dict.node_class) if !node else node
 		var _node_props = node.get_property_list()
 		if "properties" in node_dict and node_dict.properties is Array:
 			for prop in node_dict.properties:

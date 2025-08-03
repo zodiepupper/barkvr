@@ -29,7 +29,6 @@ offset_top = 363.0
 offset_right = 510.0
 offset_bottom = 449.0
 mouse_filter = 1
-position_offset = Vector2(406, 363)
 title = "interval"
 slot/0/left_enabled = false
 slot/0/left_type = 0

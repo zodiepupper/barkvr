@@ -6,7 +6,6 @@ offset_top = 290.0
 offset_right = 769.0
 offset_bottom = 376.0
 mouse_filter = 1
-position_offset = Vector2(647, 290)
 title = "float"
 slot/0/left_enabled = false
 slot/0/left_type = 0

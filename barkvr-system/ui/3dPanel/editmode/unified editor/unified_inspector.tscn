@@ -18,7 +18,7 @@ script/source = "extends Control
 @onready var sceneinspector: Control = %sceneinspector
 @onready var gdscriptpanel: Control = %gdscriptpanel
 @onready var add_node: Control = %AddNode
-@onready var bvs_ui: GraphEdit = %bvs_ui
+@onready var bvs_ui: Control = %bvs_ui
 
 @onready var script_toggle: Button = $script_toggle
 @onready var inspector_toggle: Button = $inspector_toggle

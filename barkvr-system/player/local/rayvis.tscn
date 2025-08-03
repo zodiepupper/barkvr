@@ -41,7 +41,7 @@ render_priority = 127
 texture = ExtResource("4_3x516")
 
 [node name="Label3D" type="Label3D" parent="cursor"]
-transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.98646027, 0.931352, 2.38419e-07)
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.98646, 0.931352, 2.38419e-07)
 pixel_size = 0.0643
 no_depth_test = true
 render_priority = 127

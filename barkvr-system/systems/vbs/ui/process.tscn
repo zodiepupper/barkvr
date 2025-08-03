@@ -6,7 +6,6 @@ offset_top = 204.0
 offset_right = 479.0
 offset_bottom = 282.0
 mouse_filter = 1
-position_offset = Vector2(404, 204)
 title = "process"
 slot/0/left_enabled = false
 slot/0/left_type = 0

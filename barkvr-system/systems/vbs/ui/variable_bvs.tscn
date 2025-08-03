@@ -1,4 +1,4 @@
-[gd_scene load_steps=0 format=3 uid="uid://ceamctffi58n0"]
+[gd_scene format=3 uid="uid://ceamctffi58n0"]
 
 [node name="variable" type="GraphNode"]
 offset_left = 659.0
@@ -6,7 +6,6 @@ offset_top = 128.0
 offset_right = 781.0
 offset_bottom = 239.0
 mouse_filter = 1
-position_offset = Vector2(659, 128)
 title = "variable"
 ignore_invalid_connection_type = true
 slot/0/left_enabled = true

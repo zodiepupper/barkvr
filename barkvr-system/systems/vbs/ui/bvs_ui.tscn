@@ -1,10 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhwovnnr04rri"]
+[gd_scene load_steps=3 format=3 uid="uid://dhwovnnr04rri"]
 
 [ext_resource type="Script" uid="uid://coqe1jb0t8ttn" path="res://barkvr-system/systems/vbs/ui/visscripttest.gd" id="1_rrgds"]
-[ext_resource type="PackedScene" uid="uid://bpqyj01fpsek7" path="res://barkvr-system/systems/vbs/ui/process.tscn" id="2_flbyy"]
-[ext_resource type="PackedScene" uid="uid://6thah7fkm67m" path="res://barkvr-system/systems/vbs/ui/interval_bvs.tscn" id="3_aies2"]
-[ext_resource type="PackedScene" uid="uid://djy728levmhch" path="res://barkvr-system/systems/vbs/ui/float_bvs.tscn" id="4_mdaeo"]
-[ext_resource type="PackedScene" uid="uid://ceamctffi58n0" path="res://barkvr-system/systems/vbs/ui/variable_bvs.tscn" id="5_v85pq"]
 [ext_resource type="PackedScene" uid="uid://crna2y28nlvky" path="res://barkvr-system/systems/vbs/ui/add_bvs_node.tscn" id="6_flbyy"]
 
 [node name="Control" type="Control"]
@@ -28,34 +24,6 @@ theme_override_constants/connection_hover_thickness = 100
 right_disconnects = true
 show_zoom_label = true
 script = ExtResource("1_rrgds")
-
-[node name="process" parent="bvs_ui" instance=ExtResource("2_flbyy")]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 75.0
-offset_bottom = 78.0
-
-[node name="interval" parent="bvs_ui" instance=ExtResource("3_aies2")]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 104.0
-offset_bottom = 86.0
-
-[node name="float" parent="bvs_ui" instance=ExtResource("4_mdaeo")]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 86.0
-
-[node name="variable" parent="bvs_ui" instance=ExtResource("5_v85pq")]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 111.0
 
 [node name="AddVBSNode" parent="." node_paths=PackedStringArray("target") instance=ExtResource("6_flbyy")]
 unique_name_in_owner = true

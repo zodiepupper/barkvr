@@ -6,8 +6,9 @@ extends Control
 @onready var line_edit = $LineEdit
 
 var vbs_nodes : Dictionary = {
-	"process": load("res://barkvr-system/systems/vbs/ui/process.tscn"),
-	"float": load("res://barkvr-system/systems/vbs/ui/float_bvs.tscn")
+	"process": load("uid://bpqyj01fpsek7"),
+	"float": load("uid://djy728levmhch"),
+	"transform": load("uid://ce28irq3p13pb"),
 }
 
 var event_manager
@@ -26,7 +27,7 @@ func _ready():
 				target.add_child(tmp)
 				tmp.position_offset = (target.size/2.0)+target.scroll_offset
 		item_list.deselect_all()
-		hide()
+		#hide()
 		)
 	line_edit.text_changed.connect(func(new_text:String):
 		item_list.deselect_all()

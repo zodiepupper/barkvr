@@ -1,16 +1,5 @@
 extends Node
 
-
-## XRTools Start XR Class
-##
-## This class supports both the OpenXR and WebXR interfaces, and handles
-## the initialization of the interface as well as reporting when the user
-## starts and ends the VR session.
-##
-## For OpenXR this class also supports passthrough on compatible devices such
-## as the Meta Quest 1 and 2.
-
-
 ## This signal is emitted when XR becomes active. For OpenXR this corresponds
 ## with the 'openxr_focused_state' signal which occurs when the application
 ## starts receiving XR input, and for WebXR this corresponds with the

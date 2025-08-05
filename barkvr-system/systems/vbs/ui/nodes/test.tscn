@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bvo6d7sihq7hr"]
+
+[node name="Test" type="GraphElement"]
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2

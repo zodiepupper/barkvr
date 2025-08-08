@@ -154,6 +154,10 @@ func update_raycasts():
 	ui_ray.force_update_transform()
 
 func buttonPressed(btn_name):
+	for item in grabbed.values():
+		if 'button_pressed' in item.node:
+			item.node.button_pressed(btn_name)
+			return
 	buttons[btn_name] = true
 	if btn_name == "grip_click":
 		pass
@@ -161,9 +165,6 @@ func buttonPressed(btn_name):
 		if ui_ray.is_colliding():
 			ui_ray.click()
 		for item in grabbed.values():
-			if 'button_pressed' in item.node:
-				item.node.button_pressed(btn_name)
-				return
 			if 'primary' in item.node:
 				item.node.primary()
 			if 'primary_pressed' in item.node:
@@ -172,6 +173,11 @@ func buttonPressed(btn_name):
 				item.node.trigger_pressed = true
 
 func buttonReleased(btn_name):
+	for item in grabbed.values():
+		if is_instance_valid(item.node):
+			if 'button_released' in item.node:
+				item.node.button_released(btn_name)
+				return
 	buttons[btn_name] = false
 	if btn_name == "by_button":
 		contextMenuSummon()
@@ -181,9 +187,6 @@ func buttonReleased(btn_name):
 		ui_ray.release()
 		for item in grabbed.values():
 			if is_instance_valid(item.node):
-				if 'button_released' in item.node:
-					item.node.button_released(btn_name)
-					return
 				if 'primary_released' in item.node:
 					item.node.primary_released()
 				if 'trigger_pressed' in item.node:

@@ -46,6 +46,7 @@ func _ready():
 		#thishandtracking = lefthandtracking
 	connect("button_pressed",buttonPressed)
 	connect("button_released",buttonReleased)
+	input_vector2_changed.connect(vector2_changed)
 	input_float_changed.connect(func(input_name:String,value:float):
 		if (XRServer.get_tracker(tracker).profile).ends_with("index_controller"):
 			match input_name:
@@ -73,6 +74,20 @@ func _ready():
 #			else:
 #				world_ray.enabled = false
 		)
+
+func float_changed(input_name:String, value:float):
+	for item in grabbed.values():
+		if is_instance_valid(item.node):
+			if 'float_changed' in item.node:
+				item.node.float_changed(input_name, value)
+				return
+
+func vector2_changed(input_name:String, value:float):
+	for item in grabbed.values():
+		if is_instance_valid(item.node):
+			if 'vector2_changed' in item.node:
+				item.node.vector2_changed(input_name, value)
+				return
 
 func _physics_process(delta: float) -> void:
 	if !rays_disabled:
@@ -145,8 +160,13 @@ func buttonPressed(btn_name):
 		if ui_ray.is_colliding():
 			ui_ray.click()
 		for item in grabbed.values():
+			if 'button_pressed' in item.node:
+				item.node.button_pressed(btn_name)
+				return
 			if 'primary' in item.node:
 				item.node.primary()
+			if 'primary_pressed' in item.node:
+				item.node.primary_pressed()
 			if "trigger_pressed" in item.node:
 				item.node.trigger_pressed = true
 
@@ -160,6 +180,9 @@ func buttonReleased(btn_name):
 		ui_ray.release()
 		for item in grabbed.values():
 			if is_instance_valid(item.node):
+				if 'button_pressed' in item.node:
+					item.node.button_released(btn_name)
+					return
 				if 'primary_released' in item.node:
 					item.node.primary_released()
 				if 'trigger_pressed' in item.node:

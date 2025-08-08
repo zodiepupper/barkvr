@@ -48,6 +48,7 @@ func _ready():
 	connect("button_released",buttonReleased)
 	input_vector2_changed.connect(vector2_changed)
 	input_float_changed.connect(func(input_name:String,value:float):
+		float_changed(input_name, value)
 		if (XRServer.get_tracker(tracker).profile).ends_with("index_controller"):
 			match input_name:
 				"grip_force":
@@ -82,7 +83,7 @@ func float_changed(input_name:String, value:float):
 				item.node.float_changed(input_name, value)
 				return
 
-func vector2_changed(input_name:String, value:float):
+func vector2_changed(input_name:String, value:Vector2):
 	for item in grabbed.values():
 		if is_instance_valid(item.node):
 			if 'vector2_changed' in item.node:
@@ -180,7 +181,7 @@ func buttonReleased(btn_name):
 		ui_ray.release()
 		for item in grabbed.values():
 			if is_instance_valid(item.node):
-				if 'button_pressed' in item.node:
+				if 'button_released' in item.node:
 					item.node.button_released(btn_name)
 					return
 				if 'primary_released' in item.node:

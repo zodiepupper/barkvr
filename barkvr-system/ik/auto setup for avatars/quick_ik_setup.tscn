@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://d1novstb8ijb2"]
 
-[ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://barkvr-system/ik/libik auto setup for avatars/quick_ik_setup.gd" id="1_77tfk"]
+[ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://barkvr-system/ik/auto setup for avatars/quick_ik_setup.gd" id="1_77tfk"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="2_f6jsk"]
 [ext_resource type="Script" uid="uid://cqeoidnhsn75e" path="res://addons/renik-gdscript/renik_spine.gd" id="3_lpdc6"]
 [ext_resource type="Script" uid="uid://chslcw2ar6ueo" path="res://addons/renik-gdscript/renik_limb.gd" id="4_h3em8"]

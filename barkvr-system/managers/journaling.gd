@@ -935,7 +935,7 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,node_name:String,data:Di
 	# add IK stuff if VRM
 	if node_name.ends_with(".vrm") or data.type == "vrm":
 		print('attempting ik')
-		var quickiksetup :Node3D = load("res://barkvr-system/ik/libik auto setup for avatars/quick_ik_setup.tscn").instantiate()
+		var quickiksetup :Node3D = load("res://barkvr-system/ik/auto setup for avatars/quick_ik_setup.tscn").instantiate()
 		node_to_add.add_child(quickiksetup)
 		var skele :Skeleton3D=null
 		for i in node_to_add.get_children():

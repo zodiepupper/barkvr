@@ -43,13 +43,14 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer"]
-visible = false
+[node name="closepanel" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="export" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/HBoxContainer"]
+[node name="closepanelbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/closepanel"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

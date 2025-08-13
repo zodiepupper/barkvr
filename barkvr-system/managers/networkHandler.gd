@@ -205,7 +205,7 @@ func _go() -> void:
 			if chan.channel.get_ready_state() != WebRTCDataChannel.STATE_OPEN:
 				tmp = false
 		peer.channels_ready = tmp
-	create_tween().tween_callback(_go).set_delay(1/120)
+	create_tween().tween_callback(_go).set_delay(1.0/120.0)
 
 func poll():
 	while !close_requested:

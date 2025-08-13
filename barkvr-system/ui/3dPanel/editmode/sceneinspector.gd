@@ -155,10 +155,10 @@ func _export_node(tmp_target:Node, togltf:bool=false):
 			print("export error: "+str(err))
 
 func _duplicate_targets() -> void:
-	var selected = get_all_selected()
-	for item in selected:
-		if "node" in item.get_metadata(0):
-			item.get_metadata(0).node.get_parent().add_child(item.get_metadata(0).node.duplicate())
+	var selected_targets = get_all_selected()
+	for selected_target in selected_targets:
+		if "node" in selected_target.get_metadata(0):
+			selected_target.get_metadata(0).node.get_parent().add_child(selected_target.get_metadata(0).node.duplicate())
 
 func _check_tree_for_updates():
 	if is_instance_valid(root):

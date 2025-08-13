@@ -90,21 +90,3 @@ layout_mode = 2
 focus_mode = 0
 text = "paste"
 expand_icon = true
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-clip_contents = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer"]
-layout_mode = 2
-mouse_filter = 1
-color = Color(1, 1, 1, 0.254902)
-
-[node name="object" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
-clip_contents = true
-layout_mode = 2

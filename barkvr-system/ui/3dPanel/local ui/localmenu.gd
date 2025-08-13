@@ -44,7 +44,7 @@ func _input(event:InputEvent):
 		big_width = event.position.x if event.position.x > tab_container.custom_minimum_size.x else tab_container.custom_minimum_size.x
 		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 
-func reveal(force_open:bool=false) -> void:
+func reveal(_force_open:bool=false) -> void:
 	show()
 	if panel:
 		panel.show()

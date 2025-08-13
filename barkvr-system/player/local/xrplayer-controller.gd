@@ -134,7 +134,7 @@ func respawn_player():
 		global_position = Vector3(0,4,0)
 
 func _ready():
-	get_window().gui_focus_changed.connect(func(node):
+	get_window().gui_focus_changed.connect(func(_node):
 		if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_TYPING
 		)
@@ -242,7 +242,7 @@ func vr_movement(delta:float) -> void:
 		# speed while flying
 		velocity = (direction*SPEED)+Vector3(0, velocity.y, 0) if !flymode else (direction*SPEED)
 
-func flat_movement(delta:float) -> void:
+func flat_movement(_delta:float) -> void:
 	place_grabbed_nodes()
 	var joy_look_vector = Input.get_vector('lookleft','lookright','lookdown','lookup')
 	if joy_look_vector.length()>.05:

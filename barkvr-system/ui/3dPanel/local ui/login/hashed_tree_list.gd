@@ -9,7 +9,7 @@ func hashed_tree_clear():
 	tree.clear()
 	clear()
 
-func add_item(text:String,metadata:Variant,replace:String='') -> TreeItem:
+func add_item(text:String,metadata:Variant,_replace:String='') -> TreeItem:
 	var tmp_tree_item:TreeItem
 	if metadata and metadata.has('node'):
 		if is_instance_valid(metadata.node):

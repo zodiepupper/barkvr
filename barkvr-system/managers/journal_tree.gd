@@ -42,10 +42,11 @@ func _ready() -> void:
 func hashed_tree_clear():
 	tree.clear()
 
-func add_item(text:String,metadata:Variant,_replace:String=''):
+func add_item(_text:String,metadata:Variant,_replace:String=''):
 	if metadata and metadata.has('node'):
 		if is_instance_valid(metadata.node):
-			var item_id = metadata.node.get_instance_id()
+			pass
+			#var item_id = metadata.node.get_instance_id()
 			#if tree.has(item_id):
 				#if metadata.has('parent'):
 					#var parent = tree[item_id].tree_item.get_parent()

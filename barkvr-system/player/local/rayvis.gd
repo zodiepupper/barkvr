@@ -16,5 +16,5 @@ func _process(_delta):
 		cursor.global_position = target
 		cursor.look_at(get_viewport().get_camera_3d().global_position,Vector3.UP,true)
 
-func setType(type:String):
+func setType(_type:String):
 	cursor.show()

@@ -4,9 +4,9 @@ extends Control
 # This requires a PR to godot. they don't seem interested in the change
 # but without it, it's impossible to do performant scene tracking
 
-@onready var export: Button = $VBoxContainer/titlebar/HBoxContainer/HBoxContainer/export
-@onready var dupbtn: Button = $VBoxContainer/titlebar/HBoxContainer/HBoxContainer3/dupbtn
-@onready var delete: Button = $VBoxContainer/titlebar/HBoxContainer/HBoxContainer2/delete
+@onready var closepanelbtn: Button = %closepanelbtn
+@onready var closepanel: HBoxContainer = %closepanel
+
 @onready var properties_header_label: Label = $"VBoxContainer/titlebar/properties header/Panel9/properties header label"
 @onready var activetoggle: CheckButton = $"VBoxContainer/titlebar/properties header/active/HBoxContainer/activetoggle"
 @onready var targetname: LineEdit = $VBoxContainer/titlebar/HBoxContainer/Panel/targetname
@@ -203,34 +203,10 @@ func _ready():
 	titlebar_top_row.visible = !hide_titlebar
 	titlebar_active.visible = !hide_titlebar
 	event_manager = Engine.get_singleton("event_manager")
-	dupbtn.pressed.connect(func():
-		if target:
-			var tmp :Node=target.duplicate()
-			target.get_parent().add_child(tmp)
-			tmp.name = target.name
-		)
-	delete.pressed.connect(func():
-		if target and is_instance_valid(target):
-			event_manager.delete_node(event_manager.root.get_path_to(target))
-			clear_fields()
-		)
 	activetoggle.toggled.connect(func(on:bool):
 		if target and is_instance_valid(target) and target is Node:
 			event_manager.set_property(event_manager.root.get_path_to(target),"visible",on)
 			#target.visible = active.button_pressed
-		)
-	export.pressed.connect(func():
-		var world_root = get_tree().get_first_node_in_group("localworldroot")
-		if world_root and target:
-			var thread = Thread.new()
-			thread.start(_export_node.bind(target))
-			BarkHelpers.rejoin_thread_when_finished(thread)
-#			_export_node(target)
-#			var tmp:PackedScene = PackedScene.new()
-#			assert(tmp.pack(target)==OK)
-#			var err = ResourceSaver.save(tmp,'user://objects/'+target.name+'.res')
-#			print(err)
-#			OS.shell_open(OS.get_user_data_dir())
 		)
 	targetname.text_changed.connect(func(new_text:String):
 		if target:
@@ -243,7 +219,7 @@ func _ready():
 	targetname.focus_exited.connect(func():
 		is_field_focused = false
 		)
-
+	closepanelbtn.pressed.connect(queue_free)
 
 func _export_node(tmp_target:Node):
 	Thread.set_thread_safety_checks_enabled(false)

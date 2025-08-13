@@ -531,7 +531,6 @@ const SAVE_DEBUG_GLTFSTATE_RES: bool = false
 
 func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	check_root()
-	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
 	#Thread.set_thread_safety_checks_enabled(false)
 	var logging_prefix := asset_name+" : "
 	print("Import VRM/GLTF/GLB/FBX: " + asset_name + " ----------------------")

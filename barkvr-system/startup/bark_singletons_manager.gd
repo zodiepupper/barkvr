@@ -18,5 +18,5 @@ func _ready():
 			tmp.name = singleton
 			get_tree().root.call_deferred("add_child",tmp)
 
-func add_singleton(name:String, instance:Object):
-	Engine.register_singleton(name, instance)
+func add_singleton(singleton_name:String, instance:Object):
+	Engine.register_singleton(singleton_name, instance)

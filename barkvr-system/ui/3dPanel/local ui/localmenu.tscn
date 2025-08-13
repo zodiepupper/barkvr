@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://doy6bwhtmwdc6"]
+[gd_scene load_steps=9 format=3 uid="uid://doy6bwhtmwdc6"]
 
 [ext_resource type="Script" uid="uid://bjcdaunap5q8n" path="res://barkvr-system/ui/3dPanel/local ui/localmenu.gd" id="1_62fs1"]
 [ext_resource type="PackedScene" uid="uid://i3pxsgqnbjly" path="res://barkvr-system/ui/3dPanel/local ui/login/matrix.tscn" id="1_wuo22"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cljm3qfem1gc1" path="res://barkvr-system/ui/3dPanel/local ui/debug/webrtc_debug.tscn" id="5_2xf7q"]
 [ext_resource type="PackedScene" uid="uid://uahdxqh2pc7q" path="res://barkvr-system/ui/3dPanel/local ui/load remote asset/load_html_asset.tscn" id="6_sw1xf"]
 [ext_resource type="PackedScene" uid="uid://boug2ukv43nh6" path="res://barkvr-system/ui/3dPanel/local ui/about panel and supporter stuff/about.tscn" id="7_d0sxl"]
+[ext_resource type="Script" uid="uid://c52dqcvcxcswn" path="res://barkvr-system/ui/3dPanel/local ui/fps.gd" id="8_pldir"]
 
 [node name="Localmenu" type="Control" groups=["localuinode"]]
 layout_mode = 3
@@ -92,5 +93,11 @@ grow_horizontal = 2
 size_flags_vertical = 3
 focus_mode = 0
 text = "❌"
+
+[node name="fps" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+script = ExtResource("8_pldir")
 
 [editable path="TabContainer/window_properties"]

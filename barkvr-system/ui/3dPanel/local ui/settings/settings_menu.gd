@@ -65,7 +65,7 @@ func _ready() -> void:
 		inspector_update_interval_spinbox.value = settings_singleton.inspector_update_interval
 		vr_notification_size_value.value = settings_singleton.vr_notification_size
 		vr_notification_offset.set_data("VR Notification Offset", settings_singleton, "vr_notification_offset")
-		interface_scaling_factor.set_data("Inspector Update Interval", settings_singleton, "interface_scaling_factor")
+		interface_scaling_factor.set_data("Interface Scaling Factor", settings_singleton, "interface_scaling_factor")
 		vr_notification_test.pressed.connect(test_vr_notification)
 		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing

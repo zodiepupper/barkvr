@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene load_steps=9 format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://barkvr-system/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
 [ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://barkvr-system/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://barkvr-system/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
+[ext_resource type="PackedScene" uid="uid://cbmgba1q1d8q5" path="res://barkvr-system/ui/3dPanel/editmode/attributes/number.tscn" id="3_6t4ur"]
 [ext_resource type="PackedScene" uid="uid://dkaactpqyjgjn" path="res://barkvr-system/ui/3dPanel/editmode/attributes/vector2.tscn" id="3_p8muu"]
 [ext_resource type="Script" uid="uid://dtd6mffjg2rvw" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_input_selector.gd" id="5_dbica"]
 [ext_resource type="Script" uid="uid://6p36kkj4jsaf" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_output_selector.gd" id="6_sna4b"]
@@ -185,6 +186,7 @@ script = ExtResource("1_2xlvg")
 node_to_toggle = NodePath("../UISettingsMargin")
 
 [node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
@@ -315,6 +317,9 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 0, 1, 1)
+
+[node name="InterfaceScalingFactor" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" instance=ExtResource("3_6t4ur")]
+layout_mode = 2
 
 [node name="InspectorUpdateInterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
 layout_mode = 2

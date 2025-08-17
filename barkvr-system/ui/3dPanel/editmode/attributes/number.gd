@@ -37,7 +37,7 @@ func _ready():
 func _go() -> void:
 	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 	var scrollparent = get_parent_control().get_parent_control()
-	if scrollparent is ScrollContainer:
+	if scrollparent:
 		var rect = get_global_rect()
 		if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
 				update_fields()

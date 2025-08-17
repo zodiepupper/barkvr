@@ -11,11 +11,17 @@ var JournalTreeClass = load("res://barkvr-system/managers/journal_tree.gd")
 var journal_tree: Node 
 
 static var extra_classes : PackedStringArray = [
-	"Panel3D"
+	"Panel3D",
+	"ParticlePen",
+	"LinePen",
+	"WindowCamera3D"
 ]
 
 static var extra_classes_spawn : Array[PackedScene] = [
-	load("res://addons/Panel3D/Panel3D.tscn")
+	load("res://addons/Panel3D/Panel3D.tscn"),
+	load("uid://og3t2qnt8ukh"), # particle pen
+	load("uid://dj84bcm2jv1wq"), # linepen
+	load("uid://bay38na2jeq1o") # placeable camera (WindowCamera3D)
 ]
 
 var root: Node:
@@ -151,7 +157,7 @@ func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := fa
 
 func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
 	check_root()
-	if "node_class" in node_dict and ClassDB.can_instantiate(node_dict.node_class):
+	if "node_class" in node_dict and (ClassDB.can_instantiate(node_dict.node_class) or node_dict.node_class in extra_classes):
 		var node : Node
 		if node_dict.node_class in extra_classes:
 			node = extra_classes_spawn[extra_classes.find(node_dict.node_class)].instantiate()

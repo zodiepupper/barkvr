@@ -1,7 +1,5 @@
 extends Node3D
 
-@onready var start_xr = $StartXR
-
 var vrm_ext_vrm_extension_0 = load("res://addons/vrm/vrm_extension.gd")
 var vrm_ext_emmissive_multiplier = load("res://addons/vrm/1.0/VRMC_materials_hdr_emissiveMultiplier.gd")
 var vrm_ext_materials_mtoon = load("res://addons/vrm/1.0/VRMC_materials_mtoon.gd")

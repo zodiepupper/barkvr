@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://d0e58hos64wvw" path="res://barkvr-system/startup/bark_singletons_manager.gd" id="3_hjfed"]
 [ext_resource type="Script" uid="uid://b4618ilskmgou" path="res://barkvr-system/managers/journaling.gd" id="4_yl0pk"]
 [ext_resource type="Script" uid="uid://co7b0xchpliyg" path="res://barkvr-system/managers/networkHandler.gd" id="5_36gsm"]
-[ext_resource type="Script" uid="uid://4a6yceroxafw" path="res://barkvr-system/startup/settings.gd" id="6_60o4m"]
+[ext_resource type="Script" uid="uid://4a6yceroxafw" path="res://barkvr-system/managers/settings.gd" id="6_60o4m"]
 [ext_resource type="Script" uid="uid://b1ijrenh1x14d" path="res://addons/vector/vector.gd" id="7_ldaby"]
 [ext_resource type="Script" uid="uid://b3opf6aydu7h7" path="res://barkvr-system/objects/pens/voxel_draw_test.gd" id="8_4ywql"]
 

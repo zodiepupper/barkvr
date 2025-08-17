@@ -181,7 +181,17 @@ func _add_fields(prop_list, new_target, above_targets:Array) -> void:
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname
 				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_VECTOR3I:
+				var tmp :Vector3_Attribute = vector_3_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
 			TYPE_VECTOR2:
+				var tmp :Vector2_Attribute = vector_2_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_VECTOR2I:
 				var tmp :Vector2_Attribute = vector_2_field.instantiate()
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname

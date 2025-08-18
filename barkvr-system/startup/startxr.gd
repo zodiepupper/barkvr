@@ -59,7 +59,7 @@ func initialize() -> bool:
 
 	# No XR interface
 	xr_interface = null
-	print("No XR interface detected")
+	print("XR: none")
 	return false
 
 
@@ -75,7 +75,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 # Perform OpenXR setup
 func _setup_for_openxr() -> bool:
-	print("OpenXR: Configuring interface")
+	print("OpenXR: configuring...")
 
 	# Set the render target size multiplier - must be done befor initializing interface
 	# NOTE: Only implemented in Godot 4.1+
@@ -84,9 +84,9 @@ func _setup_for_openxr() -> bool:
 
 	# Initialize the OpenXR interface
 	if not xr_interface.is_initialized():
-		print("OpenXR: Initializing interface")
+		print("OpenXR: trying to init")
 		if not xr_interface.initialize():
-			push_warning("OpenXR: Failed to initialize")
+			push_warning("OpenXR: init fail! is your OpenXR interface(e.g. Meta/SteamVR) running?")
 			return false
 
 	# Connect the OpenXR events
@@ -111,34 +111,34 @@ func _setup_for_openxr() -> bool:
 
 # Handle OpenXR session ready
 func _on_openxr_session_begun() -> void:
-	print("OpenXR: Session begun")
+	print("OpenXR: session ready")
 
 	# Get the reported refresh rate
 	_current_refresh_rate = xr_interface.get_display_refresh_rate()
 	if _current_refresh_rate > 0:
-		print("OpenXR: Refresh rate reported as ", str(_current_refresh_rate))
+		print("OpenXR: refreshRate ", str(_current_refresh_rate))
 	else:
-		print("OpenXR: No refresh rate given by XR runtime")
+		print("OpenXR: no refresh rate given by XR runtime")
 
 	# Pick a desired refresh rate
 	var desired_rate := target_refresh_rate if target_refresh_rate > 0 else _current_refresh_rate
 	var available_rates : Array = xr_interface.get_available_display_refresh_rates()
 	if available_rates.size() == 0:
-		print("OpenXR: Target does not support refresh rate extension")
+		print("OpenXR: target does not support refresh rate extension")
 	elif available_rates.size() == 1:
-		print("OpenXR: Target supports only one refresh rate")
+		print("OpenXR: target supports only one refresh rate")
 	elif desired_rate > 0:
-		print("OpenXR: Available refresh rates are ", str(available_rates))
+		print("OpenXR: available refresh rates are ", str(available_rates))
 		var rate = _find_closest(available_rates, desired_rate)
 		if rate > 0:
-			print("OpenXR: Setting refresh rate to ", str(rate))
+			print("OpenXR: setting refresh rate to ", str(rate))
 			xr_interface.set_display_refresh_rate(rate)
 			_current_refresh_rate = rate
 
 	# Pick a physics rate
 	var active_rate := _current_refresh_rate if _current_refresh_rate > 0 else 144.0
 	var physics_rate := int(round(active_rate * physics_rate_multiplier))
-	print("Setting physics rate to ", physics_rate)
+	print("setting physics rate to ", physics_rate)
 	Engine.physics_ticks_per_second = physics_rate
 
 
@@ -146,7 +146,7 @@ func _on_openxr_session_begun() -> void:
 func _on_openxr_visible_state() -> void:
 	# Report the XR ending
 	if xr_active:
-		print("OpenXR: XR ended (visible_state)")
+		print("OpenXR: XR end (visible_state)")
 		xr_active = false
 		xr_ended.emit()
 
@@ -155,7 +155,7 @@ func _on_openxr_visible_state() -> void:
 func _on_openxr_focused_state() -> void:
 	# Report the XR starting
 	if not xr_active:
-		print("OpenXR: XR started (focused_state)")
+		print("OpenXR: XR start (focused_state)")
 		xr_active = true
 		emit_signal("xr_started")
 
@@ -177,7 +177,7 @@ func _set_enable_passthrough(p_new_value : bool) -> void:
 
 # Perform WebXR setup
 func _setup_for_webxr() -> bool:
-	print("WebXR: Configuring interface")
+	print("WebXR: config")
 
 	# Connect the WebXR events
 	xr_interface.connect("session_supported", _on_webxr_session_supported)
@@ -216,7 +216,7 @@ func _on_webxr_session_supported(session_mode: String, supported: bool) -> void:
 
 # Called when the WebXR session has started successfully
 func _on_webxr_session_started() -> void:
-	print("WebXR: Session started")
+	print("WebXR: session start")
 
 	# Hide the canvas and switch the viewport to XR
 	$EnterWebXR.visible = false
@@ -230,7 +230,7 @@ func _on_webxr_session_started() -> void:
 
 # Called when the user ends the immersive VR session
 func _on_webxr_session_ended() -> void:
-	print("WebXR: Session ended")
+	print("WebXR: session end")
 
 	# Show the canvas and switch the viewport to non-XR
 	$EnterWebXR.visible = true
@@ -244,7 +244,7 @@ func _on_webxr_session_ended() -> void:
 
 # Called when the immersive VR session fails to start
 func _on_webxr_session_failed(message: String) -> void:
-	OS.alert("Unable to enter VR: " + message)
+	OS.alert("WebXR FAILURE INFO: " + message)
 	$EnterWebXR.visible = true
 
 
@@ -259,7 +259,7 @@ func _on_enter_webxr_button_pressed() -> void:
 	# Initialize the interface. This should trigger either _on_webxr_session_started
 	# or _on_webxr_session_failed
 	if not xr_interface.initialize():
-		OS.alert("Failed to initialize WebXR")
+		OS.alert("WEBXR FAIL")
 
 
 # Find the closest value in the array to the target

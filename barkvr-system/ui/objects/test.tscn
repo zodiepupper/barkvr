@@ -18,7 +18,6 @@ shape = SubResource("CircleShape2D_nlxr0")
 position = Vector2(356, 322)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ufp8i")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="StaticBody2D"]
@@ -26,7 +25,6 @@ position = Vector2(-260, -86)
 rotation = -1.57079
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D2"]
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ufp8i")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="StaticBody2D"]
@@ -34,5 +32,4 @@ position = Vector2(262, -86)
 rotation = -1.57079
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D3"]
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ufp8i")

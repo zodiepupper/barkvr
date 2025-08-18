@@ -51,6 +51,10 @@ window/size/viewport_width=1500
 window/size/viewport_height=800
 window/subwindows/embed_subwindows=false
 
+[dotnet]
+
+project/assembly_name="barkvr"
+
 [editor]
 
 export/convert_text_resources_to_binary=false

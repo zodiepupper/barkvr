@@ -1,6 +1,6 @@
 extends RichTextLabel
-
-var effects := "[rainbow freq=.1 sat=.6][wave amp=50 freq=1][center][font_size=42]"
+# change this if you like seizures or something
+var effects := "[rainbow freq=.1 sat=.6][wave amp=50 freq=20][center][font_size=42]"
 var messages :Array = [
 	"we couldn't do this without you!",
 	"thank you for supporting barkvr!!",
@@ -9,7 +9,7 @@ var messages :Array = [
 	"supporters!",
 	"the people who help make this possible!!",
 	"y'all are the best",
-	"please consider helping us out like these wonderful critters!"
+	"please consider helping us out like these handsome fellows!"
 ]
 
 func _ready() -> void:

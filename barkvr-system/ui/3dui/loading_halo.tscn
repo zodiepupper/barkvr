@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ben6x4qpiovfq"]
+[gd_scene load_steps=12 format=3 uid="uid://ben6x4qpiovfq"]
 
 [ext_resource type="Script" uid="uid://ccoqk6l435gfj" path="res://barkvr-system/ui/3dui/loading_halo.gd" id="1_t6gg2"]
 [ext_resource type="Script" uid="uid://cvckssxphmjby" path="res://barkvr-system/ui/3dui/quadbackpanel.gd" id="2_8b88k"]
 [ext_resource type="Script" uid="uid://bid0px1sckfi1" path="res://barkvr-system/ui/3dui/smooth_text_rotation.gd" id="2_eicjb"]
+[ext_resource type="FontFile" uid="uid://cfjn1mf2t43as" path="res://barkvr-system/ui/3dui/loader.otf" id="3_10oxj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xpd5"]
 cull_mode = 1
@@ -85,8 +86,9 @@ pixel_size = 0.0014
 billboard = 1
 render_priority = 3
 outline_render_priority = 2
-text = "loading:
-dafd"
+text = "READY PLAYER ONE"
+font = ExtResource("3_10oxj")
+outline_size = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="textparent"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.11639e-10, 0, -0.437229)

@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;">
-    <g transform="matrix(6.12323e-17,-1,1,6.12323e-17,0.25,14.75)">
-        <path d="M7.5,10.5L4.25,7.5M7.5,10.5L10.5,7.5M7.5,10.5L7.5,1M13.5,7L13.5,13.5L1.5,13.5L1.5,7" style="fill:none;fill-rule:nonzero;stroke:white;stroke-width:1px;"/>
-    </g>
+<svg version="1.1" id="Layer_1" xmlns:serif="http://www.serif.com/"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1024px" height="1024px"
+	 viewBox="0 0 1024 1024" enable-background="new 0 0 1024 1024" xml:space="preserve">
+<g transform="matrix(6.12323e-17,-1,1,6.12323e-17,0.25,14.75)">
+	<path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M-480.184,733.616l-221.866-204.8
+		 M-480.184,733.616l204.8-204.8 M-480.184,733.616V85.083 M-70.583,494.683v443.733h-819.2V494.683"/>
+</g>
 </svg>

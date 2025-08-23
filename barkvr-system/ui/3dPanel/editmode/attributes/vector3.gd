@@ -41,10 +41,10 @@ func _ready():
 	_go()
 
 func _go() -> void:
-	var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
+	var parent_rect = get_parent_control().get_parent_control().get_global_rect()
 	var rect = get_global_rect()
-	if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
-		update_fields()
+	if (rect.end.y > parent_rect.position.y and rect.position.y < parent_rect.end.y):
+			update_fields()
 	create_tween().tween_callback(_go).set_delay(Engine.get_singleton("settings_manager").inspector_update_interval)
 
 func update_fields():

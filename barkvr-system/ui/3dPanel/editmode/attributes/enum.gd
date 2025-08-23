@@ -30,10 +30,9 @@ func _go() -> void:
 	if target and !property_name.is_empty() and !_is_editing and is_instance_valid(target) and !_check_focus():
 		var scrollparentrect = get_parent_control().get_parent_control().get_global_rect()
 		var scrollparent = get_parent_control().get_parent_control()
-		if scrollparent is ScrollContainer:
-			var rect = get_global_rect()
-			if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
-					update_fields()
+		var rect = get_global_rect()
+		if (rect.end.y > scrollparentrect.position.y and rect.position.y < scrollparentrect.end.y):
+				update_fields()
 	elif !is_instance_valid(target):
 		target = null
 		val.button_pressed = false
@@ -58,7 +57,7 @@ func _check_focus():
 	return false
 
 ## sets the name, field target node, and the property name for the field to look for
-## name:String, new_target:Node, new_property_name:String
+## new_name:String, new_target:Node, new_property_name:String
 func set_data(new_name:String, new_target:Object, new_property_name:String, prop_data:Dictionary, _is_string_enum:bool=false):
 	is_string_enum = _is_string_enum
 	label.text = new_name

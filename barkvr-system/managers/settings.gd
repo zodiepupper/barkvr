@@ -68,6 +68,12 @@ var anti_aliasing: int = 0:
 		anti_aliasing = value
 		get_window().msaa_3d = value as Viewport.MSAA
 		save_and_emit(&"anti_aliasing")
+## sets the screen space anti-aliasing mode
+var screen_space_anti_aliasing: int = 0:
+	set(value):
+		screen_space_anti_aliasing = value
+		get_window().screen_space_aa = value as Viewport.ScreenSpaceAA
+		save_and_emit(&"screen_space_anti_aliasing")
 var viewport_scaling: float = 1.0:
 	set(value):
 		viewport_scaling = value
@@ -84,9 +90,11 @@ const DEFAULT_VALUES := {
 	grabbed_object_scale_factor = 1.1,
 	send_messages_with_ctrl_enter = false,
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
+	screen_space_anti_aliasing = RenderingServer.ViewportScreenSpaceAA.VIEWPORT_SCREEN_SPACE_AA_DISABLED,
 	viewport_scaling = 1.0,
 	vr_notification_size = 40.0,
-	vr_notification_offset = Vector2(.1,.9)
+	vr_notification_offset = Vector2(.1,.9),
+	
 }
 
 func _ready() -> void:

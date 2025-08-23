@@ -625,3 +625,6 @@ value = 1.0
 scrollable = false
 tick_count = 3
 ticks_on_borders = true
+
+[node name="ScreenSpaceAntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
+layout_mode = 2

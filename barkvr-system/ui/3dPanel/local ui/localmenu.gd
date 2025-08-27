@@ -22,6 +22,7 @@ var panel: Panel3D:
 		return viewport.get_parent() if viewport.get_parent() is Panel3D else null
 
 func _ready():
+	hide()
 	Engine.register_singleton("local_menu", self)
 	expanded = tab_container.visible
 	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)

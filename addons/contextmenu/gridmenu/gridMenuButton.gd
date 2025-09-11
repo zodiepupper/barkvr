@@ -2,8 +2,20 @@
 class_name GridMenuButton
 extends StaticBody3D
 
-# a signal to be thrown when clicked
+## DEPRECATED: only here for legacy support will be removed soon
 signal clicked
+
+## a signal to be thrown when pressed
+signal pressed
+
+## when the button is actively being clicked
+signal button_down
+
+## when the button is released
+signal button_up
+
+## signal for when the button is hovered
+signal hovered
 
 @onready var mesh_instance_3d : MeshInstance3D = $MeshInstance3D
 @onready var label_3d :Label3D = $Label3D
@@ -42,6 +54,10 @@ signal clicked
 		if callscript and callscript.can_instantiate():
 			callscriptinstance = callscript.new()
 
+## sets whether the button should be activated upon
+## button down (true) or button up (false)
+@export var press_on_down := true
+
 ## the instantiated callscript
 var callscriptinstance:
 	set(value):
@@ -70,10 +86,21 @@ var label_target_position := 0.0
 var alpha := 0.5
 
 # for tracking whether the button is hovered
-var hover := false
+var hover := false:
+	set(val):
+		hover = val
+		if val:
+			hovered.emit()
+
 # for tracking whether the button is currently
 # being clicked
-var isclicked := false
+var isclicked := false:
+	set(val):
+		isclicked = val
+		if val:
+			button_down.emit()
+			return
+		button_up.emit()
 
 # resets the label text once the node has
 # entered the tree so it can run the proper

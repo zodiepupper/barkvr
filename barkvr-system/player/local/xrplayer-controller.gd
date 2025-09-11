@@ -459,7 +459,8 @@ func _screen_tap_click(_event:InputEvent) -> void:
 
 func contextMenuSummon():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		handmenu.summon(camera_3d.to_global(Vector3(0,0,-.5)), camera_3d.global_position)
+		var player_scale_multiplier :float = get_tree().get_first_node_in_group("player").global_basis.get_scale().length()
+		handmenu.summon(camera_3d.project_position(get_viewport().get_mouse_position(), player_scale_multiplier*.4), camera_3d.global_position)
 
 func place_grabbed_nodes():
 	var settings_singleton := Engine.get_singleton("settings_manager")

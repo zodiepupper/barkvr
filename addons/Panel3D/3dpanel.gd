@@ -257,23 +257,23 @@ func _ready():
 			viewport.gui_release_focus()
 			)
 
-func _process(delta: float) -> void:
-	var embedded := viewport.get_embedded_subwindows()
-	for window in embedded:
-		if false and !popouts.has(window) and !window.has_meta("already_moved"):
-			window.set_meta("already_moved", true)
-			popouts.append(window)
-			var tmppanel := Panel3D.new()
-			add_child(tmppanel)
-			tmppanel.global_position = tmppanel.to_global(Vector3(0, 0, .1))
-			tmppanel.viewport_size = window.size
-			# TODO set world position to reflect relative position of the popout
-			# on it's origin viewport
-			
-			# TODO make popout render on top of inspectors but only if it comes from an inspector
-			# might be able to do this by grabbing the viewport from the node before reparenting
-			window.get_parent().remove_child(window)
-			tmppanel.viewport.add_child(window)
+#func _process(delta: float) -> void:
+	#var embedded := viewport.get_embedded_subwindows()
+	#for window in embedded:
+		#if false and !popouts.has(window) and !window.has_meta("already_moved"):
+			#window.set_meta("already_moved", true)
+			#popouts.append(window)
+			#var tmppanel := Panel3D.new()
+			#add_child(tmppanel)
+			#tmppanel.global_position = tmppanel.to_global(Vector3(0, 0, .1))
+			#tmppanel.viewport_size = window.size
+			## TODO set world position to reflect relative position of the popout
+			## on it's origin viewport
+			#
+			## TODO make popout render on top of inspectors but only if it comes from an inspector
+			## might be able to do this by grabbing the viewport from the node before reparenting
+			#window.get_parent().remove_child(window)
+			#tmppanel.viewport.add_child(window)
 
 func laser_input(data:Dictionary):
 	var event

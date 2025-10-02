@@ -14,7 +14,7 @@ config/name="barkvr"
 run/main_scene="res://barkvr-system/startup/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
 boot_splash/fullsize=false
@@ -73,10 +73,10 @@ startxr="group specifically for the XR init node"
 
 [gui]
 
-common/text_edit_undo_stack_max_size=4096
-theme/custom="res://barkvr-system/assets/barkvr_theme.tres"
 theme/default_font_multichannel_signed_distance_field=true
 theme/default_font_generate_mipmaps=true
+common/text_edit_undo_stack_max_size=4096
+theme/custom="res://barkvr-system/assets/barkvr_theme.tres"
 
 [input]
 

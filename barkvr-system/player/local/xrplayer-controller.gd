@@ -77,6 +77,8 @@ var screen_just_touched := false
 
 @export var force_set_vr_enabled := false
 
+var last_spawned_inspector
+
 var vr_mode_enabled := false:
 	set(value):
 		if force_set_vr_enabled:

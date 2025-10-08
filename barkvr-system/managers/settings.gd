@@ -5,6 +5,7 @@ signal changed(name: StringName)
 
 const PATH := "user://settings.json"
 
+## toggles camera passthrough if it is supported by the current platform
 var vr_passthrough: bool = false:
 	set(value):
 		vr_passthrough = value
@@ -14,10 +15,14 @@ var vr_passthrough: bool = false:
 			else:
 				XRServer.primary_interface.stop_passthrough()
 		save_and_emit(&"vr_passthrough")
+
+## toggles hang tracking in code if supported by the current platform
 var hand_tracking_enabled: bool = true:
 	set(value):
 		hand_tracking_enabled = value
 		save_and_emit(&"hand_tracking_enabled")
+
+## these 3 make the primary menu panel look at the local user on the specified axis
 var ui_local_menu_lookat_x: bool:
 	set(value):
 		ui_local_menu_lookat_x = value
@@ -30,56 +35,79 @@ var ui_local_menu_lookat_z: bool = true:
 	set(value):
 		ui_local_menu_lookat_z = value
 		save_and_emit(&"ui_local_menu_lookat_z")
+
 ## inspector fields update at a specific interval starting from their instantiation.
 ## this changes the interval length in seconds. 
 var inspector_update_interval: float = .1:
 	set(value):
 		inspector_update_interval = value
 		save_and_emit(&"inspector_update_interval")
+
 ## changes the size of the 3d notifications that appear on screen and in vr
 var vr_notification_size: float = 40.0:
 	set(value):
 		vr_notification_size = value
 		save_and_emit(&"vr_notification_size")
+
 ## changes the offset position of the 3d notifications
 var vr_notification_offset: Vector2 = Vector2(.1,.9):
 	set(value):
 		vr_notification_offset = value
 		save_and_emit(&"vr_notification_offset")
+		
+## changes the size of all ui elements
 var interface_scaling_factor: float = 1.0:
 	set(value):
 		interface_scaling_factor = value
 		get_window().content_scale_factor = value
 		save_and_emit(&"interface_scaling_factor")
+		
 ## the multiplier that is used for the speed held items should be scaled at
 var grabbed_object_scale_factor: float = 1.1:
 	set(value):
 		grabbed_object_scale_factor = value
 		save_and_emit(&"grabbed_object_scale_factor")
+		
 ## sets whether chat messages should be sent with ctrl+enter as opposed
 ## to the default which is just by pressing enter
 var send_messages_with_ctrl_enter: bool = false:
 	set(value):
 		send_messages_with_ctrl_enter = value
 		save_and_emit(&"send_messages_with_ctrl_enter")
+		
 ## sets the anti-aliasing mode
 var anti_aliasing: int = 0:
 	set(value):
 		anti_aliasing = value
 		get_window().msaa_3d = value as Viewport.MSAA
 		save_and_emit(&"anti_aliasing")
+		
 ## sets the screen space anti-aliasing mode
 var screen_space_anti_aliasing: int = 0:
 	set(value):
 		screen_space_anti_aliasing = value
 		get_window().screen_space_aa = value as Viewport.ScreenSpaceAA
 		save_and_emit(&"screen_space_anti_aliasing")
+
+## this changes the actual rendering resolution for the primary viewport
+## can be used to save performance or increase visual quality
 var viewport_scaling: float = 1.0:
 	set(value):
 		viewport_scaling = value
 		get_window().scaling_3d_scale = value
 		save_and_emit(&"viewport_scaling")
 
+## toggles whether the inspector is a singleton (only one can exist)
+## if `true` the buttons to spawn an inspector will instead summon your 
+## last spawned inspector and spawns one if none exist. if `false`	
+## the inspector buttons spawn a new inspector
+var inspector_as_singleton: bool = false:
+	set(value):
+		inspector_as_singleton = value
+		save_and_emit(&"inspector_as_singleton")
+
+## initialization dictionary which defines the schema of the settings file
+## exists to reduce ambiguity in how the settings file is organized
 const DEFAULT_VALUES := {
 	vr_passthrough = false,
 	hand_tracking_enabled = true,
@@ -92,10 +120,19 @@ const DEFAULT_VALUES := {
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
 	screen_space_anti_aliasing = RenderingServer.ViewportScreenSpaceAA.VIEWPORT_SCREEN_SPACE_AA_DISABLED,
 	viewport_scaling = 1.0,
+	interface_scaling_factor = 1.0,
 	vr_notification_size = 40.0,
 	vr_notification_offset = Vector2(.1,.9),
-	
+	inspector_as_singleton = false,
+
 }
+
+var inspectors := []:
+	set(val):
+		inspectors = val
+		for inspector in inspectors:
+			if !is_instance_valid(inspector):
+				inspectors.erase(inspector)
 
 func _ready() -> void:
 	if FileAccess.file_exists(PATH):

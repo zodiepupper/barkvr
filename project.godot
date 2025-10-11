@@ -57,7 +57,7 @@ export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/unidot_importer/plugin.cfg", "res://addons/vrm/plugin.cfg")
+enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/unidot_importer/plugin.cfg", "res://addons/vrm/plugin.cfg")
 
 [filesystem]
 
@@ -236,19 +236,73 @@ common/physics_jitter_fix=0.0
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method="mobile"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
 occlusion_culling/use_occlusion_culling=true
+
+[shader_globals]
+
+META_ENVIRONMENT_DEPTH_AVAILABLE={
+"type": "bool",
+"value": false
+}
+META_ENVIRONMENT_DEPTH_TEXTURE={
+"type": "sampler2DArray",
+"value": ""
+}
+META_ENVIRONMENT_DEPTH_PROJECTION_VIEW_LEFT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_PROJECTION_VIEW_RIGHT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_INV_PROJECTION_VIEW_LEFT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_INV_PROJECTION_VIEW_RIGHT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_FROM_CAMERA_PROJECTION_LEFT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_FROM_CAMERA_PROJECTION_RIGHT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_LEFT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
+META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_RIGHT={
+"type": "mat4",
+"value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+}
 
 [xr]
 
 openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
-openxr/startup_alert=false
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
 shaders/enabled=true
 openxr/extensions/hand_tracking_aim=true
+openxr/extensions/htc/passthrough=true
+openxr/extensions/htc/face_tracking=true
+openxr/extensions/meta/passthrough=true
+openxr/extensions/meta/face_tracking=true
+openxr/extensions/meta/body_tracking=true
+openxr/extensions/meta/hand_tracking_aim=true
+openxr/extensions/meta/hand_tracking_mesh=true
+openxr/extensions/meta/hand_tracking_capsules=true
+openxr/extensions/meta/application_space_warp=true
+openxr/extensions/meta/environment_depth=true
+openxr/extensions/meta/color_space/starting_color_space=2

@@ -57,6 +57,7 @@ func set_full_height_deferred():
 var event_manager
 
 func set_target(new_target, above_targets:=[]):
+	print("setting target in: ",self, "to look at: ",new_target)
 	if !above_targets.is_empty():
 		#print("first above_targets: " + str(above_targets[0]))
 		#print("above_targets: " + str(above_targets) + "\n")

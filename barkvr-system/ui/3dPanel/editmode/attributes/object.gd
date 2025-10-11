@@ -4,6 +4,7 @@ extends Control
 @onready var label :Label= $VBoxContainer/Panel2/Label
 @onready var expand: Button = $VBoxContainer/Panel2/expand
 var ATTRIBUTES_SCENE = load("res://barkvr-system/ui/3dPanel/editmode/attributes.tscn")
+var ATTRIBUTES_POPUP_SCENE = load("res://barkvr-system/ui/3dPanel/editmode/popup/attributes_popup.tscn")
 var attributes: Control
 @onready var create: Button = %create
 @onready var copy: Button = %copy
@@ -44,6 +45,15 @@ func _ready() -> void:
 			custom_minimum_size.y = 1000
 		else:
 			custom_minimum_size.y = 100
+		)
+	expand.pressed.connect(func():
+		var tmp : Control = ATTRIBUTES_POPUP_SCENE.instantiate()
+		tmp.hide_titlebar = true
+		#tmp.full_height = full_height
+		tmp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		get_parent().get_parent().get_parent().get_parent().add_child(tmp)
+		tmp.set_deferred("target", target)
+		print('opened single object inspector: ',target)
 		)
 
 ## sets the name, field target node, and the property name for the field to look for

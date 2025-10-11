@@ -1,5 +1,21 @@
 # Change history for the Godot OpenXR loaders asset
 
+## 4.1.1
+
+- Update the export plugin version to match the maven central release
+
+## 4.1.0
+
+- Implement `XR_META_boundary_visibility` extension
+- Add HorizonOS camera permissions when the Android CAMERA permission is enabled
+- Implement `XR_FB_space_warp` extension (only with Godot 4.5+)
+- Implement `XR_META_environment_depth` extension (only with Godot 4.5+)
+- Implement `XR_FB_color_space` extension
+- Update OpenXR to 1.1.49 release
+- Implement `XR_META_body_tracking_full_body`, `XR_META_body_tracking_fidelity` and `XR_META_body_tracking_callibration`
+- Clean-up editor plugins and class registration
+- `OpenXRFbSceneManager`: Clarify how to check if scene capture is possible
+
 ## 4.0.0
 
 - Support making hybrid apps for Meta headsets
@@ -11,6 +27,13 @@
 - Add missing Pico store manifest
 - Add support for `XR_FB_composition_layer_image_layout`
 - Update demo and samples for Godot 4.4
+- Switch Meta and Lynx to the Khronos loader
+- Fix `OpenXRFbSpatialEntityStorageExtensionWrapper` typos
+- Add support for `XR_FB_composition_layer_depth_test`
+- Use project settings to avoid enabling unneeded OpenXR extensions
+- Passthrough extensions should override real alpha blend mode, if enabled
+- Update the main manifest with the latest from the Khronos OpenXR loader AAR
+- Improve hand tracking related code in demo project
 
 ## 3.1.2
 - Fix passthrough sample color map display bug
@@ -54,6 +77,10 @@
 - Add XR_HTC_passthrough extension wrapper
 - Add manifest entries to Pico and switch Pico to using the Khronos Loader
 - Add Meta Passthrough tutorial doc
+
+## 2.0.4
+- Fix misc crash when reloading project on Godot 4.3
+- Fix issue with only the first permission being requested
 
 ## 2.0.3
 - Migrate the export scripts from gdscript to C++ via gdextension

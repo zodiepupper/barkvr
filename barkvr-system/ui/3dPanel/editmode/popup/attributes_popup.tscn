@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://jhkduue7dg61"]
+
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_4t6gi"]
+[ext_resource type="Script" uid="uid://coaj8cwjm6g6a" path="res://barkvr-system/ui/3dPanel/editmode/popup/attributes_popup.gd" id="1_otumx"]
+
+[node name="AttributesPopup" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+script = ExtResource("1_otumx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 0, 0, 0.77254903)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "single object editor"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="close" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+text = "X"
+
+[node name="attributes" parent="VBoxContainer" instance=ExtResource("1_4t6gi")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3

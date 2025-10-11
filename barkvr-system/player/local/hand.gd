@@ -18,14 +18,24 @@ var otherhand : XRController3D
 
 var grabbed :Dictionary
 var grabbedVel := Vector3()
+
 var rayBody : RigidBody3D
-var rightStickVec
 var grabbing = false
+## for holding time passed while holding the context menu button
 var contexttimer = 0
+## holder for currently pressed buttons this allows us to do more than just
+## respond to a button press immediately
 var buttons :Dictionary = {}
+## the amount of time the context menu buston needs to be held to summon the inspector 
+## instead of just opening the context menu
 var contexteditortimeout := 1.0
+## var for tracking whether this hand is currently scaling an object
 var isscalinggrabbedobject := false
+## for tracking the distance between the hands when beginning to scale 
+## an object
 var scalinggrabbedstartdist : float
+## for tracking wh9ich object is being scaled currently [this should
+## be upgraded eventually to allow scaling of multiple held objects]
 var scalinggrabbedobject : Node
 var scalinggrabbedstartscale : Vector3
 var rays_disabled : bool = false:
@@ -154,10 +164,14 @@ func update_raycasts():
 	ui_ray.force_update_transform()
 
 func buttonPressed(btn_name):
-	for item in grabbed.values():
-		if 'button_pressed' in item.node:
-			item.node.button_pressed(btn_name)
-			return
+	# if anything is grabbed, send inputs to those objects and return
+	if !grabbed.is_empty():
+		for item in grabbed.values():
+			if 'button_pressed' in item.node:
+				item.node.button_pressed(btn_name)
+		return
+	
+	# add the button to the dictionary of pressed buttons
 	buttons[btn_name] = true
 	if btn_name == "grip_click":
 		pass
@@ -194,7 +208,6 @@ func buttonReleased(btn_name):
 		rayBody = null
 
 func contextMenuSummon():
-	print(contexttimer)
 	if contexttimer < contexteditortimeout:
 		handmenu.summon(hand_menu_point.global_position, global_position)
 	#else:

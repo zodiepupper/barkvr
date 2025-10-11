@@ -35,7 +35,7 @@ var camPrevPos : Vector3 = Vector3()
 @export var SPEED := 5.0
 @export var JUMP_VELOCITY := 4.5
 
-@export var flymode := true:
+@export var flymode := false:
 	set(value):
 		flymode = value
 		if value:

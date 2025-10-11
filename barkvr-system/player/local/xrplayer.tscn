@@ -114,6 +114,7 @@ script = ExtResource("2_npgyv")
 [node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]
 
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
+interaction_index = 1
 follow_mouse = false
 query_on_process = false
 private_ui_collision_layers = 512

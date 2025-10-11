@@ -52,7 +52,7 @@ func _ready() -> void:
 		#tmp.full_height = full_height
 		tmp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		get_parent().get_parent().get_parent().get_parent().add_child(tmp)
-		tmp.set_deferred("target", target)
+		tmp.set_deferred("target", target[property_name])
 		print('opened single object inspector: ',target)
 		)
 

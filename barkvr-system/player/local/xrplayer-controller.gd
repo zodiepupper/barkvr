@@ -234,15 +234,17 @@ func vr_movement(delta:float) -> void:
 	
 	var input_dir = leftStick
 	var direction: Vector3
-	if flymode:
-		direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
-	else:
-		direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
+	direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
+	if !flymode:
+		var tmpscale = direction.length()
+		direction.y = 0
+		direction = direction.normalized()*tmpscale
 	if direction:
-		# used a ternary to preserve the y velocity if they player is not flying
-		# this prevents this lazy ass code from exponentially increasing vertical
-		# speed while flying
-		velocity = (direction*SPEED)+Vector3(0, velocity.y, 0) if !flymode else (direction*SPEED)
+		var motion = direction*SPEED
+		velocity.x = motion.x
+		if flymode:
+			velocity.y = motion.y
+		velocity.z = motion.z
 
 func flat_movement(_delta:float) -> void:
 	place_grabbed_nodes()

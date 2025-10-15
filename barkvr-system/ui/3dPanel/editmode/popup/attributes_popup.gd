@@ -9,9 +9,10 @@ var target:Object:
 		target = val
 		if attributes:
 			attributes.call_deferred("set_target",target)
-			rand_color.call_deferred()
 			hide_titlebar = hide_titlebar
 			full_height = full_height
+			if target:
+				rand_color.call_deferred()
 
 var hide_titlebar := false:
 	set(val):

@@ -35,7 +35,7 @@ var camPrevPos : Vector3 = Vector3()
 @export var SPEED := 5.0
 @export var JUMP_VELOCITY := 4.5
 
-@export var flymode := false:
+@export var flymode := true:
 	set(value):
 		flymode = value
 		if value:
@@ -45,7 +45,7 @@ var camPrevPos : Vector3 = Vector3()
 				noclip = false
 			motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
 
-@export var noclip := false:
+@export var noclip := true:
 	set(value):
 		if value and !flymode:
 			flymode = true
@@ -293,11 +293,7 @@ func flat_movement(_delta:float) -> void:
 	else:
 		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		#vreditor = load("res://barkvr-system/ui/3dPanel/editmode/vreditor.tscn").instantiate()
-		var vreditor = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
-		get_tree().get_first_node_in_group("localworldroot").add_child(vreditor)
-		vreditor.global_position = camera_3d.to_global(Vector3(0,0,-.5))
-		vreditor.look_at(camera_3d.global_position, Vector3.UP, true)
+		summon_inspector()
 	
 	righthand.look_at(camera_3d.to_global(grab_point))
 	
@@ -465,6 +461,15 @@ func contextMenuSummon():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 		var player_scale_multiplier :float = get_tree().get_first_node_in_group("player").global_basis.get_scale().length()
 		handmenu.summon(camera_3d.project_position(get_viewport().get_mouse_position(), player_scale_multiplier*.4), camera_3d.global_position)
+
+func summon_inspector():
+	if ( Engine.has_singleton("settings_manager") and \
+	!(Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton) or\
+	!is_instance_valid(last_spawned_inspector):
+		last_spawned_inspector = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
+		get_tree().get_first_node_in_group("localworldroot").add_child(last_spawned_inspector)
+	last_spawned_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
+	last_spawned_inspector.look_at(camera_3d.global_position, Vector3.UP, true)
 
 func place_grabbed_nodes():
 	var settings_singleton := Engine.get_singleton("settings_manager")

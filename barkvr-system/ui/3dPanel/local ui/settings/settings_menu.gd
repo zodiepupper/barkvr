@@ -17,6 +17,7 @@ class_name SettingsMenu
 @onready var local_menu_lookat_y_rect: ColorRect = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal/ColorRect
 @onready var local_menu_lookat_z_button: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal
 @onready var local_menu_lookat_z_rect: ColorRect = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal/ColorRect
+@onready var inspector_as_singleton: Bool_Attribute = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorAsSingleton
 @onready var inspector_update_interval_spinbox: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/SpinBox
 @onready var vr_notification_size_value: SpinBox = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/VRNotificationSizeValue
 @onready var vr_notification_offset: Vector2_Attribute = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/VRNotificationOffset
@@ -68,6 +69,7 @@ func _ready() -> void:
 		vr_notification_offset.set_data("VR Notification Offset", settings_singleton, "vr_notification_offset")
 		interface_scaling_factor.set_data("Interface Scaling Factor", settings_singleton, "interface_scaling_factor")
 		screen_space_anti_aliasing.set_data("Scren Space Anti Aliasing", settings_singleton, "screen_space_anti_aliasing", {"hint_string":"Disabled, FXAA_Enabled"})
+		inspector_as_singleton.set_data("Inspector As Singleton", settings_singleton, "inspector_as_singleton")
 		vr_notification_test.pressed.connect(test_vr_notification)
 		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing

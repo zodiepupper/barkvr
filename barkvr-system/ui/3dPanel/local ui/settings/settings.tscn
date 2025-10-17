@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://pnqmxgn13qw2"]
 
-[ext_resource type="Script" uid="uid://bmnepwun3mru7" path="res://barkvr-system/ui/3dPanel/local ui/settings/quick_toggler.tres.gd" id="1_2xlvg"]
 [ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://barkvr-system/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://barkvr-system/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
+[ext_resource type="PackedScene" uid="uid://ctvd4j8wp7mh5" path="res://barkvr-system/ui/3dPanel/editmode/attributes/bool.tscn" id="2_dbica"]
 [ext_resource type="PackedScene" uid="uid://cbmgba1q1d8q5" path="res://barkvr-system/ui/3dPanel/editmode/attributes/number.tscn" id="3_6t4ur"]
 [ext_resource type="PackedScene" uid="uid://dkaactpqyjgjn" path="res://barkvr-system/ui/3dPanel/editmode/attributes/vector2.tscn" id="3_p8muu"]
 [ext_resource type="Script" uid="uid://dtd6mffjg2rvw" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_input_selector.gd" id="5_dbica"]
@@ -32,25 +32,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GeneralSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "general settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../GeneralSettingsMargin")
-
-[node name="GeneralSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+folded = true
+title = "general settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
+visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
 [node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings"]
@@ -78,25 +72,19 @@ text = "restart in vr"
 icon_alignment = 1
 expand_icon = true
 
-[node name="VRSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="VRSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "VR Settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../VRSettingsMargin")
-
-[node name="VRSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+folded = true
+title = "vr settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
+visible = false
 layout_mode = 2
 color = Color(0.333333, 0, 1, 0.2)
 
 [node name="VRSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
@@ -177,25 +165,19 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="UISettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="UISettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "UI Settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../UISettingsMargin")
-
-[node name="UISettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+title = "ui settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
 layout_mode = 2
 color = Color(0, 1, 0, 0.2)
 
 [node name="UISettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
+layout_mode = 2
+
+[node name="InspectorAsSingleton" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" instance=ExtResource("2_dbica")]
 layout_mode = 2
 
 [node name="LocalMenuLookAtAxisToggles" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
@@ -443,25 +425,19 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "send test notification"
 
-[node name="ChatSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="ChatSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "chat settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../ChatSettingsMargin")
-
-[node name="ChatSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+folded = true
+title = "chat settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
+visible = false
 layout_mode = 2
 color = Color(0, 1, 1, 0.2)
 
 [node name="ChatSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="CtrlEnter" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings"]
@@ -493,25 +469,19 @@ size_flags_vertical = 3
 toggle_mode = true
 text = "is disabled"
 
-[node name="AudioSettingsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="AudioSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "Audio Settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../AudioSettingsMargin")
-
-[node name="AudioSettingsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+folded = true
+title = "audio settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
+visible = false
 layout_mode = 2
 color = Color(0, 0, 1, 0.2)
 
 [node name="AudioSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="AudioInputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings"]
@@ -580,25 +550,19 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
 
-[node name="GraphicsButton" type="Button" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("node_to_toggle")]
+[node name="GraphicsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "graphics settings"
-script = ExtResource("1_2xlvg")
-node_to_toggle = NodePath("../GraphicsMargin")
-
-[node name="GraphicsMargin" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
+folded = true
+title = "graphics settings"
+title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
 [node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="AntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]

@@ -28,7 +28,6 @@ radius = 0.1
 
 [node name="CharacterBody3D" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_iwrfe")
-noclip = true
 metadata/health = SubResource("GDScript_swjn5")
 metadata/grabbable = false
 

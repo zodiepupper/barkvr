@@ -20,7 +20,7 @@ _surfaces = [{
 [node name="handray" type="Node3D"]
 script = ExtResource("1_nnnux")
 query_on_process = true
-target_position = Vector3(0, 0, -1e+09)
+target_position = Vector3(0, 0, -1000000000)
 
 [node name="Line3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_6bpur")

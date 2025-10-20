@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5e67b4tlsvfs"]
+[gd_scene load_steps=7 format=3 uid="uid://b5e67b4tlsvfs"]
 
 [ext_resource type="Script" uid="uid://oqbd1hprv0a1" path="res://barkvr-system/player/local/rayvis.gd" id="1_6wvgr"]
 [ext_resource type="Texture2D" uid="uid://drxq6fs75fbvi" path="res://barkvr-system/ui/assets/rayvis_icons/pointing.svg" id="2_exe05"]
 [ext_resource type="Texture2D" uid="uid://b75p6dv64ascf" path="res://barkvr-system/ui/assets/rayvis_icons/physics.svg" id="3_j7jdp"]
 [ext_resource type="Texture2D" uid="uid://cmcp135fq84nn" path="res://barkvr-system/ui/assets/rayvis_icons/cursor.svg" id="4_3x516"]
 [ext_resource type="Script" uid="uid://b8h834vwjheo" path="res://barkvr-system/player/local/dynamic_cursor.gd" id="5_c8qii"]
+
+[sub_resource type="GDScript" id="GDScript_c8qii"]
+script/source = "extends Label3D
+
+func _physics_process(delta: float) -> void:
+	text = str(get_parent_node_3d().position)
+"
 
 [node name="rayvis" type="Node3D"]
 script = ExtResource("1_6wvgr")
@@ -54,3 +61,10 @@ vertical_alignment = 0
 [node name="MeshInstance3D" type="MeshInstance3D" parent="cursor"]
 visible = false
 script = ExtResource("5_c8qii")
+
+[node name="Label3D2" type="Label3D" parent="cursor"]
+visible = false
+outline_render_priority = 0
+font_size = 612
+width = 100000.0
+script = SubResource("GDScript_c8qii")

@@ -8,9 +8,7 @@ var vispos := Vector3()
 var prevHover:Node
 var prevPressed:Node
 var clickedObject:Node
-var pressed := false:
-	set(val):
-		pressed = val
+var pressed := false
 
 var using_touch := false
 var touch_timer := Timer.new()
@@ -19,6 +17,7 @@ var otherray : InteractionRay
 
 var last_point := Vector3()
 var last_dist := float()
+var last_collider_plane := Plane()
 
 @export_category("interaction ray options") ## INTERACTION OPTIONS
 
@@ -69,7 +68,11 @@ var last_to_position : Vector3
 ## the current global position of the node itself
 ## (this can be made into a local position if
 ## `target_position_is_local = true`
-@export var target_position := Vector3(0,0,-1)
+@export var target_position := Vector3(0,0,-1):
+	get:
+		if target_position_is_local:
+			return to_global(target_position)
+		return target_position
 
 @export var target_position_is_local := true
 
@@ -103,7 +106,7 @@ var query_exceptions : Array[RID]
 var query_collision_data : Dictionary:
 	set(val):
 		query_collision_data = val
-		if query_collision_data.is_empty():
+		if query_collision_data.is_empty() or !query_collision_data:
 			query_collider = null
 			query_collider_id = -1
 			query_normal = Vector3()
@@ -144,10 +147,7 @@ func query_raycast() -> Dictionary:
 	var rayquery := PhysicsRayQueryParameters3D.new()
 	#last_to_position # TODO finish raycast smoothing
 	rayquery.from = global_position
-	if target_position_is_local:
-		rayquery.to = to_global(target_position)
-	else:
-		rayquery.to = target_position
+	rayquery.to = target_position
 	rayquery.exclude = query_exceptions
 	rayquery.collision_mask = private_ui_collision_layers
 	query_collision_data = physspace.intersect_ray(rayquery)
@@ -170,6 +170,10 @@ func is_colliding() -> bool:
 
 func get_collider() -> CollisionObject3D:
 	return query_collider
+
+func get_collision_normal() -> Vector3:
+	return query_normal
+
 
 func add_exception(node : CollisionObject3D) -> void:
 	if node not in query_exception_nodes:
@@ -216,7 +220,14 @@ func interact() -> void:
 	if last_point.is_zero_approx():
 		point = to_global(target_position)
 	else:
-		point = to_global( target_position.normalized()*( global_position.distance_to(last_point) ) )
+		if !last_collider_plane.normal.is_zero_approx() and query_normal and pressed:
+			var tmp_planar_intersection = last_collider_plane.intersects_ray(global_position, target_position.normalized())
+			if tmp_planar_intersection:
+				point = tmp_planar_intersection
+			else:
+				point = last_collider_plane.project(target_position)
+		else:
+			point = to_global( target_position.normalized()*( global_position.distance_to(last_point) ) )
 	if is_instance_valid(prevHover):
 		tmpcol = prevHover
 		if query_is_colliding:
@@ -224,6 +235,7 @@ func interact() -> void:
 				point = get_collision_point()
 				last_point = point
 			elif !pressed:
+				last_collider_plane = Plane(get_collision_normal(),get_collision_point())
 				tmpcol = get_collider()
 				if "laser_input" in prevHover:
 					prevHover.laser_input({
@@ -244,6 +256,8 @@ func interact() -> void:
 						'action': 'hover',
 						'index': interaction_index
 					})
+				last_collider_plane = Plane()
+				print(last_collider_plane.normal)
 				last_point = Vector3()
 				prevHover = null
 	elif is_colliding():
@@ -299,7 +313,7 @@ func _input(event):
 				# from the camera based on the cursor position
 				var cam = get_viewport().get_camera_3d()
 				target_position = to_local(cam.project_position(get_viewport().get_mouse_position(),10000))
-			# and the mouse is captured by the window...
+			# and if the mouse *is* captured by the window...
 			else:
 				# set the target_position to be very far straight ahead
 				target_position = Vector3(0,0,-10000)

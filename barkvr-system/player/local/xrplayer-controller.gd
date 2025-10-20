@@ -88,8 +88,8 @@ var vr_mode_enabled := false:
 		_toggle_xr(value)
 
 func _toggle_xr(value):
-	if LocalGlobals:
-		LocalGlobals.vr_supported = value
+	#if LocalGlobals:
+		#LocalGlobals.vr_supported = value
 	if is_instance_valid(lefthand) and is_instance_valid(righthand):
 		lefthand.rays_disabled = !value
 		righthand.rays_disabled = !value
@@ -198,8 +198,12 @@ func _physics_process(delta:float) -> void:
 		flymode = true
 	
 	# Flat mode toggle
+	# 
 	if Input.is_action_just_pressed("desktoptoggle"):
-		vr_mode_enabled = !vr_mode_enabled
+		if not LocalGlobals.vr_supported:
+			Notifyvr.send_notification("vr not available")
+		else:
+			vr_mode_enabled = !vr_mode_enabled
 
 	if vr_mode_enabled:
 		vr_movement(delta)

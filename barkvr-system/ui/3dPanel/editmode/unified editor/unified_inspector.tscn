@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://djp6k7l4t71pi"]
+[gd_scene load_steps=15 format=3 uid="uid://djp6k7l4t71pi"]
 
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f3gci"]
 [ext_resource type="PackedScene" uid="uid://buiy5jgywujh8" path="res://barkvr-system/ui/3dPanel/editmode/sceneinspector.tscn" id="2_m06d0"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bndqcjjxuinwt" path="res://barkvr-system/assets/icons/teenyicons/solid/code.svg" id="5_dxjhh"]
 [ext_resource type="Texture2D" uid="uid://d0qwy3uq2r6q6" path="res://barkvr-system/assets/icons/teenyicons/solid/send-down.svg" id="7_gjq0p"]
 [ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="10_8v8x7"]
+[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="11_f3uba"]
 
 [sub_resource type="GDScript" id="GDScript_qoabx"]
 script/source = "extends Control
@@ -203,6 +204,7 @@ node_to_toggle = NodePath("../panels/bvs_ui")
 slide = true
 
 [node name="Panel" type="Panel" parent="."]
+z_index = 1000
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -250,3 +252,18 @@ layout_mode = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="PanelResizer" type="Button" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("11_f3uba")
+metadata/_custom_type_script = "uid://dyuw1r41shq58"

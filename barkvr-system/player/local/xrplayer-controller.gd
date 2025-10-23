@@ -87,6 +87,11 @@ var vr_mode_enabled := false:
 		Notifyvr.send_notification("vrmode: "+str(value))
 		_toggle_xr(value)
 
+
+var player_scale_multiplier :float:
+	get:
+		return get_tree().get_first_node_in_group("player").global_basis.get_scale().length()
+
 func _toggle_xr(value):
 	#if LocalGlobals:
 		#LocalGlobals.vr_supported = value
@@ -220,7 +225,9 @@ func _physics_process(delta:float) -> void:
 		velocity.y -= (gravity*1.0*( (scale.x+scale.y+scale.z)/3.0 )) * delta
 	
 	# Handle Jump.
-	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump")) or rightaxbtn) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or !movedrag.is_empty()):
+	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump")) or\
+	rightaxbtn) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or\
+	!movedrag.is_empty()):
 		velocity.y = (JUMP_VELOCITY*1*( (scale.x+scale.y+scale.z)/3.0 ))
 	
 	move_and_slide()
@@ -463,7 +470,6 @@ func _screen_tap_click(_event:InputEvent) -> void:
 
 func contextMenuSummon():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		var player_scale_multiplier :float = get_tree().get_first_node_in_group("player").global_basis.get_scale().length()
 		handmenu.summon(camera_3d.project_position(get_viewport().get_mouse_position(), player_scale_multiplier*.4), camera_3d.global_position)
 
 func summon_inspector():
@@ -495,6 +501,10 @@ func place_grabbed_nodes():
 					item.offset.origin *= 1.0/settings_singleton.grabbed_object_scale_factor
 		if is_instance_valid(item.node):
 			item.node.global_transform = camera_3d.global_transform * item.offset
+			if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+				item.node.global_position = camera_3d.project_position(get_viewport().get_mouse_position(), camera_3d.global_position.distance_to(item.node.global_position))
+			# TODO: we need to make it so grabbing doesn't spam events like this. i think the best option is to make it so grabbing
+			# sends a no-track event until the objects are released to prevent tracking hundreds of visual only actions to the journal
 			if is_instance_valid(Engine.get_singleton("event_manager")):
 					print("apply")
 					Engine.get_singleton("event_manager").set_property(

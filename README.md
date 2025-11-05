@@ -46,4 +46,31 @@ This means the whole platform is completely open and capable of being run/hosted
 - generative audio tools (can load samples, act as a modular synthesizer/FM-synth | WIP)
 - full modeling, rigging, and texturing toolset (supports voxel based mesh drawing | WIP)
 
+# contibuting
+all contributions are welcome, whether that's through github issues, messaging contributors (especially zodiepupper so i can organize things correctly) directly, emailing the support email barkvrsupport@pupper.dev, or submitting PRs!!
+
+i want to add some stuff here about contributions, though. so here are some rules
+- contributions should be presented, and handled in all aspects with respect and compassion for all involved.
+- contributions and statements made by contributions should:
+-   NOT BE hateful, or made with the intention of causing harm
+-   NOT BE discriminatory against any specific type of person
+-   NOT BE in support or in the interest of any Nazi ideals, hateful rhetoric, or suggesting ill fate on any group
+
+this is not a place for politics that are unrelated to this project, and it is not a place for people to be hateful. 
+if you contribute here, you are expected to treat others with kindness, love, and respect in all ways. if you don't give it, you don't deserve it.
+
+code contributions should be:
+- documented in code with clear and concise information that expects the reader does not have any prior knowledge about the project (within reason, no need to write books in comment blocks)
+- straight to the point, a commit message should say what was done (and sometimes why)
+- PRs should concisely state what is being changed as the title
+- PRs should have a description that is as detailed as an Issue regarding the same topic would be
+- PRs should contain 1 commit per discrete change
+- PRs should focus on a single bug/issue/feature request and solving it quickly and reasonably
+- Issues should be concise and explain what the problem is and what you expect to be the end goal of the problem being fixed
+- it is prefered that Issues be conversational and informal, but formal is also fine. just don't be shy!
+
+thank you for being here, thank you for being interested
+
+## let's make something cool together!!
+
 ### For latest, look at the "dev" branch!

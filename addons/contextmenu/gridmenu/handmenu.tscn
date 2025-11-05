@@ -30,11 +30,15 @@ func onclick():
 script/source = "extends Node3D
 
 func onclick():
-	get_tree().get_first_node_in_group(\"localuinode\").reveal(true)
-	var localui = get_tree().get_first_node_in_group(\"localuipanel\")
-	localui.global_position = global_position
-	if localui and localui is Node3D:
-		localui.look_at(to_global(Vector3(0,.1,0)), Vector3.UP, true)
+	var local_ui := get_tree().get_first_node_in_group(\"localuinode\")
+	if local_ui:
+		if !get_viewport().use_xr and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		local_ui.reveal(true)
+		var local_ui_panel := get_tree().get_first_node_in_group(\"localuipanel\")
+		local_ui_panel.global_position = global_position
+		if local_ui_panel and local_ui_panel is Node3D:
+			local_ui_panel.look_at(to_global(Vector3(0,.1,0)), Vector3.UP, true)
 "
 
 [sub_resource type="GDScript" id="GDScript_djyhs"]

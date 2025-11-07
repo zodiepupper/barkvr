@@ -3,6 +3,13 @@ extends Node
 func detect_file_type_from_header(content:PackedByteArray) -> String:
 	
 	var format_signatures = [
+		# barkjournal (.bj)
+		{
+			"type":'bj',
+			"magics": [
+				
+			]
+		},
 		# WEBP
 		{
 			"type":'img',
@@ -48,7 +55,7 @@ func detect_file_type_from_header(content:PackedByteArray) -> String:
 		
 		# MeshX
 		{
-			"type":'meshx',
+			"type":'rpkg',
 			"magics": [
 				[0x05, 0x4d, 0x65, 0x73, 0x68, 0x58],
 				]

@@ -13,6 +13,10 @@ var expanded := true
 var resizing := false
 var resize_start_position := Vector2()
 
+## a holder for the previous user state when opening the menu
+## for clearing this value, just set it equal to -1
+var previous_player_state : int = -1
+
 var viewport: Viewport:
 	get:
 		return get_viewport()
@@ -27,8 +31,7 @@ func _ready():
 	expanded = tab_container.visible
 	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():
-		window_properties.call_deferred("set_target",get_window())
-		,4)
+		window_properties.call_deferred("set_target", get_window()), 4)
 	if get_viewport().get_parent() is Panel3D:
 		get_viewport().get_parent().minimum_viewport_size = Vector2i(small_height,small_height)
 	close.pressed.connect(_close)
@@ -49,22 +52,12 @@ func reveal(_force_open:bool=false) -> void:
 	show()
 	if panel:
 		panel.show()
-	#if force_open:
-		#expanded = true
-		#if get_viewport().get_parent() is Panel3D:
-			#get_viewport().get_parent().viewport_size.x = big_height
-			#get_viewport().get_parent().viewport_size.y = big_width
-		#resize.visible = expanded
-		#tab_container.visible = expanded
-		#return
-	#expanded = !expanded
-	#resize.visible = expanded
-	#tab_container.visible = expanded
-	#if get_viewport().get_parent() is Panel3D:
-		#get_viewport().get_parent().viewport_size.x = big_height if expanded else small_height
-		#get_viewport().get_parent().viewport_size.y = big_width if expanded else small_height
+	previous_player_state = LocalGlobals.player_state
 
 func _close() -> void:
 	if panel:
 		panel.visible = false
 	visible = false
+	if previous_player_state != -1:
+		LocalGlobals.player_state = previous_player_state
+		previous_player_state = -1

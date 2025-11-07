@@ -147,8 +147,8 @@ func _ready():
 		)
 	LocalGlobals.player_state_changed.connect(func(state):
 		match state:
-			LocalGlobals.PLAYER_STATE_TYPING:
-				LocalGlobals.emit_signal("playerreleaseuifocus")
+			#LocalGlobals.PLAYER_STATE_TYPING:
+				#LocalGlobals.emit_signal("playerreleaseuifocus")
 			LocalGlobals.PLAYER_STATE_PLAYING:
 				LocalGlobals.emit_signal("playerreleaseuifocus")
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -276,6 +276,7 @@ func flat_movement(_delta:float) -> void:
 		else:
 			if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_TYPING:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					print_debug("set to playing")
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
 			ui_ray.click()
 	if Input.is_action_just_released("click"):
@@ -473,13 +474,14 @@ func contextMenuSummon():
 		handmenu.summon(camera_3d.project_position(get_viewport().get_mouse_position(), player_scale_multiplier*.4), camera_3d.global_position)
 
 func summon_inspector():
-	if ( Engine.has_singleton("settings_manager") and \
-	!(Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton) or\
-	!is_instance_valid(last_spawned_inspector):
-		last_spawned_inspector = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
-		get_tree().get_first_node_in_group("localworldroot").add_child(last_spawned_inspector)
-	last_spawned_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
-	last_spawned_inspector.look_at(camera_3d.global_position, Vector3.UP, true)
+	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
+		if ( Engine.has_singleton("settings_manager") and \
+		!(Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton) or\
+		!is_instance_valid(last_spawned_inspector):
+			last_spawned_inspector = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
+			get_tree().get_first_node_in_group("localworldroot").add_child(last_spawned_inspector)
+		last_spawned_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
+		last_spawned_inspector.look_at(camera_3d.global_position, Vector3.UP, true)
 
 func place_grabbed_nodes():
 	var settings_singleton := Engine.get_singleton("settings_manager")

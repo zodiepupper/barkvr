@@ -291,6 +291,8 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 			_import_text(asset_to_import,asset_to_import, data)
 		"glb", "vrm":
 			_import_glb(asset_to_import, asset_name, data)
+		"obj":
+			_import_obj(asset_to_import, asset_name, data)
 		"res":
 			# TODO scenes and resources can't easily be sent to peers because of
 			# possible dependencies in other files.
@@ -311,6 +313,7 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 			_import_uri(asset_to_import, data)
 		"zip":
 			_import_zip(asset_name, asset_to_import, data)
+
 		_:
 			if "loader" in data:
 				data.loader.done('failed')
@@ -385,6 +388,15 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 					'asset_name': asset_name,
 					'data': data
 				})
+			"obj":
+				_add_action({
+					'action_name': 'import_asset',
+					'type': type,
+					'asset_to_import': asset_to_import,
+					'content': content,
+					'asset_name': asset_name,
+					'data': data
+				})
 			"zip":
 				_add_action({
 					'action_name': 'import_asset',
@@ -450,6 +462,8 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 				WorkerThreadPool.add_task(import_asset.bind('glb', req.download_file, uri, false, data))
 			elif uri.contains('.vrm') or content_type == "vrm":
 				WorkerThreadPool.add_task(import_asset.bind('vrm', req.download_file, uri, false, data))
+			elif uri.contains('.obj'):
+				import_asset('obj', req.download_file, uri, false, data)
 			elif uri.contains('.res') or uri.contains('.tres') or uri.contains('.scn') or uri.contains('.tscn'):
 				import_asset('res',req.download_file, uri, false, data)
 			#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
@@ -509,6 +523,8 @@ func _import_zip(asset_name:String, asset_path:String, data:Dictionary={}):
 					dropped.ends_with('.webp') or \
 					type == "img":
 					import_asset('image', reader.read_file(dropped), asset_name, false, data)
+				elif dropped.ends_with('.obj'):
+					import_asset('obj', reader.read_file(dropped), asset_name, false, data)
 				#elif dropped.ends_with(".zip"):
 					#import_asset('zip', reader.read_file(dropped), asset_name, false, data)
 				#else:
@@ -589,6 +605,43 @@ func _import_glb(content: Variant, asset_name := '', data := {}) -> void:
 	data.nolookatuser = true
 	_post_import.call_deferred(root, generated_scene, asset_name, data, !data.has("nolookatuser"))
 
+## Import Wavefront .obj files
+func _import_obj(path_or_asset: String, asset_name := '', data := {}) -> void:
+	# load the file into a mesh
+	var logging_prefix := asset_name+" : "
+	print("Import OBJ: " + asset_name + " ----------------------")
+	
+	print(path_or_asset)
+	
+	var mesh_data := MeshInstance3D.new()
+	#this basically checks if its "local"-ish or if it's being fed through the network
+	#assuming transmitting the object between clients will become a string
+	if(path_or_asset.is_absolute_path() || path_or_asset.is_relative_path()):
+		mesh_data.mesh = ObjParse.from_path(path_or_asset)
+	else:
+		mesh_data.mesh = ObjParse.from_obj_string(path_or_asset)
+
+	#TODO: figure out a way to generate LOD's 
+	
+	#create the collision node
+	var tmpbody := StaticBody3D.new()
+	tmpbody.set_meta("grabbable",true)
+	var tmpcol := CollisionShape3D.new()
+	var tmpcolshape := SphereShape3D.new()
+	tmpcol.scale = mesh_data.get_aabb().size
+	
+	tmpcol.shape = tmpcolshape
+	tmpbody.add_child(tmpcol)
+	tmpbody.collision_layer = 2
+	tmpbody.collision_mask = 2
+
+	tmpbody.add_child(mesh_data)
+
+	#var compressed := content.compress()
+	#print(compressed)
+	#print(content)
+	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
+
 ## Imports a Godot resource.
 func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={}) -> void:
 	check_root()
@@ -605,17 +658,19 @@ func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={
 		asset_to_import = path
 	ResourceLoader.set_abort_on_missing_resources(false)
 	print(asset_to_import)
-	var res :Resource
+	#var res :Resource
 	#print(ResourceLoader.get_dependencies(asset_to_import)[0])
 	#print(asset_to_import)
-	res = ResourceLoader.load(asset_to_import,'',ResourceLoader.CACHE_MODE_IGNORE)
-	#res = load(asset_to_import)
+	print(ResourceLoader.get_recognized_extensions_for_type(asset_to_import))
+	var res = ResourceLoader.load(asset_to_import,'obj',ResourceLoader.CACHE_MODE_IGNORE)
+	
+	# var res = load(asset_to_import)
 	#print(res.resource_path)
 	#res = _load_res_with_dependencies(asset_to_import)
 	if res != null:
 		var node = res.instantiate()
 		_post_import.call_deferred(root,node,asset_name,data, !data.has("nolookatuser"))
-	ResourceLoader.load_threaded_request(asset_to_import, '', false, ResourceLoader.CACHE_MODE_IGNORE)
+	ResourceLoader.load_threaded_request(asset_to_import, 'tres', false, ResourceLoader.CACHE_MODE_IGNORE)
 	_check_loaded(asset_to_import,asset_name,data)
 
 func _load_res_with_dependencies(path:String) -> Resource:

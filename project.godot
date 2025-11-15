@@ -30,7 +30,7 @@ driver/mix_rate=48000
 [autoload]
 
 LocalGlobals="*res://barkvr-system/managers/localGlobals.gd"
-BarkHelpers="*res://barkvr-system/startup/bark_helpers.gd"
+BarkHelpers="*res://barkvr-system/lib/bark_helpers.gd"
 Notifyvr="*res://addons/notifyvr/notifyvr.gd"
 
 [bark]

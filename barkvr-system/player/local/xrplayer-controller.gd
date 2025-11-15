@@ -343,39 +343,48 @@ func _input(event):
 		pass
 	if event.is_action("cleargizmos"):
 		LocalGlobals.clear_gizmos.emit()
+		
+	# Handles Mouselook while also having a switch to handling rotation	given a couple modifiers
+	# Rotates held nodes (by right hand if done while VR is active) when rotateHeld (default: E) 
+	# Axis of rotation is locked to the y axis when modifier key (default: Left Shift)
+	# TODO(?): Does this work as expected when the player is rotated? Axis might need to be WRT the 
+	# Player's root
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		if Input.is_key_pressed(KEY_E):
+		if Input.is_action_pressed("rotateHeld"):
 			if vr_mode_enabled:
+				#VR rotation suppport, if someone wanted to use their mouse to rotate
 				for node in righthand.grabbed.values():
 					var rotation_basis = (basis*Vector3.UP*node.node.basis).normalized()
 					node.offset = node.offset.rotated_local(
 						rotation_basis,
 						-event.relative.x*(MOUSE_SPEED/100)
 						)
-					if !Input.is_key_pressed(KEY_SHIFT):
+					if !Input.is_action_pressed("modifier"):
 						rotation_basis = (basis*Vector3.RIGHT*node.node.basis)
 						node.offset = node.offset.rotated_local(
 							rotation_basis.normalized(),
 							event.relative.y*(MOUSE_SPEED/100)
 							)
 			else:
+				#desktop rotation support
 				for node in grabbed.values():
-					if is_instance_valid(node):
-						var rotation_basis = (basis*Vector3.UP*node.node.basis).normalized()
+					var rotation_basis = (basis*Vector3.UP*node.node.basis).normalized()
+					node.offset = node.offset.rotated_local(
+						rotation_basis,
+						-event.relative.x*(MOUSE_SPEED/100)
+						)
+					if !Input.is_action_pressed("modifier"):
+						rotation_basis = (basis*Vector3.RIGHT*node.node.basis)
 						node.offset = node.offset.rotated_local(
-							rotation_basis,
-							-event.relative.x*(MOUSE_SPEED/100)
+							rotation_basis.normalized(),
+							event.relative.y*(MOUSE_SPEED/100)
 							)
-						if !Input.is_key_pressed(KEY_SHIFT):
-							rotation_basis = (basis*Vector3.RIGHT*node.node.basis)
-							node.offset = node.offset.rotated_local(
-								rotation_basis.normalized(),
-								event.relative.y*(MOUSE_SPEED/100)
-								)
 		else:
+			#Mouselook, should rotation not be active
 			rotate_y(-event.relative.x*(MOUSE_SPEED/100))
 			xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 			camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+			
 	if event.is_action("pause"):
 		if event.is_pressed():
 			match LocalGlobals.player_state:

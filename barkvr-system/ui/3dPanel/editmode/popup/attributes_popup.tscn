@@ -20,6 +20,44 @@ unique_name_in_owner = true
 layout_mode = 2
 color = Color(0, 0, 0, 0.77254903)
 
+[node name="right" type="ColorRect" parent="ColorRect"]
+z_index = 4
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="left" type="ColorRect" parent="ColorRect"]
+z_index = 4
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+
+[node name="top" type="ColorRect" parent="ColorRect"]
+z_index = 4
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="bottom" type="ColorRect" parent="ColorRect"]
+z_index = 4
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 

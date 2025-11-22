@@ -46,22 +46,25 @@ text = "homeserver"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="base_url" type="Label" parent="login/HBoxContainer/VBoxContainer/Label"]
-modulate = Color(1, 1, 1, 0.498039)
+[node name="base_url" type="RichTextLabel" parent="login/HBoxContainer/VBoxContainer/Label"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -16.75
-offset_bottom = 16.75
+offset_left = -210.0
+offset_top = -11.0
+offset_bottom = 11.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_font_sizes/font_size = 14
+bbcode_enabled = true
 text = "base_url: matrix.pupper.dev"
-horizontal_alignment = 1
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="homeserver" type="LineEdit" parent="login/HBoxContainer/VBoxContainer"]

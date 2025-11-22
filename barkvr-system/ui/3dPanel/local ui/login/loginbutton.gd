@@ -4,7 +4,7 @@ extends Button
 @onready var uname: LineEdit = $"../uname"
 @onready var pword: LineEdit = $"../pword"
 @onready var button: Button = $"."
-@onready var base_url_lbl: Label = $"../Label/base_url"
+@onready var base_url_lbl: RichTextLabel = $"../Label/base_url"
 
 func _ready():
 	if is_instance_valid(Engine.get_singleton("user_manager")):
@@ -15,7 +15,7 @@ func _ready():
 	homeserver.text_changed.connect(func(new_text:String):
 		if is_instance_valid(Engine.get_singleton("user_manager")):
 			Engine.get_singleton("user_manager").get_well_known(new_text)
-			base_url_lbl.text = "contacting homeserver"
+			base_url_lbl.text = "[rainbow freq=.1][outline_size=2][outline_color=white]contacting homeserver"
 			button.disabled = true
 		)
 	homeserver.text_changed.emit(homeserver.text)

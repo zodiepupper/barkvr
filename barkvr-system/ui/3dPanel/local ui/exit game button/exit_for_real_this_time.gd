@@ -1,6 +1,6 @@
 extends Button
 
-@onready var label: Label = $"../Label"
+@onready var label: Label = $"../../Label"
 
 func _pressed() -> void:
 	var tmp = create_tween()

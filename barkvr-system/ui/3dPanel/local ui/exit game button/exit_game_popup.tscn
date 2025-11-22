@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dr1bo74h23rnm"]
+[gd_scene load_steps=3 format=3 uid="uid://dr1bo74h23rnm"]
 
+[ext_resource type="Script" uid="uid://grfdtqsdufee" path="res://barkvr-system/ui/3dPanel/local ui/exit game button/no.gd" id="1_ooq7f"]
 [ext_resource type="Script" uid="uid://crffdgai51aug" path="res://barkvr-system/ui/3dPanel/local ui/exit game button/exit_for_real_this_time.gd" id="1_utfot"]
 
 [node name="ExitGamePopup" type="Control"]
@@ -47,8 +48,19 @@ text = "are you sure you want to exit the game??"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ExitForRealThisTime" type="Button" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
+
+[node name="No" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "no"
+script = ExtResource("1_ooq7f")
+
+[node name="ExitForRealThisTime" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "yes"
 script = ExtResource("1_utfot")

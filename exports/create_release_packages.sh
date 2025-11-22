@@ -15,12 +15,16 @@ godot --headless --export-debug "Android" ../project.godot
 
 echo "compressing builds into zip files"
 
-zip ./linux/linux_arm ./linux/linux_arm -r
-zip ./linux/linux_x86_64 ./linux/linux_x86_64 -r
-zip ./win/win_arm ./win/win_arm -r
-zip ./win/win_x86_64 ./win/win_x86_64 -r
-zip ./macos/macos_arm ./macos/macos_arm -r
-zip ./macos/macos_x86_64 ./macos/macos_x86_64 -r
+cd linux
+zip linux_arm linux_arm -r
+zip linux_x86_64 linux_x86_64 -r
+cd ../win/
+zip win_arm win_arm -r
+zip win_x86_64 win_x86_64 -r
+cd ../macos/
+zip macos_arm macos_arm -r
+zip macos_x86_64 macos_x86_64 -r
+cd ..
 
 echo "removing existing exported directory so it will be cleared"
 

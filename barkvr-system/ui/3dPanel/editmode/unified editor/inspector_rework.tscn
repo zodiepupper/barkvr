@@ -1,0 +1,115 @@
+[gd_scene load_steps=8 format=3 uid="uid://dqc238s6m6ndw"]
+
+[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="1_3vg7k"]
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f60sc"]
+[ext_resource type="Script" uid="uid://faymicvh83i6" path="res://barkvr-system/ui/3dPanel/local ui/login/hashed_tree_list.gd" id="2_hxant"]
+[ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="2_ybesl"]
+[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="3_hxant"]
+
+[sub_resource type="Gradient" id="Gradient_1u5qm"]
+colors = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fbrd2"]
+gradient = SubResource("Gradient_1u5qm")
+fill_from = Vector2(1, 1)
+fill_to = Vector2(0, 0)
+
+[node name="InspectorRework" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelResizer" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+texture_normal = SubResource("GradientTexture2D_fbrd2")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("1_3vg7k")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 9
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+split_offset = 350
+touch_dragger_enabled = true
+
+[node name="SplitLeft" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Scene"
+
+[node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "+"
+
+[node name="Tree" type="Tree" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("2_hxant")
+
+[node name="SplitRight" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/SplitRight"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Inspector"
+
+[node name="Button2" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Script"
+
+[node name="Button3" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "BVS"
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+tabs_visible = false
+
+[node name="attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("1_f60sc")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="gdscriptpanel" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("2_ybesl")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Control" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("3_hxant")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2

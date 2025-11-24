@@ -1,5 +1,5 @@
 class_name PanelResizer
-extends Button
+extends BaseButton
 
 func _ready() -> void:
 	focus_mode = Control.FOCUS_NONE

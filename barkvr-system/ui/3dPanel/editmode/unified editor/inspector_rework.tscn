@@ -48,6 +48,7 @@ split_offset = 350
 touch_dragger_enabled = true
 
 [node name="SplitLeft" parent="MarginContainer/HSplitContainer" instance=ExtResource("2_hxant")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="SplitRight" type="PanelContainer" parent="MarginContainer/HSplitContainer"]

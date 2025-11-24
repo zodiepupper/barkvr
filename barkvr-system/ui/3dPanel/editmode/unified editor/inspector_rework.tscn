@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dqc238s6m6ndw"]
+[gd_scene load_steps=9 format=3 uid="uid://dqc238s6m6ndw"]
 
 [ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="1_3vg7k"]
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f60sc"]
-[ext_resource type="Script" uid="uid://faymicvh83i6" path="res://barkvr-system/ui/3dPanel/local ui/login/hashed_tree_list.gd" id="2_hxant"]
+[ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_rework.gd" id="1_hxant"]
+[ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/scene_inspector_rework.tscn" id="2_hxant"]
 [ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="2_ybesl"]
 [ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="3_hxant"]
 
@@ -20,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_hxant")
 
 [node name="PanelResizer" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(50, 50)
@@ -33,6 +35,7 @@ script = ExtResource("1_3vg7k")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 9
 theme_override_constants/margin_top = 9
 theme_override_constants/margin_right = 9
@@ -44,30 +47,8 @@ layout_mode = 2
 split_offset = 350
 touch_dragger_enabled = true
 
-[node name="SplitLeft" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+[node name="SplitLeft" parent="MarginContainer/HSplitContainer" instance=ExtResource("2_hxant")]
 layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer"]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer/PanelContainer"]
-layout_mode = 2
-text = "Scene"
-
-[node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-text = "+"
-
-[node name="Tree" type="Tree" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("2_hxant")
 
 [node name="SplitRight" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
 layout_mode = 2
@@ -76,22 +57,27 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Inspector"
+toggle_mode = true
+button_pressed = true
+text = "Buttons"
 
 [node name="Button2" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Script"
+toggle_mode = true
+text = "Are"
 
 [node name="Button3" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "BVS"
+toggle_mode = true
+text = "Auto-Generated"
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer"]
 unique_name_in_owner = true
@@ -100,16 +86,16 @@ size_flags_vertical = 3
 current_tab = 0
 tabs_visible = false
 
-[node name="attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("1_f60sc")]
+[node name="Attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("1_f60sc")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="gdscriptpanel" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("2_ybesl")]
+[node name="GDScript" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("2_ybesl")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Control" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("3_hxant")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("3_hxant")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

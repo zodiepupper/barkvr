@@ -4,6 +4,9 @@ extends Tree
 ## Dictionary to hold all objects, data & TreeItem.
 var tree_dict : Dictionary[int, Dictionary] = {}
 
+## A theme containing all of the godot default icons, used to display node types in the tree.
+const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
+
 ## Clear TreeItems & internal dictionary.
 func hashed_tree_clear():
 	tree_dict.clear()
@@ -56,6 +59,15 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 			#tree_dict[item_id].tree_item.add_button(0, load("res://assets/icons/teenyicons/outline/drag.svg"), -1, false, "equip avatar")
 
 		var target_item : TreeItem = tree_dict[item_id].tree_item
+		# Add editor node icon if it exists, else, leave it alone.
+		if GODOT_EDITOR_ICON_THEME.has_icon(str(metadata.node.get_class()), &"EditorIcons"):
+			target_item.set_icon(
+				0,
+				GODOT_EDITOR_ICON_THEME.get_icon(
+					str(metadata.node.get_class()),
+					&"EditorIcons"
+				)
+			)
 		target_item.collapsed = true
 		get_root().get_child(0).collapsed = false
 		target_item.set_text(0, text)

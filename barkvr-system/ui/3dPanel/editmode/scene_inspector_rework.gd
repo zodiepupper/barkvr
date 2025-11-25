@@ -1,9 +1,7 @@
 extends Control
 
 ## The tree used to display the nodes in the scene.
-@onready var tree: hashed_tree_list = $VBoxContainer/Tree
-## Needed for the tree to no collapse nothing, which would result in a crash.
-@onready var tree_root : TreeItem = tree.create_item()
+@onready var node_tree: InspectorNodeTree = $NodeTree
 
 var root_node : Node
 
@@ -17,19 +15,24 @@ signal selection_changed(new_selection : Node)
 func _ready() -> void:
 	_setup_tree()
 
+## Set up the node tree, it's root and signals.
 func _setup_tree() -> void:
+	# Give the node tree a core root, hidden in the actual tree.
+	node_tree.create_item()
+
+	# Set local world root as the focus of the tree.
 	root_node = get_tree().get_first_node_in_group(&"localworldroot")
-	tree.add_item(root_node.name, {'node' : root_node})
+	node_tree.add_item(root_node.name, {'node' : root_node})
 	_check_tree_for_updates()
 
-	tree.cell_selected.connect(_on_tree_cell_selected)
+	node_tree.cell_selected.connect(_on_tree_cell_selected)
 
 	get_tree().node_added.connect(_on_scene_tree_node_added)
 	get_tree().node_removed.connect(_on_scene_tree_node_removed)
 	get_tree().node_renamed.connect(_on_scene_tree_node_renamed)
 
 func _on_tree_cell_selected() -> void:
-	var new_selection = tree.get_selected().get_metadata(0).node
+	var new_selection = node_tree.get_selected().get_metadata(0).node
 	selection_changed.emit(new_selection)
 	if last_selection_list and new_selection not in last_selection_list and is_reparenting:
 		for item : TreeItem in last_selection_list:
@@ -39,12 +42,12 @@ func _on_tree_cell_selected() -> void:
 		#reparent_btn.button_pressed = false
 	last_selection_list = get_all_selected()
 	LocalGlobals.clear_gizmos.emit()
-	if !tree.get_selected():
-		tree.check_children()
+	if !node_tree.get_selected():
+		node_tree.check_children()
 		return
-	var node = tree.get_selected().get_metadata(0).node
+	var node = node_tree.get_selected().get_metadata(0).node
 	if !is_instance_valid(node):
-		tree.check_children()
+		node_tree.check_children()
 		return
 	if node is Node3D:
 		var giz = load("res://barkvr-system/objects/tools/gizmo/gizmo.tscn").instantiate()
@@ -61,23 +64,23 @@ func _on_scene_tree_node_added(node : Node) -> void:
 				var nodename :String = node.name
 				if node.has_meta('display_name'):
 					nodename = node.get_meta('display_name')
-				tree.add_item(nodename, {
+				node_tree.add_item(nodename, {
 					'node':node,
 					'parent':node.get_parent()
 				})
 
 func _on_scene_tree_node_removed(node : Node) -> void:
-	tree.remove_item(node)
+	node_tree.remove_item(node)
 
 func _on_scene_tree_node_renamed(node : Node) -> void:
 	if root_node:
 		if is_instance_valid(node):
-			tree.update_item(node)
+			node_tree.update_item(node)
 
 func _check_tree_for_updates():
 	if is_instance_valid(root_node):
 		set_root(root_node)
-		tree.check_children()
+		node_tree.check_children()
 
 func set_root(item : Node):
 	root_node = item
@@ -89,12 +92,12 @@ func add_children(node : Node, parent : Node = null):
 	if node.has_meta("display_name"):
 		nodename = node.get_meta("display_name")
 	if parent:
-		_tree_item = tree.add_item(nodename, {
+		_tree_item = node_tree.add_item(nodename, {
 			'node':node,
 			'parent':parent,
 		})
 	else:
-		_tree_item = tree.add_item(nodename,{
+		_tree_item = node_tree.add_item(nodename,{
 			'node':node
 		})
 	if node.get_child_count() > 0:
@@ -107,7 +110,7 @@ func add_children(node : Node, parent : Node = null):
 
 func get_all_selected(previous_item : TreeItem = null) -> Array:
 	var out : Array = []
-	var next = tree.get_next_selected(previous_item)
+	var next = node_tree.get_next_selected(previous_item)
 	if next:
 		out.append(next)
 		out.append_array(get_all_selected(next))

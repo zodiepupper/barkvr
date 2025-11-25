@@ -1,38 +1,91 @@
 [gd_scene load_steps=3 format=3 uid="uid://dohf48lsx84mx"]
 
 [ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/scene_inspector_rework.gd" id="1_tfb2o"]
-[ext_resource type="Script" uid="uid://faymicvh83i6" path="res://barkvr-system/ui/3dPanel/local ui/login/hashed_tree_list.gd" id="2_3mwhh"]
+[ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector_node_tree.gd" id="2_3mwhh"]
 
-[node name="SceneInspector" type="PanelContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer"]
+offset_right = 1500.0
+offset_bottom = 800.0
 script = ExtResource("1_tfb2o")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer"]
-layout_mode = 2
-text = "Scene"
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "+"
+text = "New"
 
-[node name="Tree" type="Tree" parent="VBoxContainer"]
+[node name="Button2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Delete"
+
+[node name="Button3" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Focus Root Parents"
+
+[node name="Button4" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Focus Selected"
+
+[node name="Button5" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Export Scene"
+
+[node name="Button6" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Export GLTF"
+
+[node name="Button7" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Duplicate"
+
+[node name="Button8" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Reparent"
+
+[node name="Button9" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Cut"
+
+[node name="Button10" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Copy"
+
+[node name="Button11" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+focus_mode = 0
+text = "Paste"
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "..."
+flat = false
+
+[node name="NodeTree" type="Tree" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
+theme_override_constants/icon_max_width = 16
 allow_reselect = true
 allow_search = false
 hide_root = true

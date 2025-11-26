@@ -1,7 +1,9 @@
 extends Control
 
 ## The tree used to display the nodes in the scene.
-@onready var node_tree: InspectorNodeTree = $NodeTree
+@onready var node_tree: InspectorNodeTree = %NodeTree
+## The popup menu used as a context menu.
+@onready var local_context_menu: PopupMenu = %PopupMenu
 
 var root_node : Node
 
@@ -26,6 +28,7 @@ func _setup_tree() -> void:
 	_check_tree_for_updates()
 
 	node_tree.cell_selected.connect(_on_tree_cell_selected)
+	node_tree.button_clicked.connect(_on_tree_button_clicked)
 
 	get_tree().node_added.connect(_on_scene_tree_node_added)
 	get_tree().node_removed.connect(_on_scene_tree_node_removed)
@@ -55,6 +58,16 @@ func _on_tree_cell_selected() -> void:
 		giz.global_position = node.global_position
 		giz.target = node
 		giz.name = "gizmo"
+
+## Called upon a TreeItem's button getting pressed.
+func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_button_index: int) -> void:
+	var local_context_menu_rect : Rect2i = Rect2i(
+		# TODO: Size of TreeItems does not take into account the Tree's scrollbar.
+		Vector2i(node_tree.get_item_area_rect(item).end),
+		Vector2i.ZERO
+	)
+	# TODO: Popup function should make the menu disappear when user clicks outside of popup, however, it does not.
+	local_context_menu.popup(local_context_menu_rect)
 
 func _on_scene_tree_node_added(node : Node) -> void:
 	if is_inside_tree():

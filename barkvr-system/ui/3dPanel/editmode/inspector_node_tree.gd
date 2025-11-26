@@ -1,11 +1,20 @@
 class_name InspectorNodeTree
 extends Tree
 
+## A theme containing all of the godot default icons, used to display node types in the tree.
+const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
+
 ## Dictionary to hold all objects, data & TreeItem.
 var tree_dict : Dictionary[int, Dictionary] = {}
 
-## A theme containing all of the godot default icons, used to display node types in the tree.
-const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
+var button_texture : ImageTexture
+
+
+
+func _ready() -> void:
+	var image : Image = Image.load_from_file("res://barkvr-system/assets/icons/teenyicons/solid/hashtag.svg")
+	button_texture = ImageTexture.create_from_image(image)
+	button_texture.set_size_override(Vector2i(16, 16))
 
 ## Clear TreeItems & internal dictionary.
 func hashed_tree_clear():
@@ -68,10 +77,14 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 					&"EditorIcons"
 				)
 			)
+
+		# Collapse all items except for the focused root.
 		target_item.collapsed = true
 		get_root().get_child(0).collapsed = false
 		target_item.set_text(0, text)
 		target_item.set_metadata(0, metadata)
+
+		target_item.add_button(0, button_texture)
 
 	return return_tree_item
 

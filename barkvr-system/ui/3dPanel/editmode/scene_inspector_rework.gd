@@ -62,8 +62,7 @@ func _on_tree_cell_selected() -> void:
 ## Called upon a TreeItem's button getting pressed.
 func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_button_index: int) -> void:
 	var local_context_menu_rect : Rect2i = Rect2i(
-		# TODO: Size of TreeItems does not take into account the Tree's scrollbar.
-		Vector2i(node_tree.get_item_area_rect(item).end),
+		Vector2i(node_tree.get_item_area_rect(item, 0).end),
 		Vector2i.ZERO
 	)
 	# TODO: Popup function should make the menu disappear when user clicks outside of popup, however, it does not.

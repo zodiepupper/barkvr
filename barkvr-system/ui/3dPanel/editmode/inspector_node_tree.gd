@@ -7,14 +7,7 @@ const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 ## Dictionary to hold all objects, data & TreeItem.
 var tree_dict : Dictionary[int, Dictionary] = {}
 
-var button_texture : ImageTexture
 
-
-
-func _ready() -> void:
-	var image : Image = Image.load_from_file("res://barkvr-system/assets/icons/teenyicons/solid/hashtag.svg")
-	button_texture = ImageTexture.create_from_image(image)
-	button_texture.set_size_override(Vector2i(16, 16))
 
 ## Clear TreeItems & internal dictionary.
 func hashed_tree_clear():
@@ -58,13 +51,11 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 
 			var parent_item : TreeItem = tree_dict[metadata.parent.get_instance_id()].tree_item
 			return_tree_item = create_item(parent_item)
-			#return_tree_item.add_button(0,load("res://assets/icons/teenyicons/solid/bin.svg"))
 			tree_dict[item_id].tree_item = return_tree_item
 
 		else:
 			tree_dict[item_id].tree_item = create_item()
-			#tree_dict[item_id].tree_item.add_button(0,load("res://assets/icons/teenyicons/solid/bin.svg"))
-		#if metadata.node.has_method('equip_to_local_user'):
+		#if metadata.node.has_method('equip_to_local_user'): # Leftover comment from before rework.
 			#tree_dict[item_id].tree_item.add_button(0, load("res://assets/icons/teenyicons/outline/drag.svg"), -1, false, "equip avatar")
 
 		var target_item : TreeItem = tree_dict[item_id].tree_item
@@ -84,7 +75,8 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 		target_item.set_text(0, text)
 		target_item.set_metadata(0, metadata)
 
-		target_item.add_button(0, button_texture)
+		# Add a button used for the dropdown, button signal can be accessed via "Tree.button_clicked" signal.
+		target_item.add_button(0, GODOT_EDITOR_ICON_THEME.get_icon(&"GuiTabMenuHl", &"EditorIcons"))
 
 	return return_tree_item
 

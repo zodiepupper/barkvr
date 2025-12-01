@@ -20,6 +20,8 @@ var last_selection_list : Array
 @onready var node_tree: InspectorNodeTree = %NodeTree
 ## The popup menu used as a context menu.
 @onready var local_context_menu: PopupMenu = %PopupMenu
+## The menu used to add a node as a child of it's target.
+@onready var add_node_menu: Panel = %AddNodeMenu
 
 @onready var search: LineEdit = %Search
 @onready var button_add: Button = %ButtonAdd
@@ -55,7 +57,7 @@ func _setup_tree() -> void:
 	get_tree().node_renamed.connect(_on_scene_tree_node_renamed)
 
 ## Set up the context menu to be used in the node tree.
-func _setup_context_menu() -> void: # moveDir, save, search
+func _setup_context_menu() -> void:
 	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Add", &"EditorIcons"), "Add Child", 11)
 	local_context_menu.add_separator()
 	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Duplicate", &"EditorIcons"), "Duplicate", 21)
@@ -82,8 +84,12 @@ func _setup_context_menu() -> void: # moveDir, save, search
 	)
 
 func selection_add_child() -> void:
-	# TODO: This.
-	pass
+	var selected : TreeItem = node_tree.get_next_selected(null)
+	if !selected: return
+
+	var target : Node = selected.get_metadata(0).node
+	add_node_menu.set_target(target)
+	add_node_menu.show()
 
 func selection_duplicate() -> void:
 	var selections : Array = get_all_selected()
@@ -222,7 +228,7 @@ func _on_focus_parent_pressed() -> void:
 	set_root(root_node.get_parent())
 	node_tree.check_children()
 
-## Export the target hierarchy to the user's download folder, either as a
+## Export the target hierarchy to the user's download folder, either as a scene or gltf.
 func _export_node(target : Node, to_gltf : bool = false):
 	Thread.set_thread_safety_checks_enabled(false)
 

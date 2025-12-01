@@ -30,6 +30,7 @@ func _ready() -> void:
 
 	search_bar.text_changed.connect(_on_search_bar_edited)
 	item_list.item_selected.connect(_on_item_list_item_selected)
+
 	# item_activated just does not work with 3DUI apparently, real fun.
 	# Currently using a custom double click checker using item_selected.
 	#item_list.item_activated.connect(_on_item_list_item_activated)
@@ -54,10 +55,12 @@ func _load_class_list() -> void:
 func set_target(item : Node) -> void:
 	target = item
 
+
+
 ## Confirm selection and add it to the target as a child.
 func add_selected_node() -> void:
-	if !is_instance_valid(target): return
-	if !is_instance_valid(event_manager): return
+	if not is_instance_valid(target): return
+	if not is_instance_valid(event_manager): return
 
 	var selected_index : int = item_list.get_selected_items()[0]
 	var selected_class : String = item_list.get_item_text(selected_index)
@@ -73,7 +76,7 @@ func add_selected_node() -> void:
 	})
 	close()
 
-## Hide the menu and reset selection to the first.
+## Hide the menu and reset selection to the first list item.
 func close() -> void:
 	item_list.deselect_all()
 	item_list.select(0)
@@ -85,6 +88,8 @@ func add_class_to_item_list(class_string : String) -> void:
 		item_list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(class_string, &"EditorIcons"))
 	else: # Fallback.
 		item_list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(&"Node", &"EditorIcons"))
+
+
 
 ## Search through the item list.
 func _on_search_bar_edited(search_text : String) -> void:

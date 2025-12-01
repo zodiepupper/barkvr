@@ -1,24 +1,26 @@
 class_name InspectorNodeTree
 extends Tree
+## A specialized Tree to be used in the in-app SceneInspector.
 
 ## A theme containing all of the godot default icons, used to display node types in the tree.
 const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 
-## Dictionary to hold all objects, data & TreeItem.
+## Dictionary to hold all objects, data & TreeItems.
 var tree_dict : Dictionary[int, Dictionary] = {}
 
 
 
 ## Clear TreeItems & internal dictionary.
-func hashed_tree_clear():
+func tree_clear():
 	tree_dict.clear()
 	clear()
 
 ## Add an item to the tree.
+## Metadata contains the related node and its parent.
 func add_item(text : String, metadata : Variant, _replace : String = '') -> TreeItem:
 	# Return if node in metadata is missing/invalid.
 	if !metadata: return
-	if !metadata.has('node'): return
+	if !metadata.has("node"): return
 	if !is_instance_valid(metadata.node): return
 
 	# TreeItem to return at the end of the function.
@@ -27,7 +29,7 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 	var item_id = metadata.node.get_instance_id()
 	# Update & reparent item if it already exists in the tree.
 	if tree_dict.has(item_id):
-		if metadata.has('parent'):
+		if metadata.has("parent"):
 			var parent_item : TreeItem = tree_dict[item_id].tree_item.get_parent()
 			if is_instance_valid(parent_item):
 				parent_item.remove_child(tree_dict[item_id].tree_item)
@@ -40,13 +42,13 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 	# Create item if it doesn't exist in tree yet.
 	else:
 		tree_dict[item_id] = {
-			'node' : metadata.node
+			"node" : metadata.node
 		}
-		if metadata.has('parent'):
+		if metadata.has("parent"):
 			if !tree_dict.has(metadata.parent.get_instance_id()):
 				add_item(metadata.parent.name, {
-					'node' : metadata.parent,
-					'parent' : metadata.parent.get_parent()
+					"node" : metadata.parent,
+					"parent" : metadata.parent.get_parent()
 				})
 
 			var parent_item : TreeItem = tree_dict[metadata.parent.get_instance_id()].tree_item
@@ -80,11 +82,14 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 
 	return return_tree_item
 
-## Remove invalid children with node metadata.
+## Remove invalid children that have node metadata.
 func check_children() -> void:
 	for key : int in tree_dict:
-		if !tree_dict[key].has('node') ||\
-			is_instance_valid(tree_dict[key].node): return
+		if (
+				not tree_dict[key].has("node")
+				or is_instance_valid(tree_dict[key].node)
+		):
+			return
 
 		if is_instance_valid(tree_dict[key].tree_item):
 			tree_dict[key].tree_item.free()
@@ -107,7 +112,7 @@ func remove_item(target : Variant) -> void:
 				tree_dict[target].tree_item.free()
 			tree_dict.erase(target)
 
-## Update text of a certain node's TreeItem.
+## Update text of a given node's TreeItem.
 func update_item(node : Node) -> void:
 	var item_id : int = node.get_instance_id()
 	if !tree_dict.has(item_id): return

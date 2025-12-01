@@ -72,7 +72,8 @@ focus_mode = 0
 toggle_mode = true
 text = "Tab 2"
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer" node_paths=PackedStringArray("button_container")]
+[node name="TabLeft" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer" node_paths=PackedStringArray("button_container")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
@@ -80,7 +81,7 @@ tabs_visible = false
 script = ExtResource("4_svp2n")
 button_container = NodePath("../HBoxContainer")
 
-[node name="SceneInspector" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/TabContainer" instance=ExtResource("2_hxant")]
+[node name="SceneInspector" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/TabLeft" instance=ExtResource("2_hxant")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
@@ -121,7 +122,7 @@ focus_mode = 0
 toggle_mode = true
 text = "Generated"
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer" node_paths=PackedStringArray("button_container")]
+[node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer" node_paths=PackedStringArray("button_container")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -130,16 +131,16 @@ tabs_visible = false
 script = ExtResource("4_svp2n")
 button_container = NodePath("../HBoxContainer")
 
-[node name="Attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("1_f60sc")]
+[node name="Attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("1_f60sc")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="GDScript" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("2_ybesl")]
+[node name="GDScript" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("2_ybesl")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="BVS" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabContainer" instance=ExtResource("3_hxant")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("3_hxant")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

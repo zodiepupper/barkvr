@@ -113,6 +113,9 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+context_menu_enabled = false
+emoji_menu_enabled = false
+clear_button_enabled = true
 
 [node name="ButtonFavorite" type="Button" parent="MarginContainer/AspectRatioContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/HBoxContainer"]
 unique_name_in_owner = true
@@ -130,6 +133,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
+allow_reselect = true
 
 [node name="Label3" type="Label" parent="MarginContainer/AspectRatioContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit"]
 visible = false

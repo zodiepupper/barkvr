@@ -6,6 +6,13 @@ const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 var target : Node
 var event_manager : Bark_Journal
 
+## Used to track the time since the last item selection.
+## item_activated signal in 3DUI issue workaround.
+var double_click_timer : SceneTreeTimer
+## Used to track the last selected class.
+## item_activated signal in 3DUI issue workaround.
+var last_selected_class : String
+
 @onready var window_icon: TextureRect = %WindowIcon
 
 @onready var search_bar: LineEdit = %SearchBar
@@ -29,6 +36,7 @@ func _ready() -> void:
 	button_confirm.pressed.connect(add_selected_node)
 
 	search_bar.text_changed.connect(_on_search_bar_edited)
+	search_bar.text_submitted.connect(_on_search_bar_submitted)
 	item_list.item_selected.connect(_on_item_list_item_selected)
 
 	# item_activated just does not work with 3DUI apparently, real fun.
@@ -62,7 +70,10 @@ func add_selected_node() -> void:
 	if not is_instance_valid(target): return
 	if not is_instance_valid(event_manager): return
 
-	var selected_index : int = item_list.get_selected_items()[0]
+	var selected_item_list : PackedInt32Array = item_list.get_selected_items()
+	if selected_item_list.is_empty(): return
+
+	var selected_index : int = selected_item_list[0]
 	var selected_class : String = item_list.get_item_text(selected_index)
 
 	event_manager.add_node(event_manager.root.get_path_to(target),{
@@ -131,10 +142,25 @@ func _on_search_bar_edited(search_text : String) -> void:
 		add_class_to_item_list(item)
 
 	# Select the first item to prevent no items being selected.
-	item_list.select(0)
+	if item_list.item_count > 0:
+		item_list.select(0)
+
+## Called when enter is pressed while the search bar is focused.
+## Function exists due to add_selected_node not having any args.
+func _on_search_bar_submitted(_text : String) -> void:
+	add_selected_node()
 
 ## Called when an item is selected, used to detect double clicks.
-func _on_item_list_item_selected(_index :int) -> void:
-	# TODO: This right here.
-	#print("item selected")
-	pass
+func _on_item_list_item_selected(index :int) -> void:
+	var current_selected_class : String = item_list.get_item_text(index)
+
+	# Double click success.
+	if double_click_timer and last_selected_class == current_selected_class:
+		add_selected_node()
+		double_click_timer = null
+		return
+
+	# Enable double click timer.
+	last_selected_class = current_selected_class
+	double_click_timer = get_tree().create_timer(0.5)
+	double_click_timer.timeout.connect(func() -> void: double_click_timer = null)

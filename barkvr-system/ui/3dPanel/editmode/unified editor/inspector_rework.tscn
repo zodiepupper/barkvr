@@ -3,18 +3,18 @@
 [ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="1_3vg7k"]
 [ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f60sc"]
 [ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_rework.gd" id="1_hxant"]
+[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_tit44"]
 [ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/scene_inspector_rework.tscn" id="2_hxant"]
 [ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="2_ybesl"]
 [ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="3_hxant"]
-[ext_resource type="Script" uid="uid://uutckbismjsl" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_tab_container.gd" id="4_svp2n"]
 
 [sub_resource type="Gradient" id="Gradient_1u5qm"]
-colors = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(1, 0, 1, 1, 1, 0, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_fbrd2"]
 gradient = SubResource("Gradient_1u5qm")
 fill_from = Vector2(1, 1)
-fill_to = Vector2(0, 0)
+fill_to = Vector2(0.45, 0.45)
 
 [node name="InspectorRework" type="PanelContainer"]
 clip_contents = true
@@ -23,6 +23,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_tit44")
+theme_type_variation = &"RootPanel"
 script = ExtResource("1_hxant")
 
 [node name="PanelResizer" type="TextureButton" parent="."]
@@ -41,7 +43,7 @@ mouse_filter = 2
 theme_override_constants/margin_left = 9
 theme_override_constants/margin_top = 9
 theme_override_constants/margin_right = 9
-theme_override_constants/margin_bottom = 9
+theme_override_constants/margin_bottom = 12
 
 [node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
 unique_name_in_owner = true
@@ -49,98 +51,36 @@ layout_mode = 2
 split_offset = 350
 touch_dragger_enabled = true
 
-[node name="SplitLeft" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
+[node name="TabLeft" type="TabContainer" parent="MarginContainer/HSplitContainer"]
+unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-button_pressed = true
-text = "SceneInspector"
-
-[node name="Button2" type="Button" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "Tab 2"
-
-[node name="TabLeft" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer" node_paths=PackedStringArray("button_container")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
 current_tab = 0
-tabs_visible = false
-script = ExtResource("4_svp2n")
-button_container = NodePath("../HBoxContainer")
+clip_tabs = false
+tab_focus_mode = 0
 
-[node name="SceneInspector" parent="MarginContainer/HSplitContainer/SplitLeft/VBoxContainer/TabLeft" instance=ExtResource("2_hxant")]
+[node name="SceneInspector" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("2_hxant")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="SplitRight" type="PanelContainer" parent="MarginContainer/HSplitContainer"]
-clip_contents = true
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/SplitRight"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer"]
+[node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="Button" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-button_pressed = true
-text = "Buttons"
-
-[node name="Button2" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "Are"
-
-[node name="Button3" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "Automatically"
-
-[node name="Button4" type="Button" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-text = "Generated"
-
-[node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer" node_paths=PackedStringArray("button_container")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
 current_tab = 0
-tabs_visible = false
-script = ExtResource("4_svp2n")
-button_container = NodePath("../HBoxContainer")
+clip_tabs = false
+tab_focus_mode = 0
 
-[node name="Attributes" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("1_f60sc")]
+[node name="Attributes" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("1_f60sc")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="GDScript" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("2_ybesl")]
+[node name="GDScript" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("2_ybesl")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="BVS" parent="MarginContainer/HSplitContainer/SplitRight/VBoxContainer/TabRight" instance=ExtResource("3_hxant")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("3_hxant")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

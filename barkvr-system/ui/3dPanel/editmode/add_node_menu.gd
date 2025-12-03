@@ -16,6 +16,8 @@ var last_selected_class : String
 @onready var window_icon: TextureRect = %WindowIcon
 
 @onready var search_bar: LineEdit = %SearchBar
+@onready var button_favorite: Button = %ButtonFavorite
+
 @onready var item_list: ItemList = %ItemList
 
 @onready var button_close: Button = %ButtonClose
@@ -47,6 +49,7 @@ func _ready() -> void:
 func _setup_icons() -> void:
 	window_icon.set_texture(load(ProjectSettings.get_setting("application/config/icon")))
 	search_bar.set_right_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Search", &"EditorIcons"))
+	button_favorite.set_button_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Favorites", &"EditorIcons"))
 	button_close.set_button_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Close", &"EditorIcons"))
 
 ## Load the initial, unfiltered, class list.
@@ -90,7 +93,7 @@ func add_selected_node() -> void:
 ## Hide the menu and reset selection to the first list item.
 func close() -> void:
 	item_list.deselect_all()
-	item_list.select(0)
+	if item_list.item_count > 0: item_list.select(0)
 	hide()
 
 ## Add an item to the item list with class_string as the type.
@@ -142,8 +145,7 @@ func _on_search_bar_edited(search_text : String) -> void:
 		add_class_to_item_list(item)
 
 	# Select the first item to prevent no items being selected.
-	if item_list.item_count > 0:
-		item_list.select(0)
+	if item_list.item_count > 0: item_list.select(0)
 
 ## Called when enter is pressed while the search bar is focused.
 ## Function exists due to add_selected_node not having any args.

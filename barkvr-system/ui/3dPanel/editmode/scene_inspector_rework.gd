@@ -42,7 +42,11 @@ func _setup_tree() -> void:
 
 	# Set local world root as the focus of the tree.
 	root_node = get_tree().get_first_node_in_group(&"localworldroot")
-	node_tree.add_item(root_node.name, { "node" : root_node })
+	if root_node:
+		node_tree.add_item(root_node.name, { "node" : root_node })
+	else:
+		root_node = get_viewport()
+		node_tree.add_item(root_node.name, { "node" : root_node })
 	_check_tree_for_updates()
 
 	button_add.pressed.connect(selection_add_child)

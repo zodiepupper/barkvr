@@ -5,6 +5,8 @@ const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 
 var target : Node
 var event_manager : Bark_Journal
+## Store original parent of this menu to reparent upon panel close.
+var original_parent : Node
 
 ## Used to track the time since the last item selection.
 ## item_activated signal in 3DUI issue workaround.
@@ -29,6 +31,8 @@ var last_selected_class : String
 func _ready() -> void:
 	event_manager = Engine.get_singleton(&"event_manager")
 	print("event supplier: " + str(event_manager))
+
+	original_parent = get_parent()
 
 	_setup_icons()
 	_load_class_list()
@@ -94,6 +98,8 @@ func add_selected_node() -> void:
 func close() -> void:
 	item_list.deselect_all()
 	if item_list.item_count > 0: item_list.select(0)
+	if get_parent() != original_parent:
+		reparent(original_parent)
 	hide()
 
 ## Add an item to the item list with class_string as the type.

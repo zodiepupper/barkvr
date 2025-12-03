@@ -95,6 +95,12 @@ func selection_add_child() -> void:
 
 	var target : Node = selected.get_metadata(0).node
 	add_node_menu.set_target(target)
+
+	var viewport : Viewport = get_viewport()
+	if viewport is SubViewport:
+		if viewport.get_child(0) is Control:
+			add_node_menu.reparent(viewport.get_child(0))
+
 	add_node_menu.show()
 
 ## Duplicate currently selected item.

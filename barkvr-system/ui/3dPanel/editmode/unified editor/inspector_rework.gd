@@ -27,3 +27,8 @@ func _on_node_selection_changed(new_selection : Node) -> void:
 	for tab : Node in target_tabs:
 		if tab.has_method(&"set_target"):
 			tab.set_target(new_selection)
+
+## Unfinished concept function.
+func _setup_tab_container_popout() -> void:
+	# TODO: Set up "close" icons for the tab buttons, use their signal to pop them out into their own windows.
+	pass

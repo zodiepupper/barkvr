@@ -96,6 +96,8 @@ func selection_add_child() -> void:
 	var target : Node = selected.get_metadata(0).node
 	add_node_menu.set_target(target)
 
+	# Reparent AddNodeMenu to the root of the inspector, if it is one.
+	# Not foolproof yet, will be improved once custom inspector classes are set up.
 	var viewport : Viewport = get_viewport()
 	if viewport is SubViewport:
 		if viewport.get_child(0) is Control:

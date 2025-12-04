@@ -1,5 +1,7 @@
 extends Control
 
+
+
 ## A theme containing all of the godot default icons, used to display node types in the item list.
 const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 
@@ -15,14 +17,19 @@ var double_click_timer : SceneTreeTimer
 ## item_activated signal in 3DUI issue workaround.
 var last_selected_class : String
 
+
+
 @onready var window_icon: TextureRect = %WindowIcon
+@onready var button_close: Button = %ButtonClose
 
 @onready var search_bar: LineEdit = %SearchBar
 @onready var button_favorite: Button = %ButtonFavorite
 
 @onready var item_list: ItemList = %ItemList
 
-@onready var button_close: Button = %ButtonClose
+@onready var list_favorites: ItemList = %ListFavorites
+@onready var list_recent: ItemList = %ListRecent
+
 @onready var button_confirm: Button = %ButtonConfirm
 @onready var button_cancel: Button = %ButtonCancel
 
@@ -37,13 +44,19 @@ func _ready() -> void:
 	_setup_icons()
 	_load_class_list()
 
+	# Set up signals.
 	button_close.pressed.connect(close)
 	button_cancel.pressed.connect(close)
 	button_confirm.pressed.connect(add_selected_node)
 
 	search_bar.text_changed.connect(_on_search_bar_edited)
 	search_bar.text_submitted.connect(_on_search_bar_submitted)
+	button_favorite.pressed.connect(_on_favorite_button_pressed)
+
 	item_list.item_selected.connect(_on_item_list_item_selected)
+
+	list_favorites.item_selected.connect(_on_sidebar_item_list_item_selected.bind(list_favorites))
+	list_recent.item_selected.connect(_on_sidebar_item_list_item_selected.bind(list_recent))
 
 	# item_activated just does not work with 3DUI apparently, real fun.
 	# Currently using a custom double click checker using item_selected.
@@ -61,7 +74,7 @@ func _load_class_list() -> void:
 	for cls : String in ClassDB.get_class_list() + Bark_Journal.extra_classes:
 		if not ClassDB.is_parent_class(cls, &"Node") and not cls in Bark_Journal.extra_classes: continue
 
-		add_class_to_item_list(cls)
+		add_class_to_item_list(item_list, cls)
 
 	item_list.select(0)
 
@@ -83,6 +96,7 @@ func add_selected_node() -> void:
 	var selected_index : int = selected_item_list[0]
 	var selected_class : String = item_list.get_item_text(selected_index)
 
+	# Let the event_manager add the node and handle it.
 	event_manager.add_node(event_manager.root.get_path_to(target),{
 		"node_class" : selected_class,
 		"properties" : [
@@ -92,22 +106,51 @@ func add_selected_node() -> void:
 			}
 		]
 	})
+
+	# Check if class already exists in recent list.
+	var is_in_list := false
+	for idx : int in list_recent.item_count:
+		if list_recent.get_item_text(idx) == selected_class:
+			is_in_list = true
+			# Move item to top.
+			list_recent.move_item(idx, 0)
+			break
+
+	# Add to recent list if not present already, then move to top.
+	if not is_in_list:
+		list_recent.move_item(add_class_to_item_list(list_recent, selected_class), 0)
+
 	close()
 
 ## Hide the menu and reset selection to the first list item.
 func close() -> void:
 	item_list.deselect_all()
 	if item_list.item_count > 0: item_list.select(0)
+
+	# Reparent menu if it has been moved upon showing.
 	if get_parent() != original_parent:
 		reparent(original_parent)
+
 	hide()
 
 ## Add an item to the item list with class_string as the type.
-func add_class_to_item_list(class_string : String) -> void:
+func add_class_to_item_list(list : ItemList, class_string : String) -> int:
 	if GODOT_EDITOR_ICON_THEME.has_icon(class_string, &"EditorIcons"):
-		item_list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(class_string, &"EditorIcons"))
+		return list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(class_string, &"EditorIcons"))
 	else: # Fallback.
-		item_list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(&"Node", &"EditorIcons"))
+		return list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(&"Node", &"EditorIcons"))
+
+## Used to detect double clicks.
+func detect_double_click(selected_class : String) -> void:
+	if double_click_timer and last_selected_class == selected_class:
+		add_selected_node()
+		double_click_timer = null
+		return
+
+	# Enable double click timer.
+	last_selected_class = selected_class
+	double_click_timer = get_tree().create_timer(0.5)
+	double_click_timer.timeout.connect(func() -> void: double_click_timer = null)
 
 
 
@@ -138,7 +181,7 @@ func _on_search_bar_edited(search_text : String) -> void:
 		if (
 				contains_all_chars
 				or class_string_lower.contains(search_text)
-				or class_string_lower.similarity(search_text) > .6
+				or class_string_lower.similarity(search_text) > 0.6
 		):
 			filtered_list.append(class_string)
 
@@ -148,7 +191,7 @@ func _on_search_bar_edited(search_text : String) -> void:
 	)
 	# Populate list with search matches.
 	for item : String in filtered_list:
-		add_class_to_item_list(item)
+		add_class_to_item_list(item_list, item)
 
 	# Select the first item to prevent no items being selected.
 	if item_list.item_count > 0: item_list.select(0)
@@ -158,17 +201,42 @@ func _on_search_bar_edited(search_text : String) -> void:
 func _on_search_bar_submitted(_text : String) -> void:
 	add_selected_node()
 
-## Called when an item is selected, used to detect double clicks.
-func _on_item_list_item_selected(index :int) -> void:
-	var current_selected_class : String = item_list.get_item_text(index)
 
-	# Double click success.
-	if double_click_timer and last_selected_class == current_selected_class:
-		add_selected_node()
-		double_click_timer = null
-		return
+## Called when the favorite button is pressed.
+func _on_favorite_button_pressed() -> void:
+	if not item_list.is_anything_selected(): return
 
-	# Enable double click timer.
-	last_selected_class = current_selected_class
-	double_click_timer = get_tree().create_timer(0.5)
-	double_click_timer.timeout.connect(func() -> void: double_click_timer = null)
+	var selected_index : int = item_list.get_selected_items()[0]
+	var selected_class : String = item_list.get_item_text(selected_index)
+
+	# Remove if already a favorite.
+	var is_in_list := false
+	for idx : int in list_favorites.item_count:
+		if list_favorites.get_item_text(idx) == selected_class:
+			is_in_list = true
+			list_favorites.remove_item(idx)
+			break
+
+	# Add if not a favorite yet.
+	if not is_in_list:
+		add_class_to_item_list(list_favorites, selected_class)
+
+## Called when an item is selected.
+func _on_item_list_item_selected(index : int) -> void:
+	var selected_class : String = item_list.get_item_text(index)
+	detect_double_click(selected_class)
+
+## Called when one of the lists on the sidebar has one of its items selected.
+func _on_sidebar_item_list_item_selected(index : int, list : ItemList) -> void:
+	match list: # Deselect other list.
+		list_recent: list_favorites.deselect_all()
+		list_favorites: list_recent.deselect_all()
+
+	var selected_class : String = list.get_item_text(index)
+
+	# Select it in the search bar.
+	search_bar.set_text(selected_class)
+	_on_search_bar_edited(selected_class)
+
+	# Check for double clicks in the sidebar.
+	detect_double_click(selected_class)

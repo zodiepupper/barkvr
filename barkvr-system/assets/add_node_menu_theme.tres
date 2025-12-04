@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=23 format=3 uid="uid://1875kv5x57wd"]
+[gd_resource type="Theme" load_steps=29 format=3 uid="uid://1875kv5x57wd"]
 
 [ext_resource type="FontFile" uid="uid://coysmd6nhks20" path="res://barkvr-system/assets/font/static/OpenSans-SemiBold.ttf" id="1_ydyl8"]
 [ext_resource type="FontVariation" uid="uid://cj1etf32fetld" path="res://barkvr-system/assets/font/barkfonts.tres" id="2_2mc81"]
@@ -62,6 +62,62 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpr3g"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nb56c"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.11372549, 0.14509805, 0.1882353, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xm2fg"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.16862746, 0.2627451, 0.3882353, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6myye"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.16862746, 0.2627451, 0.3882353, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxcsj"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -74,6 +130,30 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ktqw7"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.15686275, 0.23137255, 0.3372549, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ng8j3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.15686275, 0.23137255, 0.3372549, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g51qj"]
 content_margin_left = 4.0
@@ -201,7 +281,15 @@ DescriptionContainer/styles/panel = SubResource("StyleBoxFlat_u2oi4")
 DescriptionHeader/base_type = &"RichTextLabel"
 DescriptionHeader/styles/normal = SubResource("StyleBoxFlat_eemga")
 ItemList/colors/font_color = Color(1, 1, 1, 1)
+ItemList/styles/cursor_unfocused = SubResource("StyleBoxFlat_hpr3g")
+ItemList/styles/hovered = SubResource("StyleBoxFlat_nb56c")
+ItemList/styles/hovered_selected = SubResource("StyleBoxFlat_xm2fg")
+ItemList/styles/hovered_selected_focus = SubResource("StyleBoxFlat_6myye")
 ItemList/styles/panel = SubResource("StyleBoxFlat_dxcsj")
+ItemList/styles/selected = SubResource("StyleBoxFlat_ktqw7")
+ItemList/styles/selected_focus = SubResource("StyleBoxFlat_ng8j3")
+ItemListRecent/base_type = &"ItemList"
+ItemListRecent/colors/guide_color = Color(0, 0, 0, 0)
 Label/fonts/font = ExtResource("1_ydyl8")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_g51qj")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_ydyl8")

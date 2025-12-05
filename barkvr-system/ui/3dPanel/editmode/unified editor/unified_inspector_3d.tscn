@@ -1,27 +1,27 @@
 [gd_scene load_steps=9 format=3 uid="uid://ec0mqh35i2in"]
 
 [ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_2f3s4"]
-[ext_resource type="PackedScene" uid="uid://djp6k7l4t71pi" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector.tscn" id="2_420i3"]
+[ext_resource type="PackedScene" uid="uid://dqc238s6m6ndw" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_rework.tscn" id="2_8d3jq"]
 
 [sub_resource type="Gradient" id="Gradient_lcqgf"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_pnq8w"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h7rv1"]
-color_ramp = SubResource("Gradient_lcqgf")
 noise = SubResource("FastNoiseLite_pnq8w")
+color_ramp = SubResource("Gradient_lcqgf")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_bsfdt"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ttheo"]
 width = 128
 height = 128
-in_3d_space = true
+noise = SubResource("FastNoiseLite_bsfdt")
 seamless = true
-seamless_blend_skirt = 1.0
+in_3d_space = true
 as_normal_map = true
 normalize = false
-noise = SubResource("FastNoiseLite_bsfdt")
+seamless_blend_skirt = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5mcw"]
 transparency = 1
@@ -41,7 +41,7 @@ freeze_mode = 1
 continuous_cd = true
 script = ExtResource("1_2f3s4")
 background_material = SubResource("StandardMaterial3D_o5mcw")
-_auto_load_ui = ExtResource("2_420i3")
+_auto_load_ui = ExtResource("2_8d3jq")
 render_priority = 124
 on_top = true
 metadata/grabbable = true

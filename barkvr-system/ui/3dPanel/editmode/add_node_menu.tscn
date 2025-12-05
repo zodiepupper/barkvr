@@ -1,0 +1,237 @@
+[gd_scene load_steps=3 format=3 uid="uid://cx8et16cxspnk"]
+
+[ext_resource type="Script" uid="uid://beoov53mgy2by" path="res://barkvr-system/ui/3dPanel/editmode/add_node_menu.gd" id="1_d1tmi"]
+[ext_resource type="Theme" uid="uid://1875kv5x57wd" path="res://barkvr-system/assets/add_node_menu_theme.tres" id="1_yiajg"]
+
+[node name="AddNodeMenu" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_yiajg")
+script = ExtResource("1_d1tmi")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="RootContainer" type="PanelContainer" parent="MarginContainer/AspectRatioContainer"]
+layout_mode = 2
+theme_type_variation = &"RootContainer"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="WindowTopBar" type="PanelContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"WindowTopBar"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar/HBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="WindowIcon" type="TextureRect" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar/HBoxContainer2/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar/HBoxContainer2/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"WindowTopLabel"
+text = "Create New Node"
+
+[node name="ButtonClose" type="Button" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/WindowTopBar/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"WindowTopButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 9
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+touch_dragger_enabled = true
+
+[node name="LeftSplit" type="VSplitContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="Favorites" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit/Favorites"]
+layout_mode = 2
+text = "Favorites:"
+
+[node name="ListFavorites" type="ItemList" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit/Favorites"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+allow_reselect = true
+
+[node name="Recent" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit/Recent"]
+layout_mode = 2
+text = "Recent:"
+
+[node name="ListRecent" type="ItemList" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/LeftSplit/Recent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+theme_type_variation = &"ItemListRecent"
+allow_reselect = true
+
+[node name="RightSplit" type="VSplitContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ClassList" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList"]
+layout_mode = 2
+text = "Search:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList"]
+layout_mode = 2
+
+[node name="SearchBar" type="LineEdit" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+context_menu_enabled = false
+emoji_menu_enabled = false
+clear_button_enabled = true
+
+[node name="ButtonFavorite" type="Button" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+
+[node name="Label2" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList"]
+layout_mode = 2
+text = "Matches:"
+
+[node name="ItemList" type="ItemList" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+allow_reselect = true
+
+[node name="Description" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.35
+
+[node name="Label" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/Description"]
+layout_mode = 2
+text = "Description:"
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/Description"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"DescriptionContainer"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/Description/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DescriptionHeader" type="RichTextLabel" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/Description/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"DescriptionHeader"
+bbcode_enabled = true
+text = "[b][color=569eff]Class[/color] ClassName[/b] < Inheritance < Inheritance < Inheritance"
+fit_content = true
+scroll_active = false
+
+[node name="DescriptionText" type="RichTextLabel" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/Description/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+bbcode_enabled = true
+text = "[b]Summary of the selected class.[/b]
+
+Description of the selected class.
+Descriptions can be quite long, describing in-depth on how a node works and how it is to be used.
+Additional line used for testing of the scrollbar."
+
+[node name="Footer" type="HBoxContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer" type="Control" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonConfirm" type="Button" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SelectorButton"
+text = "Create"
+
+[node name="Spacer2" type="Control" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonCancel" type="Button" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"SelectorButton"
+text = "Cancel"
+
+[node name="Spacer3" type="Control" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3

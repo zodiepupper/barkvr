@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=17 format=3 uid="uid://beb0gdkkx60br"]
+[gd_resource type="Theme" load_steps=19 format=3 uid="uid://beb0gdkkx60br"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xk8hu"]
 content_margin_left = 4.0
@@ -39,6 +39,13 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_detail = 5
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2m32"]
+bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+corner_detail = 5
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_xk8hu"]
+color = Color(0.21568628, 0.21568628, 0.21568628, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qdal"]
 bg_color = Color(0.07058824, 0.07058824, 0.07058824, 1)
@@ -160,6 +167,8 @@ FlatContainer/styles/panel = SubResource("StyleBoxEmpty_xk8hu")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_aclsv")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_aclsv")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_aeu5f")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_w2m32")
+PopupMenu/styles/separator = SubResource("StyleBoxLine_xk8hu")
 RootPanel/base_type = &"PanelContainer"
 RootPanel/styles/panel = SubResource("StyleBoxFlat_1qdal")
 TabContainer/constants/side_margin = 0

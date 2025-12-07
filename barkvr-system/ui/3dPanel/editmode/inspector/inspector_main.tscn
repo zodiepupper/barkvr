@@ -1,12 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://dqc238s6m6ndw"]
 
-[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="1_3vg7k"]
-[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="1_f60sc"]
-[ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_rework.gd" id="1_hxant"]
-[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_tit44"]
-[ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/scene_inspector_rework.tscn" id="2_hxant"]
-[ext_resource type="PackedScene" uid="uid://cw57xg0xewjcv" path="res://barkvr-system/ui/3dPanel/editmode/gdscriptpanel.tscn" id="2_ybesl"]
-[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="3_hxant"]
+[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_nal8t"]
+[ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_main.gd" id="2_jrkme"]
+[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="3_17f7l"]
+[ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene_inspector.tscn" id="4_nds4o"]
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="5_6d5uu"]
+[ext_resource type="PackedScene" uid="uid://cyqdfiewnkxl1" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_gdscript_editor.tscn" id="6_72g2u"]
+[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="7_d5fl1"]
 
 [sub_resource type="Gradient" id="Gradient_1u5qm"]
 colors = PackedColorArray(1, 0, 1, 1, 1, 0, 1, 0)
@@ -16,16 +16,16 @@ gradient = SubResource("Gradient_1u5qm")
 fill_from = Vector2(1, 1)
 fill_to = Vector2(0.45, 0.45)
 
-[node name="InspectorRework" type="PanelContainer"]
+[node name="Inspector" type="PanelContainer"]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_tit44")
+theme = ExtResource("1_nal8t")
 theme_type_variation = &"RootPanel"
-script = ExtResource("1_hxant")
+script = ExtResource("2_jrkme")
 
 [node name="PanelResizer" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(50, 50)
@@ -35,7 +35,7 @@ size_flags_vertical = 8
 texture_normal = SubResource("GradientTexture2D_fbrd2")
 ignore_texture_size = true
 stretch_mode = 0
-script = ExtResource("1_3vg7k")
+script = ExtResource("3_17f7l")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -59,7 +59,7 @@ current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="SceneInspector" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("2_hxant")]
+[node name="SceneInspector" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("4_nds4o")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
@@ -67,20 +67,20 @@ metadata/_tab_index = 0
 [node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="Attributes" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("1_f60sc")]
+[node name="Attributes" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("5_6d5uu")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="GDScript" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("2_ybesl")]
-visible = false
+[node name="GDScriptEditor" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_72g2u")]
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("3_hxant")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("7_d5fl1")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

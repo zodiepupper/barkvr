@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=19 format=3 uid="uid://beb0gdkkx60br"]
+[gd_resource type="Theme" load_steps=21 format=3 uid="uid://beb0gdkkx60br"]
+
+[ext_resource type="FontFile" uid="uid://bfe3o1gdmrg2t" path="res://barkvr-system/assets/font/noto_sans_mono/NotoSansMono-VariableFont_wdth,wght.ttf" id="1_1qdal"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xk8hu"]
 content_margin_left = 4.0
@@ -11,6 +13,18 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tbyk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.07058824, 0.07058824, 0.07058824, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xk8hu"]
 
@@ -162,6 +176,16 @@ corner_detail = 5
 
 [resource]
 Button/styles/pressed = SubResource("StyleBoxFlat_xk8hu")
+CodeEdit/colors/brace_mismatch_color = Color(1, 0.47058824, 0.41960785, 1)
+CodeEdit/colors/caret_color = Color(1, 1, 1, 1)
+CodeEdit/colors/current_line_color = Color(1, 1, 1, 0.07058824)
+CodeEdit/colors/font_color = Color(0.7882353, 0.7882353, 0.7882353, 1)
+CodeEdit/colors/line_length_guideline_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+CodeEdit/colors/line_number_color = Color(0.7882353, 0.7882353, 0.7882353, 0.5019608)
+CodeEdit/colors/selection_color = Color(0.3372549, 0.61960787, 1, 0.4)
+CodeEdit/colors/word_highlighted_color = Color(1, 1, 1, 0.07058824)
+CodeEdit/fonts/font = ExtResource("1_1qdal")
+CodeEdit/styles/normal = SubResource("StyleBoxFlat_6tbyk")
 FlatContainer/base_type = &"PanelContainer"
 FlatContainer/styles/panel = SubResource("StyleBoxEmpty_xk8hu")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_aclsv")

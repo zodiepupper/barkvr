@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cx8et16cxspnk"]
 
-[ext_resource type="Script" uid="uid://beoov53mgy2by" path="res://barkvr-system/ui/3dPanel/editmode/add_node_menu.gd" id="1_d1tmi"]
+[ext_resource type="Script" uid="uid://beoov53mgy2by" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/add_node_menu.gd" id="1_d1tmi"]
 [ext_resource type="Theme" uid="uid://1875kv5x57wd" path="res://barkvr-system/assets/add_node_menu_theme.tres" id="1_yiajg"]
 
 [node name="AddNodeMenu" type="Panel"]

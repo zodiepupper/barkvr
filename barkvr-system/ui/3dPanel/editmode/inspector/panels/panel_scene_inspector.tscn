@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dohf48lsx84mx"]
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_mgoju"]
-[ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/scene_inspector_rework.gd" id="1_tfb2o"]
-[ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector_node_tree.gd" id="2_3mwhh"]
-[ext_resource type="PackedScene" uid="uid://cx8et16cxspnk" path="res://barkvr-system/ui/3dPanel/editmode/add_node_menu.tscn" id="3_l53mb"]
+[ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene_inspector.gd" id="1_tfb2o"]
+[ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_node_tree.gd" id="2_3mwhh"]
+[ext_resource type="PackedScene" uid="uid://cx8et16cxspnk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/add_node_menu.tscn" id="3_l53mb"]
 
 [node name="SceneInspector" type="PanelContainer"]
 anchors_preset = 15

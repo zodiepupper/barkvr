@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://ec0mqh35i2in"]
 
 [ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_2f3s4"]
-[ext_resource type="PackedScene" uid="uid://dqc238s6m6ndw" path="res://barkvr-system/ui/3dPanel/editmode/unified editor/inspector_rework.tscn" id="2_8d3jq"]
+[ext_resource type="PackedScene" uid="uid://dqc238s6m6ndw" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_main.tscn" id="2_8d3jq"]
 
 [sub_resource type="Gradient" id="Gradient_lcqgf"]
 

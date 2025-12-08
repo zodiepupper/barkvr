@@ -120,7 +120,7 @@ func selection_focus() -> void:
 	if !is_instance_valid(node_tree.get_next_selected(null)): return
 
 	var new_target = node_tree.get_next_selected(null).get_metadata(0).node
-	node_tree.hashed_tree_clear()
+	node_tree.tree_clear()
 	node_tree.create_item().set_text(0, "")
 	set_root(new_target)
 	node_tree.check_children()

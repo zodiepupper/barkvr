@@ -12,6 +12,8 @@ var script_template_text : String
 ## A setting on whether the code should be saved on any text change in the CodeEdit.
 var save_on_edit : bool = false # TODO: True by default, false for testing.
 
+var sort_method_list_alphabetically : bool = false
+
 ## The name of the currently selected script.
 ## Suffixed with "(*)" when the script has unsaved changes.
 var current_script_name : String:
@@ -43,20 +45,26 @@ var current_script_name : String:
 @onready var button_toggle_sidebar: Button = %ButtonToggleSidebar
 ## A manual save button.
 @onready var button_save: Button = %ButtonSave
+## A toggle-able button to enable/disable auto saving.
 @onready var button_auto_save: CheckBox = %ButtonAutoSave
 @onready var label_caret_location: Label = %LabelCaretLocation
 
 
 
 func _ready() -> void:
-	code_edit.text_changed.connect(_on_code_edit_text_changed)
-	code_edit.caret_changed.connect(_on_code_edit_caret_changed)
-
+	# Load script template text from file.
 	script_template_text = ScriptTemplate.new().get_script().source_code
 
 	_setup_icons()
 
+	# Signal setup.
+	code_edit.text_changed.connect(_on_code_edit_text_changed)
+	code_edit.caret_changed.connect(_on_code_edit_caret_changed)
+
 	button_online_docs.pressed.connect(_on_button_online_docs_pressed)
+
+	list_methods.item_selected.connect(_on_method_list_item_selected)
+	button_sort_methods.toggled.connect(_on_button_sort_methods_toggled)
 
 	button_toggle_sidebar.pressed.connect(_on_button_toggle_sidebar_pressed)
 	button_save.pressed.connect(save_code)
@@ -105,6 +113,7 @@ func _on_target_set(new_target : Node) -> void:
 			current_script_name = script_name.to_snake_case() + ".gd"
 		else:
 			current_script_name = target_class.to_snake_case() + ".script.gd"
+
 	# In case there is no script present get the template and extend from current.
 	else:
 		code_edit.text = (
@@ -113,6 +122,8 @@ func _on_target_set(new_target : Node) -> void:
 				script_template_text)
 
 		current_script_name = target_class.to_snake_case() + ".script.gd(*)"
+
+	update_method_list()
 
 
 
@@ -137,6 +148,24 @@ func save_code() -> void:
 	if current_script_name.ends_with("(*)"):
 		current_script_name = current_script_name.left(-3)
 
+	# TODO: Might move this and auto-saving on a timer, to reduce repeat calls.
+	update_method_list()
+
+func update_method_list() -> void:
+	list_methods.clear()
+
+	var script := GDScript.new()
+	script.source_code = code_edit.text
+
+	# Return on Error other than 0(OK).
+	if script.reload(): return
+
+	for method : Dictionary in script.get_script_method_list():
+		list_methods.add_item(method.name)
+
+	if sort_method_list_alphabetically:
+		list_methods.sort_items_by_text()
+
 
 
 ## Called whenever edits are being made inside the CodeEdit.
@@ -145,6 +174,7 @@ func _on_code_edit_text_changed() -> void:
 	if not current_script_name.ends_with("(*)"):
 		current_script_name += "(*)"
 
+	# Save if autosave is turned on.
 	if save_on_edit: save_code()
 
 ## Called when the CodeEdit's caret moves.
@@ -168,3 +198,14 @@ func _on_button_toggle_sidebar_pressed() -> void:
 ## Toggle auto saving.
 func _on_button_auto_save_toggled(toggled_on : bool) -> void:
 	save_on_edit = toggled_on
+
+## Move to selected method, called when a method item is clicked in the list.
+func _on_method_list_item_selected(index : int) -> void:
+	var target_function : String = list_methods.get_item_text(index)
+	var result_line : int = code_edit.search(target_function + "(", 0, 0, 0).y
+	code_edit.set_caret_line(result_line)
+
+## Toggle sorting of the method list.
+func _on_button_sort_methods_toggled(toggled_on : bool) -> void:
+	sort_method_list_alphabetically = toggled_on
+	update_method_list()

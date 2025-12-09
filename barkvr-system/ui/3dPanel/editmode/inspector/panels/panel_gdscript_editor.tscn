@@ -26,31 +26,26 @@ layout_mode = 2
 [node name="Button" type="Button" parent="VBoxContainer/TopBar/ButtonsLeft"]
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "File"
 
 [node name="Button2" type="Button" parent="VBoxContainer/TopBar/ButtonsLeft"]
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Edit"
 
 [node name="Button3" type="Button" parent="VBoxContainer/TopBar/ButtonsLeft"]
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Search"
 
 [node name="Button4" type="Button" parent="VBoxContainer/TopBar/ButtonsLeft"]
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Go To"
 
 [node name="Button5" type="Button" parent="VBoxContainer/TopBar/ButtonsLeft"]
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Debug"
 
 [node name="LabelScriptName" type="Label" parent="VBoxContainer/TopBar"]
@@ -70,14 +65,12 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Online Docs"
 
 [node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 disabled = true
 text = "Search Help"
 
@@ -88,14 +81,12 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 disabled = true
 
 [node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 disabled = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
@@ -140,7 +131,6 @@ placeholder_text = "Filter Methods"
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 toggle_mode = true
 
 [node name="ListMethods" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/Methods"]
@@ -158,17 +148,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
-placeholder_text = "extends CodeEdit
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta : float) -> void:
-	pass # Replace with function body.
-"
 editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
@@ -211,7 +190,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 
 [node name="Spacer" type="Control" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -221,7 +199,6 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Save"
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
@@ -236,7 +213,18 @@ text = "Auto Save"
 [node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
+[node name="LabelCaretLocation" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"LabelMono"
+text = "   0:   0"
+horizontal_alignment = 2
+
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LabelIndentType" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LabelMono"
 text = "Tabs"
 horizontal_alignment = 2

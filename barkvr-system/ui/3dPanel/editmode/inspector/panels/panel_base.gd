@@ -18,3 +18,11 @@ func set_target(new_target : Node) -> void:
 ## Override class to be used to adjust panels on target change.
 func _on_target_set(_new_target : Node) -> void:
 	pass
+
+## Returns the default editor icon under the given icon_name.
+## Returns NodeWarning icon instead if no icon exists under that name.
+func get_editor_icon(icon_name : StringName) -> Texture2D:
+	if GODOT_EDITOR_ICON_THEME.has_icon(icon_name, &"EditorIcons"):
+		return GODOT_EDITOR_ICON_THEME.get_icon(icon_name, &"EditorIcons")
+
+	return GODOT_EDITOR_ICON_THEME.get_icon(&"NodeWarning", &"EditorIcons")

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=28 format=3 uid="uid://beb0gdkkx60br"]
+[gd_resource type="Theme" load_steps=29 format=3 uid="uid://beb0gdkkx60br"]
 
 [ext_resource type="FontFile" uid="uid://bfe3o1gdmrg2t" path="res://barkvr-system/assets/font/noto_sans_mono/NotoSansMono-VariableFont_wdth,wght.ttf" id="1_1qdal"]
 
@@ -133,9 +133,20 @@ corner_radius_top_right = 3
 corner_detail = 5
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvh2i"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.24705882, 0.24705882, 0.24705882, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2m32"]
 bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
-corner_detail = 5
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_xk8hu"]
 color = Color(0.21568628, 0.21568628, 0.21568628, 1)
@@ -279,6 +290,17 @@ LabelMono/fonts/font = ExtResource("1_1qdal")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_aclsv")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_aclsv")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_aeu5f")
+MenuBar/colors/font_hover_pressed_color = Color(0.34117648, 0.627451, 1, 1)
+MenuBar/colors/font_pressed_color = Color(0.34117648, 0.627451, 1, 1)
+MenuBar/styles/disabled = SubResource("StyleBoxEmpty_1qdal")
+MenuBar/styles/hover = SubResource("StyleBoxFlat_vab18")
+MenuBar/styles/hover_pressed = SubResource("StyleBoxFlat_nuifk")
+MenuBar/styles/normal = SubResource("StyleBoxEmpty_1qdal")
+MenuBar/styles/pressed = SubResource("StyleBoxFlat_nuifk")
+PopupMenu/constants/item_end_padding = 6
+PopupMenu/constants/item_start_padding = 6
+PopupMenu/constants/v_separation = 6
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_nvh2i")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_w2m32")
 PopupMenu/styles/separator = SubResource("StyleBoxLine_xk8hu")
 RootPanel/base_type = &"PanelContainer"

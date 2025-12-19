@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_mgoju"]
 [ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene_inspector.gd" id="1_tfb2o"]
-[ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_node_tree.gd" id="2_3mwhh"]
+[ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/inspector_node_tree.gd" id="2_3mwhh"]
 [ext_resource type="PackedScene" uid="uid://cx8et16cxspnk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/add_node_menu.tscn" id="3_l53mb"]
 
 [node name="SceneInspector" type="PanelContainer"]
@@ -25,14 +25,12 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "New"
 
 [node name="ButtonFocusParent" type="Button" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme_type_variation = &"TopBarButton"
 text = "Focus Parent"
 
 [node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer"]

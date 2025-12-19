@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn8lqjy8e3pqr"]
+
+[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_op55h"]
+[ext_resource type="Script" uid="uid://4bdy3aes748i" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/gdscript_documentation.gd" id="2_gjict"]
+
+[node name="GDScriptDocumentation" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme = ExtResource("1_op55h")
+script = ExtResource("2_gjict")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+text = "This is mostly just a placeholder for documentation pages, honestly I need to change the name of these two classes to ScriptDocumentation and ScriptCodeEdit."

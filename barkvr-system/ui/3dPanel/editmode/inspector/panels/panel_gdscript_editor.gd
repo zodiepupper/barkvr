@@ -72,6 +72,8 @@ func _setup_icons() -> void:
 func _setup_signals() -> void:
 	button_online_docs.pressed.connect(_on_button_online_docs_pressed)
 
+	list_scripts.item_selected.connect(_on_script_list_item_selected)
+
 	list_methods.item_selected.connect(_on_method_list_item_selected)
 	button_sort_methods.toggled.connect(_on_button_sort_methods_toggled)
 
@@ -80,6 +82,7 @@ func _setup_signals() -> void:
 
 	button_auto_save.toggled.connect(_on_button_auto_save_toggled)
 
+	script_tab_container.child_order_changed.connect(_on_script_tab_container_child_order_changed)
 	script_tab_container.tab_changed.connect(_on_script_tab_container_tab_changed)
 
 	# ScriptMenuBar signals.
@@ -89,14 +92,14 @@ func _setup_signals() -> void:
 
 
 ## Override function from the InspectorPanel class.
-func _on_target_set(new_target : Node) -> void:
+func _on_target_set(new_target: Node) -> void:
 	if not new_target: return
 
-	var tab_index : int = script_tab_container.check_for_tab(new_target)
+	var tab_index: int = script_tab_container.check_for_tab(new_target)
 	if tab_index != -1:
 		script_tab_container.set_current_tab(tab_index)
 	else:
-		var new_tab : Control = script_tab_container.add_tab(new_target)
+		var new_tab: Control = script_tab_container.add_tab(new_target)
 		if new_tab is GDScriptCodeEdit:
 			new_tab.caret_changed.connect(_on_code_edit_caret_changed)
 			new_tab.script_data_updated.connect(update_method_list)
@@ -106,15 +109,15 @@ func _on_target_set(new_target : Node) -> void:
 ## Update the list of methods in the bottom of the sidebar.
 ## TODO: This kinda needs a version for GDScriptDocumentation.
 func update_method_list() -> void:
-	var current_tab : Control = script_tab_container.get_current_tab_control()
+	var current_tab: Control = script_tab_container.get_current_tab_control()
 	list_methods.clear()
 
-	var script_method_list : Array[Dictionary]
+	var script_method_list: Array[Dictionary]
 	if current_tab is GDScriptCodeEdit:
 		script_method_list = current_tab.get_script_method_list()
 	else: return
 
-	for method : Dictionary in script_method_list:
+	for method: Dictionary in script_method_list:
 		list_methods.add_item(method.name)
 
 	if sort_method_list_alphabetically:
@@ -122,10 +125,34 @@ func update_method_list() -> void:
 
 
 
-func _on_script_tab_container_tab_changed(index : int) -> void:
-	var current_tab : Control = script_tab_container.get_tab_control(index)
-	var is_type_code_edit : bool = current_tab is GDScriptCodeEdit
-	var is_type_documentation : bool = current_tab is GDScriptDocumentation
+func _on_script_tab_container_child_order_changed() -> void:
+	list_scripts.clear()
+
+	for i: int in script_tab_container.get_tab_count():
+		var icon_name := &"NodeWarning"
+		var tab_name := "ERROR"
+
+		var tab: Control = script_tab_container.get_tab_control(i)
+
+		if tab is GDScriptCodeEdit:
+			icon_name = &"GDScriptInternal" if tab.editable else &"GDScript"
+			tab_name = tab.get_script_name_unsaved()
+		elif tab is GDScriptDocumentation:
+			icon_name = &"Help"
+			# TODO: Doc stuff.
+			#tab_name = "Placeholder"
+
+		list_scripts.add_item(tab_name, get_editor_icon(icon_name))
+
+	if list_scripts.item_count > 0:
+		list_scripts.select(script_tab_container.current_tab)
+
+func _on_script_tab_container_tab_changed(index: int) -> void:
+	var current_tab: Control = script_tab_container.get_tab_control(index)
+	var is_type_code_edit: bool = current_tab is GDScriptCodeEdit
+	var is_type_documentation: bool = current_tab is GDScriptDocumentation
+
+	if current_tab: list_scripts.select(index)
 
 	top_menu_bar.set_menu_hidden(1, not is_type_code_edit)
 	top_menu_bar.set_menu_hidden(3, not is_type_code_edit)
@@ -139,14 +166,14 @@ func _on_script_tab_container_tab_changed(index : int) -> void:
 
 ## Called when the CodeEdit's caret moves.
 func _on_code_edit_caret_changed() -> void:
-	var current_tab : Control = script_tab_container.get_current_tab_control()
+	var current_tab: Control = script_tab_container.get_current_tab_control()
 	if current_tab is GDScriptCodeEdit:
-		var caret_position : Vector2i = current_tab.get_caret_position()
+		var caret_position: Vector2i = current_tab.get_caret_position()
 		label_caret_location.text = "%4d:%4d" % [caret_position.x, caret_position.y]
 
 ## Opens the online Godot documentation for the current engine version.
 func _on_button_online_docs_pressed() -> void:
-	var version_info : Dictionary = Engine.get_version_info()
+	var version_info: Dictionary = Engine.get_version_info()
 	OS.shell_open("https://docs.godotengine.org/en/%s.%s/" % [version_info.major, version_info.minor])
 
 ## Toggles the sidebar and changes the button's icon to reflect sidebar state.
@@ -158,23 +185,26 @@ func _on_button_toggle_sidebar_pressed() -> void:
 		button_toggle_sidebar.set_button_icon(get_editor_icon(&"Forward"))
 
 func _on_button_save_pressed() -> void:
-	var current_tab : Control = script_tab_container.get_current_tab_control()
+	var current_tab: Control = script_tab_container.get_current_tab_control()
 	if current_tab is GDScriptCodeEdit:
 		current_tab.save_code()
 
 ## Toggle auto saving.
-func _on_button_auto_save_toggled(toggled_on : bool) -> void:
+func _on_button_auto_save_toggled(toggled_on: bool) -> void:
 	save_on_edit = toggled_on
 
+func _on_script_list_item_selected(index: int) -> void:
+	script_tab_container.set_current_tab(index)
+
 ## Move to selected method, called when a method item is clicked in the list.
-func _on_method_list_item_selected(index : int) -> void:
-	var current_tab : Control = script_tab_container.get_current_tab_control()
-	var target_method : String = list_methods.get_item_text(index)
+func _on_method_list_item_selected(index: int) -> void:
+	var current_tab: Control = script_tab_container.get_current_tab_control()
+	var target_method: String = list_methods.get_item_text(index)
 
 	if current_tab is GDScriptCodeEdit:
 		current_tab.jump_to_method(target_method)
 
 ## Toggle sorting of the method list.
-func _on_button_sort_methods_toggled(toggled_on : bool) -> void:
+func _on_button_sort_methods_toggled(toggled_on: bool) -> void:
 	sort_method_list_alphabetically = toggled_on
 	update_method_list()

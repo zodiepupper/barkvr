@@ -6,19 +6,21 @@ extends CodeEdit
 
 signal script_name_updated()
 signal script_data_updated()
+signal request_save_confirm()
 
-const GDSCRIPT_HIGHLIGHTER : CodeHighlighter = preload("uid://dgk2x876348oy")
+const GDSCRIPT_HIGHLIGHTER: CodeHighlighter = preload("uid://dgk2x876348oy")
 
 ## The name of the currently selected script.
-var script_name : String
+var script_name: String
 ## A copy of the currently saved script, used for the method list.
-var script_data : GDScript
+var script_data: GDScript
 
-var has_unsaved_changes : bool = false
+var has_unsaved_changes: bool = false
+var typing_stopped_timer: SceneTreeTimer
 
 ## The node this script belongs to, used as a semi-temporary means to connect scripts.
 ## Preferrably scripts should be just a script and have some connection system instead.
-var node_target : Node
+var node_target: Node
 
 
 
@@ -31,20 +33,20 @@ func _ready() -> void:
 
 
 
-func set_script_from_node(target : Node) -> void:
+func set_script_from_node(target: Node) -> void:
 	if not target: return
 
 	node_target = target
 
-	var target_script : Script = target.get_script()
-	var target_class : String = target.get_class()
+	var target_script: Script = target.get_script()
+	var target_class: String = target.get_class()
 
 	# If target already has a script get it and show it.
 	if target_script and target_script.has_source_code():
 		text = target_script.source_code
 
 		# Assign current script name based on global name, alternatively on class name.
-		var global_script_name : String = target_script.get_global_name()
+		var global_script_name: String = target_script.get_global_name()
 		if not global_script_name.is_empty():
 			script_name = global_script_name.to_snake_case()
 			# Global script names can "try" to override already existing ones.
@@ -58,7 +60,7 @@ func set_script_from_node(target : Node) -> void:
 	# In case there is no script present get the template and extend from current.
 	else:
 		# Load script template file and get store its source code.
-		var script_template_text : String = load("uid://cjfm48dxhjdhi").new().get_script().source_code
+		var script_template_text: String = load("uid://cjfm48dxhjdhi").new().get_script().source_code
 		# Dynamically add class to the script file and set as text.
 		text = (
 				"extends " + target_class +
@@ -70,7 +72,7 @@ func set_script_from_node(target : Node) -> void:
 		update_script_data()
 
 ## Update the current script data, reloads text into a script if none is provided.
-func update_script_data(script : GDScript = null) -> GDScript:
+func update_script_data(script: GDScript = null) -> GDScript:
 	if not script and editable:
 		script = GDScript.new()
 		script.source_code = text
@@ -90,12 +92,12 @@ func get_script_name_unsaved() -> String:
 
 func get_script_method_list() -> Array[Dictionary]:
 	if not script_data: return []
-	var method_list : Array[Dictionary] = script_data.get_script_method_list()
+	var method_list: Array[Dictionary] = script_data.get_script_method_list()
 	var filtered_method_list = method_list.filter(
 			func(method): return search("func " + method.name + "(", 0, 0, 0).y != -1)
 	return filtered_method_list
 
-func set_script_name(new_name : String) -> void:
+func set_script_name(new_name: String) -> void:
 	script_name = new_name
 
 
@@ -116,8 +118,8 @@ func save_code() -> void:
 
 	has_unsaved_changes = false
 
-func jump_to_method(method : String) -> void:
-	var method_line : int = search("func " + method + "(", 0, 0, 0).y
+func jump_to_method(method: String) -> void:
+	var method_line: int = search("func " + method + "(", 0, 0, 0).y
 	# Despite what the 4.5 documentation might suggest, "adjust_viewport" does not actually center.
 	# As such, it has been disabled and center_viewport_to_caret is being used instead.
 	set_caret_line(method_line, false)
@@ -127,11 +129,17 @@ func jump_to_method(method : String) -> void:
 
 ## Called when the text has been changed in any way.
 func _on_text_changed() -> void:
-	pass
+	# Clear timeout to reset.
+	if typing_stopped_timer:
+		typing_stopped_timer.timeout.disconnect(_on_text_changed_timeout)
+	# Create timer to request saving on timeout.
+	typing_stopped_timer = get_tree().create_timer(1.2)
+	typing_stopped_timer.timeout.connect(_on_text_changed_timeout)
 
 ## A timeout from text_changed to prevent saving on every tiny change.
 func _on_text_changed_timeout() -> void:
-	pass
+	typing_stopped_timer = null
+	request_save_confirm.emit()
 
 func get_caret_position() -> Vector2i:
 	var caret_position := Vector2i(

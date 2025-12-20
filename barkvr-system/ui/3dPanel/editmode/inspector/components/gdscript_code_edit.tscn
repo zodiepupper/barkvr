@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqsr3h08uq076"]
+[gd_scene load_steps=3 format=3 uid="uid://cqsr3h08uq076"]
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_n2bki"]
 [ext_resource type="Script" uid="uid://5shs6dg4gpm" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/gdscript_code_edit.gd" id="2_jy8td"]
-[ext_resource type="CodeHighlighter" uid="uid://dgk2x876348oy" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/gdscript_highlighter.tres" id="2_uisdv"]
 
 [node name="GDScriptCodeEdit" type="CodeEdit"]
 anchors_preset = 15
@@ -19,7 +18,6 @@ scroll_past_end_of_file = true
 minimap_draw = true
 caret_blink = true
 caret_blink_interval = 0.5
-syntax_highlighter = ExtResource("2_uisdv")
 highlight_all_occurrences = true
 highlight_current_line = true
 draw_tabs = true
@@ -29,7 +27,7 @@ line_folding = true
 line_length_guidelines = Array[int]([80, 100])
 gutters_draw_line_numbers = true
 gutters_draw_fold_gutter = true
-delimiter_strings = Array[String](["\"\"\" \"\"\"", "''' '''", "\" \"", "' '"])
+delimiter_strings = Array[String](["''' '''", "\"\"\" \"\"\"", "' '", "\" \""])
 delimiter_comments = Array[String](["##", "#"])
 code_completion_enabled = true
 code_completion_prefixes = Array[String]([".", ",", "(", "=", "$", "@", "\"", "'"])

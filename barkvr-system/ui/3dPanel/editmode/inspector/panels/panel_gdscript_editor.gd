@@ -50,6 +50,9 @@ func _ready() -> void:
 	_setup_icons()
 	_setup_signals()
 
+	# Ensure buttons are set correctly for the current context.
+	_on_script_tab_container_tab_changed(0)
+
 	# Sync toggle button with setting.
 	button_auto_save.set_pressed_no_signal(save_on_edit)
 
@@ -82,7 +85,7 @@ func _setup_signals() -> void:
 
 	button_auto_save.toggled.connect(_on_button_auto_save_toggled)
 
-	script_tab_container.child_order_changed.connect(_on_script_tab_container_child_order_changed)
+	script_tab_container.child_order_changed.connect(update_script_list)
 	script_tab_container.tab_changed.connect(_on_script_tab_container_tab_changed)
 
 	# ScriptMenuBar signals.
@@ -107,27 +110,31 @@ func _on_target_set(new_target: Node) -> void:
 
 
 ## Update the list of methods in the bottom of the sidebar.
-## TODO: This kinda needs a version for GDScriptDocumentation.
 func update_method_list() -> void:
-	var current_tab: Control = script_tab_container.get_current_tab_control()
 	list_methods.clear()
 
-	var script_method_list: Array[Dictionary]
-	if current_tab is GDScriptCodeEdit:
-		script_method_list = current_tab.get_script_method_list()
-	else: return
+	var current_tab: Control = script_tab_container.get_current_tab_control()
 
-	for method: Dictionary in script_method_list:
-		list_methods.add_item(method.name)
+	# Generate a list of all methods in the current script to jump to.
+	if current_tab is GDScriptCodeEdit:
+		var script_method_list: Array[Dictionary]
+		script_method_list = current_tab.get_script_method_list()
+
+		for method: Dictionary in script_method_list:
+			list_methods.add_item(method.name)
+
+	# TODO: This right here.
+	elif current_tab is GDScriptDocumentation:
+		return
 
 	if sort_method_list_alphabetically:
 		list_methods.sort_items_by_text()
 
-
-
-func _on_script_tab_container_child_order_changed() -> void:
+## Used to display pseudo tab buttons in the script list.
+func update_script_list() -> void:
 	list_scripts.clear()
 
+	# Generate a button for each tab in the switcher.
 	for i: int in script_tab_container.get_tab_count():
 		var icon_name := &"NodeWarning"
 		var tab_name := "ERROR"
@@ -135,6 +142,7 @@ func _on_script_tab_container_child_order_changed() -> void:
 		var tab: Control = script_tab_container.get_tab_control(i)
 
 		if tab is GDScriptCodeEdit:
+			# Only internal/classless files are editable.
 			icon_name = &"GDScriptInternal" if tab.editable else &"GDScript"
 			tab_name = tab.get_script_name_unsaved()
 		elif tab is GDScriptDocumentation:
@@ -147,11 +155,16 @@ func _on_script_tab_container_child_order_changed() -> void:
 	if list_scripts.item_count > 0:
 		list_scripts.select(script_tab_container.current_tab)
 
+
+
+## Called when the active tab in the tab container changes.
+## Updates context-based buttons.
 func _on_script_tab_container_tab_changed(index: int) -> void:
 	var current_tab: Control = script_tab_container.get_tab_control(index)
 	var is_type_code_edit: bool = current_tab is GDScriptCodeEdit
 	var is_type_documentation: bool = current_tab is GDScriptDocumentation
 
+	# Prevent OOB errors if there is no tab for the current index.
 	if current_tab: list_scripts.select(index)
 
 	top_menu_bar.set_menu_hidden(1, not is_type_code_edit)
@@ -163,10 +176,10 @@ func _on_script_tab_container_tab_changed(index: int) -> void:
 
 	update_method_list()
 
-
 ## Called when the CodeEdit's caret moves.
 func _on_code_edit_caret_changed() -> void:
 	var current_tab: Control = script_tab_container.get_current_tab_control()
+
 	if current_tab is GDScriptCodeEdit:
 		var caret_position: Vector2i = current_tab.get_caret_position()
 		label_caret_location.text = "%4d:%4d" % [caret_position.x, caret_position.y]
@@ -193,6 +206,7 @@ func _on_button_save_pressed() -> void:
 func _on_button_auto_save_toggled(toggled_on: bool) -> void:
 	save_on_edit = toggled_on
 
+## Pseudo tab buttons to navigate the central tab switcher.
 func _on_script_list_item_selected(index: int) -> void:
 	script_tab_container.set_current_tab(index)
 
@@ -204,7 +218,7 @@ func _on_method_list_item_selected(index: int) -> void:
 	if current_tab is GDScriptCodeEdit:
 		current_tab.jump_to_method(target_method)
 
-## Toggle sorting of the method list.
+## Toggle sorting of the method list, actual sorting happens with the list update.
 func _on_button_sort_methods_toggled(toggled_on: bool) -> void:
 	sort_method_list_alphabetically = toggled_on
 	update_method_list()

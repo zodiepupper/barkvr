@@ -81,7 +81,7 @@ func _setup_signals() -> void:
 	button_sort_methods.toggled.connect(_on_button_sort_methods_toggled)
 
 	button_toggle_sidebar.pressed.connect(_on_button_toggle_sidebar_pressed)
-	button_save.pressed.connect(_on_button_save_pressed)
+	button_save.pressed.connect(save_current_content)
 
 	button_auto_save.toggled.connect(_on_button_auto_save_toggled)
 
@@ -89,7 +89,7 @@ func _setup_signals() -> void:
 	script_tab_container.tab_changed.connect(_on_script_tab_container_tab_changed)
 
 	# ScriptMenuBar signals.
-	top_menu_bar.file_save.connect(_on_button_save_pressed)
+	top_menu_bar.file_save.connect(save_current_content)
 	top_menu_bar.file_close.connect(script_tab_container.close_current_tab)
 
 
@@ -106,6 +106,8 @@ func _on_target_set(new_target: Node) -> void:
 		if new_tab is GDScriptCodeEdit:
 			new_tab.caret_changed.connect(_on_code_edit_caret_changed)
 			new_tab.script_data_updated.connect(update_method_list)
+			#new_tab.script_name_updated.connect()
+			new_tab.request_save_confirm.connect(_on_code_edit_request_save_confirm)
 
 
 
@@ -155,6 +157,13 @@ func update_script_list() -> void:
 	if list_scripts.item_count > 0:
 		list_scripts.select(script_tab_container.current_tab)
 
+## Save the content of the current tab.
+func save_current_content() -> void:
+	var current_tab: Control = script_tab_container.get_current_tab_control()
+
+	if current_tab is GDScriptCodeEdit:
+		current_tab.save_code()
+
 
 
 ## Called when the active tab in the tab container changes.
@@ -184,6 +193,10 @@ func _on_code_edit_caret_changed() -> void:
 		var caret_position: Vector2i = current_tab.get_caret_position()
 		label_caret_location.text = "%4d:%4d" % [caret_position.x, caret_position.y]
 
+func _on_code_edit_request_save_confirm() -> void:
+	if not save_on_edit: return
+	save_current_content()
+
 ## Opens the online Godot documentation for the current engine version.
 func _on_button_online_docs_pressed() -> void:
 	var version_info: Dictionary = Engine.get_version_info()
@@ -197,14 +210,10 @@ func _on_button_toggle_sidebar_pressed() -> void:
 	else:
 		button_toggle_sidebar.set_button_icon(get_editor_icon(&"Forward"))
 
-func _on_button_save_pressed() -> void:
-	var current_tab: Control = script_tab_container.get_current_tab_control()
-	if current_tab is GDScriptCodeEdit:
-		current_tab.save_code()
-
 ## Toggle auto saving.
 func _on_button_auto_save_toggled(toggled_on: bool) -> void:
 	save_on_edit = toggled_on
+	if toggled_on: save_current_content()
 
 ## Pseudo tab buttons to navigate the central tab switcher.
 func _on_script_list_item_selected(index: int) -> void:

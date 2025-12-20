@@ -7,6 +7,8 @@ extends CodeEdit
 signal script_name_updated()
 signal script_data_updated()
 
+const GDSCRIPT_HIGHLIGHTER : CodeHighlighter = preload("uid://dgk2x876348oy")
+
 ## The name of the currently selected script.
 var script_name : String
 ## A copy of the currently saved script, used for the method list.
@@ -21,6 +23,10 @@ var node_target : Node
 
 
 func _ready() -> void:
+	# This is done to ensure that the CodeHighlighter is unique.
+	# Using the same highlighter multiple times causes issues.
+	syntax_highlighter = GDSCRIPT_HIGHLIGHTER.duplicate()
+
 	text_changed.connect(_on_text_changed)
 
 

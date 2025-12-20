@@ -82,6 +82,10 @@ func _setup_signals() -> void:
 
 	script_tab_container.tab_changed.connect(_on_script_tab_container_tab_changed)
 
+	# ScriptMenuBar signals.
+	top_menu_bar.file_save.connect(_on_button_save_pressed)
+	top_menu_bar.file_close.connect(script_tab_container.close_current_tab)
+
 
 
 ## Override function from the InspectorPanel class.

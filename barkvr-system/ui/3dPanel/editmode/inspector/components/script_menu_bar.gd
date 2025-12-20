@@ -6,6 +6,15 @@ extends MenuBar
 
 
 
+signal file_save
+signal file_save_all
+signal file_close
+signal file_close_all
+signal file_close_other
+signal file_close_below
+signal file_close_docs
+signal file_toggle_side_panel
+
 @onready var file: PopupMenu = %File
 @onready var edit: PopupMenu = %Edit
 @onready var search: PopupMenu = %Search
@@ -21,68 +30,85 @@ func _ready() -> void:
 	_setup_go_to_menu()
 	_setup_debug_menu()
 
+	_setup_signals()
+
+	#disable_all_items()
+
+
+
+func _setup_signals() -> void:
+	file.id_pressed.connect(_on_file_id_pressed)
+	edit.id_pressed.connect(_on_edit_id_pressed)
+	search.id_pressed.connect(_on_search_id_pressed)
+	go_to.id_pressed.connect(_on_go_to_id_pressed)
+	debug.id_pressed.connect(_on_debug_id_pressed)
+
 func _setup_file_menu() -> void:
-	file.add_item("New Script...", 11)
-	file.add_item("New Text File...", 12)
-	file.add_item("Open...", 13)
-	file.add_item("Reopen Closed Script", 14)
+	var popup: PopupMenu = file
+
+	popup.add_item("New Script...", 11)
+	popup.add_item("New Text File...", 12)
+	popup.add_item("Open...", 13)
+	popup.add_item("Reopen Closed Script", 14)
 	# TODO: Auto-generate sub-popup list.
 	var sub_popup_recent := PopupMenu.new()
-	file.add_submenu_node_item("Open Recent", sub_popup_recent, 15)
+	popup.add_submenu_node_item("Open Recent", sub_popup_recent, 15)
 
-	file.add_separator()
-	file.add_item("Save", 21)
-	file.add_item("Save As...", 22)
-	file.add_item("Save All", 23)
+	popup.add_separator()
+	popup.add_item("Save", 21)
+	popup.add_item("Save As...", 22)
+	popup.add_item("Save All", 23)
 
-	file.add_separator()
-	file.add_item("Soft Reload Tool Script", 31)
-	file.add_item("Copy Script Path", 32)
-	file.add_item("Copy Script UID", 33)
-	file.add_item("Show in FileSystem", 34)
+	popup.add_separator()
+	popup.add_item("Soft Reload Tool Script", 31)
+	popup.add_item("Copy Script Path", 32)
+	popup.add_item("Copy Script UID", 33)
+	popup.add_item("Show in FileSystem", 34)
 
-	file.add_separator()
-	file.add_item("History Previous", 41)
-	file.add_item("History Next", 42)
+	popup.add_separator()
+	popup.add_item("History Previous", 41)
+	popup.add_item("History Next", 42)
 
-	file.add_separator()
+	popup.add_separator()
 	var sub_popup_theme := PopupMenu.new()
 	sub_popup_theme.add_item("Import Theme...")
 	sub_popup_theme.add_item("Reload Theme")
 	sub_popup_theme.add_separator()
 	sub_popup_theme.add_item("Save Theme As...")
-	file.add_submenu_node_item("Theme", sub_popup_theme, 51)
+	popup.add_submenu_node_item("Theme", sub_popup_theme, 51)
 
-	file.add_separator()
-	file.add_item("Close", 61)
-	file.add_item("Close All", 62)
-	file.add_item("Close Other Tabs", 63)
-	file.add_item("Close Tabs Below", 64)
-	file.add_item("Close Docs", 65)
+	popup.add_separator()
+	popup.add_item("Close", 61)
+	popup.add_item("Close All", 62)
+	popup.add_item("Close Other Tabs", 63)
+	popup.add_item("Close Tabs Below", 64)
+	popup.add_item("Close Docs", 65)
 
-	file.add_separator()
-	file.add_item("Run", 71)
+	popup.add_separator()
+	popup.add_item("Run", 71)
 
-	file.add_separator()
-	file.add_item("Toggle Files Panel", 81)
+	popup.add_separator()
+	popup.add_item("Toggle Files Panel", 81)
 
 func _setup_edit_menu() -> void:
-	edit.add_item("Undo", 11)
-	edit.add_item("Redo", 12)
+	var popup: PopupMenu = edit
 
-	edit.add_separator()
-	edit.add_item("Cut", 21)
-	edit.add_item("Copy", 22)
-	edit.add_item("Paste", 23)
+	popup.add_item("Undo", 11)
+	popup.add_item("Redo", 12)
 
-	edit.add_separator()
-	edit.add_item("Select All", 31)
-	edit.add_item("Duplicate Selection", 32)
-	edit.add_item("Duplicate Lines", 33)
-	edit.add_item("Evaluate Selection", 34)
-	edit.add_item("Toggle Word Wrap", 35)
+	popup.add_separator()
+	popup.add_item("Cut", 21)
+	popup.add_item("Copy", 22)
+	popup.add_item("Paste", 23)
 
-	edit.add_separator()
+	popup.add_separator()
+	popup.add_item("Select All", 31)
+	popup.add_item("Duplicate Selection", 32)
+	popup.add_item("Duplicate Lines", 33)
+	popup.add_item("Evaluate Selection", 34)
+	popup.add_item("Toggle Word Wrap", 35)
+
+	popup.add_separator()
 	var sub_popup_line := PopupMenu.new()
 	sub_popup_line.add_item("Move Up")
 	sub_popup_line.add_item("Move Down")
@@ -90,32 +116,32 @@ func _setup_edit_menu() -> void:
 	sub_popup_line.add_item("Unindent")
 	sub_popup_line.add_item("Delete Line")
 	sub_popup_line.add_item("Toggle Comment")
-	edit.add_submenu_node_item("Line", sub_popup_line, 41)
+	popup.add_submenu_node_item("Line", sub_popup_line, 41)
 
 	var sub_popup_folding := PopupMenu.new()
 	sub_popup_folding.add_item("Fold/Unfold Line")
 	sub_popup_folding.add_item("Fold All Lines")
 	sub_popup_folding.add_item("Unfold All Lines")
 	sub_popup_folding.add_item("Create Code Region")
-	edit.add_submenu_node_item("Folding", sub_popup_folding, 42)
+	popup.add_submenu_node_item("Folding", sub_popup_folding, 42)
 
-	edit.add_separator()
-	edit.add_item("Completion Query", 51)
-	edit.add_item("Trim Trailing Whitespace", 52)
-	edit.add_item("Trim Final Newlines", 53)
+	popup.add_separator()
+	popup.add_item("Completion Query", 51)
+	popup.add_item("Trim Trailing Whitespace", 52)
+	popup.add_item("Trim Final Newlines", 53)
 
 	var sub_popup_indentation := PopupMenu.new()
 	sub_popup_indentation.add_item("Convert Indent to Spaces")
 	sub_popup_indentation.add_item("Convert Indent to Tabs")
 	sub_popup_indentation.add_item("Auto Indent")
-	edit.add_submenu_node_item("Indentation", sub_popup_indentation, 54)
+	popup.add_submenu_node_item("Indentation", sub_popup_indentation, 54)
 
-	edit.add_separator()
+	popup.add_separator()
 	var sub_popup_convert_case := PopupMenu.new()
 	sub_popup_convert_case.add_item("Uppercase")
 	sub_popup_convert_case.add_item("Lowercase")
 	sub_popup_convert_case.add_item("Capitalize")
-	edit.add_submenu_node_item("Convert Case", sub_popup_convert_case, 61)
+	popup.add_submenu_node_item("Convert Case", sub_popup_convert_case, 61)
 
 	var sub_popup_syntax_highlighter := PopupMenu.new()
 	sub_popup_syntax_highlighter.add_radio_check_item("Plain Text")
@@ -124,48 +150,108 @@ func _setup_edit_menu() -> void:
 	sub_popup_syntax_highlighter.add_radio_check_item("Markdown")
 	sub_popup_syntax_highlighter.add_radio_check_item("ConfigFile")
 	sub_popup_syntax_highlighter.add_radio_check_item("GDScript")
-	edit.add_submenu_node_item("Syntax Highlighter", sub_popup_syntax_highlighter, 62)
+	popup.add_submenu_node_item("Syntax Highlighter", sub_popup_syntax_highlighter, 62)
 
 func _setup_search_menu() -> void:
-	search.add_item("Find...", 11)
-	search.add_item("Find Next", 12)
-	search.add_item("Find Previous", 13)
-	search.add_item("Replace...", 14)
+	var popup: PopupMenu = search
 
-	search.add_separator()
-	search.add_item("Find in Files...", 21)
-	search.add_item("Replace in Files...", 22)
+	popup.add_item("Find...", 11)
+	popup.add_item("Find Next", 12)
+	popup.add_item("Find Previous", 13)
+	popup.add_item("Replace...", 14)
 
-	search.add_separator()
-	search.add_item("Contextual Help", 31)
+	popup.add_separator()
+	popup.add_item("Find in Files...", 21)
+	popup.add_item("Replace in Files...", 22)
+
+	popup.add_separator()
+	popup.add_item("Contextual Help", 31)
 
 func _setup_go_to_menu() -> void:
-	go_to.add_item("Go to Function...", 11)
-	go_to.add_item("Go to Line...", 12)
-	go_to.add_item("Lookup Symbol", 13)
+	var popup: PopupMenu = go_to
 
-	go_to.add_separator()
+	popup.add_item("Go to Function...", 11)
+	popup.add_item("Go to Line...", 12)
+	popup.add_item("Lookup Symbol", 13)
+
+	popup.add_separator()
 	var sub_popup_bookmarks := PopupMenu.new()
 	sub_popup_bookmarks.add_item("Toggle Bookmark")
 	sub_popup_bookmarks.add_item("Remove All Bookmarks")
 	sub_popup_bookmarks.add_item("Go to Next Bookmark")
 	sub_popup_bookmarks.add_item("Go to Previous Bookmark")
-	go_to.add_submenu_node_item("Bookmarks", sub_popup_bookmarks, 21)
+	popup.add_submenu_node_item("Bookmarks", sub_popup_bookmarks, 21)
 
 	var sub_popup_breakpoints := PopupMenu.new()
 	sub_popup_breakpoints.add_item("Toggle Breakpoint")
 	sub_popup_breakpoints.add_item("Remove All Breakpoints")
 	sub_popup_breakpoints.add_item("Go to Next Breakpoint")
 	sub_popup_breakpoints.add_item("Go to Previous Breakpoint")
-	go_to.add_submenu_node_item("Breakpoints", sub_popup_breakpoints, 22)
+	popup.add_submenu_node_item("Breakpoints", sub_popup_breakpoints, 22)
 
 func _setup_debug_menu() -> void:
-	debug.add_item("Step Into", 11)
-	debug.add_item("Step Over", 12)
+	var popup: PopupMenu = debug
 
-	debug.add_separator()
-	debug.add_item("Break", 21)
-	debug.add_item("Continue", 22)
+	popup.add_item("Step Into", 11)
+	popup.add_item("Step Over", 12)
 
-	debug.add_separator()
-	debug.add_check_item("Debug with External Editor", 31)
+	popup.add_separator()
+	popup.add_item("Break", 21)
+	popup.add_item("Continue", 22)
+
+	popup.add_separator()
+	popup.add_check_item("Debug with External Editor", 31)
+
+
+
+func disable_all_items() -> void:
+	var popup_list: Array[PopupMenu] = [
+		file,
+		edit,
+		search,
+		go_to,
+		debug,
+	]
+	for popup: PopupMenu in popup_list:
+		for index: int in popup.item_count:
+			if popup.is_item_separator(index): continue
+			popup.set_item_disabled(index, true)
+
+func close_all_popups() -> void:
+	for child in get_children():
+		if child is PopupMenu:
+			child.hide()
+
+
+
+func _on_file_id_pressed(id: int) -> void:
+	match id:
+		21: file_save.emit()
+		23: file_save_all.emit()
+		61: file_close.emit()
+		62: file_close_all.emit()
+		63: file_close_other.emit()
+		64: file_close_below.emit()
+		65: file_close_docs.emit()
+		81: file_toggle_side_panel.emit()
+
+func _on_edit_id_pressed(id: int) -> void:
+	match id:
+		11: pass
+		12: pass
+
+func _on_search_id_pressed(id: int) -> void:
+	match id:
+		11: pass
+		12: pass
+
+func _on_go_to_id_pressed(id: int) -> void:
+	match id:
+		11: pass
+		12: pass
+
+func _on_debug_id_pressed(id: int) -> void:
+	match id:
+		31:
+			var item_index: int = debug.get_item_index(31)
+			debug.set_item_checked(item_index, not debug.is_item_checked(item_index))

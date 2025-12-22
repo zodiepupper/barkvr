@@ -11,11 +11,17 @@ signal request_save_confirm()
 const GDSCRIPT_HIGHLIGHTER: CodeHighlighter = preload("uid://dgk2x876348oy")
 
 ## The name of the currently selected script.
-var script_name: String
+var script_name: String:
+	set(value):
+		script_name = value
+		script_name_updated.emit()
 ## A copy of the currently saved script, used for the method list.
 var script_data: GDScript
 
-var has_unsaved_changes: bool = false
+var has_unsaved_changes: bool = false:
+	set(value):
+		has_unsaved_changes = value
+		script_name_updated.emit()
 var typing_stopped_timer: SceneTreeTimer
 
 ## The node this script belongs to, used as a semi-temporary means to connect scripts.
@@ -33,6 +39,8 @@ func _ready() -> void:
 
 
 
+## Sets the script in the CodeEdit from a target node.
+## Generates a new template script if node doesn't have one.
 func set_script_from_node(target: Node) -> void:
 	if not target: return
 
@@ -72,7 +80,9 @@ func set_script_from_node(target: Node) -> void:
 		update_script_data()
 
 ## Update the current script data, reloads text into a script if none is provided.
+## Crashes the game in editor builds with the reload function, if code is invalid.
 func update_script_data(script: GDScript = null) -> GDScript:
+	# Only reload editable scripts.
 	if not script and editable:
 		script = GDScript.new()
 		script.source_code = text
@@ -84,26 +94,27 @@ func update_script_data(script: GDScript = null) -> GDScript:
 	script_data_updated.emit()
 	return script
 
+## Returns the script name with "(*)" appended if there are unsaved changes.
 func get_script_name_unsaved() -> String:
 	if has_unsaved_changes:
 		return script_name + ".gd(*)"
 	else:
 		return script_name + ".gd"
 
+## Get a list of all methods that are actually present in the script.
 func get_script_method_list() -> Array[Dictionary]:
 	if not script_data: return []
 	var method_list: Array[Dictionary] = script_data.get_script_method_list()
+
+	# Discard methods that are in-built or inherited.
 	var filtered_method_list = method_list.filter(
 			func(method): return search("func " + method.name + "(", 0, 0, 0).y != -1)
-	return filtered_method_list
 
-func set_script_name(new_name: String) -> void:
-	script_name = new_name
+	return filtered_method_list
 
 
 
 ## Save the code currently in text.
-## Crashes the game in "Editor" builds with the reload function, if code is invalid.
 func save_code() -> void:
 	if not is_instance_valid(node_target): return
 	if not editable: return
@@ -118,6 +129,7 @@ func save_code() -> void:
 
 	has_unsaved_changes = false
 
+## Set the caret to the line that the given method is in.
 func jump_to_method(method: String) -> void:
 	var method_line: int = search("func " + method + "(", 0, 0, 0).y
 	# Despite what the 4.5 documentation might suggest, "adjust_viewport" does not actually center.
@@ -129,6 +141,9 @@ func jump_to_method(method: String) -> void:
 
 ## Called when the text has been changed in any way.
 func _on_text_changed() -> void:
+	# Update unsaved status.
+	if !has_unsaved_changes: has_unsaved_changes = true
+
 	# Clear timeout to reset.
 	if typing_stopped_timer:
 		typing_stopped_timer.timeout.disconnect(_on_text_changed_timeout)
@@ -141,6 +156,8 @@ func _on_text_changed_timeout() -> void:
 	typing_stopped_timer = null
 	request_save_confirm.emit()
 
+## Returns the current caret position as a Vector2i.
+## X: Line, Y: Column
 func get_caret_position() -> Vector2i:
 	var caret_position := Vector2i(
 			get_caret_line(),

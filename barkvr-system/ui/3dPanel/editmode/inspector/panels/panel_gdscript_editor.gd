@@ -99,38 +99,29 @@ func _on_target_set(new_target: Node) -> void:
 	if not new_target: return
 
 	var tab_index: int = script_tab_container.check_for_tab(new_target)
+	# Open existing tab if it already exists.
 	if tab_index != -1:
 		script_tab_container.set_current_tab(tab_index)
+	# Make a new tab.
 	else:
 		var new_tab: Control = script_tab_container.add_tab(new_target)
 		if new_tab is GDScriptCodeEdit:
 			new_tab.caret_changed.connect(_on_code_edit_caret_changed)
 			new_tab.script_data_updated.connect(update_method_list)
-			#new_tab.script_name_updated.connect()
+			new_tab.script_name_updated.connect(update_script_name)
 			new_tab.request_save_confirm.connect(_on_code_edit_request_save_confirm)
+		elif new_tab is GDScriptDocumentation:
+			pass # TODO: This here.
 
 
 
-## Update the list of methods in the bottom of the sidebar.
-func update_method_list() -> void:
-	list_methods.clear()
-
+## Update the current script name in all places.
+func update_script_name() -> void:
 	var current_tab: Control = script_tab_container.get_current_tab_control()
 
-	# Generate a list of all methods in the current script to jump to.
 	if current_tab is GDScriptCodeEdit:
-		var script_method_list: Array[Dictionary]
-		script_method_list = current_tab.get_script_method_list()
-
-		for method: Dictionary in script_method_list:
-			list_methods.add_item(method.name)
-
-	# TODO: This right here.
-	elif current_tab is GDScriptDocumentation:
-		return
-
-	if sort_method_list_alphabetically:
-		list_methods.sort_items_by_text()
+		label_script_name.text = current_tab.get_script_name_unsaved()
+	update_script_list()
 
 ## Used to display pseudo tab buttons in the script list.
 func update_script_list() -> void:
@@ -157,6 +148,28 @@ func update_script_list() -> void:
 	if list_scripts.item_count > 0:
 		list_scripts.select(script_tab_container.current_tab)
 
+## Update the list of methods in the bottom of the sidebar.
+func update_method_list() -> void:
+	list_methods.clear()
+
+	var current_tab: Control = script_tab_container.get_current_tab_control()
+
+	# Generate a list of all methods in the current script to jump to.
+	if current_tab is GDScriptCodeEdit:
+		var script_method_list: Array[Dictionary]
+		script_method_list = current_tab.get_script_method_list()
+
+		for method: Dictionary in script_method_list:
+			list_methods.add_item(method.name)
+
+	# Generate a list of every category in the doc to jump to.
+	elif current_tab is GDScriptDocumentation:
+		return # TODO: This right here.
+
+	# Sort method list if sorting is enabled and possible(button visible).
+	if sort_method_list_alphabetically && button_sort_methods.visible:
+		list_methods.sort_items_by_text()
+
 ## Save the content of the current tab.
 func save_current_content() -> void:
 	var current_tab: Control = script_tab_container.get_current_tab_control()
@@ -174,14 +187,27 @@ func _on_script_tab_container_tab_changed(index: int) -> void:
 	var is_type_documentation: bool = current_tab is GDScriptDocumentation
 
 	# Prevent OOB errors if there is no tab for the current index.
-	if current_tab: list_scripts.select(index)
+	if current_tab and list_scripts.item_count > 0: list_scripts.select(index)
 
 	top_menu_bar.set_menu_hidden(1, not is_type_code_edit)
 	top_menu_bar.set_menu_hidden(3, not is_type_code_edit)
 
+	# Show method search & sorting only if type is CodeEdit.
+	button_sort_methods.get_parent_control().set_visible(is_type_code_edit)
+	# Hide method list if neither type fits.
 	sidebar_methods.set_visible(is_type_code_edit or is_type_documentation)
 
+	# Disable script-sensitive items in the bottom bar.
+	# In the actual engine it seems like these items are part of the tabswitcher.
+	# That's the cause for the sidebar not having a toggle button,
+	# when nothing is selected in the editor.
 	bottom_elements_right.set_visible(is_type_code_edit)
+
+	# Change current name at the top of the script editor.
+	if current_tab is GDScriptCodeEdit:
+		label_script_name.text = current_tab.get_script_name_unsaved()
+	elif current_tab is GDScriptDocumentation:
+		pass # TODO: This right here.
 
 	update_method_list()
 
@@ -193,6 +219,7 @@ func _on_code_edit_caret_changed() -> void:
 		var caret_position: Vector2i = current_tab.get_caret_position()
 		label_caret_location.text = "%4d:%4d" % [caret_position.x, caret_position.y]
 
+## Called by the currently active code edit to confirm saving when using auto-save.
 func _on_code_edit_request_save_confirm() -> void:
 	if not save_on_edit: return
 	save_current_content()

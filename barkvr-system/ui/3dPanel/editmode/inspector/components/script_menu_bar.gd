@@ -1,9 +1,10 @@
 class_name ScriptMenuBar
 extends MenuBar
 ## A custom class to handle popup management in the script editor.
-## Due to the impractical ID system that popup items use,
+## Due to the impractical ID system that PopupMenu items use,
 ## this file has been made to manage all of it in one place.
-
+## Notice: Many of the segments in here have been disabled, due
+## to the incredible headache of getting anything working here.
 
 
 signal file_save
@@ -12,7 +13,7 @@ signal file_close
 signal file_close_all
 signal file_close_other
 signal file_close_below
-signal file_close_docs
+#signal file_close_docs
 signal file_toggle_side_panel
 
 @onready var file: PopupMenu = %File
@@ -32,6 +33,12 @@ func _ready() -> void:
 
 	_setup_signals()
 
+	# Hide all menus that have no functional interactions.
+	set_menu_hidden(1, true)
+	set_menu_hidden(2, true)
+	set_menu_hidden(3, true)
+	set_menu_hidden(4, true)
+
 	#disable_all_items()
 
 
@@ -46,46 +53,46 @@ func _setup_signals() -> void:
 func _setup_file_menu() -> void:
 	var popup: PopupMenu = file
 
-	popup.add_item("New Script...", 11)
-	popup.add_item("New Text File...", 12)
-	popup.add_item("Open...", 13)
-	popup.add_item("Reopen Closed Script", 14)
-	# TODO: Auto-generate sub-popup list.
-	var sub_popup_recent := PopupMenu.new()
-	popup.add_submenu_node_item("Open Recent", sub_popup_recent, 15)
+	#popup.add_item("New Script...", 11)
+	#popup.add_item("New Text File...", 12)
+	#popup.add_item("Open...", 13)
+	#popup.add_item("Reopen Closed Script", 14)
+	# TODO: Auto-generate recent file list.
+	#var sub_popup_recent := PopupMenu.new()
+	#popup.add_submenu_node_item("Open Recent", sub_popup_recent, 15)
 
-	popup.add_separator()
+	#popup.add_separator()
 	popup.add_item("Save", 21)
-	popup.add_item("Save As...", 22)
+	#popup.add_item("Save As...", 22)
 	popup.add_item("Save All", 23)
 
-	popup.add_separator()
-	popup.add_item("Soft Reload Tool Script", 31)
-	popup.add_item("Copy Script Path", 32)
-	popup.add_item("Copy Script UID", 33)
-	popup.add_item("Show in FileSystem", 34)
+	#popup.add_separator()
+	#popup.add_item("Soft Reload Tool Script", 31)
+	#popup.add_item("Copy Script Path", 32)
+	#popup.add_item("Copy Script UID", 33)
+	#popup.add_item("Show in FileSystem", 34)
 
-	popup.add_separator()
-	popup.add_item("History Previous", 41)
-	popup.add_item("History Next", 42)
+	#popup.add_separator()
+	#popup.add_item("History Previous", 41)
+	#popup.add_item("History Next", 42)
 
-	popup.add_separator()
-	var sub_popup_theme := PopupMenu.new()
-	sub_popup_theme.add_item("Import Theme...")
-	sub_popup_theme.add_item("Reload Theme")
-	sub_popup_theme.add_separator()
-	sub_popup_theme.add_item("Save Theme As...")
-	popup.add_submenu_node_item("Theme", sub_popup_theme, 51)
+	#popup.add_separator()
+	#var sub_popup_theme := PopupMenu.new()
+	#sub_popup_theme.add_item("Import Theme...")
+	#sub_popup_theme.add_item("Reload Theme")
+	#sub_popup_theme.add_separator()
+	#sub_popup_theme.add_item("Save Theme As...")
+	#popup.add_submenu_node_item("Theme", sub_popup_theme, 51)
 
 	popup.add_separator()
 	popup.add_item("Close", 61)
 	popup.add_item("Close All", 62)
 	popup.add_item("Close Other Tabs", 63)
 	popup.add_item("Close Tabs Below", 64)
-	popup.add_item("Close Docs", 65)
+	#popup.add_item("Close Docs", 65)
 
-	popup.add_separator()
-	popup.add_item("Run", 71)
+	#popup.add_separator()
+	#popup.add_item("Run", 71)
 
 	popup.add_separator()
 	popup.add_item("Toggle Files Panel", 81)
@@ -232,23 +239,20 @@ func _on_file_id_pressed(id: int) -> void:
 		62: file_close_all.emit()
 		63: file_close_other.emit()
 		64: file_close_below.emit()
-		65: file_close_docs.emit()
+		#65: file_close_docs.emit()
 		81: file_toggle_side_panel.emit()
 
 func _on_edit_id_pressed(id: int) -> void:
 	match id:
 		11: pass
-		12: pass
 
 func _on_search_id_pressed(id: int) -> void:
 	match id:
 		11: pass
-		12: pass
 
 func _on_go_to_id_pressed(id: int) -> void:
 	match id:
 		11: pass
-		12: pass
 
 func _on_debug_id_pressed(id: int) -> void:
 	match id:

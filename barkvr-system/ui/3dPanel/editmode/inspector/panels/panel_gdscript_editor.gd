@@ -90,7 +90,12 @@ func _setup_signals() -> void:
 
 	# ScriptMenuBar signals.
 	top_menu_bar.file_save.connect(save_current_content)
+	top_menu_bar.file_save_all.connect(save_all_content)
 	top_menu_bar.file_close.connect(script_tab_container.close_current_tab)
+	top_menu_bar.file_close_all.connect(close_tabs_all)
+	top_menu_bar.file_close_other.connect(close_tabs_other)
+	top_menu_bar.file_close_below.connect(close_tabs_below)
+	top_menu_bar.file_toggle_side_panel.connect(_on_button_toggle_sidebar_pressed)
 
 
 
@@ -99,17 +104,21 @@ func _on_target_set(new_target: Node) -> void:
 	if not new_target: return
 
 	var tab_index: int = script_tab_container.check_for_tab(new_target)
+
 	# Open existing tab if it already exists.
 	if tab_index != -1:
 		script_tab_container.set_current_tab(tab_index)
+
 	# Make a new tab.
 	else:
 		var new_tab: Control = script_tab_container.add_tab(new_target)
 		if new_tab is GDScriptCodeEdit:
+			# Connect signals.
 			new_tab.caret_changed.connect(_on_code_edit_caret_changed)
 			new_tab.script_data_updated.connect(update_method_list)
 			new_tab.script_name_updated.connect(update_script_name)
 			new_tab.request_save_confirm.connect(_on_code_edit_request_save_confirm)
+
 		elif new_tab is GDScriptDocumentation:
 			pass # TODO: This here.
 
@@ -129,6 +138,7 @@ func update_script_list() -> void:
 
 	# Generate a button for each tab in the switcher.
 	for i: int in script_tab_container.get_tab_count():
+		# Defaults.
 		var icon_name := &"NodeWarning"
 		var tab_name := "ERROR"
 
@@ -177,6 +187,34 @@ func save_current_content() -> void:
 	if current_tab is GDScriptCodeEdit:
 		current_tab.save_code()
 
+## Save the content of all currently opened tabs.
+func save_all_content() -> void:
+	for index: int in script_tab_container.get_tab_count():
+		var index_control: Control = script_tab_container.get_tab_control(index)
+
+		if index_control is GDScriptCodeEdit:
+			index_control.save_code()
+
+## Close all currently opened tabs.
+## This could be improved by making "close tab" a function on each tab,
+## maybe with a confirm popup of some sorts.
+func close_tabs_all() -> void:
+	for index: int in script_tab_container.get_tab_count():
+		script_tab_container.get_tab_control(index).queue_free()
+
+## Close all tabs other than the currently selected one.
+func close_tabs_other() -> void:
+	var current_index: int = script_tab_container.current_tab
+	for index: int in script_tab_container.get_tab_count():
+		if index == current_index: continue
+		script_tab_container.get_tab_control(index).queue_free()
+
+## Close all tabs below the currently focused one.
+func close_tabs_below() -> void:
+	var current_index: int = script_tab_container.current_tab
+	for index: int in script_tab_container.get_tab_count() - current_index:
+		script_tab_container.get_tab_control(index + current_index).queue_free()
+
 
 
 ## Called when the active tab in the tab container changes.
@@ -189,8 +227,10 @@ func _on_script_tab_container_tab_changed(index: int) -> void:
 	# Prevent OOB errors if there is no tab for the current index.
 	if current_tab and list_scripts.item_count > 0: list_scripts.select(index)
 
-	top_menu_bar.set_menu_hidden(1, not is_type_code_edit)
-	top_menu_bar.set_menu_hidden(3, not is_type_code_edit)
+	# Disable menu bar options that are exclusive to CodeEdit.
+	# Disabled due to the respective options being disabled by default already.
+	#top_menu_bar.set_menu_hidden(1, not is_type_code_edit)
+	#top_menu_bar.set_menu_hidden(3, not is_type_code_edit)
 
 	# Show method search & sorting only if type is CodeEdit.
 	button_sort_methods.get_parent_control().set_visible(is_type_code_edit)
@@ -208,6 +248,8 @@ func _on_script_tab_container_tab_changed(index: int) -> void:
 		label_script_name.text = current_tab.get_script_name_unsaved()
 	elif current_tab is GDScriptDocumentation:
 		pass # TODO: This right here.
+	else:
+		label_script_name.text = ""
 
 	update_method_list()
 

@@ -211,9 +211,9 @@ func close_tabs_other() -> void:
 
 ## Close all tabs below the currently focused one.
 func close_tabs_below() -> void:
-	var current_index: int = script_tab_container.current_tab
-	for index: int in script_tab_container.get_tab_count() - current_index:
-		script_tab_container.get_tab_control(index + current_index).queue_free()
+	var current_index_offset: int = script_tab_container.current_tab + 1
+	for index: int in script_tab_container.get_tab_count() - current_index_offset:
+		script_tab_container.get_tab_control(index + current_index_offset).queue_free()
 
 
 

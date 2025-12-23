@@ -168,6 +168,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
+[node name="VSeparator4" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+layout_mode = 2
+
 [node name="ButtonSave" type="Button" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
 unique_name_in_owner = true
 layout_mode = 2

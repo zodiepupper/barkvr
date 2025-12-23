@@ -15,4 +15,7 @@ script = ExtResource("2_gjict")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 2
-text = "This is mostly just a placeholder for documentation pages, honestly I need to change the name of these two classes to ScriptDocumentation and ScriptCodeEdit."
+text = "This is mostly just a placeholder for documentation pages, which are currently not usable.
+
+Documentation is currently in this state and not even implemented in the script editor, due to there being no easy way to handle these.
+The current two possibilities are either saving the whole docs and including them with the app itself, or fetching them from the online version, neither of which are all that great."

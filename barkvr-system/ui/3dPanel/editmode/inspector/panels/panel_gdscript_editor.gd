@@ -3,7 +3,7 @@ extends InspectorPanel
 
 
 ## A setting on whether the code should be saved on any text change in the CodeEdit.
-var save_on_edit: bool = false # TODO: True by default, false for testing.
+var save_on_edit: bool = true
 var sort_method_list_alphabetically: bool = false
 
 ## A menu bar used to display script and documentation related options.

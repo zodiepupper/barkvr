@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cymx6emd82t81" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_tab_container.gd" id="3_koxkx"]
 [ext_resource type="Script" uid="uid://dlvdbamdrmoel" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_menu_bar.gd" id="3_oocds"]
 
-[node name="GDScriptEditor" type="PanelContainer"]
+[node name="ScriptEditor" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -49,38 +49,38 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"TopBarLabel"
-text = "script_name.gd(*)"
 horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="ButtonsRight" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-layout_mode = 2
-
-[node name="ButtonOnlineDocs" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
+[node name="ButtonOnlineDocs" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Online Docs"
 
-[node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
+[node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 focus_mode = 0
 disabled = true
 text = "Search Help"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TopBar/ButtonsRight"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TopBar"]
+visible = false
 layout_mode = 2
 
-[node name="ButtonHistoryPrevious" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
+[node name="ButtonHistoryPrevious" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 focus_mode = 0
 disabled = true
 
-[node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar/ButtonsRight"]
+[node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 focus_mode = 0
 disabled = true
@@ -101,13 +101,16 @@ size_flags_vertical = 3
 [node name="SearchScripts" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 placeholder_text = "Filter Scripts"
+editable = false
 
 [node name="ListScripts" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
+allow_search = false
 
 [node name="SidebarMethods" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar"]
 unique_name_in_owner = true
@@ -137,6 +140,7 @@ layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
 allow_reselect = true
+allow_search = false
 
 [node name="Content" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
 layout_mode = 2

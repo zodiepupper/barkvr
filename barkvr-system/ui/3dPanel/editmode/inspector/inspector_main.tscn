@@ -67,16 +67,16 @@ metadata/_tab_index = 0
 [node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
 [node name="Attributes" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("5_6d5uu")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="GDScriptEditor" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_72g2u")]
+[node name="ScriptEditor" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_72g2u")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 

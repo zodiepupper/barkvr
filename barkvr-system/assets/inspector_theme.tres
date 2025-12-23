@@ -37,7 +37,7 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.07058824, 0.07058824, 0.07058824, 1)
+bg_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -189,6 +189,8 @@ bg_color = Color(0, 0, 0, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5igu"]
 bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jd3em"]
 

@@ -62,23 +62,25 @@ func _ready():
 		if (XRServer.get_tracker(tracker).profile).ends_with("index_controller"):
 			match input_name:
 				"grip_force":
-					if value > .1 and !grabbing:
-						trigger_haptic_pulse("haptic",400.0,.5,.1,0.0)
+					if value > .1 and !grabbing: #TODO change these to be a setting
+						trigger_haptic_pulse("haptic",400.0,.5,.05,0.0)
 						grip()
 				"grip":
-					if value < 1.0:
+					if value < 1.0: #TODO change these to be a setting
 						if grabbing:
 							grabbing = false
-							trigger_haptic_pulse("haptic",100.0,.5,.1,0.0)
+							trigger_haptic_pulse("haptic",100.0,.5,.05,0.0)
 							ungrip()
 		else:
 			match input_name:
 				"grip":
-					if value > .75 and !grabbing:
-						trigger_haptic_pulse("haptic",100.0,.5,.1,0.0)
+					if value > .75 and !grabbing: #TODO change these to be a setting
+						trigger_haptic_pulse("haptic",400.0,.5,.05,0.0)
 						grip()
-					elif value < .5:
+					elif value < .5: #TODO change these to be a setting
 						grabbing = false
+						trigger_haptic_pulse("haptic",100.0,.5,.05,0.0)
+						ungrip()
 #		if name == "trigger":
 #			if value > .3:
 #				world_ray.enabled = true
@@ -169,42 +171,45 @@ func buttonPressed(btn_name):
 		for item in grabbed.values():
 			if 'button_pressed' in item.node:
 				item.node.button_pressed(btn_name)
+				continue
+			# DEPRECATED the following are only for backward compatibility!
+			if 'primary' in item.node:
+				item.node.primary()
+				continue
+			if 'primary_pressed' in item.node:
+				item.node.primary_pressed()
+				continue
+			if "trigger_pressed" in item.node:
+				item.node.trigger_pressed = true
+				continue
 		return
-	
 	# add the button to the dictionary of pressed buttons
 	buttons[btn_name] = true
-	if btn_name == "grip_click":
-		pass
+	# click the interaction ray
 	if btn_name == "trigger_click":
 		if ui_ray.is_colliding():
 			ui_ray.click()
-		for item in grabbed.values():
-			if 'primary' in item.node:
-				item.node.primary()
-			if 'primary_pressed' in item.node:
-				item.node.primary_pressed()
-			if "trigger_pressed" in item.node:
-				item.node.trigger_pressed = true
 
 func buttonReleased(btn_name):
-	for item in grabbed.values():
-		if is_instance_valid(item.node):
-			if 'button_released' in item.node:
-				item.node.button_released(btn_name)
-				return
+	# if anything is grabbed send the input to those nodes and return
+	if !grabbed.is_empty():
+		for item in grabbed.values():
+			if is_instance_valid(item.node):
+				if 'button_released' in item.node:
+					item.node.button_released(btn_name)
+					continue
+				# DEPRECATED the following are only for backward compatibility!
+				if 'primary_released' in item.node:
+					item.node.primary_released()
+					continue
+		return
+	# remove the button from the pressed buttons dictionary
 	buttons[btn_name] = false
 	if btn_name == "by_button":
 		contextMenuSummon()
-	if btn_name == "grip_click":
-		ungrip()
+	# unclick the interaction ray
 	if btn_name == "trigger_click":
 		ui_ray.release()
-		for item in grabbed.values():
-			if is_instance_valid(item.node):
-				if 'primary_released' in item.node:
-					item.node.primary_released()
-				if 'trigger_pressed' in item.node:
-					item.node.trigger_pressed = false
 		rayBody = null
 
 func contextMenuSummon():

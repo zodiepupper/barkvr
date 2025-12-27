@@ -173,15 +173,16 @@ func buttonPressed(btn_name):
 				item.node.button_pressed(btn_name)
 				continue
 			# DEPRECATED the following are only for backward compatibility!
-			if 'primary' in item.node:
-				item.node.primary()
-				continue
-			if 'primary_pressed' in item.node:
-				item.node.primary_pressed()
-				continue
-			if "trigger_pressed" in item.node:
-				item.node.trigger_pressed = true
-				continue
+			if btn_name == "trigger_click":
+				if 'primary' in item.node:
+					item.node.primary()
+					continue
+				if 'primary_pressed' in item.node:
+					item.node.primary_pressed()
+					continue
+				if "trigger_pressed" in item.node:
+					item.node.trigger_pressed = true
+					continue
 		return
 	# add the button to the dictionary of pressed buttons
 	buttons[btn_name] = true
@@ -199,8 +200,14 @@ func buttonReleased(btn_name):
 					item.node.button_released(btn_name)
 					continue
 				# DEPRECATED the following are only for backward compatibility!
+				if 'released' in item.node:
+					item.node.released()
+					continue
 				if 'primary_released' in item.node:
 					item.node.primary_released()
+					continue
+				if 'trigger_released' in item.node:
+					item.node.trigger_released()
 					continue
 		return
 	# remove the button from the pressed buttons dictionary

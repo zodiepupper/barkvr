@@ -43,6 +43,8 @@ var sort_method_list_alphabetically: bool = false
 @onready var button_auto_save: CheckBox = %ButtonAutoSave
 ## A label to display the current position of the caret.
 @onready var label_caret_location: Label = %LabelCaretLocation
+## A RichTextLabel used to inform the user of an uneditable script.
+@onready var internal_class_warning_label: RichTextLabel = %InternalClassWarningLabel
 
 
 
@@ -243,9 +245,14 @@ func _on_script_tab_container_tab_changed(index: int) -> void:
 	# when nothing is selected in the editor.
 	bottom_elements_right.set_visible(is_type_code_edit)
 
+	# Reset non-editable warning label.
+	internal_class_warning_label.set_visible(false)
+
 	# Change current name at the top of the script editor.
 	if current_tab is GDScriptCodeEdit:
 		label_script_name.text = current_tab.get_script_name_unsaved()
+		# Make warning label visible if the current tab is non-editable.
+		internal_class_warning_label.set_visible(not current_tab.editable)
 	elif current_tab is GDScriptDocumentation:
 		pass # TODO: This right here.
 	else:

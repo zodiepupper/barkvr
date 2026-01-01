@@ -1,9 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyqdfiewnkxl1"]
+[gd_scene load_steps=6 format=3 uid="uid://cyqdfiewnkxl1"]
 
 [ext_resource type="Script" uid="uid://c1vvx1d1jopgx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_gdscript_editor.gd" id="1_aehwx"]
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_dvnw4"]
 [ext_resource type="Script" uid="uid://cymx6emd82t81" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_tab_container.gd" id="3_koxkx"]
 [ext_resource type="Script" uid="uid://dlvdbamdrmoel" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_menu_bar.gd" id="3_oocds"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oocds"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.08627451, 0.08627451, 0.08627451, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="ScriptEditor" type="PanelContainer"]
 anchors_preset = 15
@@ -204,3 +215,14 @@ layout_mode = 2
 theme_type_variation = &"LabelMono"
 text = "Tabs"
 horizontal_alignment = 2
+
+[node name="InternalClassWarningLabel" type="RichTextLabel" parent="VBoxContainer/HSplitContainer/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_oocds")
+bbcode_enabled = true
+text = "[color=c9b053][u]Warning:[/u][/color] The currently selected script cannot be edited due to it being an internally used class."
+fit_content = true
+scroll_active = false

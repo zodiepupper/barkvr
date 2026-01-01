@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://beb0gdkkx60br"]
+[gd_resource type="Theme" load_steps=30 format=3 uid="uid://beb0gdkkx60br"]
 
 [ext_resource type="FontFile" uid="uid://bfe3o1gdmrg2t" path="res://barkvr-system/assets/font/noto_sans_mono/NotoSansMono-VariableFont_wdth,wght.ttf" id="1_1qdal"]
 
@@ -31,6 +31,12 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7yimk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6tbyk"]
 content_margin_left = 4.0
@@ -277,6 +283,7 @@ CodeEdit/colors/line_number_color = Color(0.7882353, 0.7882353, 0.7882353, 0.501
 CodeEdit/colors/selection_color = Color(0.3372549, 0.61960787, 1, 0.4)
 CodeEdit/colors/word_highlighted_color = Color(1, 1, 1, 0.07058824)
 CodeEdit/fonts/font = ExtResource("1_1qdal")
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_7yimk")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_6tbyk")
 CodeEdit/styles/read_only = SubResource("StyleBoxFlat_ghbuo")
 FlatContainer/base_type = &"PanelContainer"

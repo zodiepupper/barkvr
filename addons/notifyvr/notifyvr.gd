@@ -1,6 +1,7 @@
 extends Node
 
 var queuedmessages = []
+
 var height_offset = 0
 var notif_parent : Node3D :
 	get:
@@ -16,6 +17,7 @@ func send_notification(message):
 	lbl.set_script(load("res://addons/notifyvr/textscript.gd"))
 	lbl.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	queuedmessages.append(lbl)
+	_process_messages.call_deferred()
 
 func _ready() -> void:
 	setup_notif_parent.call_deferred()
@@ -33,15 +35,15 @@ func update_height_offset(_sink_for_entered_tree=null) -> void:
 		if "get_aabb" in child and child is VisualInstance3D:
 			height_offset += child.get_aabb().size.y
 
-func _process(delta: float) -> void:
+func _process_messages():
 	if queuedmessages.size() > 0:
 		for i: Label3D in queuedmessages:
 			var notif_parent : Node3D = get_tree().get_first_node_in_group("notificationparent")
 			if notif_parent:
 				notif_parent.add_child(i)
-				#update_height_offset()
+				update_height_offset()
 				i.pixel_size = .005*Engine.get_singleton("settings_manager").vr_notification_size
 				notif_parent.move_child(i,0)
-				i.offset.y = height_offset*4.0
+				i.position.y = height_offset
 				queuedmessages.erase(i)
 			

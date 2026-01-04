@@ -43,5 +43,4 @@ script = ExtResource("1_2f3s4")
 background_material = SubResource("StandardMaterial3D_o5mcw")
 _auto_load_ui = ExtResource("2_8d3jq")
 render_priority = 124
-on_top = true
 metadata/grabbable = true

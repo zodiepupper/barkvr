@@ -100,7 +100,7 @@ func _toggle_xr(value):
 		righthand.rays_disabled = !value
 		ui_ray.enabled = !value
 		ui_ray.visible = !value
-	
+
 	if !localui.is_node_ready():
 		await localui.ready
 	if value:
@@ -128,7 +128,7 @@ func _toggle_xr(value):
 		lefthand.rotation_degrees = Vector3(-90.0,0,0)
 		ui_ray.enabled = true
 		ui_ray.show()
-		
+
 		# Fix incorrect player transform in desktop mode
 		xrplayer.position = Vector3.ZERO
 
@@ -164,10 +164,10 @@ func _ready():
 	respawn_player()
 	if !ProjectSettings.get_setting("xr/openxr/enabled"):
 		vr_mode_enabled = false
-	
+
 	if OS.get_name() == "Web":
 		vr_mode_enabled = false
-	
+
 	righthand.connect("button_pressed",func(input_name):
 		if input_name == "ax_button":
 			rightaxbtn = true
@@ -201,9 +201,9 @@ func _physics_process(delta:float) -> void:
 	if global_position.length() > 100000:
 		respawn_player()
 		flymode = true
-	
+
 	# Flat mode toggle
-	# 
+	#
 	if Input.is_action_just_pressed("desktoptoggle"):
 		if not LocalGlobals.vr_supported:
 			Notifyvr.send_notification("vr not available")
@@ -212,24 +212,24 @@ func _physics_process(delta:float) -> void:
 
 	if vr_mode_enabled:
 		vr_movement(delta)
-	
+
 	if !vr_mode_enabled:
 		flat_movement(delta)
-	
+
 	var prevyvel = velocity.y
 	velocity = velocity.move_toward(Vector3(), SPEED*.5)
-	
+
 	# Add the gravity.
 	if not is_on_floor() and not flymode:
 		velocity.y = prevyvel
 		velocity.y -= (gravity*1.0*( (scale.x+scale.y+scale.z)/3.0 )) * delta
-	
+
 	# Handle Jump.
 	if (Input.is_action_just_pressed("jump") or (flymode and Input.is_action_pressed("jump")) or\
 	rightaxbtn) and (is_on_floor() or flymode) and (LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING or\
 	!movedrag.is_empty()):
 		velocity.y = (JUMP_VELOCITY*1*( (scale.x+scale.y+scale.z)/3.0 ))
-	
+
 	move_and_slide()
 
 func vr_movement(delta:float) -> void:
@@ -242,7 +242,7 @@ func vr_movement(delta:float) -> void:
 	camPrevPos = xr_camera_3d.position
 	transform = transform.rotated_local(Vector3.UP,-rightStick.x*delta)
 	xrplayer.position = xrplayer.position.rotated(Vector3.UP,rightStick.x*delta)
-	
+
 	var input_dir = leftStick
 	var direction: Vector3
 	direction = ((xr_camera_3d.global_basis) * Vector3(input_dir.x, 0, -input_dir.y))
@@ -306,13 +306,13 @@ func flat_movement(_delta:float) -> void:
 		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 		summon_inspector()
-	
+
 	righthand.look_at(camera_3d.to_global(grab_point))
-	
+
 	var input_dir : Vector2
 	if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PLAYING:
 		input_dir = Input.get_vector("left", "right", "up", "down")
-	
+
 	if !movedrag.is_empty():
 		if -touch_move_left > input_dir.x:
 			input_dir.x = -touch_move_left
@@ -343,11 +343,11 @@ func _input(event):
 		pass
 	if event.is_action("cleargizmos"):
 		LocalGlobals.clear_gizmos.emit()
-		
+
 	# Handles Mouselook while also having a switch to handling rotation	given a couple modifiers
-	# Rotates held nodes (by right hand if done while VR is active) when rotateHeld (default: E) 
+	# Rotates held nodes (by right hand if done while VR is active) when rotateHeld (default: E)
 	# Axis of rotation is locked to the y axis when modifier key (default: Left Shift)
-	# TODO(?): Does this work as expected when the player is rotated? Axis might need to be WRT the 
+	# TODO(?): Does this work as expected when the player is rotated? Axis might need to be WRT the
 	# Player's root
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		if Input.is_action_pressed("rotateHeld"):
@@ -384,7 +384,7 @@ func _input(event):
 			rotate_y(-event.relative.x*(MOUSE_SPEED/100))
 			xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 			camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-			
+
 	if event.is_action("pause"):
 		if event.is_pressed():
 			match LocalGlobals.player_state:
@@ -426,7 +426,7 @@ func _input(event):
 					'dragstarttime': Time.get_ticks_msec()
 				}
 				screen_just_touched = true
-		
+
 		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
 			if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
 			and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
@@ -487,7 +487,7 @@ func summon_inspector():
 		if ( Engine.has_singleton("settings_manager") and \
 		!(Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton) or\
 		!is_instance_valid(last_spawned_inspector):
-			last_spawned_inspector = load("res://barkvr-system/ui/3dPanel/editmode/unified editor/unified_inspector_3d.tscn").instantiate()
+			last_spawned_inspector = load("uid://ec0mqh35i2in").instantiate() # Load inspector from UID.
 			get_tree().get_first_node_in_group("localworldroot").add_child(last_spawned_inspector)
 		last_spawned_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
 		last_spawned_inspector.look_at(camera_3d.global_position, Vector3.UP, true)

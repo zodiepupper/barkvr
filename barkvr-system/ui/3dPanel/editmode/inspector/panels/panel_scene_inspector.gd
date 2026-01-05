@@ -1,20 +1,20 @@
-extends Control
+extends InspectorPanel
+
+
 
 ## Signal for node tree selection change.
-signal selection_changed(new_selection : Node)
+signal selection_changed(new_selection: Node)
 
-## A theme containing all of the godot default icons, might be best to make this global someday.
-const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
 ## The 3D gizmo scene.
 const GIZMO_SCENE = preload("uid://cv0sjbxpqjy6h")
 
 ## The tree's root node.
-var root_node : Node
+var root_node: Node
 
 ## State on whether reparenting is currently in progress.
-var is_reparenting : bool = false
+var is_reparenting: bool = false
 ## Array of the last selections in the node tree.
-var last_selection_list : Array
+var last_selection_list: Array
 
 ## The tree used to display the nodes in the scene.
 @onready var node_tree: InspectorNodeTree = %NodeTree
@@ -30,7 +30,7 @@ var last_selection_list : Array
 
 
 func _ready() -> void:
-	search.set_right_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Search", &"EditorIcons"))
+	search.set_right_icon(get_editor_icon(&"Search"))
 
 	_setup_tree()
 	_setup_context_menu()
@@ -63,19 +63,19 @@ func _setup_tree() -> void:
 
 ## Set up the context menu to be used in the node tree.
 func _setup_context_menu() -> void:
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Add", &"EditorIcons"), "Add Child", 11)
+	local_context_menu.add_icon_item(get_editor_icon(&"Add"), "Add Child", 11)
 	local_context_menu.add_separator()
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Duplicate", &"EditorIcons"), "Duplicate", 21)
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Reparent", &"EditorIcons"), "Reparent", 22)
+	local_context_menu.add_icon_item(get_editor_icon(&"Duplicate"), "Duplicate", 21)
+	local_context_menu.add_icon_item(get_editor_icon(&"Reparent"), "Reparent", 22)
 	local_context_menu.add_separator()
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"NewRoot", &"EditorIcons"), "Make Focus", 31)
+	local_context_menu.add_icon_item(get_editor_icon(&"NewRoot"), "Make Focus", 31)
 	local_context_menu.add_separator()
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"ExternalLink", &"EditorIcons"), "Export Scene", 41)
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"ExternalLink", &"EditorIcons"), "Export GLTF", 42)
+	local_context_menu.add_icon_item(get_editor_icon(&"ExternalLink"), "Export Scene", 41)
+	local_context_menu.add_icon_item(get_editor_icon(&"ExternalLink"), "Export GLTF", 42)
 	local_context_menu.add_separator()
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Remove", &"EditorIcons"), "Delete", 51)
+	local_context_menu.add_icon_item(get_editor_icon(&"Remove"), "Delete", 51)
 	local_context_menu.add_separator()
-	local_context_menu.add_icon_item(GODOT_EDITOR_ICON_THEME.get_icon(&"Close", &"EditorIcons"), "Close Menu")
+	local_context_menu.add_icon_item(get_editor_icon(&"Close"), "Close Menu")
 
 	local_context_menu.id_pressed.connect(func(index) -> void:
 		match index:
@@ -90,15 +90,15 @@ func _setup_context_menu() -> void:
 
 ## Add a child to the currently selected item, opens a new menu for selection.
 func selection_add_child() -> void:
-	var selected : TreeItem = node_tree.get_next_selected(null)
+	var selected: TreeItem = node_tree.get_next_selected(null)
 	if not selected: return
 
-	var target : Node = selected.get_metadata(0).node
-	add_node_menu.set_target(target)
+	var selected_node: Node = selected.get_metadata(0).node
+	add_node_menu.set_target(selected_node)
 
 	# Reparent AddNodeMenu to the root of the inspector, if it is one.
 	# Not foolproof yet, will be improved once custom inspector classes are set up.
-	var viewport : Viewport = get_viewport()
+	var viewport: Viewport = get_viewport()
 	if viewport is SubViewport:
 		if viewport.get_child(0) is Control:
 			add_node_menu.reparent(viewport.get_child(0))
@@ -107,9 +107,9 @@ func selection_add_child() -> void:
 
 ## Duplicate currently selected item.
 func selection_duplicate() -> void:
-	var selections : Array = get_all_selected()
+	var selections: Array = get_all_selected()
 
-	for selected_target : TreeItem in selections:
+	for selected_target: TreeItem in selections:
 		var target_metadata = selected_target.get_metadata(0)
 		if not "node" in target_metadata: continue
 
@@ -126,15 +126,15 @@ func selection_focus() -> void:
 	node_tree.check_children()
 
 ## Export currently selected hierarchy.
-func selection_export(as_gltf : bool = false) -> void:
-	var world_root : Node = get_tree().get_first_node_in_group(&"localworldroot")
-	var target: Node = node_tree.get_selected().get_metadata(0).node
-	if world_root and target:
-		WorkerThreadPool.add_task(_export_node.bind(target, as_gltf))
+func selection_export(as_gltf: bool = false) -> void:
+	var world_root: Node = get_tree().get_first_node_in_group(&"localworldroot")
+	var target_node: Node = node_tree.get_selected().get_metadata(0).node
+	if world_root and target_node:
+		WorkerThreadPool.add_task(_export_node.bind(target_node, as_gltf))
 
 ## Delete current selection.
 func selection_delete() -> void:
-	var selections : Array = get_all_selected()
+	var selections: Array = get_all_selected()
 
 	for item in selections:
 		if not "node" in item.get_metadata(0): continue
@@ -147,7 +147,7 @@ func _on_tree_cell_selected() -> void:
 	selection_changed.emit(new_selection)
 
 	if last_selection_list and new_selection not in last_selection_list and is_reparenting:
-		for item : TreeItem in last_selection_list:
+		for item: TreeItem in last_selection_list:
 			item.get_metadata(0).node.owner = item.get_metadata(0).node.get_parent()
 			item.get_metadata(0).node.reparent(new_selection)
 		_check_tree_for_updates()
@@ -180,9 +180,9 @@ func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_butt
 	node_tree.set_selected(item, 0)
 
 	# Calculate position of the context menu.
-	var button_rect : Rect2i = node_tree.get_item_area_rect(item, 0)
+	var button_rect: Rect2i = node_tree.get_item_area_rect(item, 0)
 	@warning_ignore("integer_division")
-	var local_context_menu_position : Vector2i = Vector2i(
+	var local_context_menu_position: Vector2i = Vector2i(
 		int(node_tree.get_global_rect().position.x + button_rect.end.x),
 		int(node_tree.get_global_rect().position.y + button_rect.end.y - (button_rect.size.y / 2))
 	)
@@ -192,7 +192,7 @@ func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_butt
 
 
 
-func _on_scene_tree_node_added(node : Node) -> void:
+func _on_scene_tree_node_added(node: Node) -> void:
 	if not is_inside_tree(): return
 
 	await get_tree().process_frame
@@ -201,7 +201,7 @@ func _on_scene_tree_node_added(node : Node) -> void:
 	if not is_instance_valid(node): return
 	if not root_node.is_ancestor_of(node): return
 
-	var node_name : String = node.name
+	var node_name: String = node.name
 	if node.has_meta(&"display_name"):
 		node_name = node.get_meta(&"display_name")
 
@@ -210,10 +210,10 @@ func _on_scene_tree_node_added(node : Node) -> void:
 		"parent" : node.get_parent()
 	})
 
-func _on_scene_tree_node_removed(node : Node) -> void:
+func _on_scene_tree_node_removed(node: Node) -> void:
 	node_tree.remove_item(node)
 
-func _on_scene_tree_node_renamed(node : Node) -> void:
+func _on_scene_tree_node_renamed(node: Node) -> void:
 	if not root_node: return
 	if not is_instance_valid(node): return
 
@@ -227,12 +227,12 @@ func _check_tree_for_updates():
 	set_root(root_node)
 	node_tree.check_children()
 
-func set_root(item : Node):
+func set_root(item: Node):
 	root_node = item
 	add_children(item)
 
-func add_children(node : Node, parent : Node = null):
-	var nodename : String = node.name
+func add_children(node: Node, parent: Node = null):
+	var nodename: String = node.name
 	if node.has_meta("display_name"):
 		nodename = node.get_meta("display_name")
 
@@ -252,11 +252,11 @@ func add_children(node : Node, parent : Node = null):
 
 		if not is_instance_valid(node): return
 
-		for i : Node in node.get_children():
+		for i: Node in node.get_children():
 			add_children(i, node)
 
 ## Get all currently selected items as an array.
-func get_all_selected(previous_item : TreeItem = null) -> Array:
+func get_all_selected(previous_item: TreeItem = null) -> Array:
 	var return_array := Array()
 	var next = node_tree.get_next_selected(previous_item)
 	if next:
@@ -275,33 +275,33 @@ func _on_focus_parent_pressed() -> void:
 	set_root(root_node.get_parent())
 	node_tree.check_children()
 
-## Export the target hierarchy to the user's download folder, either as a scene or gltf.
-func _export_node(target : Node, to_gltf : bool = false):
+## Export the target node's hierarchy to the user's download folder, either as a scene or gltf.
+func _export_node(target_node: Node, to_gltf: bool = false):
 	Thread.set_thread_safety_checks_enabled(false)
 
-	var download_folder_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/"
-	print("Export save path: " + download_folder_path + target.name + ".tscn")
+	var download_folder_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/"
+	print("Export save path: " + download_folder_path + target_node.name + ".tscn")
 
 	if not OS.get_name() == "Web" and not DirAccess.dir_exists_absolute(download_folder_path): return
 
-	Engine.get_singleton(&"event_manager").take_owner_of_node_and_all_children(target, target)
+	Engine.get_singleton(&"event_manager").take_owner_of_node_and_all_children(target_node, target_node)
 
 	if to_gltf: # Export as GLTF.
 		var gltf_doc := GLTFDocument.new()
 		var gltf_state := GLTFState.new()
-		gltf_doc.append_from_scene(target, gltf_state)
+		gltf_doc.append_from_scene(target_node, gltf_state)
 		if OS.get_name() == "Web":
-			JavaScriptBridge.download_buffer(gltf_doc.generate_buffer(gltf_state), target.name + ".res")
+			JavaScriptBridge.download_buffer(gltf_doc.generate_buffer(gltf_state), target_node.name + ".res")
 		else:
-			gltf_doc.write_to_filesystem(gltf_state, download_folder_path + target.name + ".glb")
+			gltf_doc.write_to_filesystem(gltf_state, download_folder_path + target_node.name + ".glb")
 			# Left over from before rewrite.
 			#var err = ResourceSaver.save(packed, downpath+tmp_target.name+".tscn",ResourceSaver.FLAG_BUNDLE_RESOURCES)
 
 	else: # Export as scene.
 		var packed := PackedScene.new()
-		packed.pack(target)
+		packed.pack(target_node)
 		if OS.get_name() == "Web":
-			JavaScriptBridge.download_buffer(var_to_bytes_with_objects(packed), target.name + ".res")
+			JavaScriptBridge.download_buffer(var_to_bytes_with_objects(packed), target_node.name + ".res")
 		else:
-			var err : Error = ResourceSaver.save(packed, download_folder_path + target.name + ".tscn", ResourceSaver.FLAG_BUNDLE_RESOURCES)
+			var err: Error = ResourceSaver.save(packed, download_folder_path + target_node.name + ".tscn", ResourceSaver.FLAG_BUNDLE_RESOURCES)
 			if err: print("Export error: " + str(err))

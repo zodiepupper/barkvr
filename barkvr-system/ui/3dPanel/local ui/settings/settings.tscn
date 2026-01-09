@@ -167,14 +167,17 @@ size_flags_stretch_ratio = 0.1
 
 [node name="UISettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+folded = true
 title = "ui settings"
 title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
+visible = false
 layout_mode = 2
 color = Color(0, 1, 0, 0.2)
 
 [node name="UISettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="InspectorAsSingleton" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" instance=ExtResource("2_dbica")]

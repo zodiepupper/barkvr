@@ -6,5 +6,5 @@
 freeze = true
 freeze_mode = 1
 script = ExtResource("1_2klrp")
-metadata/_custom_type_script = "uid://cb6a7hbfmnudr"
 metadata/grabbable = true
+metadata/_custom_type_script = "uid://cb6a7hbfmnudr"

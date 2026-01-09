@@ -5,6 +5,8 @@ signal changed(name: StringName)
 
 const PATH := "user://settings.json"
 
+static var instance : SettingsSingleton
+
 ## toggles camera passthrough if it is supported by the current platform
 var vr_passthrough: bool = false:
 	set(value):
@@ -89,6 +91,15 @@ var screen_space_anti_aliasing: int = 0:
 		get_window().screen_space_aa = value as Viewport.ScreenSpaceAA
 		save_and_emit(&"screen_space_anti_aliasing")
 
+## sets whether the primary viewport should render 3d or not
+## [br]this is meant to be expanded, soon, into the UI only mode
+## where barkvr acts as a normal GUI based client
+var viewport_disable_3d : bool = false:
+	set(value):
+		viewport_disable_3d = value
+		get_viewport().disable_3d = value
+		save_and_emit(&"viewport_disable_3d")
+
 ## this changes the actual rendering resolution for the primary viewport
 ## can be used to save performance or increase visual quality
 var viewport_scaling: float = 1.0:
@@ -119,6 +130,7 @@ const DEFAULT_VALUES := {
 	send_messages_with_ctrl_enter = false,
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
 	screen_space_anti_aliasing = RenderingServer.ViewportScreenSpaceAA.VIEWPORT_SCREEN_SPACE_AA_DISABLED,
+	viewport_disable_3d = false,
 	viewport_scaling = 1.0,
 	interface_scaling_factor = 1.0,
 	vr_notification_size = 40.0,
@@ -133,6 +145,9 @@ var inspectors := []:
 		for inspector in inspectors:
 			if !is_instance_valid(inspector):
 				inspectors.erase(inspector)
+
+func _init() -> void:
+	instance = self
 
 func _ready() -> void:
 	if FileAccess.file_exists(PATH):

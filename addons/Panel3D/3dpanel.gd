@@ -9,9 +9,11 @@ var material : StandardMaterial3D
 
 var last_input_position := Vector2()
 
+## this is the root of the scene when it is added to the viewport
 var ui : Node
 var tex : ViewportTexture
 
+## variable for tracking the known popouts on this panel3d
 var popouts: Array[Window] = []
 
 ## material rendered in "next_pass" of the default material good for backgrounds
@@ -257,15 +259,30 @@ func _ready():
 			viewport.gui_release_focus()
 			)
 
-#func _process(delta: float) -> void:
+# this is an attempt to capture and track any embedded subwindows
+# into their own Panel3D so they can be treated like normal popups
+# kindof. this is rough, for obvious reasons if you look around here...
+# [br]i think we should contemplate writing a better shim, or a custom
+# system for summoning popups explicitly for Panel3D. [br]
+# [br]PS: there is a chance we could just put a Window at the top 
+# of the [code]viewport[/code] variable so we can use the Window's signal
+# [code]about_to_popup[/code] to intercept this entirely. but that feels jank...
+#func capture_embedded_subwindows():
 	#var embedded := viewport.get_embedded_subwindows()
 	#for window in embedded:
-		#if false and !popouts.has(window) and !window.has_meta("already_moved"):
+		#if !popouts.has(window) and !window.has_meta("already_moved"):
 			#window.set_meta("already_moved", true)
 			#popouts.append(window)
 			#var tmppanel := Panel3D.new()
-			#add_child(tmppanel)
-			#tmppanel.global_position = tmppanel.to_global(Vector3(0, 0, .1))
+			#tmppanel.collision_layer = collision_layer
+			#tmppanel.collision_mask = collision_mask
+			#get_parent().add_child(tmppanel)
+			#var popup_pos_3d := Vector3(
+				#(window.position.x/viewport.size.x)*mesh.mesh.size.x,
+				#0,
+				#.1
+			#)
+			#tmppanel.global_position = to_global(popup_pos_3d)
 			#tmppanel.viewport_size = window.size
 			## TODO set world position to reflect relative position of the popout
 			## on it's origin viewport
@@ -274,6 +291,27 @@ func _ready():
 			## might be able to do this by grabbing the viewport from the node before reparenting
 			#window.get_parent().remove_child(window)
 			#tmppanel.viewport.add_child(window)
+			#tmppanel.ui = window
+			#if !window.is_connected("visibility_changed", update_floating_popup):
+				#window.visibility_changed.connect(update_floating_popup.bind(tmppanel))
+#
+#func update_floating_popup(popup_panel:Panel3D):
+	##popouts.erase(popup_panel.ui)
+	##popup_panel.queue_free()
+	#var one = popup_panel.ui.position.x/viewport.size.x
+	#var two = one*mesh.mesh.size.x
+	#var popup_pos_3d := Vector3(
+		#(popup_panel.ui.position.x/viewport.size.x)*mesh.mesh.size.x,
+		#0,
+		#.1
+	#)
+	#popup_panel.global_position = to_global(popup_pos_3d)
+#
+#func remove_floating_popup(popup_panel:Panel3D):
+	#pass
+#
+#func _process(delta: float) -> void:
+	#capture_embedded_subwindows()
 
 func laser_input(data:Dictionary):
 	var event

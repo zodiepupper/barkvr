@@ -338,7 +338,7 @@ func flat_movement(_delta:float) -> void:
 			xr_camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 			camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 
-func _input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventJoypadMotion:
 		pass
 	if event.is_action("cleargizmos"):
@@ -480,7 +480,12 @@ func _screen_tap_click(_event:InputEvent) -> void:
 
 func contextMenuSummon():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		handmenu.summon(camera_3d.project_position(get_viewport().get_mouse_position(), player_scale_multiplier*.4), camera_3d.global_position)
+		handmenu.summon(
+			camera_3d.project_position(
+				get_viewport().get_mouse_position(),
+				player_scale_multiplier*.4
+				) if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED else camera_3d.to_global(Vector3(0,0,-player_scale_multiplier*.4)),
+			camera_3d.global_position)
 
 func summon_inspector():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:

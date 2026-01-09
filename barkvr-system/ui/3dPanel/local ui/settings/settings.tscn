@@ -555,14 +555,17 @@ color = Color(0, 1, 0, 0)
 
 [node name="GraphicsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+folded = true
 title = "graphics settings"
 title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
 [node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+visible = false
 layout_mode = 2
 
 [node name="AntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]

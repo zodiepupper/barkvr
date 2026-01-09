@@ -30,8 +30,6 @@ var last_selection_list: Array
 
 
 func _ready() -> void:
-	search.set_right_icon(get_editor_icon(&"Search"))
-
 	_setup_tree()
 	_setup_context_menu()
 
@@ -143,7 +141,18 @@ func selection_delete() -> void:
 
 ## Called upon the Tree's TreeItem being selected.
 func _on_tree_cell_selected() -> void:
-	var new_selection = node_tree.get_selected().get_metadata(0).node
+	# Discard on no selection.
+	if !node_tree.get_selected():
+		node_tree.check_children()
+		return
+
+	var new_selection: Node = node_tree.get_selected().get_metadata(0).node
+
+	# Discard on invalid selected node.
+	if !is_instance_valid(new_selection):
+		node_tree.check_children()
+		return
+
 	selection_changed.emit(new_selection)
 
 	if last_selection_list and new_selection not in last_selection_list and is_reparenting:
@@ -153,24 +162,21 @@ func _on_tree_cell_selected() -> void:
 		_check_tree_for_updates()
 		is_reparenting = false
 
+	# Prevent re-generating the gizmo of an already selected item.
+	if last_selection_list.size() > 0:
+		if node_tree.get_selected() == last_selection_list[0]: return
+
 	last_selection_list = get_all_selected()
 
+	# Clears all gizmos, could be nicer by only removing the linked one.
 	LocalGlobals.clear_gizmos.emit()
 
-	if !node_tree.get_selected():
-		node_tree.check_children()
-		return
-
-	var node = node_tree.get_selected().get_metadata(0).node
-	if !is_instance_valid(node):
-		node_tree.check_children()
-		return
-
-	if node is Node3D:
+	# If the selected node is a Node3D, attach a 3D gizmo.
+	if new_selection is Node3D:
 		var giz = GIZMO_SCENE.instantiate()
 		root_node.add_child(giz)
-		giz.global_position = node.global_position
-		giz.target = node
+		giz.global_position = new_selection.global_position
+		giz.target = new_selection
 		giz.name = "Gizmo"
 
 ## Called upon a TreeItem's button getting pressed.

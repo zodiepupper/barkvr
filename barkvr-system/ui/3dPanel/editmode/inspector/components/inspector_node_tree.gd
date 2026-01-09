@@ -2,9 +2,6 @@ class_name InspectorNodeTree
 extends Tree
 ## A specialized Tree to be used in the in-app SceneInspector.
 
-## A theme containing all of the godot default icons, used to display node types in the tree.
-const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
-
 ## Dictionary to hold all objects, data & TreeItems.
 var tree_dict : Dictionary[int, Dictionary] = {}
 
@@ -62,14 +59,7 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 
 		var target_item : TreeItem = tree_dict[item_id].tree_item
 		# Add editor node icon if it exists, else, leave it alone.
-		if GODOT_EDITOR_ICON_THEME.has_icon(str(metadata.node.get_class()), &"EditorIcons"):
-			target_item.set_icon(
-				0,
-				GODOT_EDITOR_ICON_THEME.get_icon(
-					str(metadata.node.get_class()),
-					&"EditorIcons"
-				)
-			)
+		target_item.set_icon(0, get_editor_icon( str(metadata.node.get_class()) ) )
 
 		# Collapse all items except for the focused root.
 		target_item.collapsed = true
@@ -78,7 +68,7 @@ func add_item(text : String, metadata : Variant, _replace : String = '') -> Tree
 		target_item.set_metadata(0, metadata)
 
 		# Add a button used for the dropdown, button signal can be accessed via "Tree.button_clicked" signal.
-		target_item.add_button(0, GODOT_EDITOR_ICON_THEME.get_icon(&"GuiTabMenuHl", &"EditorIcons"))
+		target_item.add_button(0, get_editor_icon(&"GuiTabMenuHl"))
 
 	return return_tree_item
 
@@ -122,3 +112,13 @@ func update_item(node : Node) -> void:
 		tree_dict[item_id].tree_item.set_text(0, node.get_meta("display_name"))
 	else:
 		tree_dict[item_id].tree_item.set_text(0, node.name)
+
+## Returns the basic editor icon under the given icon_name.
+## Returns the default Node icon instead if no icon exists under that name.
+## Duplicate from the InspectorPanel class, maybe this should just be a global function.
+func get_editor_icon(icon_name: StringName) -> Texture2D:
+	var icon_path: String = "res://barkvr-system/assets/icons/editor-icons/"+icon_name+".svg"
+	if ResourceLoader.exists(icon_path, "Texture2D"):
+		return ResourceLoader.load(icon_path, "Texture2D")
+
+	return ResourceLoader.load("res://barkvr-system/assets/icons/editor-icons/Node.svg", "Texture2D")

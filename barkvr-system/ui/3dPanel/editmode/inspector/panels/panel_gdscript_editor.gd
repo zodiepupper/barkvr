@@ -49,7 +49,6 @@ var sort_method_list_alphabetically: bool = false
 
 
 func _ready() -> void:
-	_setup_icons()
 	_setup_signals()
 
 	# Ensure buttons are set correctly for the current context.
@@ -57,21 +56,6 @@ func _ready() -> void:
 
 	# Sync toggle button with setting.
 	button_auto_save.set_pressed_no_signal(save_on_edit)
-
-## Set up dynamic icons loaded from the editor theme.
-func _setup_icons() -> void:
-	button_online_docs.set_button_icon(get_editor_icon(&"ExternalLink"))
-	button_search_help.set_button_icon(get_editor_icon(&"HelpSearch"))
-	button_history_previous.set_button_icon(get_editor_icon(&"Back"))
-	button_history_next.set_button_icon(get_editor_icon(&"Forward"))
-
-	search_scripts.set_right_icon(get_editor_icon(&"Search"))
-	search_methods.set_right_icon(get_editor_icon(&"Search"))
-	button_sort_methods.set_button_icon(get_editor_icon(&"Sort"))
-
-	button_toggle_sidebar.set_button_icon(get_editor_icon(&"Back"))
-
-	button_save.set_button_icon(get_editor_icon(&"Save"))
 
 ## Set up all the signals needed for interactive components.
 func _setup_signals() -> void:

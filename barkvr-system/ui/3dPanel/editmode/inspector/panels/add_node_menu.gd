@@ -2,9 +2,6 @@ extends Control
 
 
 
-## A theme containing all of the godot default icons, used to display node types in the item list.
-const GODOT_EDITOR_ICON_THEME = preload("uid://b34aw2colacks")
-
 var target : Node
 var event_manager : Bark_Journal
 ## Store original parent of this menu to reparent upon panel close.
@@ -62,12 +59,9 @@ func _ready() -> void:
 	# Currently using a custom double click checker using item_selected.
 	#item_list.item_activated.connect(_on_item_list_item_activated)
 
-## Set up dynamic icons loaded from the editor theme or project settings.
+## Set up dynamic icons loaded from project settings.
 func _setup_icons() -> void:
 	window_icon.set_texture(load(ProjectSettings.get_setting("application/config/icon")))
-	search_bar.set_right_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Search", &"EditorIcons"))
-	button_favorite.set_button_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Favorites", &"EditorIcons"))
-	button_close.set_button_icon(GODOT_EDITOR_ICON_THEME.get_icon(&"Close", &"EditorIcons"))
 
 ## Load the initial, unfiltered, class list.
 func _load_class_list() -> void:
@@ -135,10 +129,7 @@ func close() -> void:
 
 ## Add an item to the item list with class_string as the type.
 func add_class_to_item_list(list : ItemList, class_string : String) -> int:
-	if GODOT_EDITOR_ICON_THEME.has_icon(class_string, &"EditorIcons"):
-		return list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(class_string, &"EditorIcons"))
-	else: # Fallback.
-		return list.add_item(class_string, GODOT_EDITOR_ICON_THEME.get_icon(&"Node", &"EditorIcons"))
+		return list.add_item(class_string, get_editor_icon(class_string))
 
 ## Used to detect double clicks.
 func detect_double_click(selected_class : String) -> void:
@@ -240,3 +231,13 @@ func _on_sidebar_item_list_item_selected(index : int, list : ItemList) -> void:
 
 	# Check for double clicks in the sidebar.
 	detect_double_click(selected_class)
+
+## Returns the basic editor icon under the given icon_name.
+## Returns the default Node icon instead if no icon exists under that name.
+## Duplicate from the InspectorPanel class, maybe this should just be a global function.
+func get_editor_icon(icon_name: StringName) -> Texture2D:
+	var icon_path: String = "res://barkvr-system/assets/icons/editor-icons/"+icon_name+".svg"
+	if ResourceLoader.exists(icon_path, "Texture2D"):
+		return ResourceLoader.load(icon_path, "Texture2D")
+
+	return ResourceLoader.load("res://barkvr-system/assets/icons/editor-icons/Node.svg", "Texture2D")

@@ -1,9 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://cyqdfiewnkxl1"]
+[gd_scene load_steps=13 format=3 uid="uid://cyqdfiewnkxl1"]
 
 [ext_resource type="Script" uid="uid://c1vvx1d1jopgx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_gdscript_editor.gd" id="1_aehwx"]
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_dvnw4"]
 [ext_resource type="Script" uid="uid://cymx6emd82t81" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_tab_container.gd" id="3_koxkx"]
 [ext_resource type="Script" uid="uid://dlvdbamdrmoel" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/script_menu_bar.gd" id="3_oocds"]
+[ext_resource type="Texture2D" uid="uid://vi71vw7xj6kl" path="res://barkvr-system/assets/icons/editor-icons/Back.svg" id="4_hov0c"]
+[ext_resource type="Texture2D" uid="uid://b1hmwucylpwy1" path="res://barkvr-system/assets/icons/editor-icons/ExternalLink.svg" id="4_ns2mg"]
+[ext_resource type="Texture2D" uid="uid://n62fq757lw5f" path="res://barkvr-system/assets/icons/editor-icons/HelpSearch.svg" id="5_r7ov2"]
+[ext_resource type="Texture2D" uid="uid://ccjxfcq6j1hao" path="res://barkvr-system/assets/icons/editor-icons/Forward.svg" id="5_urplj"]
+[ext_resource type="Texture2D" uid="uid://b4fxdub5kj8fr" path="res://barkvr-system/assets/icons/editor-icons/Search.svg" id="6_ns2mg"]
+[ext_resource type="Texture2D" uid="uid://dufsy04te2utv" path="res://barkvr-system/assets/icons/editor-icons/Sort.svg" id="7_r7ov2"]
+[ext_resource type="Texture2D" uid="uid://dpnqtceef8vdo" path="res://barkvr-system/assets/icons/editor-icons/Save.svg" id="9_e5jdj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oocds"]
 content_margin_left = 5.0
@@ -69,6 +76,7 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Online Docs"
+icon = ExtResource("4_ns2mg")
 
 [node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
@@ -77,6 +85,7 @@ layout_mode = 2
 focus_mode = 0
 disabled = true
 text = "Search Help"
+icon = ExtResource("5_r7ov2")
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/TopBar"]
 visible = false
@@ -88,6 +97,7 @@ visible = false
 layout_mode = 2
 focus_mode = 0
 disabled = true
+icon = ExtResource("4_hov0c")
 
 [node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar"]
 unique_name_in_owner = true
@@ -95,6 +105,7 @@ visible = false
 layout_mode = 2
 focus_mode = 0
 disabled = true
+icon = ExtResource("5_urplj")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -115,6 +126,7 @@ layout_mode = 2
 focus_mode = 0
 placeholder_text = "Filter Scripts"
 editable = false
+right_icon = ExtResource("6_ns2mg")
 
 [node name="ListScripts" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts"]
 unique_name_in_owner = true
@@ -138,12 +150,14 @@ size_flags_horizontal = 3
 focus_mode = 0
 placeholder_text = "Filter Methods"
 editable = false
+right_icon = ExtResource("6_ns2mg")
 
 [node name="ButtonSortMethods" type="Button" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
+icon = ExtResource("7_r7ov2")
 
 [node name="ListMethods" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods"]
 unique_name_in_owner = true
@@ -172,6 +186,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
+icon = ExtResource("4_hov0c")
 
 [node name="BottomElementsRight" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Content/BottomBar"]
 unique_name_in_owner = true
@@ -187,6 +202,7 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Save"
+icon = ExtResource("9_e5jdj")
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
 layout_mode = 2

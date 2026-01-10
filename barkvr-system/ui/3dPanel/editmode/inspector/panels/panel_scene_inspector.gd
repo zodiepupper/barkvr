@@ -15,6 +15,8 @@ var root_node: Node
 var is_reparenting: bool = false
 ## Array of the last selections in the node tree.
 var last_selection_list: Array
+## The currently active gizmo on the selected item.
+var current_gizmo: BarkGizmo
 
 ## The tree used to display the nodes in the scene.
 @onready var node_tree: InspectorNodeTree = %NodeTree
@@ -168,16 +170,20 @@ func _on_tree_cell_selected() -> void:
 
 	last_selection_list = get_all_selected()
 
-	# Clears all gizmos, could be nicer by only removing the linked one.
-	LocalGlobals.clear_gizmos.emit()
+	# Clears the currently linked gizmo.
+	if is_instance_valid(current_gizmo):
+		current_gizmo.queue_free()
 
 	# If the selected node is a Node3D, attach a 3D gizmo.
 	if new_selection is Node3D:
-		var giz = GIZMO_SCENE.instantiate()
-		root_node.add_child(giz)
-		giz.global_position = new_selection.global_position
-		giz.target = new_selection
-		giz.name = "Gizmo"
+		var gizmo: BarkGizmo = GIZMO_SCENE.instantiate()
+
+		gizmo.source = self
+		gizmo.target = new_selection
+		gizmo.name = "Gizmo"
+
+		root_node.add_child(gizmo)
+		current_gizmo = gizmo
 
 ## Called upon a TreeItem's button getting pressed.
 func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_button_index: int) -> void:
@@ -216,9 +222,11 @@ func _on_scene_tree_node_added(node: Node) -> void:
 		"parent" : node.get_parent()
 	})
 
+## Sync tree with scene tree by removing deleted nodes.
 func _on_scene_tree_node_removed(node: Node) -> void:
 	node_tree.remove_item(node)
 
+## Sync tree when nodes are renamed.
 func _on_scene_tree_node_renamed(node: Node) -> void:
 	if not root_node: return
 	if not is_instance_valid(node): return
@@ -233,6 +241,7 @@ func _check_tree_for_updates():
 	set_root(root_node)
 	node_tree.check_children()
 
+## Set the root of the tree and generate its children.
 func set_root(item: Node):
 	root_node = item
 	add_children(item)
@@ -300,8 +309,6 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 			JavaScriptBridge.download_buffer(gltf_doc.generate_buffer(gltf_state), target_node.name + ".res")
 		else:
 			gltf_doc.write_to_filesystem(gltf_state, download_folder_path + target_node.name + ".glb")
-			# Left over from before rewrite.
-			#var err = ResourceSaver.save(packed, downpath+tmp_target.name+".tscn",ResourceSaver.FLAG_BUNDLE_RESOURCES)
 
 	else: # Export as scene.
 		var packed := PackedScene.new()

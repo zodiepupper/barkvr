@@ -1,26 +1,32 @@
 extends StaticBody3D
 
-@onready var gizmo:Node3D = $".."
-var prev_click_pos:Vector3
 
-@onready var xcol:CollisionShape3D = %xcol
-@onready var ycol:CollisionShape3D = %ycol
-@onready var zcol:CollisionShape3D = %zcol
 
-var interaction_index:int=-1
+@export_enum("x", "y", "z") var _axis: String = "x"
 
-var _offset:=Vector3()
+var prev_click_pos: Vector3
 
-@export_enum("x","y","z") var _axis:String = "x"
+var interaction_index: int = -1
 
-func laser_input(data:Dictionary):
+var _offset := Vector3()
+
+@onready var gizmo: Node3D = $".."
+
+@onready var xcol: CollisionShape3D = %xcol
+@onready var ycol: CollisionShape3D = %ycol
+@onready var zcol: CollisionShape3D = %zcol
+
+
+
+func laser_input(data: Dictionary) -> void:
 	if data.pressed:
 		interaction_index = data.index
+
 	if gizmo.target and prev_click_pos != data.position and data.index == interaction_index:
 		if prev_click_pos and data.pressed:
 			_set_colliders(true)
-			var tmppos:Vector3=gizmo.target.global_position
-			tmppos[_axis] = data.position[_axis]-_offset[_axis]
+			var tmppos: Vector3 = gizmo.target.global_position
+			tmppos[_axis] = data.position[_axis] - _offset[_axis]
 			gizmo.target.global_position = tmppos
 			prev_click_pos = data.position
 		else:
@@ -28,21 +34,21 @@ func laser_input(data:Dictionary):
 			_set_colliders(false)
 			prev_click_pos = data.position
 			_offset = data.position-gizmo.target.global_position
-			if is_instance_valid(Engine.get_singleton("event_manager")):
-				print("apply")
-				Engine.get_singleton("event_manager").set_property(
-					get_tree().get_first_node_in_group('localworldroot').get_path_to(gizmo.target),
+			if is_instance_valid(Engine.get_singleton(&"event_manager")):
+				Engine.get_singleton(&"event_manager").set_property(
+					get_tree().get_first_node_in_group(&"localworldroot").get_path_to(gizmo.target),
 					"global_position",
 					gizmo.target.global_position
-					)
-	elif data.has('hovering'):
+				)
+
+	elif data.has("hovering"):
 		if !data.hovering:
 			interaction_index = -1
 			_set_colliders(false)
 			prev_click_pos = Vector3()
 			_offset = Vector3()
 
-func _set_colliders(is_drag:bool=false):
+func _set_colliders(is_drag: bool = false) -> void:
 	match _axis:
 		"x":
 			if is_drag:

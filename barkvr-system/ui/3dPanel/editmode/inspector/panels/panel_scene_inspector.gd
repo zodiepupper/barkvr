@@ -81,7 +81,7 @@ func _setup_context_menu() -> void:
 		match index:
 			11: selection_add_child()
 			21: selection_duplicate()
-			22: is_reparenting = !is_reparenting
+			22: selection_reparent()
 			31: selection_focus()
 			41: selection_export()
 			42: selection_export(true)
@@ -114,6 +114,13 @@ func selection_duplicate() -> void:
 		if not "node" in target_metadata: continue
 
 		target_metadata.node.get_parent().add_child(target_metadata.node.duplicate())
+
+## Begin reparenting, enables reparenting on next selection.
+func selection_reparent() -> void:
+	is_reparenting = not is_reparenting
+
+	if is_reparenting:
+		snackbar_new("Reparenting, select node to reparent to.", 0)
 
 ## Focus currently selected item in the tree (make visible root).
 func selection_focus() -> void:
@@ -158,9 +165,18 @@ func _on_tree_cell_selected() -> void:
 	selection_changed.emit(new_selection)
 
 	if last_selection_list and new_selection not in last_selection_list and is_reparenting:
+		snackbar_clear()
+
 		for item: TreeItem in last_selection_list:
-			item.get_metadata(0).node.owner = item.get_metadata(0).node.get_parent()
+			var item_node: Node = item.get_metadata(0).node
+			item_node.owner = item.get_metadata(0).node.get_parent()
+
+			if item_node == new_selection:
+				snackbar_new.call_deferred("Cannot reparent node to itself.", get_editor_icon(&"StatusError"))
+				continue
+
 			item.get_metadata(0).node.reparent(new_selection)
+
 		_check_tree_for_updates()
 		is_reparenting = false
 
@@ -295,9 +311,10 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 	Thread.set_thread_safety_checks_enabled(false)
 
 	var download_folder_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/"
-	print("Export save path: " + download_folder_path + target_node.name + ".tscn")
 
-	if not OS.get_name() == "Web" and not DirAccess.dir_exists_absolute(download_folder_path): return
+	if not OS.get_name() == "Web" and not DirAccess.dir_exists_absolute(download_folder_path):
+		snackbar_new.call_deferred("Error during export. Couldn't access download folder.", get_editor_icon(&"StatusError"))
+		return
 
 	Engine.get_singleton(&"event_manager").take_owner_of_node_and_all_children(target_node, target_node)
 
@@ -309,6 +326,7 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 			JavaScriptBridge.download_buffer(gltf_doc.generate_buffer(gltf_state), target_node.name + ".res")
 		else:
 			gltf_doc.write_to_filesystem(gltf_state, download_folder_path + target_node.name + ".glb")
+			snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".glb", get_editor_icon(&"StatusSuccess"))
 
 	else: # Export as scene.
 		var packed := PackedScene.new()
@@ -317,4 +335,7 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 			JavaScriptBridge.download_buffer(var_to_bytes_with_objects(packed), target_node.name + ".res")
 		else:
 			var err: Error = ResourceSaver.save(packed, download_folder_path + target_node.name + ".tscn", ResourceSaver.FLAG_BUNDLE_RESOURCES)
-			if err: print("Export error: " + str(err))
+			if err:
+				snackbar_new.call_deferred("Error during export. " + str(err), get_editor_icon(&"StatusError"))
+			else:
+				snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".tscn", get_editor_icon(&"StatusSuccess"))

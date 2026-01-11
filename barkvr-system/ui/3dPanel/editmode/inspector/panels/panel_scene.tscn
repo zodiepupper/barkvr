@@ -1,14 +1,14 @@
 [gd_scene load_steps=8 format=3 uid="uid://dohf48lsx84mx"]
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_mgoju"]
-[ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene_inspector.gd" id="1_tfb2o"]
+[ext_resource type="Script" uid="uid://b6afgfshbrwrk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene.gd" id="1_tfb2o"]
 [ext_resource type="Script" uid="uid://d4jrawhdx7xl8" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/inspector_node_tree.gd" id="2_3mwhh"]
 [ext_resource type="Texture2D" uid="uid://lmg43uttrlvq" path="res://barkvr-system/assets/icons/editor-icons/Add.svg" id="3_36jfj"]
 [ext_resource type="PackedScene" uid="uid://cx8et16cxspnk" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/add_node_menu.tscn" id="3_l53mb"]
 [ext_resource type="Texture2D" uid="uid://b4fxdub5kj8fr" path="res://barkvr-system/assets/icons/editor-icons/Search.svg" id="4_ip3ux"]
 [ext_resource type="Texture2D" uid="uid://dnuigya2hgjua" path="res://barkvr-system/assets/icons/editor-icons/custom/MethodOverrideMirror.svg" id="5_avlyw"]
 
-[node name="SceneInspector" type="PanelContainer"]
+[node name="Scene" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

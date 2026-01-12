@@ -1,25 +1,17 @@
-[gd_scene load_steps=19 format=3 uid="uid://cv0sjbxpqjy6h"]
+[gd_scene load_steps=11 format=3 uid="uid://cv0sjbxpqjy6h"]
 
 [ext_resource type="Script" uid="uid://bxdpv2yy0uc4v" path="res://barkvr-system/objects/tools/gizmo/gizmo.gd" id="1_q74wi"]
 [ext_resource type="Script" uid="uid://cx7nrsulx76r8" path="res://barkvr-system/objects/tools/gizmo/axis_mover.gd" id="2_vldjq"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ahq3v"]
-shading_mode = 0
-albedo_color = Color(1, 0, 0, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ktp1c"]
 no_depth_test = true
 shading_mode = 0
-albedo_color = Color(0.665604, 1.96133e-06, 4.33177e-07, 0.392157)
+albedo_color = Color(0.9607843, 0.23921569, 0.3882353, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_5mua7"]
 size = Vector3(1, 0.01, 0.01)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xnyhu"]
-shading_mode = 0
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_nc0sh"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_tv6ye"]
 top_radius = 0.0
 bottom_radius = 0.05
 height = 0.2
@@ -27,42 +19,18 @@ height = 0.2
 [sub_resource type="BoxShape3D" id="BoxShape3D_xvnkt"]
 size = Vector3(1.1, 0.1, 0.1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sya76"]
-shading_mode = 0
-albedo_color = Color(0, 1, 0, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pm28y"]
 no_depth_test = true
 shading_mode = 0
-albedo_color = Color(1.01075e-06, 0.531399, 1.05888e-06, 0.392157)
-
-[sub_resource type="BoxMesh" id="BoxMesh_gp1mc"]
-size = Vector3(1, 0.01, 0.01)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_4maec"]
-top_radius = 0.0
-bottom_radius = 0.05
-height = 0.2
+albedo_color = Color(0.6431373, 0.8980392, 0.039215688, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v4v8i"]
 size = Vector3(1.1, 0.1, 0.1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hkafn"]
-shading_mode = 0
-albedo_color = Color(0, 0, 1, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_816s8"]
 no_depth_test = true
 shading_mode = 0
-albedo_color = Color(4.81308e-06, 0, 0.911567, 0.392157)
-
-[sub_resource type="BoxMesh" id="BoxMesh_h2krj"]
-size = Vector3(1, 0.01, 0.01)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_tv6ye"]
-top_radius = 0.0
-bottom_radius = 0.05
-height = 0.2
+albedo_color = Color(0.19607843, 0.6627451, 0.9607843, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_puepw"]
 size = Vector3(1.1, 0.1, 0.1)
@@ -77,15 +45,13 @@ script = ExtResource("2_vldjq")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="x"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
-material_override = SubResource("StandardMaterial3D_ahq3v")
-material_overlay = SubResource("StandardMaterial3D_ktp1c")
+material_override = SubResource("StandardMaterial3D_ktp1c")
 mesh = SubResource("BoxMesh_5mua7")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="x"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
-material_override = SubResource("StandardMaterial3D_xnyhu")
-material_overlay = SubResource("StandardMaterial3D_ktp1c")
-mesh = SubResource("CylinderMesh_nc0sh")
+material_override = SubResource("StandardMaterial3D_ktp1c")
+mesh = SubResource("CylinderMesh_tv6ye")
 
 [node name="xcol" type="CollisionShape3D" parent="x"]
 unique_name_in_owner = true
@@ -101,15 +67,13 @@ _axis = "y"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="y"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
-material_override = SubResource("StandardMaterial3D_sya76")
-material_overlay = SubResource("StandardMaterial3D_pm28y")
-mesh = SubResource("BoxMesh_gp1mc")
+material_override = SubResource("StandardMaterial3D_pm28y")
+mesh = SubResource("BoxMesh_5mua7")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="y"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
-material_override = SubResource("StandardMaterial3D_sya76")
-material_overlay = SubResource("StandardMaterial3D_pm28y")
-mesh = SubResource("CylinderMesh_4maec")
+material_override = SubResource("StandardMaterial3D_pm28y")
+mesh = SubResource("CylinderMesh_tv6ye")
 
 [node name="ycol" type="CollisionShape3D" parent="y"]
 unique_name_in_owner = true
@@ -125,14 +89,12 @@ _axis = "z"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="z"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
-material_override = SubResource("StandardMaterial3D_hkafn")
-material_overlay = SubResource("StandardMaterial3D_816s8")
-mesh = SubResource("BoxMesh_h2krj")
+material_override = SubResource("StandardMaterial3D_816s8")
+mesh = SubResource("BoxMesh_5mua7")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="z"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
-material_override = SubResource("StandardMaterial3D_hkafn")
-material_overlay = SubResource("StandardMaterial3D_816s8")
+material_override = SubResource("StandardMaterial3D_816s8")
 mesh = SubResource("CylinderMesh_tv6ye")
 
 [node name="zcol" type="CollisionShape3D" parent="z"]

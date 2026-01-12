@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cx8et16cxspnk"]
+[gd_scene load_steps=6 format=3 uid="uid://cx8et16cxspnk"]
 
 [ext_resource type="Script" uid="uid://beoov53mgy2by" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/add_node_menu.gd" id="1_d1tmi"]
 [ext_resource type="Theme" uid="uid://1875kv5x57wd" path="res://barkvr-system/assets/add_node_menu_theme.tres" id="1_yiajg"]
+[ext_resource type="Texture2D" uid="uid://cda3kcysklph" path="res://barkvr-system/assets/icons/editor-icons/Close.svg" id="3_tplhs"]
+[ext_resource type="Texture2D" uid="uid://b4fxdub5kj8fr" path="res://barkvr-system/assets/icons/editor-icons/Search.svg" id="4_kjqj7"]
+[ext_resource type="Texture2D" uid="uid://c1t0gdaysusy8" path="res://barkvr-system/assets/icons/editor-icons/Favorites.svg" id="5_veb4y"]
 
 [node name="AddNodeMenu" type="Panel"]
 anchors_preset = 15
@@ -70,6 +73,7 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"WindowTopButton"
+icon = ExtResource("3_tplhs")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer"]
 layout_mode = 2
@@ -147,12 +151,14 @@ size_flags_horizontal = 3
 context_menu_enabled = false
 emoji_menu_enabled = false
 clear_button_enabled = true
+right_icon = ExtResource("4_kjqj7")
 
 [node name="ButtonFavorite" type="Button" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 0
+icon = ExtResource("5_veb4y")
 
 [node name="Label2" type="Label" parent="MarginContainer/AspectRatioContainer/RootContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer/RightSplit/ClassList"]
 layout_mode = 2

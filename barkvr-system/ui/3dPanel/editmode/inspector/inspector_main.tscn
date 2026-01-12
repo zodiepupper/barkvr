@@ -1,12 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://dqc238s6m6ndw"]
 
-[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_nal8t"]
-[ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_main.gd" id="2_jrkme"]
-[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="3_17f7l"]
-[ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene_inspector.tscn" id="4_nds4o"]
-[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="5_6d5uu"]
-[ext_resource type="PackedScene" uid="uid://cyqdfiewnkxl1" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_gdscript_editor.tscn" id="6_72g2u"]
-[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="7_d5fl1"]
+[ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_x1vjx"]
+[ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_main.gd" id="2_rlvjo"]
+[ext_resource type="Script" uid="uid://dyuw1r41shq58" path="res://barkvr-system/ui/3dPanel/panel_resizer.gd" id="3_7ww00"]
+[ext_resource type="PackedScene" uid="uid://dohf48lsx84mx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_scene.tscn" id="4_dldjt"]
+[ext_resource type="PackedScene" uid="uid://jqh6stt10ct5" path="res://barkvr-system/ui/3dPanel/editmode/attributes.tscn" id="5_nal8t"]
+[ext_resource type="PackedScene" uid="uid://cyqdfiewnkxl1" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_script.tscn" id="6_niosx"]
+[ext_resource type="PackedScene" uid="uid://dhwovnnr04rri" path="res://barkvr-system/systems/vbs/ui/bvs_ui.tscn" id="7_j0kk2"]
 
 [sub_resource type="Gradient" id="Gradient_1u5qm"]
 colors = PackedColorArray(1, 0, 1, 1, 1, 0, 1, 0)
@@ -23,9 +23,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_nal8t")
+theme = ExtResource("1_x1vjx")
 theme_type_variation = &"RootPanel"
-script = ExtResource("2_jrkme")
+script = ExtResource("2_rlvjo")
 
 [node name="PanelResizer" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(50, 50)
@@ -35,7 +35,7 @@ size_flags_vertical = 8
 texture_normal = SubResource("GradientTexture2D_fbrd2")
 ignore_texture_size = true
 stretch_mode = 0
-script = ExtResource("3_17f7l")
+script = ExtResource("3_7ww00")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -59,7 +59,7 @@ current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="SceneInspector" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("4_nds4o")]
+[node name="Scene" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("4_dldjt")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
@@ -71,16 +71,16 @@ current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="Attributes" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("5_6d5uu")]
+[node name="Properties" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("5_nal8t")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="ScriptEditor" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_72g2u")]
+[node name="Script" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_niosx")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("7_d5fl1")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("7_j0kk2")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

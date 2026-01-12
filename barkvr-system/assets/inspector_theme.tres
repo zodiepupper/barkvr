@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=30 format=3 uid="uid://beb0gdkkx60br"]
+[gd_resource type="Theme" load_steps=31 format=3 uid="uid://beb0gdkkx60br"]
 
 [ext_resource type="FontFile" uid="uid://bfe3o1gdmrg2t" path="res://barkvr-system/assets/font/noto_sans_mono/NotoSansMono-VariableFont_wdth,wght.ttf" id="1_1qdal"]
 
@@ -160,6 +160,20 @@ color = Color(0.21568628, 0.21568628, 0.21568628, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qdal"]
 bg_color = Color(0.07058824, 0.07058824, 0.07058824, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqrxm"]
+content_margin_left = 16.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.22745098, 0.22745098, 0.22745098, 1)
+border_width_left = 3
+border_color = Color(0.9607843, 0.23921569, 0.3882353, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jd3em"]
 content_margin_left = 4.0
 content_margin_top = 6.0
@@ -314,6 +328,12 @@ PopupMenu/styles/panel = SubResource("StyleBoxFlat_w2m32")
 PopupMenu/styles/separator = SubResource("StyleBoxLine_xk8hu")
 RootPanel/base_type = &"PanelContainer"
 RootPanel/styles/panel = SubResource("StyleBoxFlat_1qdal")
+Snackbar/base_type = &"PanelContainer"
+Snackbar/styles/panel = SubResource("StyleBoxFlat_wqrxm")
+SnackbarHolder/base_type = &"MarginContainer"
+SnackbarHolder/constants/margin_bottom = 8
+SnackbarHolder/constants/margin_left = 16
+SnackbarHolder/constants/margin_right = 16
 TabContainer/constants/side_margin = 0
 TabContainer/styles/panel = SubResource("StyleBoxFlat_jd3em")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_7yimk")

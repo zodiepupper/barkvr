@@ -171,10 +171,9 @@ func _on_tree_cell_selected() -> void:
 			var item_node: Node = item.get_metadata(0).node
 			item_node.owner = item.get_metadata(0).node.get_parent()
 
-			if item_node == new_selection:
-				snackbar_new.call_deferred("Cannot reparent node to itself.", get_editor_icon(&"StatusError"))
+			if item_node == new_selection or item_node.is_ancestor_of(new_selection):
+				snackbar_new.call_deferred("Cannot reparent node to itself.", 3, get_editor_icon(&"StatusError"))
 				continue
-
 			item.get_metadata(0).node.reparent(new_selection)
 
 		_check_tree_for_updates()
@@ -313,7 +312,7 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 	var download_folder_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/"
 
 	if not OS.get_name() == "Web" and not DirAccess.dir_exists_absolute(download_folder_path):
-		snackbar_new.call_deferred("Error during export. Couldn't access download folder.", get_editor_icon(&"StatusError"))
+		snackbar_new.call_deferred("Error during export. Couldn't access download folder.", 3, get_editor_icon(&"StatusError"))
 		return
 
 	Engine.get_singleton(&"event_manager").take_owner_of_node_and_all_children(target_node, target_node)
@@ -326,7 +325,7 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 			JavaScriptBridge.download_buffer(gltf_doc.generate_buffer(gltf_state), target_node.name + ".res")
 		else:
 			gltf_doc.write_to_filesystem(gltf_state, download_folder_path + target_node.name + ".glb")
-			snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".glb", get_editor_icon(&"StatusSuccess"))
+			snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".glb", 3, get_editor_icon(&"StatusSuccess"))
 
 	else: # Export as scene.
 		var packed := PackedScene.new()
@@ -336,6 +335,6 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 		else:
 			var err: Error = ResourceSaver.save(packed, download_folder_path + target_node.name + ".tscn", ResourceSaver.FLAG_BUNDLE_RESOURCES)
 			if err:
-				snackbar_new.call_deferred("Error during export. " + str(err), get_editor_icon(&"StatusError"))
+				snackbar_new.call_deferred("Error during export. " + str(err), 3, get_editor_icon(&"StatusError"))
 			else:
-				snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".tscn", get_editor_icon(&"StatusSuccess"))
+				snackbar_new.call_deferred("Export saved as: " + download_folder_path + target_node.name + ".tscn", 3, get_editor_icon(&"StatusSuccess"))

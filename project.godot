@@ -12,6 +12,7 @@ config_version=5
 
 config/name="barkvr"
 run/main_scene="res://barkvr-system/startup/main.tscn"
+run/enable_alt_space_menu=true
 config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
 config/features=PackedStringArray("4.5", "Mobile")
@@ -50,6 +51,8 @@ gdscript/warnings/unused_signal=0
 window/size/viewport_width=1500
 window/size/viewport_height=800
 window/subwindows/embed_subwindows=false
+display_server/driver.linuxbsd="wayland"
+window/handheld/orientation=6
 
 [editor]
 
@@ -299,6 +302,7 @@ META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_RIGHT={
 openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
+openxr/startup_alert=false
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
@@ -316,3 +320,4 @@ openxr/extensions/meta/hand_tracking_capsules=true
 openxr/extensions/meta/application_space_warp=true
 openxr/extensions/meta/environment_depth=true
 openxr/extensions/meta/color_space/starting_color_space=2
+hybrid_app/enabled=true

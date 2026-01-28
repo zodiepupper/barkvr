@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c76jook46cjyx"]
+[gd_scene format=3 uid="uid://c76jook46cjyx"]
 
 [ext_resource type="Script" uid="uid://cfiauksnjwq00" path="res://barkvr-system/objects/toys/bouncyballgun.gd" id="1_akfv3"]
 
@@ -14,17 +14,17 @@ height = 0.1
 radial_segments = 4
 rings = 1
 
-[node name="bouncyballgun" type="RigidBody3D"]
+[node name="bouncyballgun" type="RigidBody3D" unique_id=850461285]
 script = ExtResource("1_akfv3")
 metadata/grabbable = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1544805598]
 shape = SubResource("BoxShape3D_duhwo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1703648565]
 mesh = SubResource("BoxMesh_jvvxf")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1676213365]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.302092)
 mesh = SubResource("CapsuleMesh_d5u1c")
 skeleton = NodePath("../..")

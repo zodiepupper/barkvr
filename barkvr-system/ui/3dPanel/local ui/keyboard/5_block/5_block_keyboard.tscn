@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c8nr32r7yt3w7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lpdhp"]
+
+[sub_resource type="GDScript" id="GDScript_v47ps"]
+script/source = "extends MeshInstance3D
+
+func _process(delta: float) -> void:
+	var parent = get_parent()
+	
+"
+
+[node name="5BlockKeyboard" type="Node3D" unique_id=1938296476]
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1432403681]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1793288863]
+shape = SubResource("BoxShape3D_lpdhp")
+
+[node name="vis" type="MeshInstance3D" parent="Area3D/CollisionShape3D" unique_id=1123706291]
+script = SubResource("GDScript_v47ps")

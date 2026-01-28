@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=6 format=3 uid="uid://bnxndu834y4ws"]
+[gd_resource type="AudioBusLayout" format=3 uid="uid://bnxndu834y4ws"]
 
 [sub_resource type="AudioEffectNotchFilter" id="AudioEffectNotchFilter_feqo5"]
 resource_name = "NotchFilter"

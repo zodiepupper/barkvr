@@ -1,22 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://cflstd2bxe62a"]
+[gd_scene format=3 uid="uid://cflstd2bxe62a"]
 
-[ext_resource type="PackedScene" uid="uid://yk0dma18v2xm" path="res://addons/renik-gdscript/sample_models/godette.glb" id="1_hfna0"]
+[ext_resource type="PackedScene" uid="uid://cox0bfdddkll3" path="res://addons/renik-gdscript/sample_models/godette.glb" id="1_hfna0"]
 
-[node name="GoddettePhysicsIkTest" type="Node3D"]
+[node name="GoddettePhysicsIkTest" type="Node3D" unique_id=915732965]
 
-[node name="godette" parent="." instance=ExtResource("1_hfna0")]
+[node name="godette" parent="." unique_id=1592733203 instance=ExtResource("1_hfna0")]
 
-[node name="Skeleton3D" parent="godette" index="0"]
-bones/42/position = Vector3(0.00588868, 0.188559, 0.0121415)
-bones/42/rotation = Quaternion(0.0307567, 0.999527, -1.24306e-09, -4.03969e-08)
-bones/43/position = Vector3(0.0101017, 0.163986, 0.00817198)
-bones/43/rotation = Quaternion(0.0217482, 0.706772, -0.0217482, 0.706772)
-bones/43/scale = Vector3(1, 1, 1)
-bones/44/position = Vector3(-0.077525, 0.158475, -0.012525)
-bones/44/rotation = Quaternion(9.57037e-09, -0.707107, -9.57038e-09, 0.707107)
-bones/44/scale = Vector3(1, 1, 1)
-
-[node name="SkeletonIK3D" type="SkeletonIK3D" parent="godette/Skeleton3D" index="2"]
+[node name="godette_Skeleton3D#SkeletonIK3D" type="SkeletonIK3D" parent="." unique_id=678101595]
 transform = Transform3D(0.378039, 0.410315, 0.829897, 0.662815, 0.505886, -0.552047, -0.646346, 0.758763, -0.0807185, -0.298981, 0.878921, 0.195931)
 root_bone = &"RightUpperArm"
 tip_bone = &"RightHand"

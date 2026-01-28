@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ceamctffi58n0"]
 
-[node name="variable" type="GraphNode"]
+[node name="variable" type="GraphNode" unique_id=98394879]
 offset_left = 659.0
 offset_top = 128.0
 offset_right = 781.0
@@ -27,10 +27,10 @@ slot/1/right_color = Color(0, 1, 0, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
 
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="LineEdit" type="LineEdit" parent="." unique_id=1785690151]
 layout_mode = 2
 placeholder_text = "variable name"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1910256591]
 layout_mode = 2
 text = "value"

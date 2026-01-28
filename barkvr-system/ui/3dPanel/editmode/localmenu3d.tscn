@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbqns5wp6l638"]
+[gd_scene format=3 uid="uid://bbqns5wp6l638"]
 
 [ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="1_1cj4t"]
 [ext_resource type="PackedScene" uid="uid://doy6bwhtmwdc6" path="res://barkvr-system/ui/3dPanel/local ui/localmenu.tscn" id="2_ra1f3"]
 [ext_resource type="Script" uid="uid://ceukp60f15tsk" path="res://barkvr-system/ui/3dPanel/editmode/parent_lookat_user.tres.gd" id="3_ra1f3"]
 
-[node name="Panel3D" type="RigidBody3D" groups=["localuipanel"]]
+[node name="Panel3D" type="RigidBody3D" unique_id=105990435 groups=["localuipanel"]]
 collision_layer = 512
 collision_mask = 512
 freeze = true
@@ -16,5 +16,5 @@ render_priority = 127
 on_top = true
 metadata/grabbable = true
 
-[node name="parent_lookat_user_camera" type="Node" parent="." groups=["localuilookat"]]
+[node name="parent_lookat_user_camera" type="Node" parent="." unique_id=1482169827 groups=["localuilookat"]]
 script = ExtResource("3_ra1f3")

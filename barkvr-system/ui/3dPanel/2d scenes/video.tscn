@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cn1wel2bnigbf"]
+[gd_scene format=3 uid="uid://cn1wel2bnigbf"]
 
 [ext_resource type="Script" uid="uid://ebbm1wn0pums" path="res://barkvr-system/ui/3dPanel/2d scenes/video.gd" id="1_isxg1"]
 
-[node name="videoContainer" type="VBoxContainer"]
+[node name="videoContainer" type="VBoxContainer" unique_id=1061450325]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,29 +12,29 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_isxg1")
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="." unique_id=890536662]
 layout_mode = 2
 size_flags_vertical = 3
 ratio = 1.7
 
-[node name="video" type="VideoStreamPlayer" parent="AspectRatioContainer"]
+[node name="video" type="VideoStreamPlayer" parent="AspectRatioContainer" unique_id=479911088]
 layout_mode = 2
 expand = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=151027693]
 layout_mode = 2
 
-[node name="play" type="Button" parent="HBoxContainer"]
+[node name="play" type="Button" parent="HBoxContainer" unique_id=1925376628]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "play"
 
-[node name="pause" type="Button" parent="HBoxContainer"]
+[node name="pause" type="Button" parent="HBoxContainer" unique_id=1039109914]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "pause"
 
-[node name="restart" type="Button" parent="HBoxContainer"]
+[node name="restart" type="Button" parent="HBoxContainer" unique_id=1747779725]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "restart"

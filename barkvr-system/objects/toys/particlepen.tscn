@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://og3t2qnt8ukh"]
+[gd_scene format=3 uid="uid://og3t2qnt8ukh"]
 
 [ext_resource type="Script" uid="uid://cji5xf5e7jus0" path="res://barkvr-system/objects/toys/particlepen.gd" id="1_6lnrq"]
 
@@ -27,19 +27,19 @@ top_radius = 0.0
 bottom_radius = 0.025
 height = 0.1
 
-[node name="particlepen" type="StaticBody3D"]
+[node name="particlepen" type="StaticBody3D" unique_id=166741278]
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_6lnrq")
 metadata/grabbable = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2101278368]
 shape = SubResource("BoxShape3D_to33s")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=77245292]
 mesh = SubResource("BoxMesh_b058x")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1136729519]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.221584, 0)
 emitting = false
 amount = 10000
@@ -48,6 +48,6 @@ fixed_fps = 200
 process_material = SubResource("ParticleProcessMaterial_tpmft")
 draw_pass_1 = SubResource("RibbonTrailMesh_qq8n2")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=130726832]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.174114, 0)
 mesh = SubResource("CylinderMesh_at4jr")

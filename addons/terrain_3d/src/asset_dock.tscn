@@ -1,22 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkb6hii5e48m2"]
+[gd_scene format=3 uid="uid://dkb6hii5e48m2"]
 
-[ext_resource type="Script" path="res://addons/terrain_3d/src/asset_dock.gd" id="1_e23pg"]
+[ext_resource type="Script" uid="uid://bgoifepft1hjw" path="res://addons/terrain_3d/src/asset_dock.gd" id="1_e23pg"]
 
-[node name="Terrain3D" type="PanelContainer"]
+[node name="Terrain3D" type="PanelContainer" unique_id=1633845690]
 custom_minimum_size = Vector2(256, 95)
 offset_right = 766.0
 offset_bottom = 100.0
 script = ExtResource("1_e23pg")
 
-[node name="Box" type="BoxContainer" parent="."]
+[node name="Box" type="BoxContainer" parent="." unique_id=64110792]
 layout_mode = 2
 size_flags_vertical = 3
 vertical = true
 
-[node name="Buttons" type="BoxContainer" parent="Box"]
+[node name="Buttons" type="BoxContainer" parent="Box" unique_id=1586290337]
 layout_mode = 2
 
-[node name="TexturesBtn" type="Button" parent="Box/Buttons"]
+[node name="TexturesBtn" type="Button" parent="Box/Buttons" unique_id=62110834]
 custom_minimum_size = Vector2(80, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -26,7 +26,7 @@ toggle_mode = true
 button_pressed = true
 text = "Textures"
 
-[node name="MeshesBtn" type="Button" parent="Box/Buttons"]
+[node name="MeshesBtn" type="Button" parent="Box/Buttons" unique_id=698633411]
 custom_minimum_size = Vector2(80, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -35,7 +35,7 @@ theme_override_font_sizes/font_size = 16
 toggle_mode = true
 text = "Meshes"
 
-[node name="PlacementOpt" type="OptionButton" parent="Box/Buttons"]
+[node name="PlacementOpt" type="OptionButton" parent="Box/Buttons" unique_id=549887615]
 custom_minimum_size = Vector2(80, 30)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -43,6 +43,7 @@ size_flags_vertical = 0
 selected = 7
 item_count = 9
 popup/item_0/text = "Left_UL"
+popup/item_0/id = 0
 popup/item_1/text = "Left_BL"
 popup/item_1/id = 1
 popup/item_2/text = "Left_UR"
@@ -60,7 +61,7 @@ popup/item_7/id = 7
 popup/item_8/text = "Bottom"
 popup/item_8/id = 8
 
-[node name="SizeSlider" type="HSlider" parent="Box/Buttons"]
+[node name="SizeSlider" type="HSlider" parent="Box/Buttons" unique_id=934575419]
 custom_minimum_size = Vector2(80, 10)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -68,7 +69,7 @@ min_value = 66.0
 max_value = 230.0
 value = 83.0
 
-[node name="Floating" type="Button" parent="Box/Buttons"]
+[node name="Floating" type="Button" parent="Box/Buttons" unique_id=1158679254]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -77,7 +78,7 @@ toggle_mode = true
 text = "F"
 flat = true
 
-[node name="Pinned" type="Button" parent="Box/Buttons"]
+[node name="Pinned" type="Button" parent="Box/Buttons" unique_id=1134484073]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -86,7 +87,7 @@ toggle_mode = true
 text = "P"
 flat = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Box"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Box" unique_id=176005386]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

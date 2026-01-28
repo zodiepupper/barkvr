@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://3cx3afcwx3hw"]
+[gd_scene format=3 uid="uid://3cx3afcwx3hw"]
 
 [ext_resource type="Script" uid="uid://cr13nnbjttyvw" path="res://barkvr-system/ui/3dPanel/editmode/attributes/string.gd" id="1_7fh5n"]
 
-[node name="string" type="Control"]
+[node name="string" type="Control" unique_id=1070933937]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 3
 anchors_preset = 15
@@ -16,7 +16,7 @@ size_flags_stretch_ratio = 2.0
 mouse_filter = 1
 script = ExtResource("1_7fh5n")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=687032245]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,14 +26,14 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=1506179681]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel2" unique_id=659148758]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,21 +45,21 @@ text = "position"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="position" type="HBoxContainer" parent="VBoxContainer"]
+[node name="position" type="HBoxContainer" parent="VBoxContainer" unique_id=1983087150]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="v" type="HBoxContainer" parent="VBoxContainer/position"]
+[node name="v" type="HBoxContainer" parent="VBoxContainer/position" unique_id=2049726666]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer/position/v"]
+[node name="Panel2" type="Panel" parent="VBoxContainer/position/v" unique_id=2141644752]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/position/v/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/position/v/Panel2" unique_id=1137883624]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,6 +71,6 @@ text = "string:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="val" type="LineEdit" parent="VBoxContainer/position/v"]
+[node name="val" type="LineEdit" parent="VBoxContainer/position/v" unique_id=1503133338]
 layout_mode = 2
 size_flags_horizontal = 3

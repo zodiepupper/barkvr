@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2746ng3ssbvm"]
+[gd_scene format=3 uid="uid://b2746ng3ssbvm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdjrh"]
 bg_color = Color(0.168627, 0.168627, 0.168627, 1)
@@ -26,7 +26,7 @@ font_color = Color(0, 0, 0, 1)
 corner_radius_top_right = 32
 corner_radius_bottom_right = 32
 
-[node name="ForearmMenu" type="Control"]
+[node name="ForearmMenu" type="Control" unique_id=1144905246]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +34,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="left" type="Panel" parent="."]
+[node name="left" type="Panel" parent="." unique_id=1256431184]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.1
@@ -43,7 +43,7 @@ anchor_bottom = 0.9
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jdjrh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="left"]
+[node name="VBoxContainer" type="VBoxContainer" parent="left" unique_id=378606484]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1
@@ -54,18 +54,18 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="left/VBoxContainer"]
+[node name="Button" type="Button" parent="left/VBoxContainer" unique_id=471811405]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_28u6r")
 text = "Voice"
 
-[node name="Panel" type="Button" parent="left/VBoxContainer"]
+[node name="Panel" type="Button" parent="left/VBoxContainer" unique_id=1659160671]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_vsj4h")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="left/VBoxContainer/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="left/VBoxContainer/Panel" unique_id=580256439]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1
@@ -75,7 +75,7 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="left/VBoxContainer/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="left/VBoxContainer/Panel/VBoxContainer" unique_id=905214591]
 layout_mode = 2
 size_flags_vertical = 3
 text = "volume"
@@ -83,12 +83,12 @@ label_settings = SubResource("LabelSettings_o3tr4")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="left/VBoxContainer/Panel/VBoxContainer"]
+[node name="HSlider" type="HSlider" parent="left/VBoxContainer/Panel/VBoxContainer" unique_id=136043240]
 layout_mode = 2
 value = 60.0
 ticks_on_borders = true
 
-[node name="right" type="Panel" parent="."]
+[node name="right" type="Panel" parent="." unique_id=262346902]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.35

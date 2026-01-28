@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://30b7d60g8qug"]
 
-[node name="WebrtcConnectionTools" type="Control"]
+[node name="WebrtcConnectionTools" type="Control" unique_id=953135314]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -8,7 +8,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1151903401]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,27 +16,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=1399552546]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1890798104]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="new_peer" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="new_peer" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=865258674]
 layout_mode = 2
 text = "create new peer"
 
-[node name="create_offer" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="create_offer" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=678804967]
 layout_mode = 2
 text = "create offer"
 
-[node name="create_answer" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="create_answer" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=1192761103]
 layout_mode = 2
 text = "create answer"
 
-[node name="new_peer4" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="new_peer4" type="Button" parent="HBoxContainer/VBoxContainer" unique_id=527007446]
 layout_mode = 2
 text = "create new peer"

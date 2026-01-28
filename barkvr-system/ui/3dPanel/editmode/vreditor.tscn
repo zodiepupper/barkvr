@@ -1,39 +1,34 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3sbt3oft3cxg"]
+[gd_scene format=3 uid="uid://b3sbt3oft3cxg"]
 
 [ext_resource type="Script" uid="uid://dfc24xmvboo40" path="res://barkvr-system/ui/3dPanel/editmode/vreditor.gd" id="1_8pitw"]
-[ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="2_tnd62"]
 
-[node name="vreditor" type="Node3D"]
+[node name="vreditor" type="Node3D" unique_id=836115686]
 script = ExtResource("1_8pitw")
 
-[node name="script" type="StaticBody3D" parent="."]
+[node name="script" type="StaticBody3D" parent="." unique_id=600633753]
 unique_name_in_owner = true
 transform = Transform3D(0.707107, -8.9407e-08, 0.707107, 5.96046e-08, 1, 8.74228e-08, -0.707107, 2.98023e-08, 0.707107, -0.442787, -4.44088e-15, 0.18931)
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("2_tnd62")
 metadata/grabbable = true
 
-[node name="attributes" type="StaticBody3D" parent="."]
+[node name="attributes" type="StaticBody3D" parent="." unique_id=225534916]
 unique_name_in_owner = true
 transform = Transform3D(0.707107, 0, -0.707107, 3.30343e-20, 1, 4.37114e-08, 0.707107, 0, 0.707107, 0.445292, -2.66453e-15, 0.181695)
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("2_tnd62")
 metadata/grabbable = true
 
-[node name="addnode" type="StaticBody3D" parent="."]
+[node name="addnode" type="StaticBody3D" parent="." unique_id=26154971]
 unique_name_in_owner = true
 transform = Transform3D(1, 2.51218e-15, 0, -2.17558e-15, 0.866025, -0.5, -1.25607e-15, 0.5, 0.866026, 0, 0.4, 0.0629571)
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("2_tnd62")
 metadata/grabbable = true
 
-[node name="inspector" type="StaticBody3D" parent="."]
+[node name="inspector" type="StaticBody3D" parent="." unique_id=1455206153]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("2_tnd62")
 metadata/grabbable = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnw1biowam8w"]
+[gd_scene format=3 uid="uid://dnw1biowam8w"]
 
 [ext_resource type="Script" uid="uid://duvwvwghhl03w" path="res://barkvr-system/objects/toys/audio/synthcube/synthcube.gd" id="1_p4ec3"]
 
@@ -11,27 +11,27 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_x3tah"]
 mix_rate = 11025.0
 
-[node name="synthcube" type="RigidBody3D"]
+[node name="synthcube" type="RigidBody3D" unique_id=491366665]
 collision_layer = 3
 collision_mask = 3
 continuous_cd = true
 script = ExtResource("1_p4ec3")
 metadata/grabbable = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1555446355]
 mesh = SubResource("BoxMesh_mrsjk")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1584105181]
 shape = SubResource("BoxShape3D_mkjkt")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="." unique_id=1690245780]
 stream = SubResource("AudioStreamGenerator_x3tah")
 volume_db = -10.16
 pitch_scale = 0.8
 autoplay = true
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=1682855591]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.172844, 0)
 
-[node name="Label3D2" type="Label3D" parent="."]
+[node name="Label3D2" type="Label3D" parent="." unique_id=1676635755]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.172844, 0)

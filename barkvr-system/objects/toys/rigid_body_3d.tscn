@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://y38504yxs82b"]
+[gd_scene format=3 uid="uid://y38504yxs82b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pydgp"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -6,16 +6,16 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="BoxMesh" id="BoxMesh_6fop7"]
 size = Vector3(0.1, 0.1, 0.1)
 
-[node name="RigidBody3d" type="RigidBody3D"]
+[node name="RigidBody3d" type="RigidBody3D" unique_id=877210565]
 mass = 100.0
 gravity_scale = 0.0
-continuous_cd = true
-max_contacts_reported = 1
-contact_monitor = true
 can_sleep = false
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3d" type="CollisionShape3D" parent="." unique_id=814373101]
 shape = SubResource("BoxShape3D_pydgp")
 
-[node name="MeshInstance3d" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3d" type="MeshInstance3D" parent="." unique_id=700198816]
 mesh = SubResource("BoxMesh_6fop7")

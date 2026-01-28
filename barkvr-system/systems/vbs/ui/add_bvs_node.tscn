@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://crna2y28nlvky"]
+[gd_scene format=3 uid="uid://crna2y28nlvky"]
 
 [ext_resource type="Script" uid="uid://pbdo38fd6ehi" path="res://barkvr-system/systems/vbs/ui/add_vbs_node.gd" id="1_0tgfi"]
 
-[node name="AddVBSNode" type="Control"]
+[node name="AddVBSNode" type="Control" unique_id=654538318]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_0tgfi")
 
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="LineEdit" type="LineEdit" parent="." unique_id=857294694]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -20,7 +20,7 @@ offset_bottom = 45.0
 grow_horizontal = 2
 placeholder_text = "filter"
 
-[node name="ItemList" type="ItemList" parent="."]
+[node name="ItemList" type="ItemList" parent="." unique_id=85961562]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

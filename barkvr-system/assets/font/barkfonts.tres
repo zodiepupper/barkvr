@@ -1,4 +1,4 @@
-[gd_resource type="FontVariation" load_steps=4 format=3 uid="uid://cj1etf32fetld"]
+[gd_resource type="FontVariation" format=3 uid="uid://cj1etf32fetld"]
 
 [ext_resource type="FontFile" uid="uid://db0xr70rowjlv" path="res://barkvr-system/assets/font/Noto_Color_Emoji/NotoColorEmoji-Regular.ttf" id="1_nooa6"]
 [ext_resource type="FontFile" uid="uid://bs1eh2m3rv6mx" path="res://barkvr-system/assets/font/OpenSans-VariableFont_wdth,wght.ttf" id="1_xhkmi"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=4 uid="uid://wk11tl1w3f3d"]
+[gd_scene format=4 uid="uid://wk11tl1w3f3d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_to7x7"]
 
@@ -32,7 +32,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_tpgto")
 
-[node name="Cube" type="MeshInstance3D"]
+[node name="Cube" type="MeshInstance3D" unique_id=530592476]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.5)
 mesh = SubResource("ArrayMesh_lig0e")
-skeleton = NodePath("")

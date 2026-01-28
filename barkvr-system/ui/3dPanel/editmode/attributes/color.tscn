@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://5r83rbiuayop"]
+[gd_scene format=3 uid="uid://5r83rbiuayop"]
 
 [ext_resource type="Script" uid="uid://bsw4anitg0s4s" path="res://barkvr-system/ui/3dPanel/editmode/attributes/color.gd" id="1_51r0t"]
 
@@ -10,7 +10,7 @@ shadow_size = 0
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
 
-[node name="color" type="Control"]
+[node name="color" type="Control" unique_id=295389262]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
 anchors_preset = 15
@@ -24,7 +24,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 script = ExtResource("1_51r0t")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2038790247]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -33,13 +33,13 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=401846514]
 custom_minimum_size = Vector2(100, 60)
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel2" unique_id=135678325]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,30 +51,30 @@ text = "position"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1293089936]
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
 current_tab = 0
 
-[node name="rgba" type="HBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="rgba" type="HBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1095051893]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 0
 
-[node name="r" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba"]
+[node name="r" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba" unique_id=1827002834]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/r"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/r" unique_id=1278407973]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(1, 0, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/r/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/r/ColorRect" unique_id=2088460539]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,22 +93,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="rval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/r"]
+[node name="rval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/r" unique_id=1836466029]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="g" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba"]
+[node name="g" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba" unique_id=1422011725]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/g"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/g" unique_id=1254615301]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0, 1, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/g/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/g/ColorRect" unique_id=803736578]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -127,22 +127,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="gval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/g"]
+[node name="gval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/g" unique_id=744314844]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="b" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba"]
+[node name="b" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba" unique_id=656704146]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/b"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/b" unique_id=138225218]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0, 0, 1, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/b/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/b/ColorRect" unique_id=1350248402]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -155,22 +155,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="bval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/b"]
+[node name="bval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/b" unique_id=556404652]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="a" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba"]
+[node name="a" type="HBoxContainer" parent="VBoxContainer/TabContainer/rgba" unique_id=707340981]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/a"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/rgba/a" unique_id=1990913414]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/a/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/rgba/a/ColorRect" unique_id=1846011904]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -183,29 +183,29 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="rgbaval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/a"]
+[node name="rgbaval" type="LineEdit" parent="VBoxContainer/TabContainer/rgba/a" unique_id=22233846]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="hsva" type="HBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="hsva" type="HBoxContainer" parent="VBoxContainer/TabContainer" unique_id=398110338]
 visible = false
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 1
 
-[node name="h" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva"]
+[node name="h" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva" unique_id=1542686562]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/h"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/h" unique_id=918746123]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/h/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/h/ColorRect" unique_id=2019332249]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -218,22 +218,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="hval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/h"]
+[node name="hval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/h" unique_id=1414374302]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="s" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva"]
+[node name="s" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva" unique_id=1348422431]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/s"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/s" unique_id=1254040170]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/s/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/s/ColorRect" unique_id=1885623620]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -246,22 +246,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="sval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/s"]
+[node name="sval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/s" unique_id=102639056]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="v" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva"]
+[node name="v" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva" unique_id=3718866]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/v"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/v" unique_id=518127941]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/v/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/v/ColorRect" unique_id=1524313977]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -274,22 +274,22 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="vval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/v"]
+[node name="vval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/v" unique_id=1313574617]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="a" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva"]
+[node name="a" type="HBoxContainer" parent="VBoxContainer/TabContainer/hsva" unique_id=735488372]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/a"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hsva/a" unique_id=1060660801]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/a/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hsva/a/ColorRect" unique_id=1302632844]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -302,29 +302,29 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="hsvaval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/a"]
+[node name="hsvaval" type="LineEdit" parent="VBoxContainer/TabContainer/hsva/a" unique_id=1190957803]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="hex" type="HBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="hex" type="HBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1151361038]
 visible = false
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 2
 
-[node name="h" type="HBoxContainer" parent="VBoxContainer/TabContainer/hex"]
+[node name="h" type="HBoxContainer" parent="VBoxContainer/TabContainer/hex" unique_id=1272371074]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hex/h"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/TabContainer/hex/h" unique_id=505793183]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0.41, 0.41, 0.41, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hex/h/ColorRect"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/hex/h/ColorRect" unique_id=1001967553]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -338,6 +338,6 @@ label_settings = SubResource("LabelSettings_ta0h6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="hexval" type="LineEdit" parent="VBoxContainer/TabContainer/hex/h"]
+[node name="hexval" type="LineEdit" parent="VBoxContainer/TabContainer/hex/h" unique_id=1824317720]
 layout_mode = 2
 size_flags_horizontal = 3

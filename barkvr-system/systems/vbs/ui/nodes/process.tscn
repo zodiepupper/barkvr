@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bpqyj01fpsek7"]
 
-[node name="process" type="GraphNode"]
+[node name="process" type="GraphNode" unique_id=151495519]
 offset_left = 404.0
 offset_top = 204.0
 offset_right = 479.0
@@ -17,6 +17,6 @@ slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1922745944]
 layout_mode = 2
 text = "woof"

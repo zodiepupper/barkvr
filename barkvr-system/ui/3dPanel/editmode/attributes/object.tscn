@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dddtbbin6ty1l"]
+[gd_scene format=3 uid="uid://dddtbbin6ty1l"]
 
 [ext_resource type="Script" uid="uid://bgsuycn851owg" path="res://barkvr-system/ui/3dPanel/editmode/attributes/object.gd" id="1_bl13v"]
 
-[node name="object" type="Control"]
+[node name="object" type="Control" unique_id=1251757812]
 clip_contents = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 3
@@ -18,7 +18,7 @@ mouse_filter = 1
 script = ExtResource("1_bl13v")
 full_height = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1388915496]
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
@@ -28,12 +28,12 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=482078410]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel2" unique_id=1412630499]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -45,7 +45,7 @@ text = "object"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="expand" type="Button" parent="VBoxContainer/Panel2"]
+[node name="expand" type="Button" parent="VBoxContainer/Panel2" unique_id=395930113]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.45
@@ -58,7 +58,7 @@ theme_override_font_sizes/font_size = 24
 text = "\\/"
 flat = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel2" unique_id=138610433]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,7 +68,7 @@ grow_vertical = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="create" type="Button" parent="VBoxContainer/Panel2/HBoxContainer"]
+[node name="create" type="Button" parent="VBoxContainer/Panel2/HBoxContainer" unique_id=1103705699]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -76,14 +76,14 @@ mouse_filter = 1
 text = "create"
 expand_icon = true
 
-[node name="copy" type="Button" parent="VBoxContainer/Panel2/HBoxContainer"]
+[node name="copy" type="Button" parent="VBoxContainer/Panel2/HBoxContainer" unique_id=111902467]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "copy"
 expand_icon = true
 
-[node name="paste" type="Button" parent="VBoxContainer/Panel2/HBoxContainer"]
+[node name="paste" type="Button" parent="VBoxContainer/Panel2/HBoxContainer" unique_id=48252139]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

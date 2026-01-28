@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d1novstb8ijb2"]
+[gd_scene format=3 uid="uid://d1novstb8ijb2"]
 
 [ext_resource type="Script" uid="uid://dpfrhqjau6lbn" path="res://barkvr-system/ik/auto setup for avatars/quick_ik_setup.gd" id="1_77tfk"]
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="2_f6jsk"]
@@ -7,112 +7,74 @@
 [ext_resource type="Script" uid="uid://cd1tfr1w8y75e" path="res://addons/renik-gdscript/renik_placement.gd" id="5_4b5be"]
 [ext_resource type="Script" uid="uid://ch5v21lx7m462" path="res://addons/renik-gdscript/renik_placement_gait.gd" id="6_xjv3a"]
 
-[sub_resource type="Resource" id="Resource_oro2a"]
+[sub_resource type="Resource" id="Resource_5qdgp"]
 resource_name = "ForwardGait"
 script = ExtResource("6_xjv3a")
-speed_scalar_min = 1.0
 speed_scalar_max = 0.5
 ground_time = 5.0
-lift_time_base = 10.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
 apex_out_time_base = 5.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
 drop_time_scalar = 0.0
 tip_toe_distance_scalar = 1.5707963267948966
-tip_toe_speed_scalar = 0.7853981633974483
-tip_toe_angle_max = 1.0471975511965976
 lift_vertical = 0.0
 lift_vertical_scalar = 0.4
 lift_horizontal_scalar = 0.7
 lift_angle = 1.5707963267948966
 apex_vertical = 0.0
-apex_vertical_scalar = 0.1
 apex_angle = 0.39269908169872414
-drop_vertical = 0.0
 drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
 drop_angle = -0.39269908169872414
 contact_point_ease = 0.05
-contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_rkq70"]
+[sub_resource type="Resource" id="Resource_iplp8"]
 resource_name = "BackwardGait"
 script = ExtResource("6_xjv3a")
 speed_scalar_min = 0.5
 speed_scalar_max = 0.75
 ground_time = 5.0
 lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
-drop_time_scalar = 5.0
 tip_toe_distance_scalar = 0.0
 tip_toe_speed_scalar = 0.0
 tip_toe_angle_max = 0.0
-lift_vertical = 0.025
 lift_vertical_scalar = 0.1
 lift_horizontal_scalar = 0.33
 lift_angle = -0.39269908169872414
 apex_vertical = 0.1
-apex_vertical_scalar = 0.1
 apex_angle = 0.39269908169872414
-drop_vertical = 0.0
 drop_vertical_scalar = 0.1
-drop_horizontal_scalar = 0.25
 drop_angle = 0.39269908169872414
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[sub_resource type="Resource" id="Resource_1513a"]
+[sub_resource type="Resource" id="Resource_2gnmk"]
 resource_name = "SidewaysGait"
 script = ExtResource("6_xjv3a")
 speed_scalar_min = 0.75
 speed_scalar_max = 0.75
 ground_time = 10.0
 lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
-drop_time_scalar = 5.0
 tip_toe_distance_scalar = 0.0
 tip_toe_speed_scalar = 0.0
 tip_toe_angle_max = 0.0
 lift_vertical = 0.05
 lift_vertical_scalar = 0.05
 lift_horizontal_scalar = 0.2
-lift_angle = 0.0
-apex_vertical = 0.01
-apex_vertical_scalar = 0.1
 apex_angle = 0.39269908169872414
 drop_vertical = 0.01
 drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
-drop_angle = 0.0
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
-[node name="quick_ik_setup" type="Node3D"]
+[node name="quick_ik_setup" type="Node3D" unique_id=2125162705]
 script = ExtResource("1_77tfk")
 metadata/renikroot = false
 
-[node name="equip avatar" parent="." instance=ExtResource("2_f6jsk")]
+[node name="equip avatar" parent="." unique_id=112005251 instance=ExtResource("2_f6jsk")]
 transform = Transform3D(2, 1.49012e-08, -6.5135e-16, 0, -8.74228e-08, -2, -1.49012e-08, 2, -8.74228e-08, 0, 0, 0)
 text = "equip avatar"
 
-[node name="RenIKSpineModifier3D" type="SkeletonModifier3D" parent="." node_paths=PackedStringArray("head_target", "hip_target")]
-_import_path = NodePath("")
+[node name="RenIKSpineModifier3D" type="SkeletonModifier3D" parent="." unique_id=176753751 node_paths=PackedStringArray("head_target", "hip_target")]
 unique_name_in_owner = true
 process_mode = 0
 process_priority = 0
@@ -121,13 +83,6 @@ process_thread_group = 0
 physics_interpolation_mode = 0
 auto_translate_mode = 0
 editor_description = ""
-accessibility_name = ""
-accessibility_description = ""
-accessibility_live = 0
-accessibility_controls_nodes = Array[NodePath]([])
-accessibility_described_by_nodes = Array[NodePath]([])
-accessibility_labeled_by_nodes = Array[NodePath]([])
-accessibility_flow_to_nodes = Array[NodePath]([])
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.385, 0)
 rotation_edit_mode = 0
 rotation_order = 2
@@ -140,14 +95,13 @@ script = ExtResource("3_lpdc6")
 head_target = NodePath("HeadTarget")
 hip_target = NodePath("HipsTarget")
 
-[node name="HeadTarget" type="Marker3D" parent="RenIKSpineModifier3D"]
+[node name="HeadTarget" type="Marker3D" parent="RenIKSpineModifier3D" unique_id=1079975114]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.868, 0)
 
-[node name="HipsTarget" type="Marker3D" parent="RenIKSpineModifier3D"]
+[node name="HipsTarget" type="Marker3D" parent="RenIKSpineModifier3D" unique_id=465379039]
 transform = Transform3D(1, 0.000602383, -0.000379418, -0.000591934, 0.999636, 0.0269611, 0.000395521, -0.0269609, 0.999636, 0, 1.353, 0)
 
-[node name="LeftHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="LeftHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." unique_id=941251840 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 process_mode = 0
 process_priority = 0
@@ -156,13 +110,6 @@ process_thread_group = 0
 physics_interpolation_mode = 0
 auto_translate_mode = 0
 editor_description = ""
-accessibility_name = ""
-accessibility_description = ""
-accessibility_live = 0
-accessibility_controls_nodes = Array[NodePath]([])
-accessibility_described_by_nodes = Array[NodePath]([])
-accessibility_labeled_by_nodes = Array[NodePath]([])
-accessibility_flow_to_nodes = Array[NodePath]([])
 transform = Transform3D(0.0008028317, 0.99999917, 0, -1.0000008, 0.0008028304, 0, 0, 0, 1.000001, 1, 1.348, 0)
 rotation_edit_mode = 0
 rotation_order = 2
@@ -179,11 +126,10 @@ pole_offset = Quaternion(0.113039, -0.0652631, 0.495722, 0.858616)
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("LeftHandTarget")
 
-[node name="LeftHandTarget" type="Marker3D" parent="LeftHandRenIKLimbModifier3D"]
+[node name="LeftHandTarget" type="Marker3D" parent="LeftHandRenIKLimbModifier3D" unique_id=1359059451]
 transform = Transform3D(-4.3711363e-08, 0, 1.0000006, 0, 1.0000002, 0, -0.99999946, 0, -4.3711413e-08, 0, 0.30700004, 0)
 
-[node name="RightHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="RightHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." unique_id=704669618 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 process_mode = 0
 process_priority = 0
@@ -192,13 +138,6 @@ process_thread_group = 0
 physics_interpolation_mode = 0
 auto_translate_mode = 0
 editor_description = ""
-accessibility_name = ""
-accessibility_description = ""
-accessibility_live = 0
-accessibility_controls_nodes = Array[NodePath]([])
-accessibility_described_by_nodes = Array[NodePath]([])
-accessibility_labeled_by_nodes = Array[NodePath]([])
-accessibility_flow_to_nodes = Array[NodePath]([])
 transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000001, -0.36, 1.348, 0)
 rotation_edit_mode = 0
 rotation_order = 2
@@ -217,11 +156,10 @@ pole_offset = Quaternion(0.113039, -0.0652631, 0.495722, 0.858616)
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("RightHandTarget")
 
-[node name="RightHandTarget" type="Marker3D" parent="RightHandRenIKLimbModifier3D"]
+[node name="RightHandTarget" type="Marker3D" parent="RightHandRenIKLimbModifier3D" unique_id=1423174749]
 transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, -1, 0, 0)
 
-[node name="LeftFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="LeftFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." unique_id=1410548672 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 process_mode = 0
 process_priority = 0
@@ -230,13 +168,6 @@ process_thread_group = 0
 physics_interpolation_mode = 0
 auto_translate_mode = 0
 editor_description = ""
-accessibility_name = ""
-accessibility_description = ""
-accessibility_live = 0
-accessibility_controls_nodes = Array[NodePath]([])
-accessibility_described_by_nodes = Array[NodePath]([])
-accessibility_labeled_by_nodes = Array[NodePath]([])
-accessibility_flow_to_nodes = Array[NodePath]([])
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.342, 0.043, -0.061)
 rotation_edit_mode = 0
 rotation_order = 2
@@ -262,11 +193,10 @@ has_shoulder = false
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("LeftFootTarget")
 
-[node name="LeftFootTarget" type="Marker3D" parent="LeftFootRenIKLimbModifier3D"]
+[node name="LeftFootTarget" type="Marker3D" parent="LeftFootRenIKLimbModifier3D" unique_id=759372191]
 transform = Transform3D(1, 0, 0, 0, 1.0000006, 0, 0, 0, 1.0000006, 0, 0, 0)
 
-[node name="RightFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="RightFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="." unique_id=188969943 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 process_mode = 0
 process_priority = 0
@@ -275,13 +205,6 @@ process_thread_group = 0
 physics_interpolation_mode = 0
 auto_translate_mode = 0
 editor_description = ""
-accessibility_name = ""
-accessibility_description = ""
-accessibility_live = 0
-accessibility_controls_nodes = Array[NodePath]([])
-accessibility_described_by_nodes = Array[NodePath]([])
-accessibility_labeled_by_nodes = Array[NodePath]([])
-accessibility_flow_to_nodes = Array[NodePath]([])
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.342, 0.043, -0.058)
 rotation_edit_mode = 0
 rotation_order = 2
@@ -308,19 +231,19 @@ has_shoulder = false
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("RightFootTarget")
 
-[node name="RightFootTarget" type="Marker3D" parent="RightFootRenIKLimbModifier3D"]
+[node name="RightFootTarget" type="Marker3D" parent="RightFootRenIKLimbModifier3D" unique_id=1240395431]
 transform = Transform3D(1, 0, 0, 0, 1.0000006, 0, 0, 0, 1.0000006, 0, 0, 0)
 
-[node name="LogicContainer" type="Node3D" parent="."]
+[node name="LogicContainer" type="Node3D" parent="." unique_id=1287043872]
 transform = Transform3D(0.898533, 0.432097, -0.077013, -0.433652, 0.84693, -0.307663, -0.067716, 0.309842, 0.948374, 0, 0, 0)
 
-[node name="RenIKFootPlacement" type="Node3D" parent="LogicContainer" node_paths=PackedStringArray("armature_head_target", "armature_hip_target", "armature_left_foot_target", "armature_right_foot_target")]
+[node name="RenIKFootPlacement" type="Node3D" parent="LogicContainer" unique_id=453037912 node_paths=PackedStringArray("armature_head_target", "armature_hip_target", "armature_left_foot_target", "armature_right_foot_target")]
 unique_name_in_owner = true
 transform = Transform3D(1, 1.11759e-08, 0, -6.70552e-08, 1, 0, -7.45058e-09, 0, 1, 0, 0, 0)
 script = ExtResource("5_4b5be")
-forward_gait = SubResource("Resource_oro2a")
-backward_gait = SubResource("Resource_rkq70")
-sideways_gait = SubResource("Resource_1513a")
+forward_gait = SubResource("Resource_5qdgp")
+backward_gait = SubResource("Resource_iplp8")
+sideways_gait = SubResource("Resource_2gnmk")
 spine_length = 0.428095
 left_leg_length = 0.869769
 right_leg_length = 0.869942

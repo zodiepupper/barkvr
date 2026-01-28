@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dv0etfy0ao5"]
+[gd_scene format=3 uid="uid://dv0etfy0ao5"]
 
 [ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://barkvr-system/startup/basic_starter.tscn" id="1_ad4cs"]
 [ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://barkvr-system/startup/playerSpawnLocation.tscn" id="2_humgq"]
@@ -42,10 +42,10 @@ fractal_type = 0
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ugxtn"]
 width = 128
 height = 128
-in_3d_space = true
-seamless = true
-color_ramp = SubResource("Gradient_vmob3")
 noise = SubResource("FastNoiseLite_gruoj")
+color_ramp = SubResource("Gradient_vmob3")
+seamless = true
+in_3d_space = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3nls"]
 render_priority = 127
@@ -132,23 +132,23 @@ func _process(_delta: float) -> void:
 	get_parent().global_position = get_viewport().get_camera_3d().global_position
 "
 
-[node name="init_world" type="Node3D"]
+[node name="init_world" type="Node3D" unique_id=1042381064]
 
-[node name="multiplayer world root" type="Node3D" parent="." groups=["localworldroot"]]
+[node name="multiplayer world root" type="Node3D" parent="." unique_id=1718415203 groups=["localworldroot"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="basic starter world" parent="multiplayer world root" instance=ExtResource("1_ad4cs")]
+[node name="basic starter world" parent="multiplayer world root" unique_id=709609605 instance=ExtResource("1_ad4cs")]
 
-[node name="playerSpawnLocation" parent="multiplayer world root/basic starter world" instance=ExtResource("2_humgq")]
+[node name="playerSpawnLocation" parent="multiplayer world root/basic starter world" unique_id=1611564869 instance=ExtResource("2_humgq")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.76036, 0.0923181, 2.56459)
 
-[node name="playercontainer" parent="multiplayer world root" instance=ExtResource("11_qw71v")]
+[node name="playercontainer" parent="multiplayer world root" unique_id=1238881976 instance=ExtResource("11_qw71v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08992, 0.91664, 2.46325)
 
-[node name="local_ui" type="Node3D" parent="multiplayer world root"]
+[node name="local_ui" type="Node3D" parent="multiplayer world root" unique_id=1476740303]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="keyboard panel" type="RigidBody3D" parent="multiplayer world root/local_ui"]
+[node name="keyboard panel" type="RigidBody3D" parent="multiplayer world root/local_ui" unique_id=337192344]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4736, 1.7588, -4.28413)
 collision_layer = 4
 collision_mask = 4
@@ -160,10 +160,10 @@ viewport_size = Vector2i(1265, 720)
 panel_thickness = 0.01
 metadata/grabbable = true
 
-[node name="Node3D" type="Node3D" parent="multiplayer world root"]
+[node name="Node3D" type="Node3D" parent="multiplayer world root" unique_id=733416313]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="multiplayer world root/Node3D"]
+[node name="CSGBox3D" type="CSGBox3D" parent="multiplayer world root/Node3D" unique_id=206442578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08259, 1.78338, 3.40336)
 use_collision = true
 size = Vector3(0.05, 0.05, 0.05)
@@ -171,21 +171,19 @@ material = SubResource("StandardMaterial3D_xtqms")
 script = SubResource("GDScript_pli2f")
 metadata/grabbable = true
 
-[node name="Audio3d" parent="multiplayer world root" instance=ExtResource("6_nx2sb")]
+[node name="Audio3d" parent="multiplayer world root" unique_id=793641825 instance=ExtResource("6_nx2sb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0567468, 1.55099, 2.56656)
 
-[node name="Linepen" parent="multiplayer world root" instance=ExtResource("7_8hxdm")]
+[node name="Linepen" parent="multiplayer world root" unique_id=1754706843 instance=ExtResource("7_8hxdm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38342, 0)
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1943658936]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.33328, 1.91664, 2.46325)
 visible = false
 mesh = SubResource("SphereMesh_ffpko")
 skeleton = NodePath("../multiplayer world root")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D2" unique_id=1753931449]
 deterministic = true
-libraries = {
-&"": SubResource("AnimationLibrary_qxavp")
-}
+libraries/ = SubResource("AnimationLibrary_qxavp")
 script = SubResource("GDScript_dw37y")

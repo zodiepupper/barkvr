@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://pnqmxgn13qw2"]
+[gd_scene format=3 uid="uid://pnqmxgn13qw2"]
 
 [ext_resource type="Script" uid="uid://bmm8sapd556y5" path="res://barkvr-system/ui/3dPanel/local ui/settings/settings_menu.gd" id="1_p8muu"]
 [ext_resource type="PackedScene" uid="uid://dy1wide8xv5df" path="res://barkvr-system/ui/3dPanel/editmode/attributes/enum.tscn" id="2_bod8q"]
@@ -10,7 +10,7 @@
 
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
 
-[node name="settings" type="Control"]
+[node name="settings" type="Control" unique_id=1908223142]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p8muu")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=216452811]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,43 +27,43 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=770736092]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1578212275]
 layout_mode = 2
 folded = true
 title = "general settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=19733212]
 visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
-[node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin"]
+[node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=1188667687]
 visible = false
 layout_mode = 2
 
-[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings"]
+[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=653113849]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR" unique_id=1867648081]
 layout_mode = 2
 size_flags_vertical = 3
 text = "restart in vr"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR"]
+[node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR" unique_id=1308592514]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR"]
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR" unique_id=838901183]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -72,40 +72,40 @@ text = "restart in vr"
 icon_alignment = 1
 expand_icon = true
 
-[node name="VRSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="VRSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=625862703]
 layout_mode = 2
 folded = true
 title = "vr settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin" unique_id=654080231]
 visible = false
 layout_mode = 2
 color = Color(0.333333, 0, 1, 0.2)
 
-[node name="VRSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin"]
+[node name="VRSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin" unique_id=788997599]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings"]
+[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings" unique_id=790744469]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough" unique_id=227075784]
 layout_mode = 2
 size_flags_vertical = 3
 text = "toggle passthrough"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough"]
+[node name="Passthrough" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough" unique_id=1376453442]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough" unique_id=838518584]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -115,7 +115,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle" unique_id=1075199279]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -127,23 +127,23 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings"]
+[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings" unique_id=1858635695]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking" unique_id=208018890]
 layout_mode = 2
 size_flags_vertical = 3
 text = "toggle hand tracking"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking"]
+[node name="HandTracking" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking" unique_id=2024244040]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking" unique_id=878066070]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -153,7 +153,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/HandTracking/HandTracking/Toggle" unique_id=932481968]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -165,44 +165,44 @@ grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="UISettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="UISettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1200934037]
 layout_mode = 2
 folded = true
 title = "ui settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin" unique_id=1241815477]
 visible = false
 layout_mode = 2
 color = Color(0, 1, 0, 0.2)
 
-[node name="UISettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin"]
+[node name="UISettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin" unique_id=2145027632]
 visible = false
 layout_mode = 2
 
-[node name="InspectorAsSingleton" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" instance=ExtResource("2_dbica")]
+[node name="InspectorAsSingleton" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=1578106198 instance=ExtResource("2_dbica")]
 layout_mode = 2
 
-[node name="LocalMenuLookAtAxisToggles" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+[node name="LocalMenuLookAtAxisToggles" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=2120630463]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles" unique_id=1868464286]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Local Menu LookAt Axis Toggles"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Position" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles"]
+[node name="Position" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles" unique_id=1322495860]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="XVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
+[node name="XVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position" unique_id=592981230]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox" unique_id=696620583]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -210,7 +210,7 @@ text = "x"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="XVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox"]
+[node name="XVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox" unique_id=663123202]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -220,7 +220,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/XVBox/XVal" unique_id=1371559784]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -233,11 +233,11 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(1, 0, 0, 1)
 
-[node name="YVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
+[node name="YVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position" unique_id=766045095]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox" unique_id=1888279624]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -245,7 +245,7 @@ text = "y"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="YVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox"]
+[node name="YVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox" unique_id=957570588]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -255,7 +255,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/YVbox/YVal" unique_id=1473046369]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -268,11 +268,11 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 1)
 
-[node name="ZVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position"]
+[node name="ZVbox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position" unique_id=1923279423]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox" unique_id=1030164079]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -280,7 +280,7 @@ text = "z"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ZVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox"]
+[node name="ZVal" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox" unique_id=580359307]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -290,7 +290,7 @@ text = "disabled"
 icon_alignment = 1
 expand_icon = true
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/LocalMenuLookAtAxisToggles/Position/ZVbox/ZVal" unique_id=702583322]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -303,20 +303,20 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 0, 1, 1)
 
-[node name="InterfaceScalingFactor" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" instance=ExtResource("3_6t4ur")]
+[node name="InterfaceScalingFactor" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=1522904368 instance=ExtResource("3_6t4ur")]
 layout_mode = 2
 
-[node name="InspectorUpdateInterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+[node name="InspectorUpdateInterval" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=1658486293]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval" unique_id=461043578]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Inspector Update Interval:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval/Label" unique_id=257148804]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -329,7 +329,7 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval"]
+[node name="SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InspectorUpdateInterval" unique_id=1592231464]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_icons/updown = SubResource("ImageTexture_5et3l")
@@ -340,17 +340,17 @@ allow_greater = true
 allow_lesser = true
 alignment = 1
 
-[node name="VRNotificationSize" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+[node name="VRNotificationSize" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=623895955]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize" unique_id=1933825701]
 layout_mode = 2
 size_flags_vertical = 3
 text = "VR Notification Size:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize/Label" unique_id=756351170]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -363,7 +363,7 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="VRNotificationSizeValue" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize"]
+[node name="VRNotificationSizeValue" type="SpinBox" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationSize" unique_id=963075847]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_icons/updown = SubResource("ImageTexture_5et3l")
@@ -374,17 +374,17 @@ allow_greater = true
 allow_lesser = true
 alignment = 1
 
-[node name="VRNotificationOffset" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+[node name="VRNotificationOffset" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=1936363588]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset" unique_id=822491985]
 layout_mode = 2
 size_flags_vertical = 3
 text = "VR Notification Size:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset/Label" unique_id=780523454]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -397,20 +397,20 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="VRNotificationOffset" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset" instance=ExtResource("3_p8muu")]
+[node name="VRNotificationOffset" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationOffset" unique_id=1798572842 instance=ExtResource("3_p8muu")]
 layout_mode = 2
 
-[node name="VRNotificationTest" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings"]
+[node name="VRNotificationTest" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings" unique_id=1238381722]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest" unique_id=923139465]
 layout_mode = 2
 size_flags_vertical = 3
 text = "send test notification"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest/Label" unique_id=342509658]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -423,37 +423,37 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="VRNotificationTest" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest"]
+[node name="VRNotificationTest" type="Button" parent="ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest" unique_id=28239377]
 layout_mode = 2
 size_flags_vertical = 3
 text = "send test notification"
 
-[node name="ChatSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="ChatSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1900204722]
 layout_mode = 2
 folded = true
 title = "chat settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin" unique_id=1242661879]
 visible = false
 layout_mode = 2
 color = Color(0, 1, 1, 0.2)
 
-[node name="ChatSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin"]
+[node name="ChatSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin" unique_id=983582399]
 visible = false
 layout_mode = 2
 
-[node name="CtrlEnter" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings"]
+[node name="CtrlEnter" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings" unique_id=657920769]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter" unique_id=169580543]
 layout_mode = 2
 size_flags_vertical = 3
 text = "send messages with ctrl+enter:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Label"]
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Label" unique_id=1291587072]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -466,39 +466,39 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter"]
+[node name="Toggle" type="Button" parent="ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter" unique_id=1687530328]
 layout_mode = 2
 size_flags_vertical = 3
 toggle_mode = true
 text = "is disabled"
 
-[node name="AudioSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="AudioSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1160347259]
 layout_mode = 2
 folded = true
 title = "audio settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin" unique_id=1227328560]
 visible = false
 layout_mode = 2
 color = Color(0, 0, 1, 0.2)
 
-[node name="AudioSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin"]
+[node name="AudioSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin" unique_id=648465235]
 visible = false
 layout_mode = 2
 
-[node name="AudioInputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings"]
+[node name="AudioInputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings" unique_id=954163197]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection" unique_id=173482558]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Audio Input Device"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection"]
+[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection" unique_id=1212315329]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -507,7 +507,7 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("5_dbica")
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection/Options"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioInputSelection/Options" unique_id=367220450]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -520,18 +520,18 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
 
-[node name="AudioOutputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings"]
+[node name="AudioOutputSelection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings" unique_id=1371149828]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection" unique_id=1734811377]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Audio Output Device"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection"]
+[node name="Options" type="OptionButton" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection" unique_id=1606589481]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -540,7 +540,7 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("6_sna4b")
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection/Options"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/AudioSettingsMargin/AudioSettings/AudioOutputSelection/Options" unique_id=683204486]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 1
 anchors_preset = 12
@@ -553,35 +553,35 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 color = Color(0, 1, 0, 0)
 
-[node name="GraphicsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="GraphicsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=597424449]
 layout_mode = 2
 folded = true
 title = "graphics settings"
 title_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GraphicsMargin" unique_id=1201064712]
 visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
-[node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin"]
+[node name="Graphics" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin" unique_id=2040667219]
 visible = false
 layout_mode = 2
 
-[node name="AntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
+[node name="AntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" unique_id=369851373 instance=ExtResource("2_bod8q")]
 layout_mode = 2
 
-[node name="ViewportScaling" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics"]
+[node name="ViewportScaling" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" unique_id=2052925113]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling" unique_id=473817541]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Scaling 3d:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling"]
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ViewportScaling" unique_id=2096112043]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -593,9 +593,9 @@ scrollable = false
 tick_count = 3
 ticks_on_borders = true
 
-[node name="ScreenSpaceAntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_bod8q")]
+[node name="ScreenSpaceAntiAliasing" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" unique_id=1899654686 instance=ExtResource("2_bod8q")]
 layout_mode = 2
 
-[node name="ViewportDisable3d" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" instance=ExtResource("2_dbica")]
+[node name="ViewportDisable3d" parent="ScrollContainer/VBoxContainer/GraphicsMargin/Graphics" unique_id=1535883609 instance=ExtResource("2_dbica")]
 unique_name_in_owner = true
 layout_mode = 2

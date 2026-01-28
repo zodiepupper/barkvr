@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://b248xkjw837k7"]
+[gd_scene format=3 uid="uid://b248xkjw837k7"]
 
 [ext_resource type="Script" uid="uid://dlfu7floxsuaq" path="res://barkvr-system/ui/3dPanel/editmode/attributes/metadata.gd" id="1_rosvv"]
 
-[node name="metadata" type="Control"]
+[node name="metadata" type="Control" unique_id=982294416]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 3
 anchors_preset = 15
@@ -15,7 +15,7 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 script = ExtResource("1_rosvv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=381316397]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,13 +25,13 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=1439667638]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel2" unique_id=271674712]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,20 +42,20 @@ text = "add metadata"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="metadata" type="HBoxContainer" parent="VBoxContainer"]
+[node name="metadata" type="HBoxContainer" parent="VBoxContainer" unique_id=783173742]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="name" type="HBoxContainer" parent="VBoxContainer/metadata"]
+[node name="name" type="HBoxContainer" parent="VBoxContainer/metadata" unique_id=493621719]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer/metadata/name"]
+[node name="Panel2" type="Panel" parent="VBoxContainer/metadata/name" unique_id=1224417280]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="Label" type="Label" parent="VBoxContainer/metadata/name/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/metadata/name/Panel2" unique_id=343763177]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,21 +66,21 @@ text = "name:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="meta_name" type="LineEdit" parent="VBoxContainer/metadata/name"]
+[node name="meta_name" type="LineEdit" parent="VBoxContainer/metadata/name" unique_id=1410961285]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="v2" type="HBoxContainer" parent="VBoxContainer/metadata"]
+[node name="v2" type="HBoxContainer" parent="VBoxContainer/metadata" unique_id=418266172]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer/metadata/v2"]
+[node name="Panel2" type="Panel" parent="VBoxContainer/metadata/v2" unique_id=2071162771]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="Label" type="Label" parent="VBoxContainer/metadata/v2/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/metadata/v2/Panel2" unique_id=821912995]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,12 +91,12 @@ text = "type:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="type" type="OptionButton" parent="VBoxContainer/metadata/v2"]
+[node name="type" type="OptionButton" parent="VBoxContainer/metadata/v2" unique_id=416990875]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="add" type="Button" parent="VBoxContainer/metadata"]
+[node name="add" type="Button" parent="VBoxContainer/metadata" unique_id=820717201]
 unique_name_in_owner = true
 layout_mode = 2
 text = "add"

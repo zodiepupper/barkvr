@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://xybmfvufjuv"]
+[gd_scene format=3 uid="uid://xybmfvufjuv"]
 
 [ext_resource type="Script" uid="uid://bcmipbqn0tm0e" path="res://addons/anthonyec.camera_preview/preview.gd" id="1_6b32r"]
 [ext_resource type="Texture2D" uid="uid://cu0soimffassh" path="res://addons/anthonyec.camera_preview/Pin.svg" id="2_p0pa8"]
 [ext_resource type="Texture2D" uid="uid://u271hs2ifyj2" path="res://addons/anthonyec.camera_preview/GuiResizerTopLeft.svg" id="2_t64ej"]
 [ext_resource type="Texture2D" uid="uid://cajk43eii4j5q" path="res://addons/anthonyec.camera_preview/GuiResizerTopRight.svg" id="3_6yuab"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_hchdq"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_m22c1"]
 viewport_path = NodePath("Panel/SubViewport")
 
 [sub_resource type="Gradient" id="Gradient_11p6r"]
@@ -18,7 +18,7 @@ width = 256
 height = 256
 fill_to = Vector2(2.08165e-12, 1)
 
-[node name="Preview" type="Control"]
+[node name="Preview" type="Control" unique_id=1502324809]
 z_index = 999
 layout_mode = 3
 anchors_preset = 15
@@ -28,7 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6b32r")
 
-[node name="Placeholder" type="Panel" parent="."]
+[node name="Placeholder" type="Panel" parent="." unique_id=794771235]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0.705882)
@@ -45,7 +45,7 @@ offset_bottom = 410.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1038049283]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
@@ -54,29 +54,29 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -520.0
-offset_top = -908.889
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = -324.5
+offset_top = -178.5
+offset_right = -12.5
+offset_bottom = -12.5
 grow_horizontal = 0
 grow_vertical = 0
 pivot_offset = Vector2(450, 300)
 
-[node name="SubViewport" type="SubViewport" parent="Panel"]
+[node name="SubViewport" type="SubViewport" parent="Panel" unique_id=267177973]
 unique_name_in_owner = true
 handle_input_locally = false
 gui_disable_input = true
 size_2d_override_stretch = true
 
-[node name="Camera3D" type="Camera3D" parent="Panel/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="Panel/SubViewport" unique_id=370384215]
 unique_name_in_owner = true
 current = true
 
-[node name="Camera2D" type="Camera2D" parent="Panel/SubViewport"]
+[node name="Camera2D" type="Camera2D" parent="Panel/SubViewport" unique_id=414068498]
 unique_name_in_owner = true
 ignore_rotation = false
 
-[node name="ViewportMarginContainer" type="MarginContainer" parent="Panel"]
+[node name="ViewportMarginContainer" type="MarginContainer" parent="Panel" unique_id=436764275]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
@@ -86,20 +86,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/ViewportMarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="Panel/ViewportMarginContainer" unique_id=1934538512]
 unique_name_in_owner = true
 layout_mode = 2
-texture = SubResource("ViewportTexture_hchdq")
+texture = SubResource("ViewportTexture_m22c1")
 expand_mode = 1
 
-[node name="Gradient" type="TextureRect" parent="Panel"]
+[node name="Gradient" type="TextureRect" parent="Panel" unique_id=1567837738]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,7 +108,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_4dkve")
 
-[node name="OverlayMarginContainer" type="MarginContainer" parent="Panel"]
+[node name="OverlayMarginContainer" type="MarginContainer" parent="Panel" unique_id=1410041186]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -118,18 +117,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
-[node name="OverlayContainer" type="Control" parent="Panel/OverlayMarginContainer"]
+[node name="OverlayContainer" type="Control" parent="Panel/OverlayMarginContainer" unique_id=864658171]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="DragHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer"]
+[node name="DragHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer" unique_id=525352289]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,12 +138,11 @@ grow_vertical = 2
 focus_mode = 0
 flat = true
 
-[node name="ResizeLeftHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer"]
+[node name="ResizeLeftHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer" unique_id=1743581456]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
-offset_right = 60.0
-offset_bottom = 60.0
+offset_right = 37.5
+offset_bottom = 37.5
 size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_default_cursor_shape = 12
@@ -153,16 +151,17 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="ResizeRightHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer"]
+[node name="ResizeRightHandle" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer" unique_id=1334714280]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -60.0
-offset_bottom = 60.0
-pivot_offset = Vector2(60, 60)
+offset_left = -37.5
+offset_bottom = 37.5
+grow_horizontal = 0
+pivot_offset = Vector2(37.5, 37.5)
 size_flags_horizontal = 8
 size_flags_vertical = 0
 mouse_default_cursor_shape = 11
@@ -171,16 +170,16 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="LockButton" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer"]
+[node name="LockButton" type="Button" parent="Panel/OverlayMarginContainer/OverlayContainer" unique_id=1221661388]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -60.0
-offset_right = 60.0
-pivot_offset = Vector2(0, 60)
+offset_top = -37.5
+offset_right = 37.5
+grow_vertical = 0
+pivot_offset = Vector2(0, 37.5)
 size_flags_horizontal = 0
 size_flags_vertical = 8
 tooltip_text = "Always Show Preview"

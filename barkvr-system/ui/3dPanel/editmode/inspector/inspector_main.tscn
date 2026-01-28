@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dqc238s6m6ndw"]
+[gd_scene format=3 uid="uid://dqc238s6m6ndw"]
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_x1vjx"]
 [ext_resource type="Script" uid="uid://3xyrjxnkg1pr" path="res://barkvr-system/ui/3dPanel/editmode/inspector/inspector_main.gd" id="2_rlvjo"]
@@ -16,7 +16,7 @@ gradient = SubResource("Gradient_1u5qm")
 fill_from = Vector2(1, 1)
 fill_to = Vector2(0.45, 0.45)
 
-[node name="Inspector" type="PanelContainer"]
+[node name="Inspector" type="PanelContainer" unique_id=36239679]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +27,7 @@ theme = ExtResource("1_x1vjx")
 theme_type_variation = &"RootPanel"
 script = ExtResource("2_rlvjo")
 
-[node name="PanelResizer" type="TextureButton" parent="."]
+[node name="PanelResizer" type="TextureButton" parent="." unique_id=149452138]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -37,7 +37,7 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("3_7ww00")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=753100756]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 9
@@ -45,13 +45,14 @@ theme_override_constants/margin_top = 9
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 12
 
-[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer" unique_id=950164923]
 unique_name_in_owner = true
 layout_mode = 2
-split_offset = 350
+split_offsets = PackedInt32Array(350)
 touch_dragger_enabled = true
+split_offset = 350
 
-[node name="TabLeft" type="TabContainer" parent="MarginContainer/HSplitContainer"]
+[node name="TabLeft" type="TabContainer" parent="MarginContainer/HSplitContainer" unique_id=726290208]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -59,28 +60,28 @@ current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="Scene" parent="MarginContainer/HSplitContainer/TabLeft" instance=ExtResource("4_dldjt")]
+[node name="Scene" parent="MarginContainer/HSplitContainer/TabLeft" unique_id=1075387869 instance=ExtResource("4_dldjt")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer"]
+[node name="TabRight" type="TabContainer" parent="MarginContainer/HSplitContainer" unique_id=1746171764]
 unique_name_in_owner = true
 layout_mode = 2
 current_tab = 0
 clip_tabs = false
 tab_focus_mode = 0
 
-[node name="Properties" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("5_nal8t")]
+[node name="Properties" parent="MarginContainer/HSplitContainer/TabRight" unique_id=733846550 instance=ExtResource("5_nal8t")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Script" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("6_niosx")]
+[node name="Script" parent="MarginContainer/HSplitContainer/TabRight" unique_id=1868787893 instance=ExtResource("6_niosx")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" instance=ExtResource("7_j0kk2")]
+[node name="BVS" parent="MarginContainer/HSplitContainer/TabRight" unique_id=297805769 instance=ExtResource("7_j0kk2")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2

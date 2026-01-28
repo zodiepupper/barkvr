@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://boug2ukv43nh6"]
+[gd_scene format=3 uid="uid://boug2ukv43nh6"]
 
 [ext_resource type="Script" uid="uid://c6bt157m3koq0" path="res://barkvr-system/ui/3dPanel/local ui/about panel and supporter stuff/support messages.gd" id="1_6uopc"]
 [ext_resource type="Script" uid="uid://hrgrf8ahjfno" path="res://barkvr-system/ui/3dPanel/local ui/about panel and supporter stuff/parse_donors_csv.gd" id="2_w0crj"]
 
-[node name="about" type="Control"]
+[node name="about" type="Control" unique_id=118065637]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 15
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_tab_index = 5
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1812394740]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,67 +21,67 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1390234357]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=758920093]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer" unique_id=1136252161]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer/MarginContainer" unique_id=459143312]
 layout_mode = 2
 bbcode_enabled = true
 text = "[rainbow freq=.1 sat=.6][wave amp=50 freq=1][center][font_size=42]we couldn't do this without you!"
 fit_content = true
 script = ExtResource("1_6uopc")
 
-[node name="FlowContainer" type="FlowContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="FlowContainer" type="FlowContainer" parent="ScrollContainer/VBoxContainer" unique_id=492119904]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2_w0crj")
 
-[node name="PanelContainer2" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=371787381]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer2" unique_id=1070644830]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer2/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer2/MarginContainer" unique_id=1483007634]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]some controls:"
 fit_content = true
 
-[node name="PanelContainer3" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer3" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=951899351]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer3"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer3" unique_id=598560840]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer" unique_id=920011001]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]f1 switches between desktop and vr "
 fit_content = true
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer"]
+[node name="RichTextLabel2" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer3/MarginContainer" unique_id=844602795]
 layout_mode = 2
 bbcode_enabled = true
 text = "[right][font size=16] (if you started with vr enabled) "
@@ -89,65 +89,65 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainer7" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer7" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=85883907]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer7"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer7" unique_id=1308279732]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer7/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer7/MarginContainer" unique_id=779416311]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]f10 clears gizmos"
 fit_content = true
 
-[node name="PanelContainer4" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer4" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=1565692430]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer4"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer4" unique_id=287919105]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer4/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer4/MarginContainer" unique_id=129479068]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]r summons the inspector"
 fit_content = true
 
-[node name="PanelContainer5" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer5" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=312685674]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer5"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer5" unique_id=408317106]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer5/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer5/MarginContainer" unique_id=1549704720]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]q or middle mouse summons the context menu"
 fit_content = true
 
-[node name="PanelContainer6" type="PanelContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="PanelContainer6" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=1789983443]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer6"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer6" unique_id=692437426]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer6/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer6/MarginContainer" unique_id=1775635230]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]esc toggles mouse lock"

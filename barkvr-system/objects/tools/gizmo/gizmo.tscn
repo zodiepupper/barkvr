@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cv0sjbxpqjy6h"]
+[gd_scene format=3 uid="uid://cv0sjbxpqjy6h"]
 
 [ext_resource type="Script" uid="uid://bxdpv2yy0uc4v" path="res://barkvr-system/objects/tools/gizmo/gizmo.gd" id="1_q74wi"]
 [ext_resource type="Script" uid="uid://cx7nrsulx76r8" path="res://barkvr-system/objects/tools/gizmo/axis_mover.gd" id="2_vldjq"]
@@ -35,69 +35,69 @@ albedo_color = Color(0.19607843, 0.6627451, 0.9607843, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_puepw"]
 size = Vector3(1.1, 0.1, 0.1)
 
-[node name="gizmo" type="Node3D" groups=["gizmo"]]
+[node name="gizmo" type="Node3D" unique_id=1719174681 groups=["gizmo"]]
 script = ExtResource("1_q74wi")
 
-[node name="x" type="StaticBody3D" parent="."]
+[node name="x" type="StaticBody3D" parent="." unique_id=589458095]
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="x"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="x" unique_id=1943817417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_ktp1c")
 mesh = SubResource("BoxMesh_5mua7")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="x"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="x" unique_id=211683558]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
 material_override = SubResource("StandardMaterial3D_ktp1c")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="xcol" type="CollisionShape3D" parent="x"]
+[node name="xcol" type="CollisionShape3D" parent="x" unique_id=985316295]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
 shape = SubResource("BoxShape3D_xvnkt")
 
-[node name="y" type="StaticBody3D" parent="."]
+[node name="y" type="StaticBody3D" parent="." unique_id=1393978621]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
 _axis = "y"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="y"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="y" unique_id=1583744691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_pm28y")
 mesh = SubResource("BoxMesh_5mua7")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="y"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="y" unique_id=35350255]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
 material_override = SubResource("StandardMaterial3D_pm28y")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="ycol" type="CollisionShape3D" parent="y"]
+[node name="ycol" type="CollisionShape3D" parent="y" unique_id=1563778173]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
 shape = SubResource("BoxShape3D_v4v8i")
 
-[node name="z" type="StaticBody3D" parent="."]
+[node name="z" type="StaticBody3D" parent="." unique_id=1482547774]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
 _axis = "z"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="z"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="z" unique_id=1329052086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_816s8")
 mesh = SubResource("BoxMesh_5mua7")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="z"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="z" unique_id=775436864]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
 material_override = SubResource("StandardMaterial3D_816s8")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="zcol" type="CollisionShape3D" parent="z"]
+[node name="zcol" type="CollisionShape3D" parent="z" unique_id=284442188]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
 shape = SubResource("BoxShape3D_puepw")

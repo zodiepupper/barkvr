@@ -1,38 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7rfds1towycg"]
+[gd_scene format=3 uid="uid://b7rfds1towycg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nlxr0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ufp8i"]
 size = Vector2(502.709, 33.4408)
 
-[node name="test" type="Node2D"]
+[node name="test" type="Node2D" unique_id=1155274126]
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=336144952]
 position = Vector2(154, 204)
 rotation = -0.0188715
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=553803416]
 shape = SubResource("CircleShape2D_nlxr0")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=158563399]
 position = Vector2(356, 322)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-scale = Vector2(1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1013251533]
 shape = SubResource("RectangleShape2D_ufp8i")
 
-[node name="StaticBody2D2" type="StaticBody2D" parent="StaticBody2D"]
+[node name="StaticBody2D2" type="StaticBody2D" parent="StaticBody2D" unique_id=941985488]
 position = Vector2(-260, -86)
 rotation = -1.57079
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D2"]
-scale = Vector2(1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D2" unique_id=583786171]
 shape = SubResource("RectangleShape2D_ufp8i")
 
-[node name="StaticBody2D3" type="StaticBody2D" parent="StaticBody2D"]
+[node name="StaticBody2D3" type="StaticBody2D" parent="StaticBody2D" unique_id=788330830]
 position = Vector2(262, -86)
 rotation = -1.57079
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D3"]
-scale = Vector2(1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/StaticBody2D3" unique_id=599531247]
 shape = SubResource("RectangleShape2D_ufp8i")

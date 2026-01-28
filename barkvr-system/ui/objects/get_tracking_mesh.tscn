@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkctxp82b3be6"]
+[gd_scene format=3 uid="uid://bkctxp82b3be6"]
 
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="1_ttpqe"]
 
-[node name="GetTrackingMesh" type="Node3D"]
+[node name="GetTrackingMesh" type="Node3D" unique_id=289064208]
 
-[node name="StaticBody3D" parent="." instance=ExtResource("1_ttpqe")]
+[node name="StaticBody3D" parent="." unique_id=400747081 instance=ExtResource("1_ttpqe")]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ben6x4qpiovfq"]
+[gd_scene format=3 uid="uid://ben6x4qpiovfq"]
 
 [ext_resource type="Script" uid="uid://ccoqk6l435gfj" path="res://barkvr-system/ui/3dui/loading_halo.gd" id="1_t6gg2"]
 [ext_resource type="Script" uid="uid://cvckssxphmjby" path="res://barkvr-system/ui/3dui/quadbackpanel.gd" id="2_8b88k"]
@@ -51,35 +51,31 @@ resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_ge66c")
 size = Vector2(0.18377, 0.130074)
 
-[node name="loading halo" type="Node3D"]
+[node name="loading halo" type="Node3D" unique_id=1910010447]
 script = ExtResource("1_t6gg2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=287552695]
 transform = Transform3D(-0.565142, -0.326286, -0.0563538, -0.3275, 0.567247, 0, 0.0488038, 0.028177, -0.65257, 0, 0, 0)
 mesh = SubResource("TorusMesh_gbg2y")
 skeleton = NodePath("../..")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D"]
-libraries = {
-&"": SubResource("AnimationLibrary_dtajc")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D" unique_id=1646998068]
+libraries/ = SubResource("AnimationLibrary_dtajc")
 speed_scale = 0.5
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1997488227]
 transform = Transform3D(0.432359, 0.249623, 0.424004, -0.3275, 0.567247, 0, -0.367198, -0.212002, 0.499245, 0, 0, 0)
 mesh = SubResource("TorusMesh_gbg2y")
 skeleton = NodePath("../..")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D3"]
-libraries = {
-&"": SubResource("AnimationLibrary_dtajc")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D3" unique_id=833535677]
+libraries/ = SubResource("AnimationLibrary_dtajc")
 speed_scale = 0.4
 
-[node name="textparent" type="Node3D" parent="."]
+[node name="textparent" type="Node3D" parent="." unique_id=1279830244]
 script = ExtResource("2_eicjb")
 
-[node name="Label3D" type="Label3D" parent="textparent"]
+[node name="Label3D" type="Label3D" parent="textparent" unique_id=424754171]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.438506)
 pixel_size = 0.0014
 billboard = 1
@@ -88,7 +84,7 @@ outline_render_priority = 2
 text = "loading:
 dafd"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="textparent"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="textparent" unique_id=1061220717]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.11639e-10, 0, -0.437229)
 visible = false
 mesh = SubResource("QuadMesh_0fmfj")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6k0dtftankcx"]
+[gd_scene format=3 uid="uid://b6k0dtftankcx"]
 
 [ext_resource type="Script" uid="uid://bwikucgpcn0tu" path="res://addons/Todo_Manager/Dock.gd" id="1"]
 [ext_resource type="Script" uid="uid://4j7ifxmpyx6i" path="res://addons/Todo_Manager/Project.gd" id="2"]
@@ -8,7 +8,7 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_kltg3"]
 
-[node name="Dock" type="Control"]
+[node name="Dock" type="Control" unique_id=1353296260]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 3
 anchors_preset = 15
@@ -19,7 +19,7 @@ grow_vertical = 2
 size_flags_vertical = 3
 script = ExtResource("1")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1693246580]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,40 +29,42 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_layout_mode = 1
 
-[node name="Header" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="VBoxContainer" unique_id=2118962326]
 visible = false
 layout_mode = 2
 
-[node name="HeaderLeft" type="HBoxContainer" parent="VBoxContainer/Header"]
+[node name="HeaderLeft" type="HBoxContainer" parent="VBoxContainer/Header" unique_id=1511344546]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer/Header/HeaderLeft"]
+[node name="Title" type="Label" parent="VBoxContainer/Header/HeaderLeft" unique_id=1881633938]
 layout_mode = 2
 text = "Todo Dock:"
 
-[node name="HeaderRight" type="HBoxContainer" parent="VBoxContainer/Header"]
+[node name="HeaderRight" type="HBoxContainer" parent="VBoxContainer/Header" unique_id=210449544]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer/Header/HeaderRight"]
+[node name="SettingsButton" type="Button" parent="VBoxContainer/Header/HeaderRight" unique_id=1609072693]
 visible = false
 layout_mode = 2
 toggle_mode = true
 text = "Settings"
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=460110152]
 layout_mode = 2
 size_flags_vertical = 3
+current_tab = 0
 
-[node name="Project" type="Panel" parent="VBoxContainer/TabContainer"]
+[node name="Project" type="Panel" parent="VBoxContainer/TabContainer" unique_id=1757093668]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("2")
+metadata/_tab_index = 0
 
-[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Project"]
+[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Project" unique_id=402649822]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,14 +73,15 @@ grow_horizontal = 2
 grow_vertical = 2
 hide_root = true
 
-[node name="Current" type="Panel" parent="VBoxContainer/TabContainer"]
+[node name="Current" type="Panel" parent="VBoxContainer/TabContainer" unique_id=380484492]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3")
+metadata/_tab_index = 1
 
-[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Current"]
+[node name="Tree" type="Tree" parent="VBoxContainer/TabContainer/Current" unique_id=216420659]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,11 +91,12 @@ grow_vertical = 2
 hide_folding = true
 hide_root = true
 
-[node name="Settings" type="Panel" parent="VBoxContainer/TabContainer"]
+[node name="Settings" type="Panel" parent="VBoxContainer/TabContainer" unique_id=1341574316]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Settings"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Settings" unique_id=95003700]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,196 +104,197 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer" unique_id=1977313445]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer" unique_id=653686382]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Scripts" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Scripts" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=669866352]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Scripts"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Scripts" unique_id=969886540]
 layout_mode = 2
 text = "Scripts:"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Scripts"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Scripts" unique_id=729304455]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1829034267]
 layout_mode = 2
 size_flags_horizontal = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=425876668]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1132924992]
 layout_mode = 2
 
-[node name="Scripts" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Scripts" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1067350350]
 layout_mode = 2
 
-[node name="ScriptName" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts"]
+[node name="ScriptName" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts" unique_id=559262957]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName" unique_id=188454025]
 layout_mode = 2
 text = "Script Name:"
 
-[node name="FullPathCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName"]
+[node name="FullPathCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName" unique_id=1678291748]
 layout_mode = 2
 button_group = SubResource("ButtonGroup_kqxcu")
 text = "Full path"
 
-[node name="ShortNameCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName"]
+[node name="ShortNameCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptName" unique_id=1923253279]
 layout_mode = 2
 button_pressed = true
 button_group = SubResource("ButtonGroup_kqxcu")
 text = "Short name"
 
-[node name="ScriptSort" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts"]
+[node name="ScriptSort" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts" unique_id=751714416]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort" unique_id=1195811157]
 layout_mode = 2
 text = "Sort Order:"
 
-[node name="AlphSortCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort"]
+[node name="AlphSortCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort" unique_id=861255408]
 layout_mode = 2
 button_pressed = true
 button_group = SubResource("ButtonGroup_kltg3")
 text = "Alphabetical"
 
-[node name="RAlphSortCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort"]
+[node name="RAlphSortCheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptSort" unique_id=342041133]
 layout_mode = 2
 button_group = SubResource("ButtonGroup_kltg3")
 text = "Reverse Alphabetical"
 
-[node name="ScriptColour" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts"]
+[node name="ScriptColour" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts" unique_id=1040635577]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptColour"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptColour" unique_id=1675777643]
 layout_mode = 2
 text = "Script Colour:"
 
-[node name="ScriptColourPickerButton" type="ColorPickerButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptColour"]
+[node name="ScriptColourPickerButton" type="ColorPickerButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/ScriptColour" unique_id=924015284]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 color = Color(0.8, 0.807843, 0.827451, 1)
 
-[node name="IgnorePaths" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts"]
+[node name="IgnorePaths" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts" unique_id=813005318]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths" unique_id=755673221]
 layout_mode = 2
 text = "Ignore Paths:"
 
-[node name="TextEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths"]
+[node name="TextEdit" type="LineEdit" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths" unique_id=930099212]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+text = "android/"
 expand_to_text_length = true
 
-[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths"]
+[node name="Label3" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2/Scripts/IgnorePaths" unique_id=345104993]
 layout_mode = 2
 text = "(Separated by commas)"
 
-[node name="TODOColours" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="TODOColours" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1716299079]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/TODOColours"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/TODOColours" unique_id=816898903]
 layout_mode = 2
 text = "TODO Colours:"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/TODOColours"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/TODOColours" unique_id=230101278]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1993347266]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=749744225]
 layout_mode = 2
 
-[node name="Colours" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Colours" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1403991067]
 layout_mode = 2
 
-[node name="Patterns" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Patterns" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=554247725]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Patterns"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Patterns" unique_id=780515585]
 layout_mode = 2
 text = "Patterns:"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Patterns"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Patterns" unique_id=2100969775]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2064596257]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=30753624]
 layout_mode = 2
 
-[node name="Patterns" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4"]
+[node name="Patterns" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1106891362]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AddPatternButton" type="Button" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4/Patterns"]
+[node name="AddPatternButton" type="Button" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer4/Patterns" unique_id=1642319142]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Add"
 
-[node name="Config" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Config" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=527103986]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Config"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Config" unique_id=2038110227]
 layout_mode = 2
 text = "Config:"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Config"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/Config" unique_id=1210360297]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1314793707]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=872749013]
 layout_mode = 2
 
-[node name="Patterns" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="Patterns" type="VBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1623311018]
 layout_mode = 2
 
-[node name="RefreshCheckButton" type="CheckButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns"]
+[node name="RefreshCheckButton" type="CheckButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns" unique_id=1633567823]
 layout_mode = 2
 size_flags_horizontal = 0
 button_pressed = true
 text = "Auto Refresh"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns" unique_id=697586075]
 layout_mode = 2
 
-[node name="BuiltInCheckButton" type="CheckButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns/HBoxContainer"]
+[node name="BuiltInCheckButton" type="CheckButton" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns/HBoxContainer" unique_id=70941290]
 layout_mode = 2
 text = "Scan Built-in Scripts"
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns/HBoxContainer" unique_id=613698706]
 layout_mode = 2
 text = "Some functionality will not work for built-in scripts"
 
-[node name="DefaultButton" type="Button" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns"]
+[node name="DefaultButton" type="Button" parent="VBoxContainer/TabContainer/Settings/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer5/Patterns" unique_id=1832786936]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Reset to default"
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1851352791]
 one_shot = true
 
-[node name="RescanButton" type="Button" parent="."]
+[node name="RescanButton" type="Button" parent="." unique_id=484570187]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

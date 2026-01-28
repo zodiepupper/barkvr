@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ce28irq3p13pb"]
 
-[node name="transform" type="GraphNode"]
+[node name="transform" type="GraphNode" unique_id=816644725]
 mouse_filter = 1
 title = "position"
 slot/0/left_enabled = true
@@ -31,32 +31,32 @@ slot/2/right_color = Color(0, 0, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
 
-[node name="X" type="HBoxContainer" parent="."]
+[node name="X" type="HBoxContainer" parent="." unique_id=1606691163]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="X"]
+[node name="Label" type="Label" parent="X" unique_id=1394540223]
 layout_mode = 2
 text = "X"
 
-[node name="SpinBox" type="SpinBox" parent="X"]
+[node name="SpinBox" type="SpinBox" parent="X" unique_id=725497537]
 layout_mode = 2
 
-[node name="Y" type="HBoxContainer" parent="."]
+[node name="Y" type="HBoxContainer" parent="." unique_id=1008358743]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Y"]
+[node name="Label" type="Label" parent="Y" unique_id=531513736]
 layout_mode = 2
 text = "Y"
 
-[node name="SpinBox" type="SpinBox" parent="Y"]
+[node name="SpinBox" type="SpinBox" parent="Y" unique_id=1586097876]
 layout_mode = 2
 
-[node name="Z" type="HBoxContainer" parent="."]
+[node name="Z" type="HBoxContainer" parent="." unique_id=1343662006]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Z"]
+[node name="Label" type="Label" parent="Z" unique_id=475134098]
 layout_mode = 2
 text = "Z"
 
-[node name="SpinBox" type="SpinBox" parent="Z"]
+[node name="SpinBox" type="SpinBox" parent="Z" unique_id=2090509730]
 layout_mode = 2

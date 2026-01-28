@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://1875kv5x57wd"]
+[gd_resource type="Theme" format=3 uid="uid://1875kv5x57wd"]
 
 [ext_resource type="FontFile" uid="uid://coysmd6nhks20" path="res://barkvr-system/assets/font/static/OpenSans-SemiBold.ttf" id="1_ydyl8"]
 [ext_resource type="FontVariation" uid="uid://cj1etf32fetld" path="res://barkvr-system/assets/font/barkfonts.tres" id="2_2mc81"]

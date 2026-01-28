@@ -1,41 +1,29 @@
-[gd_scene load_steps=10 format=3 uid="uid://08a3p8axfj1n"]
+[gd_scene format=3 uid="uid://08a3p8axfj1n"]
 
 [ext_resource type="PackedScene" uid="uid://b63xhoptrg433" path="res://addons/renik-gdscript/sample_models/Avatar_Orion.vrm" id="1_2g6r7"]
 [ext_resource type="Script" uid="uid://cd1tfr1w8y75e" path="res://addons/renik-gdscript/renik_placement.gd" id="3_slfov"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik_spine.gd" id="5_mu5of"]
+[ext_resource type="Script" uid="uid://cqeoidnhsn75e" path="res://addons/renik-gdscript/renik_spine.gd" id="5_mu5of"]
 [ext_resource type="Script" uid="uid://chslcw2ar6ueo" path="res://addons/renik-gdscript/renik_limb.gd" id="6_0yan8"]
-[ext_resource type="Script" path="res://addons/renik-gdscript/renik_placement_gait.gd" id="8_qtuga"]
+[ext_resource type="Script" uid="uid://ch5v21lx7m462" path="res://addons/renik-gdscript/renik_placement_gait.gd" id="8_qtuga"]
 
 [sub_resource type="Resource" id="Resource_2g6r7"]
 resource_name = "ForwardGait"
 script = ExtResource("8_qtuga")
-speed_scalar_min = 1.0
 speed_scalar_max = 0.5
 ground_time = 5.0
-lift_time_base = 10.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
 apex_out_time_base = 5.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
 drop_time_scalar = 0.0
-tip_toe_distance_scalar = 1.5708
-tip_toe_speed_scalar = 0.785398
-tip_toe_angle_max = 1.0472
+tip_toe_distance_scalar = 1.5707963267948966
 lift_vertical = 0.0
 lift_vertical_scalar = 0.4
 lift_horizontal_scalar = 0.7
-lift_angle = 1.5708
+lift_angle = 1.5707963267948966
 apex_vertical = 0.0
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
-drop_vertical = 0.0
+apex_angle = 0.39269908169872414
 drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
-drop_angle = -0.392699
+drop_angle = -0.39269908169872414
 contact_point_ease = 0.05
-contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
 [sub_resource type="Resource" id="Resource_xlxah"]
@@ -45,29 +33,17 @@ speed_scalar_min = 0.5
 speed_scalar_max = 0.75
 ground_time = 5.0
 lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
-drop_time_scalar = 5.0
 tip_toe_distance_scalar = 0.0
 tip_toe_speed_scalar = 0.0
 tip_toe_angle_max = 0.0
-lift_vertical = 0.025
 lift_vertical_scalar = 0.1
 lift_horizontal_scalar = 0.33
-lift_angle = -0.392699
+lift_angle = -0.39269908169872414
 apex_vertical = 0.1
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
-drop_vertical = 0.0
+apex_angle = 0.39269908169872414
 drop_vertical_scalar = 0.1
-drop_horizontal_scalar = 0.25
-drop_angle = 0.392699
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
+drop_angle = 0.39269908169872414
 scaling_ease = 0.85
 
 [sub_resource type="Resource" id="Resource_16k5x"]
@@ -77,40 +53,27 @@ speed_scalar_min = 0.75
 speed_scalar_max = 0.75
 ground_time = 10.0
 lift_time_base = 5.0
-lift_time_scalar = 5.0
-apex_in_time_base = 10.0
-apex_in_time_scalar = 5.0
-apex_out_time_base = 10.0
-apex_out_time_scalar = 5.0
 drop_time_base = 5.0
-drop_time_scalar = 5.0
 tip_toe_distance_scalar = 0.0
 tip_toe_speed_scalar = 0.0
 tip_toe_angle_max = 0.0
 lift_vertical = 0.05
 lift_vertical_scalar = 0.05
 lift_horizontal_scalar = 0.2
-lift_angle = 0.0
-apex_vertical = 0.01
-apex_vertical_scalar = 0.1
-apex_angle = 0.392699
+apex_angle = 0.39269908169872414
 drop_vertical = 0.01
 drop_vertical_scalar = 0.05
-drop_horizontal_scalar = 0.25
-drop_angle = 0.0
-contact_point_ease = 0.1
-contact_point_ease_scalar = 0.4
 scaling_ease = 0.85
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_itlrt"]
 size = Vector3(10, 0, 10)
 
-[node name="test_rig" type="Node3D"]
+[node name="test_rig" type="Node3D" unique_id=1605904613]
 
-[node name="Avatar_Orion" parent="." instance=ExtResource("1_2g6r7")]
+[node name="Avatar_Orion" parent="." unique_id=1993813348 instance=ExtResource("1_2g6r7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.184794, 0.372403, -0.311276)
 
-[node name="GeneralSkeleton" parent="Avatar_Orion" index="0"]
+[node name="GeneralSkeleton" parent="Avatar_Orion" index="0" unique_id=59696147]
 bones/0/position = Vector3(0, 0, 0)
 bones/1/rotation = Quaternion(0.0137407, 0.000456771, 0.998993, 0.0426979)
 bones/2/rotation = Quaternion(0, 0.99999, 0, 0.00458588)
@@ -130,11 +93,10 @@ bones/42/rotation = Quaternion(-0.577574, -0.39966, 0.482169, 0.523635)
 bones/43/rotation = Quaternion(0, 0.833392, 0, 0.552683)
 bones/44/rotation = Quaternion(0.886947, 0.0489628, -0.456581, -0.0496115)
 
-[node name="Head" parent="Avatar_Orion/GeneralSkeleton" index="2"]
-transform = Transform3D(1, -2.73204e-11, -2.24532e-11, -4.75779e-11, 1, 7.45058e-09, -1.31877e-11, -2.23517e-08, 1, -0.261693, 1.46815, -0.0658382)
+[node name="Head" parent="Avatar_Orion/GeneralSkeleton" index="2" unique_id=167226163]
+transform = Transform3D(0.99999994, -7.482015e-12, -2.1032065e-11, 2.3057112e-11, 0.9999999, -2.2351742e-08, -7.332801e-12, -7.450581e-09, 1, -0.26169342, 1.4681481, -0.06583826)
 
-[node name="RenIKSpineModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="3" node_paths=PackedStringArray("head_target", "hip_target")]
-_import_path = NodePath("")
+[node name="RenIKSpineModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="3" unique_id=1344364583 node_paths=PackedStringArray("head_target", "hip_target")]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -155,14 +117,13 @@ script = ExtResource("5_mu5of")
 head_target = NodePath("HeadTarget")
 hip_target = NodePath("HipsTarget")
 
-[node name="HeadTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D"]
+[node name="HeadTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D" unique_id=1920971327]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.261693, 1.86808, -0.10689)
 
-[node name="HipsTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D"]
+[node name="HipsTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D" unique_id=599014454]
 transform = Transform3D(1, 0.000240127, -0.000155979, -0.000238083, 0.999916, 0.0129744, 0.000159082, -0.0129744, 0.999916, -0.261826, 1.35048, -0.0627929)
 
-[node name="LeftHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="4" node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="LeftHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="4" unique_id=1617816149 node_paths=PackedStringArray("target")]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -187,11 +148,10 @@ pole_offset = Quaternion(0.113039, -0.0652631, 0.495722, 0.858616)
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("LeftHandTarget")
 
-[node name="LeftHandTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/LeftHandRenIKLimbModifier3D"]
+[node name="LeftHandTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/LeftHandRenIKLimbModifier3D" unique_id=192341292]
 transform = Transform3D(0.148707, -0.298677, -0.942698, 0.649048, -0.689745, 0.320918, -0.746071, -0.659579, 0.0912858, -0.294397, -0.0781376, -0.0770885)
 
-[node name="RightHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="5" node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="RightHandRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="5" unique_id=1150368279 node_paths=PackedStringArray("target")]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -218,11 +178,10 @@ pole_offset = Quaternion(0.113039, -0.0652631, 0.495722, 0.858616)
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("RightHandTarget")
 
-[node name="RightHandTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RightHandRenIKLimbModifier3D"]
+[node name="RightHandTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RightHandRenIKLimbModifier3D" unique_id=938765756]
 transform = Transform3D(1, 0, 2.98023e-08, -7.45058e-09, 1, 0, -2.98023e-08, 1.49012e-08, 1, 0.407114, -0.0773725, -0.337063)
 
-[node name="LeftFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="6" node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="LeftFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="6" unique_id=873452913 node_paths=PackedStringArray("target")]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -256,11 +215,10 @@ has_shoulder = false
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("LeftFootTarget")
 
-[node name="LeftFootTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/LeftFootRenIKLimbModifier3D"]
+[node name="LeftFootTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/LeftFootRenIKLimbModifier3D" unique_id=1232628478]
 transform = Transform3D(1, 0, 0, 0, 0.92388, 0.382684, 0, -0.382684, 0.92388, -0.000169677, -0.0501768, 0.0884254)
 
-[node name="RightFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="7" node_paths=PackedStringArray("target")]
-_import_path = NodePath("")
+[node name="RightFootRenIKLimbModifier3D" type="SkeletonModifier3D" parent="Avatar_Orion/GeneralSkeleton" index="7" unique_id=1063633844 node_paths=PackedStringArray("target")]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -295,13 +253,13 @@ has_shoulder = false
 arm_shoulder_pole_offset = Quaternion(0, 0, -0.62932, 0.777146)
 target = NodePath("RightFootTarget")
 
-[node name="RightFootTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RightFootRenIKLimbModifier3D"]
+[node name="RightFootTarget" type="Marker3D" parent="Avatar_Orion/GeneralSkeleton/RightFootRenIKLimbModifier3D" unique_id=1515072943]
 transform = Transform3D(1, 0, 0, 0, 0.92388, 0.382684, 0, -0.382684, 0.92388, 0.000753984, 0.0749747, 0.0883071)
 
-[node name="LogicContainer" type="Node3D" parent="."]
+[node name="LogicContainer" type="Node3D" parent="." unique_id=40578071]
 transform = Transform3D(0.898533, 0.432097, -0.077013, -0.433652, 0.84693, -0.307663, -0.067716, 0.309842, 0.948374, 0, 0, 0)
 
-[node name="RenIKFootPlacement" type="Node3D" parent="LogicContainer"]
+[node name="RenIKFootPlacement" type="Node3D" parent="LogicContainer" unique_id=1324021925]
 transform = Transform3D(1, 1.11759e-08, 0, -6.70552e-08, 1, 0, -7.45058e-09, 0, 1, 0, 0, 0)
 script = ExtResource("3_slfov")
 live_preview = true
@@ -314,16 +272,11 @@ right_leg_length = 0.869942
 hip_offset = Vector3(-3.3187e-05, -0.494439, 0.0372813)
 left_hip_offset = Vector3(0.0805734, -0.0471423, 0.000802664)
 right_hip_offset = Vector3(-0.0806103, -0.047079, 0.00298369)
-armature_skeleton_path = NodePath("../../Avatar_Orion/GeneralSkeleton")
 enable_hip_placement = true
-armature_head_target = NodePath("../../Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D/HeadTarget")
-armature_hip_target = NodePath("../../Avatar_Orion/GeneralSkeleton/RenIKSpineModifier3D/HipsTarget")
-armature_left_foot_target = NodePath("../../Avatar_Orion/GeneralSkeleton/LeftFootRenIKLimbModifier3D/LeftFootTarget")
-armature_right_foot_target = NodePath("../../Avatar_Orion/GeneralSkeleton/RightFootRenIKLimbModifier3D/RightFootTarget")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1392851659]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=32596331]
 shape = SubResource("BoxShape3D_itlrt")
 
 [editable path="Avatar_Orion"]

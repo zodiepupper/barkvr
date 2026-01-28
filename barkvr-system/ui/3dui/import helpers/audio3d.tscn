@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://djw2ch2x4mclg"]
+[gd_scene format=3 uid="uid://djw2ch2x4mclg"]
 
 [ext_resource type="Script" uid="uid://d4emqyb2147ip" path="res://barkvr-system/ui/3dui/import helpers/audio_3d.gd" id="1_2p126"]
 
@@ -13,19 +13,19 @@ rings = 8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fbh1k"]
 
-[node name="Audio3d" type="StaticBody3D"]
+[node name="Audio3d" type="StaticBody3D" unique_id=1199370481]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_2p126")
 metadata/grabbable = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=843146686]
 shape = SubResource("SphereShape3D_yrvwh")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=310246303]
 mesh = SubResource("SphereMesh_vhfd6")
 surface_material_override/0 = SubResource("StandardMaterial3D_fbh1k")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=129208787]
 max_db = -5.0
 doppler_tracking = 2

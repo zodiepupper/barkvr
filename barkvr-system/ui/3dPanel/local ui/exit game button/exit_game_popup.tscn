@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dr1bo74h23rnm"]
+[gd_scene format=3 uid="uid://dr1bo74h23rnm"]
 
 [ext_resource type="Script" uid="uid://grfdtqsdufee" path="res://barkvr-system/ui/3dPanel/local ui/exit game button/no.gd" id="1_ooq7f"]
 [ext_resource type="Script" uid="uid://crffdgai51aug" path="res://barkvr-system/ui/3dPanel/local ui/exit game button/exit_for_real_this_time.gd" id="1_utfot"]
 
-[node name="ExitGamePopup" type="Control"]
+[node name="ExitGamePopup" type="Control" unique_id=324390159]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=792134601]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +23,11 @@ theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=1828392063]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel" unique_id=1219995709]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -41,24 +41,24 @@ offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/Panel/VBoxContainer" unique_id=442902126]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "are you sure you want to exit the game??"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/VBoxContainer" unique_id=158133444]
 layout_mode = 2
 
-[node name="No" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer"]
+[node name="No" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer" unique_id=427799033]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "no"
 script = ExtResource("1_ooq7f")
 
-[node name="ExitForRealThisTime" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer"]
+[node name="ExitForRealThisTime" type="Button" parent="MarginContainer/Panel/VBoxContainer/HBoxContainer" unique_id=1428179660]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24

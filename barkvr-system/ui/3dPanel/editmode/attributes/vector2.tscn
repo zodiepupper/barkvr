@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkaactpqyjgjn"]
+[gd_scene format=3 uid="uid://dkaactpqyjgjn"]
 
 [ext_resource type="Script" uid="uid://uywrri3b42b7" path="res://barkvr-system/ui/3dPanel/editmode/attributes/vector2.gd" id="1_cs5e4"]
 
-[node name="vector2" type="Control"]
+[node name="vector2" type="Control" unique_id=1256629246]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 3
 anchors_preset = 15
@@ -16,7 +16,7 @@ size_flags_stretch_ratio = 2.0
 mouse_filter = 1
 script = ExtResource("1_cs5e4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=314640468]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,14 +26,14 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=1058886698]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Panel2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel2" unique_id=162409312]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,36 +45,36 @@ text = "position"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="position" type="HBoxContainer" parent="VBoxContainer"]
+[node name="position" type="HBoxContainer" parent="VBoxContainer" unique_id=77187650]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="x" type="HBoxContainer" parent="VBoxContainer/position"]
+[node name="x" type="HBoxContainer" parent="VBoxContainer/position" unique_id=752100217]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/position/x"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/position/x" unique_id=1778273829]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(1, 0, 0, 1)
 
-[node name="xval" type="LineEdit" parent="VBoxContainer/position/x"]
+[node name="xval" type="LineEdit" parent="VBoxContainer/position/x" unique_id=80178212]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="y" type="HBoxContainer" parent="VBoxContainer/position"]
+[node name="y" type="HBoxContainer" parent="VBoxContainer/position" unique_id=1460552091]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/position/y"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/position/y" unique_id=651360445]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 mouse_filter = 1
 color = Color(0, 1, 0, 1)
 
-[node name="yval" type="LineEdit" parent="VBoxContainer/position/y"]
+[node name="yval" type="LineEdit" parent="VBoxContainer/position/y" unique_id=1340763241]
 layout_mode = 2
 size_flags_horizontal = 3

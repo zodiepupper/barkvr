@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://drvs5pgtp63nx"]
+[gd_scene format=3 uid="uid://drvs5pgtp63nx"]
 
 [ext_resource type="Script" uid="uid://cekekdhqwn8h2" path="res://barkvr-system/ui/3dPanel/local ui/login/message.gd" id="1_tdypu"]
 [ext_resource type="Texture2D" uid="uid://ctpqomaxv1n6h" path="res://barkvr-system/assets/icons/teenyicons/solid/clipboard.svg" id="2_4knqr"]
@@ -36,7 +36,7 @@ func _pressed() -> void:
 		DisplayServer.clipboard_set(body.text)
 "
 
-[node name="message" type="MarginContainer"]
+[node name="message" type="MarginContainer" unique_id=1061960258]
 custom_minimum_size = Vector2(0, 53)
 anchors_preset = -1
 anchor_right = 0.7
@@ -45,7 +45,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_tdypu")
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=1505678559]
 clip_contents = true
 custom_minimum_size = Vector2(0, 53)
 layout_mode = 2
@@ -53,14 +53,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3qcyn")
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel" unique_id=1939081833]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 0
 
-[node name="time" type="Label" parent="Panel/MarginContainer2"]
+[node name="time" type="Label" parent="Panel/MarginContainer2" unique_id=215625324]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -68,7 +68,7 @@ size_flags_vertical = 8
 theme_override_font_sizes/font_size = 18
 text = "time dfkajflkajfl;a"
 
-[node name="username" type="Label" parent="Panel/MarginContainer2"]
+[node name="username" type="Label" parent="Panel/MarginContainer2" unique_id=1806103735]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -76,14 +76,14 @@ size_flags_vertical = 0
 theme_override_font_sizes/font_size = 18
 text = "username"
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1179932172]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 22
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 22
 
-[node name="body" type="RichTextLabel" parent="Panel/MarginContainer"]
+[node name="body" type="RichTextLabel" parent="Panel/MarginContainer" unique_id=1419750620]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
@@ -92,10 +92,10 @@ text = "fjawbeigojbwairgubiworuoarugbiougbiwaugbiaowuregoiawurgbiuawbgiouawregiu
 fit_content = true
 context_menu_enabled = true
 
-[node name="Control" type="Control" parent="Panel"]
+[node name="Control" type="Control" parent="Panel" unique_id=1313401608]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Panel/Control"]
+[node name="Button" type="Button" parent="Panel/Control" unique_id=705201855]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

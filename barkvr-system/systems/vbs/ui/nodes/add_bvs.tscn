@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bmusi52p7uvxv"]
 
-[node name="add" type="GraphNode"]
+[node name="add" type="GraphNode" unique_id=1204483140]
 mouse_filter = 1
 title = "float"
 slot/0/left_enabled = true
@@ -22,9 +22,9 @@ slot/1/right_color = Color(1, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
 
-[node name="SpinBox" type="SpinBox" parent="."]
+[node name="SpinBox" type="SpinBox" parent="." unique_id=2114785924]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=1460519580]
 layout_mode = 2
 text = "+"

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdrsw10btjvsk"]
+[gd_scene format=3 uid="uid://bdrsw10btjvsk"]
 
 [ext_resource type="PackedScene" uid="uid://dmb8qm404icy3" path="res://barkvr-system/ui/3dui/3dcrosskeyboard/cubekey.tscn" id="1_3ypfe"]
 
-[node name="3dcrosskeyboard" type="Node3D"]
+[node name="3dcrosskeyboard" type="Node3D" unique_id=1174328558]
 
-[node name="cubekey" parent="." instance=ExtResource("1_3ypfe")]
+[node name="cubekey" parent="." unique_id=2093661028 instance=ExtResource("1_3ypfe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.1)

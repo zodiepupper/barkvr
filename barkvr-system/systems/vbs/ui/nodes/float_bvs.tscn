@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://djy728levmhch"]
 
-[node name="float" type="GraphNode"]
+[node name="float" type="GraphNode" unique_id=2011721143]
 offset_left = 647.0
 offset_top = 290.0
 offset_right = 769.0
@@ -17,5 +17,5 @@ slot/0/right_color = Color(1, 0, 0, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
 
-[node name="SpinBox" type="SpinBox" parent="."]
+[node name="SpinBox" type="SpinBox" parent="." unique_id=1930275312]
 layout_mode = 2

@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvimj4dikvkhg"]
+[gd_scene format=3 uid="uid://bvimj4dikvkhg"]
 
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_07o8i"]
 [ext_resource type="Script" uid="uid://btyfp0xu68x36" path="res://barkvr-system/ui/3dPanel/editmode/inspector/components/snackbar.gd" id="2_yuij4"]
 [ext_resource type="Texture2D" uid="uid://cggjqt6r7fty7" path="res://barkvr-system/assets/icons/editor-icons/NodeInfo.svg" id="3_k1jma"]
 [ext_resource type="Texture2D" uid="uid://cda3kcysklph" path="res://barkvr-system/assets/icons/editor-icons/Close.svg" id="3_yuij4"]
 
-[node name="Snackbar" type="PanelContainer"]
+[node name="Snackbar" type="PanelContainer" unique_id=1310852663]
 clip_contents = true
 offset_right = 177.0
 offset_bottom = 32.0
@@ -14,24 +14,24 @@ theme = ExtResource("1_07o8i")
 theme_type_variation = &"Snackbar"
 script = ExtResource("2_yuij4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1644356957]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1434586430]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("3_k1jma")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1808189328]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Snackbar Text"
 autowrap_mode = 3
 
-[node name="CloseButton" type="TextureButton" parent="HBoxContainer"]
+[node name="CloseButton" type="TextureButton" parent="HBoxContainer" unique_id=747506039]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

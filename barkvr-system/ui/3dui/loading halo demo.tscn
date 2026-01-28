@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0wvfw354l2i5"]
+[gd_scene format=3 uid="uid://d0wvfw354l2i5"]
 
 [ext_resource type="PackedScene" uid="uid://b2r6qi0effaiw" path="res://addons/contextmenu/gridmenu/gridmenubutton.tscn" id="1_2c1wk"]
 
@@ -18,9 +18,9 @@ func _ready():
 	)
 "
 
-[node name="LoadingHaloDemo" type="Node3D"]
+[node name="LoadingHaloDemo" type="Node3D" unique_id=1191490385]
 script = SubResource("GDScript_icupb")
 
-[node name="StaticBody3D" parent="." instance=ExtResource("1_2c1wk")]
+[node name="StaticBody3D" parent="." unique_id=1551275711 instance=ExtResource("1_2c1wk")]
 text = "spawn loader"
 metadata/grabbable = true

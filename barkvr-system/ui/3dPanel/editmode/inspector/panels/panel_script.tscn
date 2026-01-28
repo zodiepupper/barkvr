@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cyqdfiewnkxl1"]
+[gd_scene format=3 uid="uid://cyqdfiewnkxl1"]
 
 [ext_resource type="Script" uid="uid://c1vvx1d1jopgx" path="res://barkvr-system/ui/3dPanel/editmode/inspector/panels/panel_script.gd" id="1_aehwx"]
 [ext_resource type="Theme" uid="uid://beb0gdkkx60br" path="res://barkvr-system/assets/inspector_theme.tres" id="1_dvnw4"]
@@ -23,7 +23,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="ScriptEditor" type="PanelContainer"]
+[node name="ScriptEditor" type="PanelContainer" unique_id=1039629321]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -33,36 +33,36 @@ theme = ExtResource("1_dvnw4")
 theme_type_variation = &"FlatContainer"
 script = ExtResource("1_aehwx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=918780121]
 layout_mode = 2
 
-[node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TopBar" type="HBoxContainer" parent="VBoxContainer" unique_id=248301662]
 layout_mode = 2
 
-[node name="TopMenuBar" type="MenuBar" parent="VBoxContainer/TopBar"]
+[node name="TopMenuBar" type="MenuBar" parent="VBoxContainer/TopBar" unique_id=1342515546]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 prefer_global_menu = false
 script = ExtResource("3_oocds")
 
-[node name="File" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar"]
+[node name="File" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar" unique_id=2138040124]
 unique_name_in_owner = true
 
-[node name="Edit" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar"]
+[node name="Edit" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar" unique_id=766011071]
 unique_name_in_owner = true
 
-[node name="Search" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar"]
+[node name="Search" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar" unique_id=1783682168]
 unique_name_in_owner = true
 
-[node name="Go To" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar"]
+[node name="Go To" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar" unique_id=609679553]
 unique_name_in_owner = true
 
-[node name="Debug" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar"]
+[node name="Debug" type="PopupMenu" parent="VBoxContainer/TopBar/TopMenuBar" unique_id=342876447]
 unique_name_in_owner = true
 oversampling_override = 1.0
 
-[node name="LabelScriptName" type="Label" parent="VBoxContainer/TopBar"]
+[node name="LabelScriptName" type="Label" parent="VBoxContainer/TopBar" unique_id=1019088844]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -71,14 +71,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="ButtonOnlineDocs" type="Button" parent="VBoxContainer/TopBar"]
+[node name="ButtonOnlineDocs" type="Button" parent="VBoxContainer/TopBar" unique_id=1836260989]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Online Docs"
 icon = ExtResource("4_ns2mg")
 
-[node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar"]
+[node name="ButtonSearchHelp" type="Button" parent="VBoxContainer/TopBar" unique_id=1935977636]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -87,11 +87,11 @@ disabled = true
 text = "Search Help"
 icon = ExtResource("5_r7ov2")
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TopBar"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/TopBar" unique_id=552172297]
 visible = false
 layout_mode = 2
 
-[node name="ButtonHistoryPrevious" type="Button" parent="VBoxContainer/TopBar"]
+[node name="ButtonHistoryPrevious" type="Button" parent="VBoxContainer/TopBar" unique_id=1264972916]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -99,7 +99,7 @@ focus_mode = 0
 disabled = true
 icon = ExtResource("4_hov0c")
 
-[node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar"]
+[node name="ButtonHistoryNext" type="Button" parent="VBoxContainer/TopBar" unique_id=1595129285]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -107,20 +107,21 @@ focus_mode = 0
 disabled = true
 icon = ExtResource("5_urplj")
 
-[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer" unique_id=1089199666]
 layout_mode = 2
 size_flags_vertical = 3
+split_offsets = PackedInt32Array(150)
 split_offset = 150
 
-[node name="Sidebar" type="VSplitContainer" parent="VBoxContainer/HSplitContainer"]
+[node name="Sidebar" type="VSplitContainer" parent="VBoxContainer/HSplitContainer" unique_id=629659812]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SidebarScripts" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar"]
+[node name="SidebarScripts" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar" unique_id=1785465198]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SearchScripts" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts"]
+[node name="SearchScripts" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts" unique_id=1593648801]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -128,22 +129,22 @@ placeholder_text = "Filter Scripts"
 editable = false
 right_icon = ExtResource("6_ns2mg")
 
-[node name="ListScripts" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts"]
+[node name="ListScripts" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarScripts" unique_id=751311113]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
 allow_search = false
 
-[node name="SidebarMethods" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar"]
+[node name="SidebarMethods" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar" unique_id=1641057348]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods" unique_id=2050762241]
 layout_mode = 2
 
-[node name="SearchMethods" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods/HBoxContainer"]
+[node name="SearchMethods" type="LineEdit" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods/HBoxContainer" unique_id=1915638073]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -152,14 +153,14 @@ placeholder_text = "Filter Methods"
 editable = false
 right_icon = ExtResource("6_ns2mg")
 
-[node name="ButtonSortMethods" type="Button" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods/HBoxContainer"]
+[node name="ButtonSortMethods" type="Button" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods/HBoxContainer" unique_id=1438553082]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 icon = ExtResource("7_r7ov2")
 
-[node name="ListMethods" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods"]
+[node name="ListMethods" type="ItemList" parent="VBoxContainer/HSplitContainer/Sidebar/SidebarMethods" unique_id=496814113]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -167,10 +168,10 @@ focus_mode = 0
 allow_reselect = true
 allow_search = false
 
-[node name="Content" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
+[node name="Content" type="VBoxContainer" parent="VBoxContainer/HSplitContainer" unique_id=1159626839]
 layout_mode = 2
 
-[node name="ScriptTabContainer" type="TabContainer" parent="VBoxContainer/HSplitContainer/Content"]
+[node name="ScriptTabContainer" type="TabContainer" parent="VBoxContainer/HSplitContainer/Content" unique_id=1195462460]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -178,61 +179,61 @@ theme_type_variation = &"TabSwitcher"
 tabs_visible = false
 script = ExtResource("3_koxkx")
 
-[node name="BottomBar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Content"]
+[node name="BottomBar" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Content" unique_id=1052456078]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="ButtonToggleSidebar" type="Button" parent="VBoxContainer/HSplitContainer/Content/BottomBar"]
+[node name="ButtonToggleSidebar" type="Button" parent="VBoxContainer/HSplitContainer/Content/BottomBar" unique_id=2088073954]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 icon = ExtResource("4_hov0c")
 
-[node name="BottomElementsRight" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Content/BottomBar"]
+[node name="BottomElementsRight" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Content/BottomBar" unique_id=873577381]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="VSeparator4" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="VSeparator4" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=85819717]
 layout_mode = 2
 
-[node name="ButtonSave" type="Button" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="ButtonSave" type="Button" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=954058210]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Save"
 icon = ExtResource("9_e5jdj")
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=1033193869]
 layout_mode = 2
 
-[node name="ButtonAutoSave" type="CheckBox" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="ButtonAutoSave" type="CheckBox" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=650159231]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Auto Save"
 
-[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=1261870504]
 layout_mode = 2
 
-[node name="LabelCaretLocation" type="Label" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="LabelCaretLocation" type="Label" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=1457373076]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"LabelMono"
 text = "   0:   0"
 horizontal_alignment = 2
 
-[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=374063084]
 layout_mode = 2
 
-[node name="LabelIndentType" type="Label" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight"]
+[node name="LabelIndentType" type="Label" parent="VBoxContainer/HSplitContainer/Content/BottomBar/BottomElementsRight" unique_id=540481690]
 layout_mode = 2
 theme_type_variation = &"LabelMono"
 text = "Tabs"
 horizontal_alignment = 2
 
-[node name="InternalClassWarningLabel" type="RichTextLabel" parent="VBoxContainer/HSplitContainer/Content"]
+[node name="InternalClassWarningLabel" type="RichTextLabel" parent="VBoxContainer/HSplitContainer/Content" unique_id=848137038]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

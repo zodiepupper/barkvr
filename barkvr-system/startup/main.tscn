@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c3i4ahamrqxcq"]
+[gd_scene format=3 uid="uid://c3i4ahamrqxcq"]
 
 [ext_resource type="Script" uid="uid://uik6keiylg15" path="res://barkvr-system/startup/init.gd" id="1_gkt54"]
 [ext_resource type="PackedScene" uid="uid://dv0etfy0ao5" path="res://barkvr-system/startup/init_world.tscn" id="2_3jltp"]
@@ -12,11 +12,11 @@
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
 
-[node name="main" type="Node3D" groups=["localroot"]]
+[node name="main" type="Node3D" unique_id=366588163 groups=["localroot"]]
 script = ExtResource("1_gkt54")
 game_startup_scene = ExtResource("2_3jltp")
 
-[node name="bark_singletons" type="Node" parent="." groups=["singletons_manager"]]
+[node name="bark_singletons" type="Node" parent="." unique_id=1693604635 groups=["singletons_manager"]]
 script = ExtResource("3_hjfed")
 singletons = {
 "event_manager": ExtResource("4_yl0pk"),
@@ -26,22 +26,22 @@ singletons = {
 "voxel_manager": ExtResource("8_4ywql")
 }
 
-[node name="RequestParent" type="Node" parent="." groups=["requestParent"]]
+[node name="RequestParent" type="Node" parent="." unique_id=1763614923 groups=["requestParent"]]
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." groups=["microphone"]]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=173051279 groups=["microphone"]]
 stream = SubResource("AudioStreamMicrophone_ve6pm")
 autoplay = true
 bus = &"mic"
 playback_type = 1
 
-[node name="StartXR" type="Node" parent="." groups=["startxr"]]
+[node name="StartXR" type="Node" parent="." unique_id=1880105625 groups=["startxr"]]
 script = ExtResource("2_3r3cq")
 target_refresh_rate = 1000.0
 
-[node name="EnterWebXR" type="CanvasLayer" parent="StartXR"]
+[node name="EnterWebXR" type="CanvasLayer" parent="StartXR" unique_id=1594752446]
 visible = false
 
-[node name="EnterVRButton" type="Button" parent="StartXR/EnterWebXR"]
+[node name="EnterVRButton" type="Button" parent="StartXR/EnterWebXR" unique_id=1323902182]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

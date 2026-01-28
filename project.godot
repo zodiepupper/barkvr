@@ -15,16 +15,17 @@ run/main_scene="res://barkvr-system/startup/main.tscn"
 run/enable_alt_space_menu=true
 config/use_custom_user_dir=true
 config/custom_user_dir_name="bark"
-config/features=PackedStringArray("4.5", "Mobile")
+config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
-boot_splash/fullsize=false
+boot_splash/stretch_mode=0
 boot_splash/image="res://barkvr-system/assets/icons/barkiconrounded.png"
 config/icon="uid://cevwfpahxlnpo"
 config/windows_native_icon="res://barkvr-system/assets/barkvrcorgi.ico"
 
 [audio]
 
+buses/default_bus_layout="uid://bnxndu834y4ws"
 driver/enable_input=true
 driver/mix_rate=48000
 

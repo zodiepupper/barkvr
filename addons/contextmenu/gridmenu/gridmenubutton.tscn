@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b2r6qi0effaiw"]
+[gd_scene format=3 uid="uid://b2r6qi0effaiw"]
 
 [ext_resource type="Script" uid="uid://calb14t8k864q" path="res://addons/contextmenu/gridmenu/gridMenuButton.gd" id="1_oxc5m"]
 
@@ -17,19 +17,19 @@ size = Vector2(0.09, 0.09)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwkcp"]
 size = Vector3(0.1, 0.01, 0.1)
 
-[node name="StaticBody3D" type="StaticBody3D"]
+[node name="StaticBody3D" type="StaticBody3D" unique_id=574681535]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_oxc5m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1728356829]
 mesh = SubResource("PlaneMesh_xa0iw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1137673644]
 shape = SubResource("BoxShape3D_xwkcp")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=662481423]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 sorting_offset = 100.0
 pixel_size = 0.0005

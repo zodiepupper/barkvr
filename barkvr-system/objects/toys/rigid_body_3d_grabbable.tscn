@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dglcj6xs6x076"]
+[gd_scene format=3 uid="uid://dglcj6xs6x076"]
 
 [ext_resource type="Script" uid="uid://rot85m2x7jxo" path="res://barkvr-system/objects/toys/rigid_body_3d_grabbable.gd" id="1_vhris"]
 
@@ -8,7 +8,7 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="BoxMesh" id="BoxMesh_6fop7"]
 size = Vector3(0.1, 0.1, 0.1)
 
-[node name="RigidBody3d" type="RigidBody3D"]
+[node name="RigidBody3d" type="RigidBody3D" unique_id=1075203243]
 collision_layer = 10
 collision_mask = 10
 freeze_mode = 1
@@ -17,8 +17,8 @@ contact_monitor = true
 max_contacts_reported = 8
 script = ExtResource("1_vhris")
 
-[node name="CollisionShape3d" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3d" type="CollisionShape3D" parent="." unique_id=892997523]
 shape = SubResource("BoxShape3D_pydgp")
 
-[node name="MeshInstance3d" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3d" type="MeshInstance3D" parent="." unique_id=1831799669]
 mesh = SubResource("BoxMesh_6fop7")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cmx3ucbbmfhst"]
+[gd_scene format=3 uid="uid://cmx3ucbbmfhst"]
 
 [ext_resource type="Shader" uid="uid://bpj2c1im84ku0" path="res://addons/godot_mirror/mirror.gdshader" id="1_5cymf"]
 [ext_resource type="Script" uid="uid://fuwxvq2ha0ri" path="res://addons/godot_mirror/mirror.gd" id="2_w4yhn"]
@@ -14,7 +14,7 @@ shader_parameter/flip_x = false
 shader_parameter/use_screenspace = false
 shader_parameter/albedo_color = Color(1, 1, 1, 1)
 
-[node name="Mirror" type="MeshInstance3D" node_paths=PackedStringArray("left_camera", "right_camera", "leftvp", "rightvp")]
+[node name="Mirror" type="MeshInstance3D" unique_id=1964022568 node_paths=PackedStringArray("left_camera", "right_camera", "leftvp", "rightvp")]
 layers = 2
 mesh = SubResource("QuadMesh_ply7g")
 surface_material_override/0 = SubResource("ShaderMaterial_61avj")
@@ -24,19 +24,19 @@ right_camera = NodePath("RightViewport/Camera3D")
 leftvp = NodePath("LeftViewport")
 rightvp = NodePath("RightViewport")
 
-[node name="LeftViewport" type="SubViewport" parent="."]
+[node name="LeftViewport" type="SubViewport" parent="." unique_id=1379842063]
 size = Vector2i(128, 128)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="LeftViewport"]
+[node name="Camera3D" type="Camera3D" parent="LeftViewport" unique_id=1511945522]
 cull_mask = 1048573
 environment = ExtResource("3_d6d7e")
 projection = 2
 
-[node name="RightViewport" type="SubViewport" parent="."]
+[node name="RightViewport" type="SubViewport" parent="." unique_id=549056127]
 size = Vector2i(128, 128)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="RightViewport"]
+[node name="Camera3D" type="Camera3D" parent="RightViewport" unique_id=1814165683]
 cull_mask = 1048573
 environment = ExtResource("3_d6d7e")

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://jqh6stt10ct5"]
+[gd_scene format=3 uid="uid://jqh6stt10ct5"]
 
 [ext_resource type="Script" uid="uid://e6vcef2box0j" path="res://barkvr-system/ui/3dPanel/editmode/attributes.gd" id="1_sps2y"]
 
-[node name="attributes" type="Control"]
+[node name="attributes" type="Control" unique_id=1151730990]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sps2y")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=800595755]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -19,22 +19,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 alignment = 1
 
-[node name="titlebar" type="VBoxContainer" parent="VBoxContainer"]
+[node name="titlebar" type="VBoxContainer" parent="VBoxContainer" unique_id=799335816]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar" unique_id=798676006]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="ColorRect" parent="VBoxContainer/titlebar/HBoxContainer"]
+[node name="Panel" type="ColorRect" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=437431532]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0, 0, 0, 1)
 
-[node name="targetname" type="LineEdit" parent="VBoxContainer/titlebar/HBoxContainer/Panel"]
+[node name="targetname" type="LineEdit" parent="VBoxContainer/titlebar/HBoxContainer/Panel" unique_id=879260292]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,54 +43,54 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="closepanel" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer"]
+[node name="closepanel" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=42132135]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="closepanelbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/closepanel"]
+[node name="closepanelbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/closepanel" unique_id=1320262428]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "export"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=1381686600]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="dupbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/HBoxContainer3"]
+[node name="dupbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/HBoxContainer3" unique_id=1599743979]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "duplicate"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=707512979]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="delete" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/HBoxContainer2"]
+[node name="delete" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/HBoxContainer2" unique_id=2047411714]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "delete"
 
-[node name="properties header" type="HBoxContainer" parent="VBoxContainer/titlebar"]
+[node name="properties header" type="HBoxContainer" parent="VBoxContainer/titlebar" unique_id=1174493238]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Panel9" type="ColorRect" parent="VBoxContainer/titlebar/properties header"]
+[node name="Panel9" type="ColorRect" parent="VBoxContainer/titlebar/properties header" unique_id=958075771]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0, 0, 0, 1)
 
-[node name="properties header label" type="Label" parent="VBoxContainer/titlebar/properties header/Panel9"]
+[node name="properties header label" type="Label" parent="VBoxContainer/titlebar/properties header/Panel9" unique_id=1158974566]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,14 +101,14 @@ text = "Properties"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="active" type="ColorRect" parent="VBoxContainer/titlebar/properties header"]
+[node name="active" type="ColorRect" parent="VBoxContainer/titlebar/properties header" unique_id=2125727062]
 custom_minimum_size = Vector2(167.01, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.0
 color = Color(0, 0, 0, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar/properties header/active"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/titlebar/properties header/active" unique_id=29624015]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,7 +116,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="active" type="Label" parent="VBoxContainer/titlebar/properties header/active/HBoxContainer"]
+[node name="active" type="Label" parent="VBoxContainer/titlebar/properties header/active/HBoxContainer" unique_id=1060331174]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -126,21 +126,21 @@ horizontal_alignment = 2
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="activetoggle" type="CheckButton" parent="VBoxContainer/titlebar/properties header/active/HBoxContainer"]
+[node name="activetoggle" type="CheckButton" parent="VBoxContainer/titlebar/properties header/active/HBoxContainer" unique_id=1550236364]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1231111383]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 follow_focus = true
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1177283434]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2

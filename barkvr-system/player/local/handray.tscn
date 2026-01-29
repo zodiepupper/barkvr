@@ -1,31 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://12mm63qyglpf"]
+[gd_scene format=3 uid="uid://12mm63qyglpf"]
 
 [ext_resource type="Script" uid="uid://bmrxlfb75i37p" path="res://barkvr-system/player/local/interactionRay.gd" id="1_nnnux"]
-[ext_resource type="Script" uid="uid://qd3xl7i1soeg" path="res://barkvr-system/objects/tools/Line3D.gd" id="2_hejn6"]
 [ext_resource type="PackedScene" uid="uid://b5e67b4tlsvfs" path="res://barkvr-system/player/local/rayvis.tscn" id="3_6jlx7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6bpur"]
-shading_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_qvybh"]
-_surfaces = [{
-"aabb": AABB(0, 0, 0, 1e-05, 0.1, 1e-05),
-"format": 34359738369,
-"primitive": 2,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 2,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 204, 204, 61, 0, 0, 0, 0)
-}]
-
-[node name="handray" type="Node3D"]
+[node name="handray" type="Node3D" unique_id=889980961]
 script = ExtResource("1_nnnux")
-query_on_process = true
+smoothing_enabled = true
 target_position = Vector3(0, 0, -1000000000)
 
-[node name="Line3D" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_6bpur")
-mesh = SubResource("ArrayMesh_qvybh")
-script = ExtResource("2_hejn6")
-iswobbly = false
-
-[node name="rayvis" parent="." instance=ExtResource("3_6jlx7")]
+[node name="rayvis" parent="." unique_id=1938452924 instance=ExtResource("3_6jlx7")]

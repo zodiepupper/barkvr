@@ -23,8 +23,11 @@ func _ready():
 	#OS.request_permissions()
 	if game_startup_scene:
 		call_deferred("add_child",game_startup_scene.instantiate())
+	
+	print("we are here: ", DirAccess.open('./').get_current_dir(true))
+	
 	var dir = DirAccess.open('user://')
-	print("open current directory: "+str(dir.get_current_dir(true))+"\n"+str(dir))
+	print("user:// -> "+str(dir.get_current_dir(true))+" :: "+str(dir))
 	if !dir.dir_exists('./tmp'):
 		dir.make_dir('./tmp')
 	if !dir.dir_exists('./objects'):

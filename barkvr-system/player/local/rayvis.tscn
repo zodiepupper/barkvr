@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5e67b4tlsvfs"]
+[gd_scene format=3 uid="uid://b5e67b4tlsvfs"]
 
 [ext_resource type="Script" uid="uid://oqbd1hprv0a1" path="res://barkvr-system/player/local/rayvis.gd" id="1_6wvgr"]
 [ext_resource type="Texture2D" uid="uid://drxq6fs75fbvi" path="res://barkvr-system/ui/assets/rayvis_icons/pointing.svg" id="2_exe05"]
 [ext_resource type="Texture2D" uid="uid://b75p6dv64ascf" path="res://barkvr-system/ui/assets/rayvis_icons/physics.svg" id="3_j7jdp"]
 [ext_resource type="Texture2D" uid="uid://cmcp135fq84nn" path="res://barkvr-system/ui/assets/rayvis_icons/cursor.svg" id="4_3x516"]
 [ext_resource type="Script" uid="uid://b8h834vwjheo" path="res://barkvr-system/player/local/dynamic_cursor.gd" id="5_c8qii"]
+[ext_resource type="Script" uid="uid://btbpamujvkrlw" path="res://barkvr-system/player/local/interactionray/path_laser_line.gd" id="6_fnmbx"]
 
 [sub_resource type="GDScript" id="GDScript_c8qii"]
 script/source = "extends Label3D
@@ -13,11 +14,19 @@ func _physics_process(delta: float) -> void:
 	text = str(get_parent_node_3d().position)
 "
 
-[node name="rayvis" type="Node3D"]
+[sub_resource type="Curve3D" id="Curve3D_cccqi"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.6663189, -4.973156, -6.6676183, 0, 0, -2, 0, 0, 0, 0, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="rayvis" type="Node3D" unique_id=1420301323 node_paths=PackedStringArray("path3d")]
 script = ExtResource("1_6wvgr")
+path3d = NodePath("Path3D")
 mouse_cursor = true
 
-[node name="pointer" type="Sprite3D" parent="."]
+[node name="pointer" type="Sprite3D" parent="." unique_id=858536294]
 transform = Transform3D(0.81, 0, 0, 0, 0.81, 0, 0, 0, 0.81, 0, 0, 0)
 visible = false
 sorting_offset = 99.0
@@ -27,7 +36,7 @@ texture_filter = 0
 render_priority = 127
 texture = ExtResource("2_exe05")
 
-[node name="physics" type="Sprite3D" parent="."]
+[node name="physics" type="Sprite3D" parent="." unique_id=716799152]
 transform = Transform3D(0.77, 0, 0, 0, 0.77, 0, 0, 0, 0.77, 0, 0, 0)
 visible = false
 sorting_offset = 99.0
@@ -37,9 +46,9 @@ texture_filter = 0
 render_priority = 127
 texture = ExtResource("3_j7jdp")
 
-[node name="cursor" type="Node3D" parent="."]
+[node name="cursor" type="Node3D" parent="." unique_id=1077557305]
 
-[node name="cursor" type="Sprite3D" parent="cursor"]
+[node name="cursor" type="Sprite3D" parent="cursor" unique_id=570732087]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.403815, -0.976471, 0)
 visible = false
 sorting_offset = 99.0
@@ -47,7 +56,7 @@ no_depth_test = true
 render_priority = 127
 texture = ExtResource("4_3x516")
 
-[node name="Label3D" type="Label3D" parent="cursor"]
+[node name="Label3D" type="Label3D" parent="cursor" unique_id=2034918092]
 transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.98646, 0.931352, 2.38419e-07)
 pixel_size = 0.0643
 no_depth_test = true
@@ -58,13 +67,33 @@ outline_size = 3
 horizontal_alignment = 0
 vertical_alignment = 0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="cursor"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="cursor" unique_id=1126848763]
 visible = false
 script = ExtResource("5_c8qii")
 
-[node name="Label3D2" type="Label3D" parent="cursor"]
+[node name="Label3D2" type="Label3D" parent="cursor" unique_id=1865066547]
 visible = false
 outline_render_priority = 0
 font_size = 612
 width = 100000.0
 script = SubResource("GDScript_c8qii")
+
+[node name="Path3D" type="Path3D" parent="." unique_id=801929842]
+curve = SubResource("Curve3D_cccqi")
+script = ExtResource("6_fnmbx")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Path3D" unique_id=1260730331]
+top_level = true
+polygon = PackedVector2Array(0, 0.01, 0.01, 0, 0, -0.01, -0.01, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 1
+path_interval = 0.1
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true

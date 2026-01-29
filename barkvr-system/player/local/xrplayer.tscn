@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cg5f0nrs0w6h5"]
+[gd_scene format=3 uid="uid://cg5f0nrs0w6h5"]
 
 [ext_resource type="Script" uid="uid://darqhbrhd2pbt" path="res://barkvr-system/player/local/xrplayer-controller.gd" id="1_iwrfe"]
 [ext_resource type="Script" uid="uid://dtrj0wbyv5rjp" path="res://barkvr-system/player/local/hand.gd" id="2_npgyv"]
@@ -26,233 +26,231 @@ size = Vector3(0.05, 0.05, 0.15)
 height = 1.0
 radius = 0.1
 
-[node name="CharacterBody3D" type="CharacterBody3D" groups=["player"]]
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1112241949 groups=["player"]]
 script = ExtResource("1_iwrfe")
 metadata/health = SubResource("GDScript_swjn5")
 metadata/grabbable = false
 
-[node name="xrplayer" type="XROrigin3D" parent="." groups=["player_xr_origin"]]
+[node name="xrplayer" type="XROrigin3D" parent="." unique_id=1882124212 groups=["player_xr_origin"]]
 
-[node name="Camera3D" type="Camera3D" parent="xrplayer"]
+[node name="Camera3D" type="Camera3D" parent="xrplayer" unique_id=1816742849]
 current = true
 fov = 90.0
 
-[node name="uiRay" parent="xrplayer/Camera3D" node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
+[node name="uiRay" parent="xrplayer/Camera3D" unique_id=1002050197 node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 unique_name_in_owner = true
 query_exception_nodes = [NodePath("../../..")]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779
 
-[node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D"]
+[node name="headiktarget" type="Node3D" parent="xrplayer/Camera3D" unique_id=2003778011]
 unique_name_in_owner = true
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="notificationparent" type="Node3D" parent="xrplayer/Camera3D" groups=["notificationparent"]]
+[node name="notificationparent" type="Node3D" parent="xrplayer/Camera3D" unique_id=1091493873 groups=["notificationparent"]]
 unique_name_in_owner = true
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 script = ExtResource("8_n4qtp")
 
-[node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" groups=["playerCamera"]]
+[node name="XrCamera3d" type="XRCamera3D" parent="xrplayer" unique_id=602813565 groups=["playerCamera"]]
 cull_mask = 1048573
 fov = 90.0
 
-[node name="Node3D" type="Node3D" parent="xrplayer/XrCamera3d" groups=["notificationparent"]]
+[node name="Node3D" type="Node3D" parent="xrplayer/XrCamera3d" unique_id=1002730981 groups=["notificationparent"]]
 transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0929923, -0.0845834, -0.183947)
 
-[node name="righthand" type="XRController3D" parent="xrplayer"]
+[node name="righthand" type="XRController3D" parent="xrplayer" unique_id=907833068]
 unique_name_in_owner = true
 tracker = &"right_hand"
 pose = &"aim"
 script = ExtResource("2_npgyv")
 
-[node name="handproxy" type="Node3D" parent="xrplayer/righthand"]
+[node name="handproxy" type="Node3D" parent="xrplayer/righthand" unique_id=632203024]
 
-[node name="grabParent" type="Node3D" parent="xrplayer/righthand/handproxy"]
+[node name="grabParent" type="Node3D" parent="xrplayer/righthand/handproxy" unique_id=1002520922]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="uiRay" parent="xrplayer/righthand/handproxy" instance=ExtResource("4_316iy")]
+[node name="uiRay" parent="xrplayer/righthand/handproxy" unique_id=398823697 instance=ExtResource("4_316iy")]
 follow_mouse = false
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779
 
-[node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy"]
+[node name="grabArea" type="Area3D" parent="xrplayer/righthand/handproxy" unique_id=1344671287]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.05, 0, 4.37114e-09)
 input_ray_pickable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/grabArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/grabArea" unique_id=581788890]
 shape = SubResource("SphereShape3D_1q63w")
 
-[node name="MeshInstance3d" type="MeshInstance3D" parent="xrplayer/righthand/handproxy"]
+[node name="MeshInstance3d" type="MeshInstance3D" parent="xrplayer/righthand/handproxy" unique_id=2140465194]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 mesh = SubResource("BoxMesh_mky8q")
-skeleton = NodePath("")
 
-[node name="handMenuPoint" type="Node3D" parent="xrplayer/righthand/handproxy"]
+[node name="handMenuPoint" type="Node3D" parent="xrplayer/righthand/handproxy" unique_id=1010963410]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
 
-[node name="handbody" type="StaticBody3D" parent="xrplayer/righthand/handproxy"]
+[node name="handbody" type="StaticBody3D" parent="xrplayer/righthand/handproxy" unique_id=1135898952]
 collision_layer = 1024
 collision_mask = 1024
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/handbody"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/righthand/handproxy/handbody" unique_id=1244385321]
 shape = SubResource("BoxShape3D_abacp")
 
-[node name="handiktarget" type="Node3D" parent="xrplayer/righthand"]
+[node name="handiktarget" type="Node3D" parent="xrplayer/righthand" unique_id=258425654]
 transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
 
-[node name="lefthand" type="XRController3D" parent="xrplayer"]
+[node name="lefthand" type="XRController3D" parent="xrplayer" unique_id=1268689249]
 unique_name_in_owner = true
 tracker = &"left_hand"
 pose = &"aim"
 script = ExtResource("2_npgyv")
 
-[node name="handproxy" type="Node3D" parent="xrplayer/lefthand"]
+[node name="handproxy" type="Node3D" parent="xrplayer/lefthand" unique_id=1928227331]
 
-[node name="uiRay" parent="xrplayer/lefthand/handproxy" instance=ExtResource("4_316iy")]
+[node name="uiRay" parent="xrplayer/lefthand/handproxy" unique_id=1609942515 instance=ExtResource("4_316iy")]
 interaction_index = 1
 follow_mouse = false
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779
 
-[node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy"]
+[node name="grabParent" type="Node3D" parent="xrplayer/lefthand/handproxy" unique_id=1874688498]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="grabArea" type="Area3D" parent="xrplayer/lefthand/handproxy"]
+[node name="grabArea" type="Area3D" parent="xrplayer/lefthand/handproxy" unique_id=126803808]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.05, 0, -4.37114e-09)
 input_ray_pickable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/grabArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/grabArea" unique_id=1353983710]
 shape = SubResource("SphereShape3D_1q63w")
 
-[node name="MeshInstance3d" type="MeshInstance3D" parent="xrplayer/lefthand/handproxy"]
+[node name="MeshInstance3d" type="MeshInstance3D" parent="xrplayer/lefthand/handproxy" unique_id=119318750]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 mesh = SubResource("BoxMesh_mky8q")
-skeleton = NodePath("")
 
-[node name="handMenuPoint" type="Node3D" parent="xrplayer/lefthand/handproxy"]
+[node name="handMenuPoint" type="Node3D" parent="xrplayer/lefthand/handproxy" unique_id=1910762934]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.203)
 
-[node name="handbody" type="StaticBody3D" parent="xrplayer/lefthand/handproxy"]
+[node name="handbody" type="StaticBody3D" parent="xrplayer/lefthand/handproxy" unique_id=1488514963]
 collision_layer = 1024
 collision_mask = 1024
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/handbody"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="xrplayer/lefthand/handproxy/handbody" unique_id=1949710740]
 shape = SubResource("BoxShape3D_abacp")
 
-[node name="handiktarget" type="Node3D" parent="xrplayer/lefthand"]
+[node name="handiktarget" type="Node3D" parent="xrplayer/lefthand" unique_id=1773178828]
 transform = Transform3D(-1, 0, 8.74228e-08, -8.74228e-08, 4.37114e-08, -1, 0, -1, -4.37114e-08, 0, 0, 0)
 
-[node name="menuoffset" type="Node3D" parent="xrplayer"]
+[node name="menuoffset" type="Node3D" parent="xrplayer" unique_id=792416600]
 unique_name_in_owner = true
 
-[node name="handmenu" parent="xrplayer/menuoffset" instance=ExtResource("9_opil0")]
+[node name="handmenu" parent="xrplayer/menuoffset" unique_id=2064888378 instance=ExtResource("9_opil0")]
 unique_name_in_owner = true
 
-[node name="localui" parent="xrplayer/menuoffset" instance=ExtResource("8_8rqii")]
+[node name="localui" parent="xrplayer/menuoffset" unique_id=436600343 instance=ExtResource("8_8rqii")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 freeze_mode = 0
 
-[node name="XRNode3D" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D" type="XRNode3D" parent="xrplayer" unique_id=900129422]
 tracker = &"/user/hand_tracker/left"
 show_when_tracked = true
 
-[node name="XRNode3D2" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D2" type="XRNode3D" parent="xrplayer" unique_id=1577471964]
 tracker = &"/user/hand_tracker/right"
 show_when_tracked = true
 
-[node name="XRNode3D3" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D3" type="XRNode3D" parent="xrplayer" unique_id=1379318705]
 tracker = &"/user/body_tracker"
 show_when_tracked = true
 
-[node name="XRNode3D4" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D4" type="XRNode3D" parent="xrplayer" unique_id=443152971]
 tracker = &"/user/face_tracker"
 show_when_tracked = true
 
-[node name="XRNode3D5" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D5" type="XRNode3D" parent="xrplayer" unique_id=1398515537]
 tracker = &"/user/treadmill"
 show_when_tracked = true
 
-[node name="XRNode3D6" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D6" type="XRNode3D" parent="xrplayer" unique_id=1277985363]
 tracker = &"/user/fbhandaim/left"
 show_when_tracked = true
 
-[node name="XRNode3D7" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D7" type="XRNode3D" parent="xrplayer" unique_id=1611901256]
 tracker = &"/user/fbhandaim/right"
 show_when_tracked = true
 
-[node name="XRNode3D8" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D8" type="XRNode3D" parent="xrplayer" unique_id=1585708896]
 tracker = &"/user/hand_htc/left"
 show_when_tracked = true
 
-[node name="XRNode3D9" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D9" type="XRNode3D" parent="xrplayer" unique_id=311456687]
 tracker = &"/user/hand_htc/right"
 show_when_tracked = true
 
-[node name="XRNode3D10" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D10" type="XRNode3D" parent="xrplayer" unique_id=640481085]
 tracker = &"/user/vive_tracker_htcx/role/handheld_object"
 show_when_tracked = true
 
-[node name="XRNode3D11" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D11" type="XRNode3D" parent="xrplayer" unique_id=704088210]
 tracker = &"/user/vive_tracker_htcx/role/left_foot"
 show_when_tracked = true
 
-[node name="XRNode3D12" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D12" type="XRNode3D" parent="xrplayer" unique_id=859864486]
 tracker = &"/user/vive_tracker_htcx/role/right_foot"
 show_when_tracked = true
 
-[node name="XRNode3D13" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D13" type="XRNode3D" parent="xrplayer" unique_id=1743788075]
 tracker = &"/user/vive_tracker_htcx/role/left_shoulder"
 show_when_tracked = true
 
-[node name="XRNode3D14" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D14" type="XRNode3D" parent="xrplayer" unique_id=1206582388]
 tracker = &"/user/vive_tracker_htcx/role/right_shoulder"
 show_when_tracked = true
 
-[node name="XRNode3D15" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D15" type="XRNode3D" parent="xrplayer" unique_id=664741102]
 tracker = &"/user/vive_tracker_htcx/role/left_elbow"
 show_when_tracked = true
 
-[node name="XRNode3D16" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D16" type="XRNode3D" parent="xrplayer" unique_id=1685803260]
 tracker = &"/user/vive_tracker_htcx/role/right_elbow"
 show_when_tracked = true
 
-[node name="XRNode3D17" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D17" type="XRNode3D" parent="xrplayer" unique_id=1355366525]
 tracker = &"/user/vive_tracker_htcx/role/left_knee"
 show_when_tracked = true
 
-[node name="XRNode3D18" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D18" type="XRNode3D" parent="xrplayer" unique_id=816992806]
 tracker = &"/user/vive_tracker_htcx/role/right_knee"
 show_when_tracked = true
 
-[node name="XRNode3D19" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D19" type="XRNode3D" parent="xrplayer" unique_id=1624402868]
 tracker = &"/user/vive_tracker_htcx/role/waist"
 show_when_tracked = true
 
-[node name="XRNode3D20" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D20" type="XRNode3D" parent="xrplayer" unique_id=1687651116]
 tracker = &"/user/vive_tracker_htcx/role/chest"
 show_when_tracked = true
 
-[node name="XRNode3D21" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D21" type="XRNode3D" parent="xrplayer" unique_id=765990679]
 tracker = &"/user/vive_tracker_htcx/role/camera"
 show_when_tracked = true
 
-[node name="XRNode3D22" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D22" type="XRNode3D" parent="xrplayer" unique_id=380165866]
 tracker = &"/user/vive_tracker_htcx/role/keyboard"
 show_when_tracked = true
 
-[node name="XRNode3D23" type="XRNode3D" parent="xrplayer"]
+[node name="XRNode3D23" type="XRNode3D" parent="xrplayer" unique_id=1968209022]
 tracker = &"/user/eyes_ext"
 show_when_tracked = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=591889712]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.496656, 0)
 shape = SubResource("CylinderShape3D_clvwe")
 
-[node name="playercamoffset" type="Node3D" parent="."]
+[node name="playercamoffset" type="Node3D" parent="." unique_id=1786473985]
 
-[node name="modules" type="Node" parent="."]
+[node name="modules" type="Node" parent="." unique_id=409030114]

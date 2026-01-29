@@ -1,7 +1,15 @@
+## custom raycasting tool made in gdscript so we can force the interaction
+## layers to work correctly
+##
+## this class is the laser that lets you touch things in barkvr.[br]
+## with this class, we can set and check multiple physics layers so that if a user
+## is pointing at an inspector, they don't accidentally click an object behind it[br]
+## it functions as a drop-in-replacement for the Raycast3D node but is more relaible
+## since this avoid some weird engine quirks with the Raycast3D node.
 class_name InteractionRay
 extends Node3D
 
-@onready var line_3d = $Line3D
+@export var line_3d : Line3D
 @onready var vis: Node3D = $rayvis
 var vispos := Vector3()
 
@@ -25,10 +33,8 @@ var last_collider_plane := Plane()
 
 @export var no_line: bool = false:
 	set(val):
-		if val and is_instance_valid(line_3d):
-			line_3d.hide()
-			return
-		line_3d.show()
+		if is_instance_valid(line_3d):
+			line_3d.visible = !val
 
 @export var stay_at_parent_origin: bool = true:
 	set(val):
@@ -52,11 +58,11 @@ var last_collider_plane := Plane()
 
 ## this controls the speed at which the lerp function
 ## interpolates toward the new target point
-@export var smoothing_speed := .1
+@export var smoothing_speed := .3
 
 ## used to track previous position the raycast casted to
 ## so we can use it as the `from` in the lerpf for smoothing
-var last_to_position : Vector3
+var smooth_raycast_position := Vector3()
 
 ## only works if `enabled = true`
 ## sets whether the raycast being run every frame should run on
@@ -147,7 +153,11 @@ func query_raycast() -> Dictionary:
 	var rayquery := PhysicsRayQueryParameters3D.new()
 	#last_to_position # TODO finish raycast smoothing
 	rayquery.from = global_position
-	rayquery.to = target_position
+	if smoothing_enabled:
+		smooth_raycast_position = smooth_raycast_position.lerp(target_position,smoothing_speed)
+		rayquery.to = smooth_raycast_position
+	else:
+		rayquery.to = target_position
 	rayquery.exclude = query_exceptions
 	rayquery.collision_mask = private_ui_collision_layers
 	query_collision_data = physspace.intersect_ray(rayquery)
@@ -277,16 +287,13 @@ func interact() -> void:
 func procrayvis():
 	if query_is_colliding:
 		vispos = query_position
-		line_3d.target = line_3d.to_local(query_position)
-		if is_instance_valid(query_collider):
-			if query_collider.is_class("RigidBody3D"):
-				vis.setType('rigidbody')
-			else:
-				vis.setType('pointer')
+		if line_3d:
+			line_3d.target = line_3d.to_local(query_position)
 	else:
 		vispos = target_position
 		# set the endpoint of the line3d to the target_position of the raycast
-		line_3d.target = target_position
+		if line_3d:
+			line_3d.target = target_position
 	vis.target = vispos
 
 func _input(event):

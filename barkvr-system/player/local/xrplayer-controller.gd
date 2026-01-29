@@ -1,3 +1,4 @@
+class_name BarkvrPlayerController
 extends CharacterBody3D
 
 # TODO plans:
@@ -77,7 +78,7 @@ var screen_just_touched := false
 
 @export var force_set_vr_enabled := false
 
-var last_spawned_inspector
+var last_spawned_inspector : Panel3D
 
 var vr_mode_enabled := false:
 	set(value):
@@ -141,6 +142,13 @@ func respawn_player():
 		global_position = Vector3(0,4,0)
 
 func _ready():
+	if SettingsSingleton.instance:
+		SettingsSingleton.instance.changed.connect(func(name : StringName):
+			if name == "viewport_disable_3d" and SettingsSingleton.instance.viewport_disable_3d:
+				localui.ui.reveal()
+			)
+	if SettingsSingleton.instance.viewport_disable_3d:
+		localui.ui.reveal()
 	get_window().gui_focus_changed.connect(func(_node):
 		if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_TYPING
@@ -268,8 +276,20 @@ func flat_movement(_delta:float) -> void:
 		if grabbed.size() > 0:
 			var did_activate_held := false
 			for item in grabbed.values():
-				if "node" in item and "primary" in item.node:
-					item.node.primary()
+				if "node" in item:
+					if 'button_pressed' in item.node:
+						item.node.button_pressed("click")
+						continue
+					# DEPRECATED the following are only for backward compatibility!
+					if 'primary' in item.node:
+						item.node.primary()
+						continue
+					if 'primary_pressed' in item.node:
+						item.node.primary_pressed()
+						continue
+					if "trigger_pressed" in item.node:
+						item.node.trigger_pressed = true
+						continue
 					did_activate_held = true
 			if !did_activate_held:
 				ui_ray.click()
@@ -282,8 +302,19 @@ func flat_movement(_delta:float) -> void:
 	if Input.is_action_just_released("click"):
 		if grabbed.size() > 0:
 			for item in grabbed.values():
-				if "node" in item and "primary_released" in item.node:
+				if 'button_released' in item.node:
+					item.node.button_released("click")
+					continue
+				# DEPRECATED the following are only for backward compatibility!
+				if 'released' in item.node:
+					item.node.released()
+					continue
+				if 'primary_released' in item.node:
 					item.node.primary_released()
+					continue
+				if 'trigger_released' in item.node:
+					item.node.trigger_released()
+					continue
 		ui_ray.release()
 	if Input.is_action_just_pressed("rightclick"):
 		if vr_mode_enabled:
@@ -489,11 +520,23 @@ func contextMenuSummon():
 
 func summon_inspector():
 	if LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		if ( Engine.has_singleton("settings_manager") and \
-		!(Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton) or\
-		!is_instance_valid(last_spawned_inspector):
-			last_spawned_inspector = load("uid://ec0mqh35i2in").instantiate() # Load inspector from UID.
-			get_tree().get_first_node_in_group("localworldroot").add_child(last_spawned_inspector)
+		# check to see if the settings manager exists
+		if Engine.has_singleton("settings_manager"):
+			# if it does, we check to see if the inspector is set as a singleton (only one at a time)
+			# or if the inspector reference is empty. if either of these are true, we spawn a new
+			# inspector
+			if (Engine.get_singleton("settings_manager") as SettingsSingleton).inspector_as_singleton and is_instance_valid(last_spawned_inspector):
+				post_summon_inspector()
+			else:
+				last_spawned_inspector = load("uid://ec0mqh35i2in").instantiate() # Load inspector from UID and instantiate it.
+				get_tree().get_first_node_in_group("localworldroot").call_deferred("add_child",last_spawned_inspector)
+				# since we deferred the add_child for the inspector for performance reasons,
+				# we now need to wait until the inspector is in the scene before we can manipulate xforms
+				# so we connect a oneshot signal (the "4" flag at the end) that finishes setup once
+				# the node is in the tree
+				last_spawned_inspector.tree_entered.connect(post_summon_inspector,4)
+
+func post_summon_inspector():
 		last_spawned_inspector.global_position = camera_3d.to_global(Vector3(0,0,-.5))
 		last_spawned_inspector.look_at(camera_3d.global_position, Vector3.UP, true)
 

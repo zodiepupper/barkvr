@@ -15,6 +15,7 @@ func _physics_process(delta: float) -> void:
 "
 
 [sub_resource type="Curve3D" id="Curve3D_cccqi"]
+resource_local_to_scene = true
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.6663189, -4.973156, -6.6676183, 0, 0, -2, 0, 0, 0, 0, 0, 0),
 "tilts": PackedFloat32Array(0, 0)
@@ -24,7 +25,6 @@ point_count = 2
 [node name="rayvis" type="Node3D" unique_id=1420301323 node_paths=PackedStringArray("path3d")]
 script = ExtResource("1_6wvgr")
 path3d = NodePath("Path3D")
-mouse_cursor = true
 
 [node name="pointer" type="Sprite3D" parent="." unique_id=858536294]
 transform = Transform3D(0.81, 0, 0, 0, 0.81, 0, 0, 0, 0.81, 0, 0, 0)

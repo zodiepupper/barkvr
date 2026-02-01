@@ -220,7 +220,8 @@ func buttonReleased(btn_name):
 		rayBody = null
 
 func contextMenuSummon():
-	handmenu.summon(hand_menu_point.global_position, global_position)
+	if handmenu:
+		handmenu.summon(hand_menu_point.global_position, global_position)
 
 func grip():
 	if grabArea.get_overlapping_bodies().size() > 0:

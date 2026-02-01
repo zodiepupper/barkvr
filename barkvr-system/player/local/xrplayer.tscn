@@ -73,6 +73,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" unique_id=398823697 instance=ExtResource("4_316iy")]
 follow_mouse = false
+smoothing_speed = 0.1
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779
@@ -112,6 +113,7 @@ script = ExtResource("2_npgyv")
 [node name="uiRay" parent="xrplayer/lefthand/handproxy" unique_id=1609942515 instance=ExtResource("4_316iy")]
 interaction_index = 1
 follow_mouse = false
+smoothing_speed = 0.1
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779

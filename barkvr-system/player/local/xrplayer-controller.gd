@@ -143,8 +143,8 @@ func respawn_player():
 
 func _ready():
 	if SettingsSingleton.instance:
-		SettingsSingleton.instance.changed.connect(func(name : StringName):
-			if name == "viewport_disable_3d" and SettingsSingleton.instance.viewport_disable_3d:
+		SettingsSingleton.instance.changed.connect(func(new_name : StringName):
+			if new_name == "viewport_disable_3d" and SettingsSingleton.instance.viewport_disable_3d:
 				localui.ui.reveal()
 			)
 	if SettingsSingleton.instance.viewport_disable_3d:

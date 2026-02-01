@@ -253,7 +253,6 @@ textures/canvas_textures/default_texture_filter=2
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
-occlusion_culling/use_occlusion_culling=true
 
 [shader_globals]
 
@@ -303,7 +302,6 @@ META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_RIGHT={
 openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
-openxr/startup_alert=false
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
@@ -321,4 +319,3 @@ openxr/extensions/meta/hand_tracking_capsules=true
 openxr/extensions/meta/application_space_warp=true
 openxr/extensions/meta/environment_depth=true
 openxr/extensions/meta/color_space/starting_color_space=2
-hybrid_app/enabled=true

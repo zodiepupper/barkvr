@@ -22,7 +22,8 @@ var target := Vector3():
 func proc_rayvis():
 	if get_tree().get_first_node_in_group("player"):
 		#global_laser_origin_override = global_laser_origin_override
-		global_laser_origin_override = (get_tree().get_first_node_in_group("player") as BarkvrPlayerController).righthand.global_position
+		if mouse_cursor:
+			global_laser_origin_override = (get_tree().get_first_node_in_group("player") as BarkvrPlayerController).righthand.global_position
 		var current_camera = get_viewport().get_camera_3d()
 		var dist = target.distance_to(current_camera.global_position)
 		cursor.scale = Vector3(1,1,1)*dist/cursor_size_factor

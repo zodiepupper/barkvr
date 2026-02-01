@@ -29,7 +29,7 @@ func _ready() -> void:
 			custom_minimum_size.y = 100
 		)
 
-## sets the name, field target node, and the property name for the field to look for
+## sets the name, field target node, and the property name for the field to look for[br]
 ## above_targets field is for tracking previously added objects to prevent
 ## ui recursion because of cyclical references
 ## name:String, new_target:Node, new_property_name:String
@@ -45,12 +45,14 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, abov
 			var prop = attributes_target[i]
 			match typeof(prop):
 				TYPE_OBJECT:
-					if "hint_string" in prop and prop.hint_string == "Node" or "class_name" in prop and prop.class_name in ClassDB.get_inheriters_from_class("Node"):
+					if "hint_string" in prop and prop.hint_string == "Node"\
+					or "class_name" in prop and prop.class_name in ClassDB.get_inheriters_from_class("Node")\
+					or prop is Node or false:
 						print('node don\'t add')
 					else:
 						var tmp :Object_Attribute = object_field.instantiate()
 						field_parent.add_child(tmp)
-						tmp.call_deferred("set_data",str(i), attributes_target, str(i),above_targets)
+						tmp.call_deferred("set_data",str(i), prop, str(i),above_targets)
 				TYPE_STRING_NAME:
 					var tmp :String_Attribute = string_field.instantiate()
 					field_parent.add_child(tmp)

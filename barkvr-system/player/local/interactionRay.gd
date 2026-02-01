@@ -75,10 +75,11 @@ var smooth_raycast_position := Vector3()
 ## (this can be made into a local position if
 ## `target_position_is_local = true`
 @export var target_position := Vector3(0,0,-1):
-	get:
+	set(val):
 		if target_position_is_local:
-			return to_global(target_position)
-		return target_position
+			target_position = to_global(val)
+			return
+		target_position = val
 
 @export var target_position_is_local := true
 
@@ -143,15 +144,14 @@ var query_is_colliding : bool
 	#query_exception_nodes = query_exception_nodes
 
 ## runs the physics query for the raycast
-## this now uses 2 raycasts to enforce a selection bias
-## on what object is being interacted with (ui, vs world objects)
+## this now uses 3 raycasts to enforce a selection bias
+## on what object is being interacted with (system/private ui, world ui, world objects)
 func query_raycast() -> Dictionary:
 	if stay_at_parent_origin:
 		position = Vector3()
 	query_collision_data = Dictionary()
 	var physspace := get_world_3d().direct_space_state
 	var rayquery := PhysicsRayQueryParameters3D.new()
-	#last_to_position # TODO finish raycast smoothing
 	rayquery.from = global_position
 	if smoothing_enabled:
 		smooth_raycast_position = smooth_raycast_position.lerp(target_position,smoothing_speed)

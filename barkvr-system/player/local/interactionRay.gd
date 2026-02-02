@@ -76,10 +76,10 @@ var smooth_raycast_position := Vector3()
 ## `target_position_is_local = true`
 @export var target_position := Vector3(0,0,-1):
 	set(val):
-		if target_position_is_local:
+		if target_position_is_local and is_inside_tree():
 			target_position = to_global(val)
-			return
-		target_position = val
+		else:
+			target_position = val
 
 @export var target_position_is_local := true
 
@@ -154,7 +154,7 @@ func query_raycast() -> Dictionary:
 	var rayquery := PhysicsRayQueryParameters3D.new()
 	rayquery.from = global_position
 	if smoothing_enabled:
-		smooth_raycast_position = smooth_raycast_position.lerp(target_position,smoothing_speed)
+		smooth_raycast_position = smooth_raycast_position.lerp(to_global(target_position),smoothing_speed)
 		rayquery.to = smooth_raycast_position
 	else:
 		rayquery.to = target_position

@@ -17,14 +17,31 @@ func _physics_process(delta: float) -> void:
 [sub_resource type="Curve3D" id="Curve3D_cccqi"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.6663189, -4.973156, -6.6676183, 0, 0, -2, 0, 0, 0, 0, 0, 0),
+"points": PackedVector3Array(0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.719, -0.966),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fnmbx"]
+render_priority = 127
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.39215687)
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+metadata/_stencil_owned = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cccqi"]
+next_pass = SubResource("StandardMaterial3D_fnmbx")
+stencil_mode = 2
+stencil_flags = 2
+
 [node name="rayvis" type="Node3D" unique_id=1420301323 node_paths=PackedStringArray("path3d")]
 script = ExtResource("1_6wvgr")
 path3d = NodePath("Path3D")
+mouse_cursor = true
 
 [node name="pointer" type="Sprite3D" parent="." unique_id=858536294]
 transform = Transform3D(0.81, 0, 0, 0, 0.81, 0, 0, 0, 0.81, 0, 0, 0)
@@ -83,7 +100,6 @@ curve = SubResource("Curve3D_cccqi")
 script = ExtResource("6_fnmbx")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Path3D" unique_id=1260730331]
-top_level = true
 polygon = PackedVector2Array(0, 0.01, 0.01, 0, 0, -0.01, -0.01, 0)
 mode = 2
 path_node = NodePath("..")
@@ -92,8 +108,9 @@ path_interval = 0.1
 path_simplify_angle = 0.0
 path_rotation = 2
 path_rotation_accurate = false
-path_local = false
+path_local = true
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
+material = SubResource("StandardMaterial3D_cccqi")

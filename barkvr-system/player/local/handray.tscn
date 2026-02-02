@@ -9,3 +9,4 @@ smoothing_enabled = true
 target_position = Vector3(0, 0, -1000000000)
 
 [node name="rayvis" parent="." unique_id=1938452924 instance=ExtResource("3_6jlx7")]
+mouse_cursor = false

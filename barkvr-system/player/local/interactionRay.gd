@@ -154,7 +154,10 @@ func query_raycast() -> Dictionary:
 	var rayquery := PhysicsRayQueryParameters3D.new()
 	rayquery.from = global_position
 	if smoothing_enabled:
-		smooth_raycast_position = smooth_raycast_position.lerp(to_global(target_position),smoothing_speed)
+		smooth_raycast_position = smooth_raycast_position.lerp(
+			target_position if follow_mouse else to_global(target_position),
+			smoothing_speed
+		)
 		rayquery.to = smooth_raycast_position
 	else:
 		rayquery.to = target_position

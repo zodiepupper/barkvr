@@ -3,6 +3,8 @@ class_name SettingsMenu
 
 # general settings
 @onready var restart_in_vr_button: Button = $ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/RestartInVR/RestartInVR/Button
+@onready var laser_smoothing_enabled: Bool_Attribute = %"laser smoothing enabled"
+@onready var laser_smoothing_speed: Number_Attribute = %"laser smoothing speed"
 
 # vr settings
 @onready var passthrough_button: Button = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle
@@ -72,6 +74,8 @@ func _ready() -> void:
 		screen_space_anti_aliasing.set_data("Scren Space Anti Aliasing", settings_singleton, "screen_space_anti_aliasing", {"hint_string":"Disabled, FXAA_Enabled"})
 		(viewport_disable_3d as Bool_Attribute).set_data("Disable 3D", settings_singleton, "viewport_disable_3d")
 		inspector_as_singleton.set_data("Inspector As Singleton", settings_singleton, "inspector_as_singleton")
+		laser_smoothing_enabled.set_data("Laser Smoothing Enabled", settings_singleton, "laser_smoothing")
+		laser_smoothing_speed.set_data("Laser Smoothing Speed", settings_singleton, "laser_smoothing_speed")
 		vr_notification_test.pressed.connect(test_vr_notification)
 		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing

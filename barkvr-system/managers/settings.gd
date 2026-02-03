@@ -117,6 +117,17 @@ var inspector_as_singleton: bool = false:
 		inspector_as_singleton = value
 		save_and_emit(&"inspector_as_singleton")
 
+## this setting enables or disables the InteractionRay smoothing functionality
+var laser_smoothing: bool = false:
+	set(value):
+		laser_smoothing = value
+		save_and_emit(&"laser_smoothing")
+
+var laser_smoothing_speed: float = .3:
+	set(value):
+		laser_smoothing_speed = value
+		save_and_emit(&"laser_smoothing_speed")
+
 ## initialization dictionary which defines the schema of the settings file
 ## exists to reduce ambiguity in how the settings file is organized
 const DEFAULT_VALUES := {
@@ -136,7 +147,8 @@ const DEFAULT_VALUES := {
 	vr_notification_size = 40.0,
 	vr_notification_offset = Vector2(.1,.9),
 	inspector_as_singleton = false,
-
+	laser_smoothing = false,
+	laser_smoothing_speed = .3
 }
 
 var inspectors := []:

@@ -34,17 +34,14 @@ size_flags_vertical = 3
 
 [node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1578212275]
 layout_mode = 2
-folded = true
 title = "general settings"
 title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=19733212]
-visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
 [node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=1188667687]
-visible = false
 layout_mode = 2
 
 [node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=653113849]
@@ -71,6 +68,14 @@ focus_mode = 0
 text = "restart in vr"
 icon_alignment = 1
 expand_icon = true
+
+[node name="laser smoothing enabled" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=2100322085 instance=ExtResource("2_dbica")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="laser smoothing speed" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=227325282 instance=ExtResource("3_6t4ur")]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="VRSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=625862703]
 layout_mode = 2

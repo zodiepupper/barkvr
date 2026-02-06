@@ -18,8 +18,8 @@ var new_pos : Vector3 = Vector3(0,0,-1):
 var global_origin_offset : Vector3 = Vector3():
 	set(val):
 		global_origin_offset = val
-		#if curve and curve.point_count > 1:
-			#if val.is_zero_approx():
-				#curve.set_point_position(0,Vector3())
-				#return
-			#curve.set_point_position(0, to_local(val))
+		if curve and curve.point_count > 1:
+			if val.is_zero_approx():
+				curve.set_point_position(0,Vector3())
+				return
+			curve.set_point_position(0, to_local(val))

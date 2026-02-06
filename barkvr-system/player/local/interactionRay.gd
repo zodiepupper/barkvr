@@ -49,7 +49,11 @@ var last_collider_plane := Plane()
 
 ## sets whether the ray should follow the mouse cursor position
 ## intended to easily keep the target aligned with controllers
-@export var follow_mouse := true
+@export var follow_mouse := true:
+	set(val):
+		follow_mouse = val
+		if vis and "mouse_cursor" in vis:
+			vis.mouse_cursor = val
 
 ## enables smoothing which applys a lerp to the
 ## target position to smooth out jittery controller
@@ -216,6 +220,7 @@ func add_exception_rid(rid : RID) -> void:
 func _ready() -> void:
 	no_line = no_line
 	stay_at_parent_origin = stay_at_parent_origin
+	follow_mouse = follow_mouse
 	add_child(touch_timer)
 	touch_timer.timeout.connect(func():
 		using_touch = false

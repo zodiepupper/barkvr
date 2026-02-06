@@ -128,6 +128,13 @@ var laser_smoothing_speed: float = .3:
 		laser_smoothing_speed = value
 		save_and_emit(&"laser_smoothing_speed")
 
+## allows a desktop user to decide whether the the laser should originate from
+## their left_hand:0, right_hand:1, or head:2
+var desktop_laser_origin: int = 0:
+	set(value):
+		desktop_laser_origin = value
+		save_and_emit(&"desktop_laser_origin")
+
 ## initialization dictionary which defines the schema of the settings file
 ## exists to reduce ambiguity in how the settings file is organized
 const DEFAULT_VALUES := {
@@ -148,7 +155,8 @@ const DEFAULT_VALUES := {
 	vr_notification_offset = Vector2(.1,.9),
 	inspector_as_singleton = false,
 	laser_smoothing = false,
-	laser_smoothing_speed = .3
+	laser_smoothing_speed = .3,
+	desktop_laser_origin = 0
 }
 
 var inspectors := []:

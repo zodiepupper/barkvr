@@ -8,6 +8,22 @@
 [ext_resource type="Script" uid="uid://dtd6mffjg2rvw" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_input_selector.gd" id="5_dbica"]
 [ext_resource type="Script" uid="uid://6p36kkj4jsaf" path="res://barkvr-system/ui/3dPanel/local ui/settings/audio_output_selector.gd" id="6_sna4b"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbica"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [sub_resource type="ImageTexture" id="ImageTexture_5et3l"]
 
 [node name="settings" type="Control" unique_id=1908223142]
@@ -34,6 +50,7 @@ size_flags_vertical = 3
 
 [node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1578212275]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 title = "general settings"
 title_alignment = 1
 
@@ -69,6 +86,24 @@ text = "restart in vr"
 icon_alignment = 1
 expand_icon = true
 
+[node name="divider" type="Panel" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=1868521272]
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dbica")
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings/divider" unique_id=431049683]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Laser Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="laser smoothing enabled" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=2100322085 instance=ExtResource("2_dbica")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -77,8 +112,13 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="laser origin" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=158459940 instance=ExtResource("2_bod8q")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="VRSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=625862703]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 folded = true
 title = "vr settings"
 title_alignment = 1
@@ -172,6 +212,7 @@ size_flags_stretch_ratio = 0.1
 
 [node name="UISettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1200934037]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 folded = true
 title = "ui settings"
 title_alignment = 1
@@ -435,6 +476,7 @@ text = "send test notification"
 
 [node name="ChatSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1900204722]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 folded = true
 title = "chat settings"
 title_alignment = 1
@@ -479,6 +521,7 @@ text = "is disabled"
 
 [node name="AudioSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1160347259]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 folded = true
 title = "audio settings"
 title_alignment = 1
@@ -560,6 +603,7 @@ color = Color(0, 1, 0, 0)
 
 [node name="GraphicsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=597424449]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 folded = true
 title = "graphics settings"
 title_alignment = 1

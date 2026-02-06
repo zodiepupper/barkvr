@@ -3,9 +3,12 @@ extends Node3D
 @onready var physics = $physics
 @onready var cursor = $cursor
 
-@export var path3d : Path3D 
+@export var path3d : Path3D
+## tells the laser to originate from the desktop_laser_origin
 @export var mouse_cursor := false
-## a global position that can be used to 
+## a global position that can be used to make the laser originate from
+## somewhere else. this is used to make the desktop laser come from a 
+## hand
 @export var global_laser_origin_override := Vector3():
 	set(val):
 		global_laser_origin_override = val
@@ -21,9 +24,14 @@ var target := Vector3():
 
 func proc_rayvis():
 	if get_tree().get_first_node_in_group("player"):
-		#global_laser_origin_override = global_laser_origin_override
 		if mouse_cursor:
-			global_laser_origin_override = (get_tree().get_first_node_in_group("player") as BarkvrPlayerController).righthand.global_position
+			match SettingsSingleton.instance.desktop_laser_origin:
+				0:
+					global_laser_origin_override = (get_tree().get_first_node_in_group("player") as BarkvrPlayerController).lefthand.global_position
+				1:
+					global_laser_origin_override = (get_tree().get_first_node_in_group("player") as BarkvrPlayerController).righthand.global_position
+				2:
+					global_laser_origin_override = Vector3()
 		var current_camera = get_viewport().get_camera_3d()
 		var dist = target.distance_to(current_camera.global_position)
 		cursor.scale = Vector3(1,1,1)*dist/cursor_size_factor

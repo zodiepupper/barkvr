@@ -1,0 +1,228 @@
+name: Godot Exports (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to upload builds to"
+        required: true
+
+env:
+  GODOT_VERSION: "4.6"
+  GODOT_CHANNEL: "stable"
+  GODOT_BASE_URL: "https://godot-releases.nbg1.your-objectstorage.com"
+
+jobs:
+  setup:
+    name: Setup Godot + Export Templates
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y unzip zip curl openjdk-17-jdk
+
+    - name: Cache Godot + Export Templates
+      uses: actions/cache@v4
+      with:
+        path: |
+          /usr/local/bin/godot
+          ~/.local/share/godot/export_templates
+        key: godot-${{ env.GODOT_VERSION }}-${{ env.GODOT_CHANNEL }}
+
+    - name: Download Godot Editor
+      run: |
+        if [ ! -f /usr/local/bin/godot ]; then
+          curl -L --http1.1 --retry 5 --retry-delay 5 \
+            -o godot.zip \
+            ${GODOT_BASE_URL}/${GODOT_VERSION}-${GODOT_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_CHANNEL}_linux.x86_64.zip
+          unzip godot.zip
+          chmod +x Godot_v${GODOT_VERSION}-${GODOT_CHANNEL}_linux.x86_64
+          sudo mv Godot_v${GODOT_VERSION}-${GODOT_CHANNEL}_linux.x86_64 /usr/local/bin/godot
+        fi
+
+    - name: Download Export Templates
+      run: |
+        TEMPLATE_PATH="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_CHANNEL}"
+        mkdir -p ~/.local/share/godot/export_templates
+        if [ ! -d "$TEMPLATE_PATH" ]; then
+          curl -L --http1.1 --retry 5 --retry-delay 5 \
+            -o templates.tpz \
+            ${GODOT_BASE_URL}/${GODOT_VERSION}-${GODOT_CHANNEL}/Godot_v${GODOT_VERSION}-${GODOT_CHANNEL}_export_templates.tpz
+          unzip templates.tpz
+          mv templates "$TEMPLATE_PATH"
+        fi
+
+    - name: Verify Godot installation
+      run: |
+        godot --version
+        ls -lh ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_CHANNEL}
+
+  export:
+    name: Export Builds
+    needs: setup
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - preset: "Windows x86_64"
+          out: win_x86_64
+          android: false
+        - preset: "Windows arm64"
+          out: win_arm
+          android: false
+        - preset: "Linux/X11 x86_64"
+          out: linux_x86_64
+          android: false
+        - preset: "Linux/X11 arm64"
+          out: linux_arm
+          android: false
+        - preset: "macOS arm64"
+          out: macos_arm
+          android: false
+
+        - preset: "Khronos"
+          out: khronos
+          android: true
+        - preset: "Lynx"
+          out: lynx
+          android: true
+        - preset: "Meta"
+          out: meta
+          android: true
+        - preset: "Meta no boundary"
+          out: meta_no_boundary
+          android: true
+        - preset: "Pico"
+          out: pico
+          android: true
+        - preset: "Magicleap"
+          out: magicleap
+          android: true
+        - preset: "Android"
+          out: android
+          android: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Restore Godot + Export Templates Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          /usr/local/bin/godot
+          ~/.local/share/godot/export_templates
+        key: godot-${{ env.GODOT_VERSION }}-${{ env.GODOT_CHANNEL }}
+
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y unzip zip curl openjdk-17-jdk
+
+    - name: Ensure Android SDK dir exists
+      if: matrix.android
+      run: mkdir -p $HOME/Android/Sdk
+
+    - name: Setup Android SDK
+      if: matrix.android
+      run: |
+        export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH
+
+        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+        if [ ! -d "$ANDROID_SDK_ROOT/cmdline-tools/latest" ]; then
+          curl -L -o cmdline-tools.zip \
+            https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip -o cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools \
+             $ANDROID_SDK_ROOT/cmdline-tools/latest
+          rm cmdline-tools.zip
+        fi
+
+        yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+          "platform-tools" \
+          "platforms;android-33" \
+          "platforms;android-34" \
+          "platforms;android-35" \
+          "build-tools;33.0.2" \
+          "build-tools;34.0.0" \
+          "build-tools;35.0.1" \
+          "cmdline-tools;latest" \
+          "ndk;28.1.13356709"
+
+        echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+        echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+
+    - name: Configure Godot Android paths
+      if: matrix.android
+      run: |
+        CONFIG_DIR="$HOME/.config/godot"
+        CONFIG_FILE="$CONFIG_DIR/editor_settings-4.tres"
+
+        mkdir -p "$CONFIG_DIR"
+
+        cat > "$CONFIG_FILE" <<EOF
+        [gd_resource type="EditorSettings" format=3]
+
+        [resource]
+        export/android/java_sdk_path="/usr/lib/jvm/java-17-openjdk-amd64"
+        export/android/android_sdk_path="$HOME/Android/Sdk"
+        EOF
+
+        echo "Configured Godot Android export paths:"
+        cat "$CONFIG_FILE"
+
+    - name: Setup Android Template
+      if: matrix.android
+      run: |
+        mkdir -p android/build
+        unzip -o ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_CHANNEL}/android_source.zip -d android/build
+
+    
+    - name: Export ${{ matrix.preset }}
+      env:
+        ANDROID_SDK_ROOT: $HOME/Android/Sdk
+      run: |
+        mkdir -p build/${{ matrix.out }}
+
+        # Determine output file
+        if [ "${{ matrix.android }}" = "true" ]; then
+          OUT="build/${{ matrix.out }}/BarkVR.apk"
+        else
+          case "${{ matrix.preset }}" in
+            "Linux/X11 x86_64")
+              OUT="build/${{ matrix.out }}/BarkVR.x86_64"
+              ;;
+            "Linux/X11 arm64")
+              OUT="build/${{ matrix.out }}/BarkVR.arm64"
+              ;;
+            "Windows x86_64"|"Windows arm64")
+              OUT="build/${{ matrix.out }}/BarkVR.exe"
+              ;;
+            "macOS arm64")
+              OUT="build/${{ matrix.out }}/BarkVR.zip"
+              ;;
+            *)
+              OUT="build/${{ matrix.out }}/BarkVR"
+              ;;
+          esac
+        fi
+
+        echo "Exporting '${{ matrix.preset }}' → $OUT"
+        godot --headless --export-debug "${{ matrix.preset }}" "$OUT"
+
+    - name: Zip Build
+      run: |
+        cd build
+        zip -r ${{ matrix.out }}.zip ${{ matrix.out }}
+
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.event.inputs.release_tag }}
+        files: build/${{ matrix.out }}.zip
+

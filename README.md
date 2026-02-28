@@ -101,7 +101,13 @@ PRs!!
 > It is recommended that Issues be conversational and informal, but formal is
 > also fine. Don't be shy!
 
-Thank you for being here, thank you for being interested
+## for support, help, or anything really:
+email:
+[barkvrsupport@pupper.dev](mailto:barkvrsupport@pupper.dev)
+fax:
+[+1-208-848-3252](tel:+12088483252)
+
+# Thank you for being here, thank you for being interested
 
 ## Let's make something cool together!!
 

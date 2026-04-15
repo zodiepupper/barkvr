@@ -1,4 +1,4 @@
-class_name Bark_Journal
+class_name BarkJournal
 extends Node
 
 var actions: Array[Dictionary] = []

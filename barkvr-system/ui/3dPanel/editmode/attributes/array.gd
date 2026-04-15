@@ -56,11 +56,11 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, abov
 				TYPE_STRING_NAME:
 					var tmp :String_Attribute = string_field.instantiate()
 					field_parent.add_child(tmp)
-					tmp.set_data(str(i), attributes_target, str(i))
+					tmp.set_data(str(i), prop, str(i))
 				TYPE_STRING:
 					var tmp :String_Attribute = string_field.instantiate()
 					field_parent.add_child(tmp)
-					tmp.set_data(str(i), attributes_target, str(i))
+					tmp.set_data(str(i), prop, str(i))
 				TYPE_COLOR:
 					var tmp :Color_Attribute = color_field.instantiate()
 					field_parent.add_child(tmp)

@@ -10,7 +10,7 @@ extends Control
 var target:Object
 var property_name:String = ''
 
-var event_supplier : Bark_Journal
+var event_supplier : BarkJournal
 
 func _ready():
 	event_supplier = Engine.get_singleton("event_manager")

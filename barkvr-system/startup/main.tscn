@@ -12,6 +12,12 @@
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
 
+[sub_resource type="GDScript" id="GDScript_p00ge"]
+script/source = "extends Node
+
+var test : Array = [\"woof\", Node.new()]
+"
+
 [node name="main" type="Node3D" unique_id=366588163 groups=["localroot"]]
 script = ExtResource("1_gkt54")
 game_startup_scene = ExtResource("2_3jltp")
@@ -49,5 +55,8 @@ offset_top = -105.0
 offset_right = 264.0
 grow_vertical = 0
 text = "Enter VR"
+
+[node name="Node" type="Node" parent="." unique_id=1643976752]
+script = SubResource("GDScript_p00ge")
 
 [connection signal="pressed" from="StartXR/EnterWebXR/EnterVRButton" to="StartXR" method="_on_enter_webxr_button_pressed"]

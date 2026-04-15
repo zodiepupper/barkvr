@@ -10,7 +10,7 @@ var _is_editing:bool = false:
 		return _check_focus()
 var property_name:String = ''
 
-var event_supplier : Bark_Journal
+var event_supplier : BarkJournal
 
 var above_targets : Array
 

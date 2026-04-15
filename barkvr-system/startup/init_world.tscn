@@ -177,6 +177,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0567468, 1.55099, 2.56656)
 [node name="Linepen" parent="multiplayer world root" unique_id=1754706843 instance=ExtResource("7_8hxdm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38342, 0)
 
+[node name="Panel3D" type="RigidBody3D" parent="multiplayer world root" unique_id=823307191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44759476, 1.0402095, 1.5683913)
+freeze = true
+freeze_mode = 1
+script = ExtResource("5_ykx2e")
+transparent = false
+metadata/_custom_type_script = "uid://cb6a7hbfmnudr"
+metadata/grabbable = true
+
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1943658936]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.33328, 1.91664, 2.46325)
 visible = false

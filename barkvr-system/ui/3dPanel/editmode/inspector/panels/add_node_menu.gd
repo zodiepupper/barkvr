@@ -3,7 +3,7 @@ extends Control
 
 
 var target : Node
-var event_manager : Bark_Journal
+var event_manager : BarkJournal
 ## Store original parent of this menu to reparent upon panel close.
 var original_parent : Node
 
@@ -65,8 +65,8 @@ func _setup_icons() -> void:
 
 ## Load the initial, unfiltered, class list.
 func _load_class_list() -> void:
-	for cls : String in ClassDB.get_class_list() + Bark_Journal.extra_classes:
-		if not ClassDB.is_parent_class(cls, &"Node") and not cls in Bark_Journal.extra_classes: continue
+	for cls : String in ClassDB.get_class_list() + BarkJournal.extra_classes:
+		if not ClassDB.is_parent_class(cls, &"Node") and not cls in BarkJournal.extra_classes: continue
 
 		add_class_to_item_list(item_list, cls)
 
@@ -155,12 +155,12 @@ func _on_search_bar_edited(search_text : String) -> void:
 
 	var filtered_list := Array()
 	var class_list : PackedStringArray = ClassDB.get_class_list()
-	class_list.append_array(Bark_Journal.extra_classes)
+	class_list.append_array(BarkJournal.extra_classes)
 
 	for class_string : String in class_list:
 		if ( # Discard unfit classes.
 				not ClassDB.is_parent_class(class_string, &"Node")
-				and not class_string in Bark_Journal.extra_classes
+				and not class_string in BarkJournal.extra_classes
 		): continue
 
 		var contains_all_chars := true

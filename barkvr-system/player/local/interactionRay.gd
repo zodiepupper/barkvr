@@ -409,8 +409,8 @@ func click():
 			prevPressed = tmpcol
 
 func release():
-	if is_colliding() and !prevPressed:
-		var tmpcol = get_collider()
+	var tmpcol = get_collider() if is_colliding() and !prevPressed else prevPressed
+	if tmpcol:
 		if tmpcol.has_method("laser_input"):
 			tmpcol.laser_input({
 				"position": query_position,
@@ -419,14 +419,19 @@ func release():
 				'index': interaction_index
 				})
 			pressed = false
-	elif is_instance_valid(prevPressed):
-		var tmpcol = prevPressed
+	prevPressed = null
+
+func fwd_event(event:InputEvent):
+	var tmpcol = get_collider() if is_colliding() and !prevPressed else prevPressed
+	if tmpcol:
 		if tmpcol.has_method("laser_input"):
 			tmpcol.laser_input({
-				"position": query_position,
-				"pressed": false,
-				'action': 'click',
-				'index': interaction_index
+				'action':'custom',
+				'position':get_collision_point(),
+				'event':event,
+				'ray_origin': global_position,
+				'ray_direction': to_global(target_position),
+				'index': -1
 				})
 			pressed = false
 	prevPressed = null

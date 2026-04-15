@@ -22,6 +22,8 @@ var target := Vector3():
 		target = val
 		proc_rayvis()
 
+signal target_updated()
+
 func proc_rayvis():
 	if get_tree().get_first_node_in_group("player"):
 		if mouse_cursor:

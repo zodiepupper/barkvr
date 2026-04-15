@@ -17,6 +17,12 @@ var spline := Curve3D.new()
 		if !iswobbly:
 			current_pos = value
 
+@export var get_other_node_target : Node:
+	set(val):
+		get_other_node_target = val
+		if "target" in val:
+			target = val.target
+
 var current_pos := Vector3():
 	set(value):
 		current_pos = value

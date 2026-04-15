@@ -51,14 +51,17 @@ size_flags_vertical = 3
 [node name="GeneralSettingsMargin" type="FoldableContainer" parent="ScrollContainer/VBoxContainer" unique_id=1578212275]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
+folded = true
 title = "general settings"
 title_alignment = 1
 
 [node name="ColorRect" type="ColorRect" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=19733212]
+visible = false
 layout_mode = 2
 color = Color(1, 0, 0, 0.2)
 
 [node name="GeneralSettings" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin" unique_id=1188667687]
+visible = false
 layout_mode = 2
 
 [node name="RestartInVR" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/GeneralSettingsMargin/GeneralSettings" unique_id=653113849]

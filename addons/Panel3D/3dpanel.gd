@@ -121,6 +121,15 @@ const BOTTOM_RIGHT = 8
 
 @export_group('Graphics Settings')
 
+## sets the viewport scaling factor 
+## (good for high-dpi stuff when godot doesn't automatically figure it out)
+@export var scaling_factor := 1.0:
+	set(val):
+		if Engine.has_singleton("settings_manager") and "interface_scaling_factor" in Engine.get_singleton("settings_manager"):
+			scaling_factor = Engine.get_singleton("settings_manager").interface_scaling_factor
+		else:
+			scaling_factor = val
+
 ## sets the render priority
 @export var render_priority := 0:
 	set(val):
@@ -319,9 +328,6 @@ func laser_input(data:Dictionary):
 	# detect which event type is being requested by the input data
 	match data.action:
 		"hover":
-			#if "pressed" in data and data.pressed:
-				#event = InputEventScreenDrag.new()
-			#else:
 			event = InputEventMouseMotion.new()
 		"scrollup":
 			event = InputEventMouseButton.new()
@@ -359,14 +365,10 @@ func laser_input(data:Dictionary):
 	event.position = round(event.position)
 	# apply key modifiers if they're relevant to the type of input event
 	if event is InputEventWithModifiers:
-		if Input.is_key_pressed(KEY_CTRL):
-			event.ctrl_pressed = true
-		if Input.is_key_pressed(KEY_ALT):
-			event.alt_pressed = true
-		if Input.is_key_pressed(KEY_META):
-			event.meta_pressed = true
-		if Input.is_key_pressed(KEY_SHIFT):
-			event.shift_pressed = true
+		event.ctrl_pressed = Input.is_key_pressed(KEY_CTRL)
+		event.alt_pressed = Input.is_key_pressed(KEY_ALT)
+		event.meta_pressed = Input.is_key_pressed(KEY_META)
+		event.shift_pressed = Input.is_key_pressed(KEY_SHIFT)
 	
 	# Set event pressed value (should be false if not explicitly changed)
 	if data.has('pressed') and "pressed" in event:

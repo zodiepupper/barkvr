@@ -96,7 +96,7 @@ func _ready() -> void:
 	anti_aliasing_dropdown.item_selected.connect(anti_aliasing_changed)
 
 func test_vr_notification():
-	Notifyvr.send_notification("awwwooooooooooooo")
+	Notifyvr.send_notification("what would you do if your crush walked up to you and barked *cutely* and then stared at you lovingly")
 
 func restart_in_vr() -> void:
 	var args := OS.get_cmdline_args()

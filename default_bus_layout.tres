@@ -12,6 +12,8 @@ resource_name = "Compressor"
 
 [sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_xt420"]
 resource_name = "voiceanalyzer"
+buffer_length = 0.5
+fft_size = 0
 
 [sub_resource type="GDOpusEncoder" id="GDOpusEncoder_rnsyb"]
 resource_name = "voicecapture"

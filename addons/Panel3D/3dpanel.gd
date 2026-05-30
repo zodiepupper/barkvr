@@ -1,7 +1,7 @@
 @tool
 @icon("res://addons/Panel3D/icon.svg")
 class_name Panel3D
-extends RigidBody3D
+extends StaticBody3D
 var viewport : SubViewport
 var mesh : MeshInstance3D
 var colshape : CollisionShape3D
@@ -184,10 +184,10 @@ const BOTTOM_RIGHT = 8
 
 func _init():
 	# since we use a rigid body for funny options we need to free the body
-	freeze = true
+	#freeze = true
 	# this makes it so when the frozen body is moved manually, it preserves
 	# calculations like velocity for collisions making it feel more natural
-	freeze_mode = FREEZE_MODE_KINEMATIC
+	#freeze_mode = FREEZE_MODE_KINEMATIC
 	# add metatdata for making the panel grabbable
 	set_meta("grabbable", true)
 	# initialize and assign the subviewport

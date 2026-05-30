@@ -150,10 +150,9 @@ unique_name_in_owner = true
 [node name="handmenu" parent="xrplayer/menuoffset" unique_id=2064888378 instance=ExtResource("9_opil0")]
 unique_name_in_owner = true
 
-[node name="localui" parent="xrplayer/menuoffset" unique_id=436600343 instance=ExtResource("8_8rqii")]
+[node name="localui" parent="xrplayer/menuoffset" unique_id=165375814 instance=ExtResource("8_8rqii")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-freeze_mode = 0
 
 [node name="XRNode3D" type="XRNode3D" parent="xrplayer" unique_id=900129422]
 tracker = &"/user/hand_tracker/left"

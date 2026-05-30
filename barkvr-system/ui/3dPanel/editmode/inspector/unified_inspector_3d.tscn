@@ -33,7 +33,7 @@ normal_scale = 16.0
 normal_texture = SubResource("NoiseTexture2D_ttheo")
 texture_filter = 1
 
-[node name="UnifiedInspector3d" type="RigidBody3D" unique_id=117416126]
+[node name="UnifiedInspector3d" type="StaticBody3D" unique_id=117416126]
 collision_layer = 4
 collision_mask = 4
 freeze = true

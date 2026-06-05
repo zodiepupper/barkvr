@@ -1,6 +1,6 @@
 extends Path3D
 
-## hold the target position, upon being set it also applies the position
+## hold the target position; upon being set it also applies the position
 ## to the appropriate point on the curve3d
 var new_pos : Vector3 = Vector3(0,0,-1):
 	set(val):

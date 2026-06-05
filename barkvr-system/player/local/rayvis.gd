@@ -17,6 +17,7 @@ extends Node3D
 
 var cursor_size_factor = 50.0
 
+## target position (global)
 var target := Vector3():
 	set(val):
 		target = val
@@ -38,7 +39,10 @@ func proc_rayvis():
 		var dist = target.distance_to(current_camera.global_position)
 		cursor.scale = Vector3(1,1,1)*dist/cursor_size_factor
 		cursor.global_position = target
-		cursor.look_at(current_camera.global_position,Vector3.UP,true)
+		# this check avoids the "colinear UP and target" issue by only performing the lookat
+		# if the operation inputs are valid
+		if abs(current_camera.global_position.dot(Vector3.UP)) < 1.0 :
+			cursor.look_at(current_camera.global_position,Vector3.UP,true)
 		if path3d and "new_pos" in path3d:
 			path3d.new_pos = to_local(target)
 

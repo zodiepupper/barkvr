@@ -5,37 +5,54 @@
 ## with this class, we can set and check multiple physics layers so that if a user
 ## is pointing at an inspector, they don't accidentally click an object behind it[br]
 ## it functions as a drop-in-replacement for the Raycast3D node but is more relaible
-## since this avoid some weird engine quirks with the Raycast3D node.
+## since this avoids some weird engine quirks with the Raycast3D node.
 class_name InteractionRay
 extends Node3D
 
+## holder for the line_3d to use for the laser line visual
 @export var line_3d : Line3D
-@onready var vis: Node3D = $rayvis
-var vispos := Vector3()
 
+## holder for the rayvis node used for drawing the 3d cursor
+@onready var vis: Node3D = $rayvis
+
+## global position we want to put the rayvis cursor at
+var vispos := Vector3():
+	set(val):
+		vispos = val
+		if line_3d:
+			line_3d.target = line_3d.to_local(vispos)
+		vis.target = vispos
+
+## tracks the previous Node that was hovered
 var prevHover:Node
+## tracks the Node we clicked on in the last iteration
 var prevPressed:Node
-var clickedObject:Node
+## tracks whether the current laser input is pressed down or not
 var pressed := false
 
+## holder variables for when we automatically switch to touch input mode
 var using_touch := false
+## timer to wait after releasing a tap to return to the normal input style
 var touch_timer := Timer.new()
 
-var otherray : InteractionRay
-
+## tracks the global collision point from the previous iteration
 var last_point := Vector3()
-var last_dist := float()
-var last_collider_plane := Plane()
+
+# here we make holders to keep the collision point and normal since godot's planes are annoying
+# and we can very easily calculate this using only the collision origin and normal and some math.
+## track the point last pressed if the user hasn't released yet (look above in code for why)
+var last_plane_origin := Vector3()
+## track the normal last pressed if the user hasn't released yet (look above in code for why)
+var last_plane_normal := Vector3()
 
 @export_category("interaction ray options") ## INTERACTION OPTIONS
 
+## allows us to change the input event device index. this helps differntiate
+## between left (0), right (1), and more
 @export var interaction_index :int = 0
 
-@export var no_line: bool = false:
-	set(val):
-		if is_instance_valid(line_3d):
-			line_3d.visible = !val
-
+## this options forces the raycast from position to always be at the origin
+## of this raycasts parent node
 @export var stay_at_parent_origin: bool = true:
 	set(val):
 		stay_at_parent_origin = val
@@ -81,7 +98,11 @@ var smooth_raycast_position := Vector3()
 ## only works if `enabled = true`
 ## sets whether the raycast being run every frame should run on
 ## the process loop (true) or the physics_process loop (false)
-@export var query_on_process := false
+@export var query_on_process := false:
+	set(val):
+		query_on_process = val
+		set_process(val)
+		set_physics_process(!val)
 
 ## the global position the raycast will query to 
 ## for collisions the start position is always
@@ -95,6 +116,8 @@ var smooth_raycast_position := Vector3()
 		else:
 			target_position = val
 
+## self explanatory, but if this is true, then when the target_position is set
+## we will assume we need to convert it from local space to global space
 @export var target_position_is_local := true
 
 ## a list of RIDs that the raycast query will
@@ -124,7 +147,7 @@ var query_exceptions : Array[RID]
 ## Dictionary to keep the data from the raycast query results
 ## and assign them to the helper values to make it close to 
 ## a drop-in for raycast3d nodes
-var query_collision_data : Dictionary:
+var query_collision_data := Dictionary():
 	set(val):
 		query_collision_data = val
 		if query_collision_data.is_empty() or !query_collision_data:
@@ -145,125 +168,193 @@ var query_collision_data : Dictionary:
 			query_rid = query_collision_data["rid"]
 			query_shape = query_collision_data["shape"]
 			query_is_colliding = true
+## the collider that is currently hit
 var query_collider : Node
+## the collider id that is currently hit
 var query_collider_id : int
+## the normal of the current collision (global)
 var query_normal : Vector3
+## the position of the current collision point (global)
 var query_position : Vector3
+## the index of the face in the collision shape currently hit
 var query_face_index : int
+## the rid of the collision shape currently hit
 var query_rid : RID
+## uhh, idk actually
 var query_shape : int
+## true if the ray is intersecting something
 var query_is_colliding : bool
 
-#func _ready() -> void:
-	#query_exception_nodes = query_exception_nodes
+## returns the query position from the last raycast (gloabl coordiantes) (query_position)
+func get_collision_point() -> Vector3:
+	return query_position
 
+## returns whether the ray is colliding as of last proc (query_is_colliding)
+func is_colliding() -> bool:
+	return query_is_colliding
+
+## returns the currently collided collider (query_collider)
+func get_collider() -> CollisionObject3D:
+	return query_collider
+
+## returns the current collision normal (query_normal)
+func get_collision_normal() -> Vector3:
+	return query_normal
+
+## allows us to add a new collider to the exceptions
+func add_exception(node : CollisionObject3D) -> void:
+	if node not in query_exception_nodes:
+		query_exception_nodes.append(node)
+
+## allows us to remove a collider from the exception list
+func remove_exception(node : CollisionObject3D) -> void:
+	if node in query_exception_nodes:
+		query_exception_nodes.erase(node)
+	var node_rid : RID = node.get_rid()
+	remove_exception_rid(node_rid)
+
+## allows us to add an excepted collider by rid to the exceptions list
+func add_exception_rid(rid : RID) -> void:
+	if !query_exceptions.has(rid):
+		query_exceptions.append(rid)
+		
+## allows us to remove an excepted collider by rid from the exceptions list
+func remove_exception_rid(rid : RID) -> void:
+	if query_exceptions.has(rid):
+		query_exceptions.erase(rid)
+
+func _ready() -> void:
+	# reset some vars to fire the setter functions
+	stay_at_parent_origin = stay_at_parent_origin
+	follow_mouse = follow_mouse
+	query_on_process = query_on_process
+	# since timers are nodes, we gotta add it as a child here
+	add_child(touch_timer)
+	# this makes it automatically reset the touch value when it runs out 
+	# so we don't have to do this elsewhere in code
+	touch_timer.timeout.connect(func():
+		using_touch = false
+		)
+
+func _process(_delta):
+	if enabled:
+		query_raycast()
+		# run the interaction function
+		interact()
+
+func _physics_process(_delta: float) -> void:
+	if enabled:
+		query_raycast()
+		# run the interaction function
+		interact()
+
+## create holder variables for `query_raycast` to save on performance
+var physspace_holder : PhysicsDirectSpaceState3D
+var rayquery_holder : PhysicsRayQueryParameters3D
+var was_previously_planar : bool = false
 ## runs the physics query for the raycast
 ## this now uses 3 raycasts to enforce a selection bias
 ## on what object is being interacted with (system/private ui, world ui, world objects)
 func query_raycast() -> Dictionary:
 	if stay_at_parent_origin:
 		position = Vector3()
-	query_collision_data = Dictionary()
-	var physspace := get_world_3d().direct_space_state
-	var rayquery := PhysicsRayQueryParameters3D.new()
-	rayquery.from = global_position
+	vispos = query_position
+	# if the user is holding a button we switch to planar projection mode
+	if pressed:
+			# create a plane to check for the intersection much cheaper than calculating ourself
+			var ray_intersects_plane_at = Plane(last_plane_normal,last_plane_origin).intersects_ray(global_position, target_position)
+			# since we are just reusing the same smooth position variable as the other smoothing code
+			# we need to track whether this is the first iteration where we are using the plane 
+			# projection instead of the physics raycast so we can snap it to the collided position
+			# instead of letting it lerp all the way from the target_position which is often
+			# very very far away. if we didn't do this, the cursor jolts to the target_position
+			# and *then* lerps to where it's supposed to be which causes all kinds of interaction 
+			# issues
+			if !was_previously_planar:
+				smooth_raycast_position = query_position
+			# if smoothing is enabled then we lerp from the last smoothed position to the new target
+			if smoothing_enabled:
+				smooth_raycast_position = smooth_raycast_position.lerp(
+					ray_intersects_plane_at,
+					smoothing_speed
+				)
+			# update the relevant data so we can pretend that the laser is actually colliding with
+			# the object that we started clicking when we entered planar projection mode
+			query_collision_data.position = ray_intersects_plane_at if !smoothing_enabled else smooth_raycast_position
+			query_position = ray_intersects_plane_at if !smoothing_enabled else smooth_raycast_position
+			was_previously_planar = true
+			# we then want to return so we don't have to even run any of the code below
+			return query_collision_data
+	# otherwise we perform the raycast as normal
+	else:
+		# we update the plane data here to ensure that it's fully valid, even
+		# though it will be one iteration late, this eliminates some weird 
+		# ordering issues that was causing the planar projection to not work
+		last_plane_normal = query_normal
+		last_plane_origin = query_position
+		# reset the collision data variable so it returns empty when there is not collision
+		query_collision_data = Dictionary()
+		was_previously_planar = false
+	
+	# update holder variable so it has the latest state
+	physspace_holder = get_world_3d().direct_space_state
+	# if we don't have an existing query params object to use, then create one
+	if !is_instance_valid(rayquery_holder):
+		rayquery_holder = PhysicsRayQueryParameters3D.new()
+	# set the from to be the origin of wherever this node is
+	rayquery_holder.from = global_position
+	
+	# if laser smoothing is enabled we need to...
 	if smoothing_enabled:
+		# lerp between where we are pointing and where we just were
+		# TODO: we should probably make it calculate it's own delta so it can behave consistently
 		smooth_raycast_position = smooth_raycast_position.lerp(
-			target_position if follow_mouse else to_global(target_position),
+			target_position,
 			smoothing_speed
 		)
-		rayquery.to = smooth_raycast_position
+		rayquery_holder.to = smooth_raycast_position
+	# if smoothing isn't enabled...
 	else:
-		rayquery.to = target_position
-	rayquery.exclude = query_exceptions
-	rayquery.collision_mask = private_ui_collision_layers
-	query_collision_data = physspace.intersect_ray(rayquery)
+		# just go where we are pointing
+		rayquery_holder.to = target_position
+	
+	# now we set our excludes, this allows the intersection calls below to ignore certain colliders
+	# this is useful for if the player's collider blocks the ray, thus causing broken interactions
+	rayquery_holder.exclude = query_exceptions
+	# now for actually checking for intersections
+	# we start by querying for anything on the private ui layer
+	rayquery_holder.collision_mask = private_ui_collision_layers
+	query_collision_data = physspace_holder.intersect_ray(rayquery_holder)
+	# if we get data back from the intersection check, then we return it
 	if query_collision_data:
 		return query_collision_data
-	rayquery.collision_mask = edit_ui_collision_layers
-	query_collision_data = physspace.intersect_ray(rayquery)
+	# if no get data back then go next layer
+	rayquery_holder.collision_mask = edit_ui_collision_layers
+	query_collision_data = physspace_holder.intersect_ray(rayquery_holder)
+	# if we get data back from the intersection check, then we return it
 	if query_collision_data:
 		return query_collision_data
-	rayquery.collision_mask = world_collision_layers
-	query_collision_data = physspace.intersect_ray(rayquery)
+	# if no get data back then go next layer
+	rayquery_holder.collision_mask = world_collision_layers
+	query_collision_data = physspace_holder.intersect_ray(rayquery_holder)
+	# return it anyway because if it's empty, then we know we hit nothing
 	return query_collision_data
 
-## returns the query position from the last raycast
-func get_collision_point() -> Vector3:
-	return query_position
-
-func is_colliding() -> bool:
-	return query_is_colliding
-
-func get_collider() -> CollisionObject3D:
-	return query_collider
-
-func get_collision_normal() -> Vector3:
-	return query_normal
-
-
-func add_exception(node : CollisionObject3D) -> void:
-	if node not in query_exception_nodes:
-		query_exception_nodes.append(node)
-
-func remove_exception(node : CollisionObject3D) -> void:
-	if node in query_exception_nodes:
-		query_exception_nodes.erase(node)
-	var node_rid : RID = node.get_rid()
-	if query_exceptions.has(node_rid):
-		query_exceptions.erase(node_rid)
-
-func add_exception_rid(rid : RID) -> void:
-	if query_exceptions.has(rid):
-		query_exceptions.erase(rid)
-
-func _ready() -> void:
-	no_line = no_line
-	stay_at_parent_origin = stay_at_parent_origin
-	follow_mouse = follow_mouse
-	add_child(touch_timer)
-	touch_timer.timeout.connect(func():
-		using_touch = false
-		)
-
-func _process(_delta):
-	if enabled and query_on_process:
-		query_raycast()
-		# updates the raycast visuals
-		procrayvis()
-		# run the interaction function
-		interact()
-
-func _physics_process(_delta: float) -> void:
-	if enabled and !query_on_process:
-		query_raycast()
-		# updates the raycast visuals
-		procrayvis()
-		# run the interaction function
-		interact()
-
+## this is the function that actually causes the ray to do an interaction
+## 
+## TODO: this is a piece of shit and needs to be rewritten holy fuck, not gonna
+## bother adding comments to this because it just doesn't deserve it. if you have
+## Qs then ask zodie
 func interact() -> void:
 	var tmpcol
 	var point : Vector3
-	if last_point.is_zero_approx():
-		point = to_global(target_position)
-	else:
-		if !last_collider_plane.normal.is_zero_approx() and query_normal and pressed:
-			var tmp_planar_intersection = last_collider_plane.intersects_ray(global_position, target_position.normalized())
-			if tmp_planar_intersection:
-				point = tmp_planar_intersection
-			else:
-				point = last_collider_plane.project(target_position)
-		else:
-			point = to_global( target_position.normalized()*( global_position.distance_to(last_point) ) )
 	if is_instance_valid(prevHover):
 		tmpcol = prevHover
 		if query_is_colliding:
-			if get_collider() == prevHover:
-				point = get_collision_point()
+			if query_collider == prevHover:
+				point = query_position
 				last_point = point
 			elif !pressed:
-				last_collider_plane = Plane(get_collision_normal(),get_collision_point())
 				tmpcol = get_collider()
 				if "laser_input" in prevHover:
 					prevHover.laser_input({
@@ -273,6 +364,7 @@ func interact() -> void:
 						'action': 'hover',
 						'index': interaction_index
 					})
+				#print_debug("does this plane look right?\n", last_collider_plane.get_center(), "\n", get_collision_point(), "\n", get_collision_normal())
 				prevHover = tmpcol
 		else:
 			if !pressed:
@@ -284,8 +376,6 @@ func interact() -> void:
 						'action': 'hover',
 						'index': interaction_index
 					})
-				last_collider_plane = Plane()
-				print(last_collider_plane.normal)
 				last_point = Vector3()
 				prevHover = null
 	elif is_colliding():
@@ -293,6 +383,10 @@ func interact() -> void:
 		point = get_collision_point()
 		last_point = point
 		prevHover = tmpcol
+		last_plane_normal = get_collision_normal()
+		last_plane_origin = get_collision_point()
+		#print_debug("does this plane look right?\n", last_collider_plane.get_center(), "\n", get_collision_point(), "\n", get_collision_normal())
+		#print_debug("does the collision point exist in the plane??\n", last_collider_plane.has_point(get_collision_point()))
 	if is_instance_valid(tmpcol) and "laser_input" in tmpcol:
 		tmpcol.laser_input({
 			'hovering': prevHover == tmpcol,
@@ -301,24 +395,22 @@ func interact() -> void:
 			'action': 'hover',
 			'index': interaction_index
 		})
+	#vispos = point
 
-func procrayvis():
-	if query_is_colliding:
-		vispos = query_position
-		if line_3d:
-			line_3d.target = line_3d.to_local(query_position)
-	else:
-		vispos = target_position
-		# set the endpoint of the line3d to the target_position of the raycast
-		if line_3d:
-			line_3d.target = target_position
-	vis.target = vispos
-
+## here we use the input method to capture any relevant input device stuff
+## this is basically only for flat mode inputs
 func _input(event):
+	# reset the using touch option until we know whether we are still using touch or not
 	using_touch = false
+	# if we are told to follow the mouse inputs and the user is actually touching the screen
+	# then we want to switch to using touch mode
 	if follow_mouse and event is InputEventScreenTouch or event is InputEventScreenDrag:
 		using_touch = true
+		# this updates the raycast target position so it aligns with where the user is touching
 		target_position = to_local(get_viewport().get_camera_3d().project_position(event.position,10000))
+	# if we get a gesture, we just wanna pass it on through to the laser_input compatible object
+	# this allows us to use nice features like pinch and drag as the engine gets them instead
+	# of shimming them in some weird way. 
 	if event is InputEventGesture:
 		if is_colliding() and prevHover is Panel3D:
 			prevHover.laser_input({
@@ -329,6 +421,7 @@ func _input(event):
 				'ray_direction': to_global(target_position),
 				'index': -1
 			})
+	# if we are told to follow the mouse and we just got a mouse input event
 	if follow_mouse and event is InputEventMouse:
 		# if we aren't in vr... (note, this function assumes that `target_position_is_local = true`)
 		if !get_viewport().use_xr and !using_touch:
@@ -341,27 +434,26 @@ func _input(event):
 			# and if the mouse *is* captured by the window...
 			else:
 				# set the target_position to be very far straight ahead
-				target_position = Vector3(0,0,-10000)
+				# TODO: make the target position distance a setting
+				target_position = Vector3(0,0,-1000000000.0)
+		# here, we check for scrolling since those inputs are a little weird
+		# and we have a shim for them to behave correctly
 		if event is InputEventMouseButton and event.pressed:
 			match event.button_index:
 				4:
 					scrollup()
 				5:
 					scrolldown()
+	# if the user starts directing inputs with a gamepad, we wanna snap
+	# the raycast target to the center of the screen for good measure
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		var cam = get_viewport().get_camera_3d()
 		target_position = to_local(cam.project_position(get_viewport().size/2,10000))
 
-#func _physics_process(_delta):
-	#if enabled and !query_on_process:
-		#query_raycast()
-		## updates the raycast visuals
-		#procrayvis()
-		## run the interaction function
-		#interact()
-
+## sends a scroll up event to the object we are currently interacting with
+## we have to send a press and release because that is what the input system expects
 func scrollup():
-	if query_is_colliding:
+	if query_is_colliding or prevHover:
 		var tmpcol = get_collider()
 		if tmpcol.has_method("laser_input"):
 			tmpcol.laser_input({
@@ -377,6 +469,8 @@ func scrollup():
 				'index': interaction_index
 				})
 
+## sends a scroll down event to the object we are currently interacting with
+## we have to send a press and release because that is what the input system expects
 func scrolldown():
 	if is_colliding():
 		var tmpcol = get_collider()
@@ -394,6 +488,7 @@ func scrolldown():
 				'index': interaction_index
 				})
 
+## sends a left mouse click to the object we are currently interacting with
 func click():
 	LocalGlobals.playerreleaseuifocus.emit()
 	if is_colliding():
@@ -408,6 +503,7 @@ func click():
 			pressed = true
 			prevPressed = tmpcol
 
+## sends a left mouse button release to the object we are currently interacting with
 func release():
 	var tmpcol = get_collider() if is_colliding() and !prevPressed else prevPressed
 	if tmpcol:
@@ -421,6 +517,7 @@ func release():
 			pressed = false
 	prevPressed = null
 
+## this allows us to forward a custom event to the object we are currently interacting with
 func fwd_event(event:InputEvent):
 	var tmpcol = get_collider() if is_colliding() and !prevPressed else prevPressed
 	if tmpcol:
@@ -433,5 +530,5 @@ func fwd_event(event:InputEvent):
 				'ray_direction': to_global(target_position),
 				'index': -1
 				})
-			pressed = false
-	prevPressed = null
+			#pressed = false
+	#prevPressed = null

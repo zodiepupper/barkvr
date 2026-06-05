@@ -39,14 +39,14 @@ next_pass = SubResource("StandardMaterial3D_fnmbx")
 stencil_mode = 2
 stencil_flags = 2
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_43thk"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_cccqi"]
 _surfaces = [{
-"aabb": AABB(-0.08000003, 0, -1.0199995, 0.08000003, 0.60000026, 1.0199995),
+"aabb": AABB(-0.08, 0, -1.02, 0.08, 0.6, 1.02),
 "format": 34359738369,
 "primitive": 2,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 21,
-"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAAr0dhuzQz0zwehTO9hOvxu87MYj2ux8C9zcxMvAEAwD0zMyO+AACYvAKADj79P3K+exSzvDTjJz5RtI6+KVzPvGdmQj5wPaW+m5nsvALQXT5miry+rkcFvWnmeT48atS+AYAUvQI4iz7+q+y+C9cjvZuZmT5bjwK/FS4zvTT7pz63yA6/aGZCvQJAtj6Y6Rq/SWFRvTZLxD6E2Sa/AgBgvQIA0j7+fzK/2SNuvZ1B3z6MxD2/Fq57vTbz6z62jki/cj2KvZyZAT/oUVy/VLiUvc9sCz++BW2/z8ycvQMAEz9h5nm/DtejvZ6ZGT9Yj4K/")
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAAr0dhuzQz0zwfhTO9hOvxu83MYj2vx8C9zMxMvAAAwD00MyO+AACYvAGADj7+P3K+ehSzvDTjJz5StI6+KFzPvGZmQj5wPaW+mpnsvAHQXT5miry+rkcFvWfmeT49atS+AIAUvQE4iz4ArOy+CtcjvZqZmT5cjwK/FC4zvTP7pz64yA6/ZmZCvQBAtj6Z6Rq/R2FRvTRLxD6F2Sa/AABgvQAA0j4AgDK/1yNuvZpB3z6OxD2/FK57vTTz6z64jki/cD2KvZqZAT/sUVy/UriUvc1sCz/CBW2/zMycvQAAEz9m5nm/CtejvZqZGT9cj4K/")
 }]
 
 [node name="rayvis" type="Node3D" unique_id=1420301323 node_paths=PackedStringArray("path3d")]
@@ -128,7 +128,7 @@ smooth_faces = true
 material = SubResource("StandardMaterial3D_cccqi")
 
 [node name="Line3D" type="MeshInstance3D" parent="Path3D" unique_id=1757794882 node_paths=PackedStringArray("get_other_node_target")]
-mesh = SubResource("ArrayMesh_43thk")
+mesh = SubResource("ArrayMesh_cccqi")
 script = ExtResource("7_cccqi")
 iswobbly = false
 target = Vector3(-0.08, 0.6, -1.02)

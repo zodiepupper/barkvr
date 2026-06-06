@@ -1,16 +1,33 @@
 extends Node3D
 
+# here we are just loading all the vrm extensions manually so they are bound for every import.
+# we probably shouldn't do this but i found an interesting benefit in that if a user
+# exports as a GLTF/GLB but the file data still includes the vrm metadata and nodes then
+# having these available for every import means it will still import the avatar properly
+## loading vrm extensions
 var vrm_ext_vrm_extension_0 = load("res://addons/vrm/vrm_extension.gd")
+## loading vrm extensions
 var vrm_ext_emmissive_multiplier = load("res://addons/vrm/1.0/VRMC_materials_hdr_emissiveMultiplier.gd")
+## loading vrm extensions
 var vrm_ext_materials_mtoon = load("res://addons/vrm/1.0/VRMC_materials_mtoon.gd")
+## loading vrm extensions
 var vrm_ext_node_constraint = load("res://addons/vrm/1.0/VRMC_node_constraint.gd")
+## loading vrm extensions
 var vrm_ext_springbone = load("res://addons/vrm/1.0/VRMC_springBone.gd")
+## loading vrm extensions
 var vrm_ext_vrm = load("res://addons/vrm/1.0/VRMC_vrm.gd")
+## loading vrm extensions
 var vrm_ext_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 
+## this is the scene we want to instantiate upon startup. 
+## TODO: replace this with a fixed startup scene that proceeds to either the user's set homeworld or to a default world or to the new world dialogue
+## TODO: create a new world dialogue to accompany the above
 @export var game_startup_scene :PackedScene
 
+## ready runs when the tree is setup and is ready to start running. look at the docs for _ready
+## for more info
 func _ready():
+	# here we load the vrm extensions we reference at the top of the file
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0.new(),true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier.new(), true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_materials_mtoon.new(), true)
@@ -19,15 +36,20 @@ func _ready():
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm.new(), true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_animation.new(), true)
 	
+	# some old attempts at permission requests. i believe this is no longer needed and that goodt
+	# asked upon attempting access
+	# TODO: look into how we should be handling the permission requests on each platform
 	#OS.set_use_file_access_save_and_swap(true)
 	#OS.request_permissions()
+	
+	# if the game_startup_scene is set to something then we instantiate it and add it to the tree
 	if game_startup_scene:
 		call_deferred("add_child",game_startup_scene.instantiate())
 	
-	print("we are here: ", DirAccess.open('./').get_current_dir(true))
-	
+	# here we open the user directory for whatever platform we are on, thankfully godot makes this easy
+	# look in godot docs for where this leads for each platform
 	var dir = DirAccess.open('user://')
-	print("user:// -> "+str(dir.get_current_dir(true))+" :: "+str(dir))
+	# now we create the directories we need if they don't already exist
 	if !dir.dir_exists('./tmp'):
 		dir.make_dir('./tmp')
 	if !dir.dir_exists('./objects'):
@@ -37,32 +59,64 @@ func _ready():
 	if !dir.dir_exists('./logins'):
 		dir.make_dir('./logins')
 	
+	# here we setup a connection to the files_dropped signal from the window
+	# this is for capturing when a user drags files from another window
+	# and drops them on our window. listening to this signal allows us to run an import
+	# when that happens.
 	get_window().files_dropped.connect(func(files:PackedStringArray):
+		# create a loading indicator
 		var loader :LoadingHalo= load("res://barkvr-system/ui/3dui/loading_halo.tscn").instantiate()
+		# here we do the player size calculation for some reason
+		# TODO: move this to the player code, we might also use the globals autoload singleton to hold this data so it is globally available (or even a static var on the player controller class, then we should be able to just ask the class itself for the data)
+		# start by initializing the estimated size at 1.0
 		var player_size_mult:float=1.0
-		if is_instance_valid(get_tree().get_first_node_in_group("player")):
-			var tmpscale = get_tree().get_first_node_in_group("player").global_basis.get_scale()
+		# we then query the tree for the "player" group to find the player node and store it in a var for brevity
+		var tmp_player_reference : Node = get_tree().get_first_node_in_group("player")
+		# if the tree returns a valid instance...
+		if is_instance_valid(tmp_player_reference):
+			# get the global scale of the player
+			var tmpscale = tmp_player_reference.global_basis.get_scale()
+			# do some magic number bullshit we shouldn't be doing (initially tuned for UX reasons but should not be done this way)
 			player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
+		# lazily find a good position relative to the player to place the imported
 		var import_position :Vector3= get_viewport().get_camera_3d().to_global(Vector3(0,0,-2.0)*player_size_mult)
+		# if we are on the web then we need to handle the import differently.
+		# TODO: oh my dog why did i do this like this please refactor
 		if !OS.get_name() == "Web":
-			#var thread := Thread.new()
+			# spin the task off to a thread to finish importing so we can continue doing other things
 			WorkerThreadPool.add_task(func():
+				# don't know why we are doing this here, but okay -_-
 				Thread.set_thread_safety_checks_enabled(false)
+				# run the import function which handles file type detection and passing the
+				# import on to the next part of the process
 				import(files,loader,import_position,player_size_mult)
 				, true, "importing: "+str(files))
-			#BarkHelpers.rejoin_thread_when_finished(thread)
+			# look for the "localworldroot" which is named poorly but is the root of the shared scene
+			# (like all the stuff under the localworldroot is what gets synced over the network to 
+			# everyone else)
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
+			# if we couldn't populate the loader text with something then we put a silly text in there
+			# since this probably means the import won't work :grimace:
 			if loader.text.is_empty():
-				loader.text = "nothing?"
+				loader.text = "something or nothing??? i can't tell yet"
+			# set the loader position to the import position we lazily found earlier
 			loader.global_position = import_position
+		# not on web, do it a different way
 		else:
+			# for some reason we aren't passing it to another thread here
+			# TODO: make this use threads
 			import(files,loader,import_position,player_size_mult)
+			# find the shared root like mentioned above and add the loader as a child
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
+			# see above
 			if loader.text.is_empty():
-				loader.text = "nothing?"
+				loader.text = "something or nothing??? i can't tell yet"
+			# see above
 			loader.global_position = import_position
-	)# end of files dropped
+	)# end files dropped (i put this here because i'm dyslexic and it's easier to read with this here)
 
+# this was intended to ensure the player is always in the world, that way if the local player object
+# is somehow destroyed, we can just immediately reinstantiate it
 #func _process(_delta:float) -> void:
 	#if !is_instance_valid(get_tree().get_first_node_in_group("player")):
 		#var tmp_target_parent = get_tree().get_first_node_in_group("localworldroot")
@@ -71,25 +125,54 @@ func _ready():
 		#else:
 			#get_tree().root.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
 
+# the actual import function
+## files is an array of paths to the files to be imported. loader is the loading indicator which we
+## should have already instantiated before calling this. import position is the initial position 
+## where we should place the imported stuff. player_size_mult is used to scale the imported stuff to
+## a good size relative to the player
 func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Vector3=Vector3(), player_size_mult:float=1.0):
+	# the offset is used while handling multiple simultaneous file imports. we increment this for 
+	# each thing that is batch imported to offset them in the world so it's easier to tell what's happening
 	var offset := -1.0
+	# this one is also just incremented each time but is used for the loader text to indicate the 
+	# progress of the batch import
 	var iteration :int= 0
+	# for every file in the array
 	for dropped in files:
+		# increment
 		iteration += 1
 		offset += 1.0
+		
+		# here we are just getting the filenames of the stuff we are importing
 		var filename:String
+		# if we are on windows then we need to handle the filenames differently
 		if OS.get_name() == "Windows" or OS.get_name() == "UWP":
 			filename = dropped.split('\\')[-1]
+		# everywhere else we can handle it *normally* lmao
 		else:
 			filename = dropped.split('/')[-1]
+		# set the loader text to a good indicator 
 		loader.text = filename + " (" + str(iteration) + "of" + str(files.size()) + ")"
+		# open the file with only read permissions
 		var file := FileAccess.open(dropped,FileAccess.READ)
+		# if we can't open the file thne it's not real and it can't hurt us
 		if !file:
 			print('failed to open import file')
-			continue
+			continue # skip the rest of the process since the file isn't obtainable
 		# try to detect the file type:
+		# TODO: HOLY SHIT THIS IS SO STUPID. I LITERALLY LOAD THE WHOLE FILE INTO MEMORY ON A WHIM TO JUST CHECK HEADERS *SOBS*
+		# TODO: we gotta fix this but i'm commenting right now. i will be back for you :evil stare:
+		# TODO: ALSO WHAT THE FUCK I DIDN'T EVEN PROPERLY SWITCH TO USING HEADER DETECTION WTF, WE GOTTA DO THAT TOO FML
 		var type = BarkHelpers.detect_file_type_from_header(FileAccess.get_file_as_bytes(dropped))
+		# use the offset to move the import position for the aforementioned UX decision
 		var new_import_position :Vector3=import_position+Vector3(0,0,offset)
+		# TODO: use the type we calculated above using the BarkHelpers class
+		# this part is a little cumbersome to read. but the "event_manager" is the BarkJournal, which handles imports right now
+		# we should move the import code to it's own class for tons of reasons lol
+		# i'm not gonna comment the following lines any further until they are changed because they are all duplicates
+		#
+		# if the type didn't resolve something we can import, then we check the file extension just incase
+		# and pass the import process to the import handling code (currently in BarkJournal)
 		if dropped.to_lower().ends_with('.gltf') or \
 			dropped.to_lower().ends_with('.glb'):
 			Engine.get_singleton("event_manager").import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult})
@@ -127,32 +210,56 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			Engine.get_singleton("event_manager").import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		else:
 			Engine.get_singleton("event_manager").import_asset('file', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
+	# since this process is blocking for the thread it exists in, we can assume the files are fully imported once this 
+	# code is finished executing.
+	# tell the loader to play the done animation and close itself
 	loader.done()
 
+## here we handle importing from the clipboard
+## expects an existing loadinghalo just like the previous function
+## import position just like the above
+## player_size_mult just like the above
 func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), player_size_mult:float=1.0):
+	# if the clipboard contains an image when the user pastes...
 	if DisplayServer.clipboard_has_image():
+		# ask teh displayserver for the image in the clipboard
 		var clip = DisplayServer.clipboard_get_image()
+		# set the loader text to indicate what it's importing is an image
 		loader.set_deferred("text", "clipboard image")
+		# pass onto the next part of the import process
 		Engine.get_singleton("event_manager").import_asset('image', clip, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 	else:
+		# if it's not an image, then we want to just grab the text directly
 		var clip = DisplayServer.clipboard_get()
+		# create a holder for attempting to load the plain text as an svg
 		var trysvg = Image.new()
-		if trysvg.load_svg_from_string(clip) == OK:
-			trysvg.load_svg_from_string(clip, 1000.0/trysvg.get_size().length())
-			print("imported svg final size: "+str(trysvg.get_size()))
+		# attempt to load the plain text as an svg
+		# including a quick calculation to try to normalize the size of the svg
+		var did_svg_load = trysvg.load_svg_from_string(clip, 1000.0/trysvg.get_size().length())
+		# if the svg loaded successfully
+		if did_svg_load == OK:
+			# if we did load an svg we wanna update the text to say it's an image
+			# since godot will rasterize the svg to an image resource
 			loader.set_deferred("text", "clipboard image")
 			Engine.get_singleton("event_manager").import_asset('image', trysvg, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+		# if the text is a URL, then we wanna import it as a remote uri
 		elif clip.begins_with("http://") or clip.begins_with("https://"):
 			loader.set_deferred("text", "clipboard url")
 			Engine.get_singleton("event_manager").import_asset('uri',clip,'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+		# otehrwise we just import it as a 3d text object
 		else:
 			loader.set_deferred("text", "clipboard text")
 			Engine.get_singleton("event_manager").import_asset('text', clip, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 		
-
+# here we capture inputs so we can capture when the player is pasting something
+# TODO: make this so it's not hard-coded to ctrl+v
 func _input(event):
+	# we only wanna do stuff if it's a key event
 	if event is InputEventKey:
+		# check if it aligns with our conditions for paste importing (right buttons and player state)
 		if event.physical_keycode == KEY_V and event.ctrl_pressed and event.pressed and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
+			# this is essentially a duplicate of the code that exists in the files_dropped code, so look
+			# above for more info
 			var player_size_mult:float=1.0
 			if is_instance_valid(get_tree().get_first_node_in_group("player")):
 				var tmpscale = get_tree().get_first_node_in_group("player").global_basis.get_scale()
@@ -164,5 +271,6 @@ func _input(event):
 			clipthread.start(import_clip.bind(loader, import_position, player_size_mult))
 			BarkHelpers.rejoin_thread_when_finished(clipthread)
 			loader.global_position = import_position
+		# if the player is pressing the keys to undo, then we wanna send an undo to the BarkJournal
 		if event.physical_keycode == KEY_Z and event.ctrl_pressed and event.pressed:
 			Engine.get_singleton("event_manager").undo_action()

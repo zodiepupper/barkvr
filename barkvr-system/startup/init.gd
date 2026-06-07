@@ -220,22 +220,23 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 ## import position just like the above
 ## player_size_mult just like the above
 func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), player_size_mult:float=1.0):
-	# if the clipboard contains an image when the user pastes...
-	if DisplayServer.clipboard_has_image():
-		# ask teh displayserver for the image in the clipboard
-		var clip = DisplayServer.clipboard_get_image()
+	# we grab a string from the clipboard if possible because sometimes the DisplayServer will tell
+	# us it has an image even though the clipboard only contains text. 
+	var clipstr : String = DisplayServer.clipboard_get()
+	# if the clipboard contains an image and didn't return a string...
+	if DisplayServer.clipboard_has_image() and clipstr.is_empty():
+		# ask the displayserver for the image in the clipboard
+		var clip : Image = DisplayServer.clipboard_get_image()
 		# set the loader text to indicate what it's importing is an image
 		loader.set_deferred("text", "clipboard image")
 		# pass onto the next part of the import process
 		Engine.get_singleton("event_manager").import_asset('image', clip, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 	else:
-		# if it's not an image, then we want to just grab the text directly
-		var clip = DisplayServer.clipboard_get()
 		# create a holder for attempting to load the plain text as an svg
 		var trysvg = Image.new()
 		# attempt to load the plain text as an svg
 		# including a quick calculation to try to normalize the size of the svg
-		var did_svg_load = trysvg.load_svg_from_string(clip, 1000.0/trysvg.get_size().length())
+		var did_svg_load = trysvg.load_svg_from_string(clipstr, 1000.0/trysvg.get_size().length())
 		# if the svg loaded successfully
 		if did_svg_load == OK:
 			# if we did load an svg we wanna update the text to say it's an image
@@ -243,13 +244,13 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 			loader.set_deferred("text", "clipboard image")
 			Engine.get_singleton("event_manager").import_asset('image', trysvg, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 		# if the text is a URL, then we wanna import it as a remote uri
-		elif clip.begins_with("http://") or clip.begins_with("https://"):
+		elif clipstr.begins_with("http://") or clipstr.begins_with("https://"):
 			loader.set_deferred("text", "clipboard url")
-			Engine.get_singleton("event_manager").import_asset('uri',clip,'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			Engine.get_singleton("event_manager").import_asset('uri',clipstr,'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 		# otehrwise we just import it as a 3d text object
 		else:
 			loader.set_deferred("text", "clipboard text")
-			Engine.get_singleton("event_manager").import_asset('text', clip, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			Engine.get_singleton("event_manager").import_asset('text', clipstr, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
 		
 # here we capture inputs so we can capture when the player is pasting something
 # TODO: make this so it's not hard-coded to ctrl+v

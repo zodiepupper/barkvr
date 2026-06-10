@@ -29,7 +29,8 @@ func _ready():
 	hide()
 	Engine.register_singleton("local_menu", self)
 	expanded = tab_container.visible
-	get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
+	if "viewport_size" in get_viewport().get_parent():
+		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 	window_properties.visibility_changed.connect(func():
 		window_properties.call_deferred("set_target", get_window()), 4)
 	if get_viewport().get_parent() is Panel3D:

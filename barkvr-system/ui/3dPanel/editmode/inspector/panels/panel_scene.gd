@@ -204,7 +204,12 @@ func _on_tree_cell_selected() -> void:
 func _on_tree_button_clicked(item: TreeItem, _column: int, _id: int, _mouse_button_index: int) -> void:
 	# Select item that the button belongs to, this is used so the selected item can be used for context actions.
 	# The button's item could be stored by itself to be used independently, but this is fine for now.
-	node_tree.set_selected(item, 0)
+	# however, we don't want to clear existing selections if the currently clicked button is already
+	# within the currently selected cells. otherwise, a multi-selection will be cleared and/or a node
+	# will be re-selected (which wastes an unfortunate amount of performance) every time we try to summon
+	# the popup
+	if item not in get_all_selected():
+		node_tree.set_selected(item, 0)
 
 	# Calculate position of the context menu.
 	var button_rect: Rect2i = node_tree.get_item_area_rect(item, 0)

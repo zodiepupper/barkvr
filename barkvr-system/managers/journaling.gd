@@ -1,15 +1,45 @@
+## BarkJournal is the class that manages all the actions and history that happens
+## during a session, whether it be only a local scene or a shared session with 
+## other players
+##
+## rigth now, this handles the journal and imports. this will be changed in the future to move
+## the import stuff to a different class. the goal is to make it so, instead of 
+## sending the full file that we imported and allowing each client to import that
+## file locally to replicate the netwroked scene, we want to process it (hopefully
+## outside of the tree or something) so we can turn it into events compatible with 
+## the journal. this sentiment may change in the future, but that's the thought right now.
+## this journal implementation is a prototype of our initial approach to concepting
+## how we could build out a PAXOS-like datamodel for the shared environment.
 class_name BarkJournal
 extends Node
 
+## tracks all historical actions
 var actions: Array[Dictionary] = []
+## holder for actions that have been undone (intended to be used for the redo operation)
 var undid_actions: Array[Dictionary] = []
+## holder for incoming actions that need to be processed
 var new_actions: Array[Dictionary] = []
 
+## mutex for processing actions for multithreaded stability
 var actions_mutex := Mutex.new()
 
+# TODO: this still needs to actually be implemented. ideally, we want to use the journal 
+# to process the shared state so we can have inspectors and other stuff just ask
+# the journal for the current state of the tree. right now, we just have the inspector as
+# a self contained object that reads the tree and operates against it on it's own. but that
+# isn't the best design, so we intend to move it here so it can be central and processed
+# immediately rather than latently, which reduces a massive amount of performance overhead 
+# with the inspectors.
+## holder which loads the journal_tree class
 var JournalTreeClass = load("res://barkvr-system/managers/journal_tree.gd")
+## holder for the actual instance of the journal tree
 var journal_tree: Node 
 
+## a list of extra classes that can be considered when processing some events.
+## this allows us to have pre-made stuff available without needing to serialize them
+## although we will turn these into bark journal assets that can be loaded within
+## the journal context fully. this is currently used to allow the add_node stuff
+## to show and instantiate bark-specific classes
 static var extra_classes : PackedStringArray = [
 	"Panel3D",
 	"ParticlePen",
@@ -17,6 +47,8 @@ static var extra_classes : PackedStringArray = [
 	"WindowCamera3D"
 ]
 
+## accompanying list of where to get the files associated with the classes
+## in the array above
 static var extra_classes_spawn : Array[PackedScene] = [
 	load("res://addons/Panel3D/Panel3D.tscn"),
 	load("uid://og3t2qnt8ukh"), # particle pen
@@ -24,38 +56,46 @@ static var extra_classes_spawn : Array[PackedScene] = [
 	load("uid://bay38na2jeq1o") # placeable camera (WindowCamera3D)
 ]
 
+# TODO: we should simplify this because we definitely don't need a check_root, _get_root, and a getter for the root variable lol
+## holder for finding the shared root "localworldroot"
 var root: Node:
 	get:
 		if !is_instance_valid(root):
 			_get_root()
 		return root
 
+## holder for the root of the client scenetree itself (normally the main window)
 var local_root: Node:
 	get:
 		if !is_instance_valid(local_root):
 			local_root = get_tree().root
 		return local_root
 
-func is_path_remote(path:NodePath, from_journal_root:bool=true):
+## this is written a little confusingly, but this just is a quick check
+## for us to know if the journal event we recieved is properly contained within
+## the shared root and isn't a remote change to the local portion of the tree
+func is_path_remote(path:NodePath):
+	# create holder for the target node
 	var target_node :Node
-	if from_journal_root:
-		target_node = root.get_node_or_null(path)
-	else:
-		target_node = get_tree().root.get_node_or_null(path)
+	# try to get the target node
+	target_node = root.get_node_or_null(path)
+	# if we find a node with the path, then we check if the shared root is
+	# an ancestor of it
 	if target_node != null and root.is_ancestor_of(target_node):
-		print('root is ancestor')
+		# if it is an ancestor, then return true
 		return true
-	print('root not ancestor')
+	# otherwise, return false
 	return false
 
-func _init():
-	print('journal init')
-
 func _ready() -> void:
+	# when the journal is ready we want to find the shared root
 	check_root()
+	# and create our journal tree (for centrally tracking the local tree)
 	journal_tree = JournalTreeClass.new()
 	add_child(journal_tree)
 
+## this is a helper to add a new event into the journal
+## accepts the action requested and whether it is an undo operation
 func _add_action(data:Dictionary, undid:=false) -> void:
 	actions_mutex.lock()
 	if undid:
@@ -66,12 +106,19 @@ func _add_action(data:Dictionary, undid:=false) -> void:
 		new_actions.append(data)
 	actions_mutex.unlock()
 
+## undoes the most recent action that is able to be undone
 func undo_action() -> void:
+	# checks that the shared root is still valid
 	check_root()
+	# lock mutex for thread safety
 	actions_mutex.lock()
+	# if the list of actions isn't empty
 	if !actions.is_empty():
+		# pop the most recent action to remove and return it
 		var action_to_undo :Dictionary = actions.pop_back()
+		# if it's valid
 		if action_to_undo and "action_name" in action_to_undo:
+			# run appropriate method to actualize the action
 			match action_to_undo.action_name:
 				'set_property':
 					set_property(action_to_undo.target, action_to_undo.prop_name, action_to_undo.previous_value, false, true)
@@ -79,8 +126,11 @@ func undo_action() -> void:
 					pass
 				'add_node':
 					pass
+	# unlock mutex so something else can run
 	actions_mutex.unlock()
 
+## this is a helper function used by the networking code to ask for all the new actions
+## that need to be sent over the network
 func get_actions() -> Array[Dictionary]:
 	actions_mutex.lock()
 	var tmp := new_actions.duplicate(true)
@@ -88,28 +138,40 @@ func get_actions() -> Array[Dictionary]:
 	actions_mutex.unlock()
 	return tmp
 
+## chekcs if the shared root is valid and if it isn't, we try to find it
 func check_root() -> void:
 	if !is_instance_valid(root):
 		_get_root()
 
+## attempts to query the tree for the shared root
 func _get_root() -> void:
 	root = get_tree().get_first_node_in_group('localworldroot')
 
 # TODO create function to iterate over the current scene and prepare it for remote syncing
-func _prepare_root_for_remote_sync() -> void:
+func _prepare_existing_tree_for_remote_sync() -> void:
 	pass
 
+## this runs the action of reparenting a node in the shared root
 func set_parent(target: NodePath, new_parent: NodePath) -> void:
+	# is the shared root valid?
 	check_root()
+	# find the node we are operating on
 	var target_node := root.get_node(target)
+	# find the new parent
 	var np_node := root.get_node(new_parent)
+	# reparent the targeted node to the new parent
 	target_node.reparent(np_node)
+	# add the action to the journal
 	actions.append({
 		'action_name': 'set_parent',
 		'target': target,
 		'new_parent': new_parent
 	})
 
+# TODO: we should do some of this in a gdextension so we can have direct memory creation access.
+# doing so will allow us to create the nodes with the correct data immediately rather than doing it
+# in gdscript and facing issues where gdscript is intentionally restricted (reasonably so in many cases)
+# from some things since this is beyond the scope of what gdscript is intended to do.
 ## Adds a node to the scene[br]
 ## should provide the nodepath for the node that will be the parent of the added
 ## nodes.[br]
@@ -126,20 +188,34 @@ func set_parent(target: NodePath, new_parent: NodePath) -> void:
 ## [br]if you would like to add metadata to the node use "metadata/property_name"
 ## as the name for the property so it will get parsed as a metadata property
 func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := false):
+	# check root validity
 	check_root()
-	print("journal_add_node")
+	# get the node we are attempting to operate on/under
 	var p_node := root.get_node(parent)
+	# if it returns a valid node...
 	if is_instance_valid(p_node):
+		# process the action into nodes outside of the tree
 		var target_node :Node = _read_add_node_nodes_dict(nodes, recieved)
+		# if the event isn't remote
 		if !recieved:
+			# i don't even know, this is some schizo bullshit that we need to rewrie i think.
+			# even if this is valid code, this sucks and we shouldn't write code like this ngl
 			while p_node.has_node("./"+target_node.name):
+				# intended to generate a sufficient hash name for the node to mitigate 
+				# node path struggles from years ago.
 				var placeholder_name :String=  str(str(str(nodes.node_class) + str( str(nodes) + str( Time.get_unix_time_from_system() + float(Time.get_ticks_usec()) ))).hash())
+				# set the new node's name
 				target_node.name = placeholder_name
+				# process the node properties and apply them to the node we just created.
+				# some more crazy shit i wrote that needs to be fixed
 				if "properties" in nodes:
 					nodes.properties.append({"name":"name","value":placeholder_name})
 				else:
 					nodes.properties = [{"name":"name","value":placeholder_name}]
+		# add the new node as a child of the designated parent node
 		p_node.add_child(target_node)
+		# if not a remote action and not an undo, then add it to the journal such that it will be
+		# synced over the network
 		if !recieved and !undid:
 			_add_action({
 				'action_name': 'add_node',
@@ -147,6 +223,7 @@ func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := fa
 				'added_node_path': root.get_path_to(target_node),
 				'nodes': nodes
 			})
+		# if it is an undo, then add it to the journal with the undid flag enabled
 		if undid:
 			_add_action({
 				'action_name': 'add_node',
@@ -155,7 +232,13 @@ func add_node(parent: NodePath, nodes:Dictionary, recieved := false, undid := fa
 				'nodes': nodes
 			},true)
 
+# TODO: replace the use of a dictionary with a class so it can have a fixed and documentable schema
+## this method is intended to accept a dictionary of nodes to be added to the shared root
+## and turn them from a dictionary of data into actual nodes to add
+## documenting this method is a bit of a frivilous effort, look at the inline doc of the above function 
+## for more info on what this is looking for
 func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
+	# check that the shared root is valid
 	check_root()
 	if "node_class" in node_dict and (ClassDB.can_instantiate(node_dict.node_class) or node_dict.node_class in extra_classes):
 		var node : Node
@@ -186,13 +269,27 @@ func _read_add_node_nodes_dict(node_dict:Dictionary, recieved:=false) -> Node:
 	tmp.name = "ERROR"
 	return tmp
 
-func delete_node(target: NodePath, recieved := false, _undid := false) -> void:
+## runs the delete node action
+func delete_node(target: NodePath, recieved := false, undid := false) -> void:
+	# check if root is valid
 	check_root()
+	# find the target node
 	var target_node := root.get_node(target)
+	# this is intended to pack the node into a scene so it can used when the
+	# user wants to undo a deletion but this is tough in gdscript and a lil fickle
+	# create packed scene we will use
 	var deleted_node_as_packed_scene := PackedScene.new()
+	# call our helper to set the node as "owner" of all the nodes beneath it.
+	# we do this because a node packed into a scene will only include nodes that have
+	# it set as their owner (and *allegedly* all the nodes that those are owners of
+	# but that didn't work when i created this)
 	take_owner_of_node_and_all_children(target_node, target_node)
+	# TODO: do something with this packedscene ffs
+	# pack the node into the PackedScene so we can save it
 	deleted_node_as_packed_scene.pack(target_node)
+	# delete the node
 	target_node.queue_free()
+	# if not remote add the actuion to the queue
 	if !recieved:
 		_add_action({
 			'action_name': 'delete_node',
@@ -200,13 +297,18 @@ func delete_node(target: NodePath, recieved := false, _undid := false) -> void:
 			'deleted_node': target_node.name#Marshalls.variant_to_base64(deleted_node_as_packed_scene,true)
 		})
 
+## sets a property of the target node in the shared scene
 func set_property(target: NodePath, prop_name: String, value: Variant, recieved := false, undid := false) -> void:
-	print(target)
 	check_root()
+	# get the target node
 	var target_node := root.get_node(target)
+	# if the node is valid and the property path exists in the target...
 	if is_instance_valid(target_node) and prop_name.split(':')[0] in target_node:
+		# capture the previous value for undoing
 		var previous_value = target_node.get_indexed(prop_name)
+		# this sets the property to the value we have
 		target_node.set_indexed(prop_name,value)
+		# if not remote or undid, then we add it to the journal
 		if !recieved and !undid:
 			_add_action({
 				'action_name': 'set_property',
@@ -215,6 +317,7 @@ func set_property(target: NodePath, prop_name: String, value: Variant, recieved 
 				'value': value,
 				'previous_value': previous_value
 			})
+		# if it's an undo, we add it with the journal with the undo flag
 		if undid:
 			_add_action({
 				'action_name': 'set_property',
@@ -224,13 +327,17 @@ func set_property(target: NodePath, prop_name: String, value: Variant, recieved 
 				'previous_value': previous_value
 			},true)
 
+## helper method to set a node as the owner of all nested nodes
 func take_owner_of_node_and_all_children(node:Node,new_owner:Node):
 	check_root()
+	# set owner of targeted node
 	node.owner = new_owner
+	# iterate over all children recursively
 	if node.get_child_count() > 0:
 		for child in node.get_children():
 			take_owner_of_node_and_all_children(child, new_owner)
 
+## this is deprecated and will be removed soon. it's need will vanish once the networking overhaul is finished
 func net_propagate_node(node_string: String, parent := ^'', node_name := '', recieved := false) -> void:
 	check_root()
 	if node_name.is_empty():
@@ -410,23 +517,36 @@ func import_asset( type: String, asset_to_import: Variant, asset_name := '', rec
 				if "loader" in data:
 					data.loader.done('failed')
 
+
+## imports a remote uri (currently only http[s])
 func _import_uri(uri:String, data:Dictionary={}):
-	var tmpdir:String = "user://tmp/"+str(hash(uri))
+	# generate a temp directory to hold the data
+	var temp_file_path :String = "user://tmp/"+str(hash(uri))
+	# here we wanna track the number of iterations so we can
+	# have a limit on the number of times we will attempt
+	# to import the uri
 	if !("iterations" in data):
 		data.iterations = 0
+	# ensure the uri is a valid http[s] url
 	if uri.begins_with("http://") or uri.begins_with("https://"):
+		# if we have already tried 4 times then we wanna say it failed
 		if "iterations" in data and data.iterations > 4:
 			print("loop while trying to import uri, cancelling import")
 			return
+		# create a new request object
 		var req := HTTPRequest.new()
-		req.download_file = tmpdir
+		# set the request to write to disk using the temp file path
+		req.download_file = temp_file_path
+		# add the request to the tree so it can be polled automatically by the engine
 		call_deferred("add_child",req)
+		# we wait for the node to be ready for some reason.
 		if !req.is_node_ready():
 			await req.ready
 		req.request_completed.connect(_uri_request_completed.bind(req,data,uri))
 		var headers = Engine.get_singleton("user_manager").headers
 		req.request(uri, headers)
 
+## finishing method for importing a uri
 func _uri_request_completed(_result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, req:HTTPRequest, data:Dictionary, uri:String):
 			print('req completed')
 			print('response code: '+str(response_code))

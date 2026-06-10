@@ -19,14 +19,45 @@ var vrm_ext_vrm = load("res://addons/vrm/1.0/VRMC_vrm.gd")
 ## loading vrm extensions
 var vrm_ext_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 
+## pre-ref the path to the loading halo to reduce duplicate lines and make it easier to instantiate
+var LOADING_HALO_SCENE := load("res://barkvr-system/ui/3dui/loading_halo.tscn")
+
+## holder variable to keep track of the command line arguments that were used at launch
+## [br]we don't really need these after startup but they could be useful in the future
+## for feature ideas.
+var command_line_arguments :PackedStringArray
+
 ## this is the scene we want to instantiate upon startup. 
 ## TODO: replace this with a fixed startup scene that proceeds to either the user's set homeworld or to a default world or to the new world dialogue
 ## TODO: create a new world dialogue to accompany the above
 @export var game_startup_scene :PackedScene
 
-## ready runs when the tree is setup and is ready to start running. look at the docs for _ready
-## for more info
+## ready runs when the tree is setup and is ready to start running. look at the godot docs for
+## _ready for more info
 func _ready():
+	# if the game_startup_scene is set to something then we instantiate it and add it to the tree
+	if game_startup_scene:
+		call_deferred("add_child",game_startup_scene.instantiate())
+	
+	# here we check to see if the user has passed any command line arguments
+	command_line_arguments = OS.get_cmdline_args()
+	if command_line_arguments:
+		# indexed for loop is here because it reduces complexity when validating
+		# whether the user provided valid options following a custom command line
+		# argument
+		for arg : int in command_line_arguments.size():
+			match command_line_arguments[arg]:
+				# here we allow the user to pass a file to auto-import at startup
+				# this makes it easier and more practical to use barkvr as a 3d file viewer/quick editor
+				# UNFORTUNATELY, these have to be absolute paths rn. godot doesn't seem to provide
+				# a builtin way to convert paths like "~" to be "/home/[user]" which sucks. we should
+				# add it manually later.
+				# TODO: autoconvert shorthand paths to absolute (~/woof.zip -> /home/username/woof.zip)
+				"--view-file":
+					if command_line_arguments.size() > arg and\
+					(command_line_arguments[arg+1].is_absolute_path() or command_line_arguments[arg+1].is_relative_path()):
+						
+						call_deferred( "import", [ command_line_arguments[ arg+1 ].remove_chars("\\\"") ] )
 	# here we load the vrm extensions we reference at the top of the file
 	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0.new(),true)
 	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier.new(), true)
@@ -41,10 +72,6 @@ func _ready():
 	# TODO: look into how we should be handling the permission requests on each platform
 	#OS.set_use_file_access_save_and_swap(true)
 	#OS.request_permissions()
-	
-	# if the game_startup_scene is set to something then we instantiate it and add it to the tree
-	if game_startup_scene:
-		call_deferred("add_child",game_startup_scene.instantiate())
 	
 	# here we open the user directory for whatever platform we are on, thankfully godot makes this easy
 	# look in godot docs for where this leads for each platform
@@ -63,23 +90,46 @@ func _ready():
 	# this is for capturing when a user drags files from another window
 	# and drops them on our window. listening to this signal allows us to run an import
 	# when that happens.
-	get_window().files_dropped.connect(func(files:PackedStringArray):
+	get_window().files_dropped.connect(window_files_dropped)# end files dropped (i put this here because i'm dyslexic and it's easier to read with this here)
+
+## class to simplify the export and provide a fixed schema for what is return
+## from the calc_import_position_and_size method. we should start using this 
+## design pattern as much as possible to remove all the vague dictionaries that
+## have to be manually documented. we can replace them with self-documenting
+## classes
+class ImportPosAndSize:
+	var position : Vector3
+	var size : float
+
+## helper method to find the current camera and player and return a calculated size based on the local 
+## player that can be used to position imported assets
+func calc_import_position_and_size() -> ImportPosAndSize:
+	# create the instance we will return
+	var out := ImportPosAndSize.new()
+	# TODO: move this to the player code, we might also use the globals autoload singleton to hold this data so it is globally available (or even a static var on the player controller class, then we should be able to just ask the class itself for the data)
+	# start by initializing the estimated size at 1.0
+	# here we do the player size calculation for some reason
+	var player_size_mult:float=1.0
+	# we then query the tree for the "player" group to find the player node and store it in a var for brevity
+	var tmp_player_reference : Node = get_tree().get_first_node_in_group("player")
+	# if the tree returns a valid instance...
+	if is_instance_valid(tmp_player_reference):
+		# get the global scale of the player
+		var tmpscale = tmp_player_reference.global_basis.get_scale()
+		# do some magic number bullshit we shouldn't be doing (initially tuned for UX reasons but should not be done this way)
+		player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
+	# lazily find a good position relative to the player to place the imported and assign it to the out
+	out.position = get_viewport().get_camera_3d().to_global(Vector3(0,0,-2.0)*player_size_mult)
+	# grab the final size calculation and give it to out
+	out.size = player_size_mult
+	# we return is as a custom class to make it easier to debug lol (yes this actually does make it
+	# easier to debug lol)
+	return out
+
+func window_files_dropped(files:PackedStringArray):
 		# create a loading indicator
-		var loader :LoadingHalo= load("res://barkvr-system/ui/3dui/loading_halo.tscn").instantiate()
-		# here we do the player size calculation for some reason
-		# TODO: move this to the player code, we might also use the globals autoload singleton to hold this data so it is globally available (or even a static var on the player controller class, then we should be able to just ask the class itself for the data)
-		# start by initializing the estimated size at 1.0
-		var player_size_mult:float=1.0
-		# we then query the tree for the "player" group to find the player node and store it in a var for brevity
-		var tmp_player_reference : Node = get_tree().get_first_node_in_group("player")
-		# if the tree returns a valid instance...
-		if is_instance_valid(tmp_player_reference):
-			# get the global scale of the player
-			var tmpscale = tmp_player_reference.global_basis.get_scale()
-			# do some magic number bullshit we shouldn't be doing (initially tuned for UX reasons but should not be done this way)
-			player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
-		# lazily find a good position relative to the player to place the imported
-		var import_position :Vector3= get_viewport().get_camera_3d().to_global(Vector3(0,0,-2.0)*player_size_mult)
+		var loader : LoadingHalo = LOADING_HALO_SCENE.instantiate()
+		var import_pos_and_size := calc_import_position_and_size()
 		# if we are on the web then we need to handle the import differently.
 		# TODO: oh my dog why did i do this like this please refactor
 		if !OS.get_name() == "Web":
@@ -89,7 +139,7 @@ func _ready():
 				Thread.set_thread_safety_checks_enabled(false)
 				# run the import function which handles file type detection and passing the
 				# import on to the next part of the process
-				import(files,loader,import_position,player_size_mult)
+				import(files,loader,import_pos_and_size.position,import_pos_and_size.size)
 				, true, "importing: "+str(files))
 			# look for the "localworldroot" which is named poorly but is the root of the shared scene
 			# (like all the stuff under the localworldroot is what gets synced over the network to 
@@ -100,20 +150,20 @@ func _ready():
 			if loader.text.is_empty():
 				loader.text = "something or nothing??? i can't tell yet"
 			# set the loader position to the import position we lazily found earlier
-			loader.global_position = import_position
+			loader.global_position = import_pos_and_size.position
 		# not on web, do it a different way
 		else:
 			# for some reason we aren't passing it to another thread here
 			# TODO: make this use threads
-			import(files,loader,import_position,player_size_mult)
+			import(files,loader,import_pos_and_size.position,import_pos_and_size.size)
 			# find the shared root like mentioned above and add the loader as a child
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 			# see above
 			if loader.text.is_empty():
 				loader.text = "something or nothing??? i can't tell yet"
 			# see above
-			loader.global_position = import_position
-	)# end files dropped (i put this here because i'm dyslexic and it's easier to read with this here)
+			loader.global_position = import_pos_and_size.position
+	
 
 # this was intended to ensure the player is always in the world, that way if the local player object
 # is somehow destroyed, we can just immediately reinstantiate it
@@ -125,7 +175,8 @@ func _ready():
 		#else:
 			#get_tree().root.add_child(load("res://barkvr-system/player/local/xrplayer.tscn").instantiate())
 
-# the actual import function
+#### the actual import function
+
 ## files is an array of paths to the files to be imported. loader is the loading indicator which we
 ## should have already instantiated before calling this. import position is the initial position 
 ## where we should place the imported stuff. player_size_mult is used to scale the imported stuff to
@@ -137,6 +188,11 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 	# this one is also just incremented each time but is used for the loader text to indicate the 
 	# progress of the batch import
 	var iteration :int= 0
+	# if there isn't a loading indicator already, create one
+	if !is_instance_valid(loader):
+		loader = LOADING_HALO_SCENE.instantiate()
+		# add it to the tree so it *actually* exists lol
+		get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 	# for every file in the array
 	for dropped in files:
 		# increment
@@ -157,8 +213,9 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		var file := FileAccess.open(dropped,FileAccess.READ)
 		# if we can't open the file thne it's not real and it can't hurt us
 		if !file:
-			print('failed to open import file')
+			print_debug('failed to open import file: ',dropped, "\nfailed because: ", FileAccess.get_open_error())
 			continue # skip the rest of the process since the file isn't obtainable
+		file.close()
 		# try to detect the file type:
 		# TODO: HOLY SHIT THIS IS SO STUPID. I LITERALLY LOAD THE WHOLE FILE INTO MEMORY ON A WHIM TO JUST CHECK HEADERS *SOBS*
 		# TODO: we gotta fix this but i'm commenting right now. i will be back for you :evil stare:
@@ -266,7 +323,7 @@ func _input(event):
 				var tmpscale = get_tree().get_first_node_in_group("player").global_basis.get_scale()
 				player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.0
 			var import_position :Vector3= get_viewport().get_camera_3d().to_global(Vector3(0,0,-2.0)*player_size_mult)
-			var loader :LoadingHalo= load("res://barkvr-system/ui/3dui/loading_halo.tscn").instantiate()
+			var loader :LoadingHalo= LOADING_HALO_SCENE.instantiate()
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 			var clipthread := Thread.new()
 			clipthread.start(import_clip.bind(loader, import_position, player_size_mult))

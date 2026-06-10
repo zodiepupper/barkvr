@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dgelhxrx1g8lr"]
+
+[ext_resource type="PackedScene" uid="uid://cg5f0nrs0w6h5" path="res://barkvr-system/player/local/xrplayer.tscn" id="3_m4lpf"]
+
+[node name="init_world" type="Node3D" unique_id=1042381064]
+
+[node name="multiplayer world root" type="Node3D" parent="." unique_id=1718415203 groups=["localworldroot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="playercontainer" parent="multiplayer world root" unique_id=1238881976 instance=ExtResource("3_m4lpf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08992, 0.91664, 2.46325)

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://65726t2vi0vh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qnlmp"]
+
+[node name="MountainRetreat" type="Node3D" unique_id=434286557]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=886792458]
+mesh = SubResource("BoxMesh_qnlmp")

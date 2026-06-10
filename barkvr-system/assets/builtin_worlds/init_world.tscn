@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dv0etfy0ao5"]
 
-[ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://barkvr-system/startup/basic_starter.tscn" id="1_ad4cs"]
+[ext_resource type="PackedScene" uid="uid://br1vh8in0e65o" path="res://barkvr-system/assets/builtin_worlds/basic_starter.tscn" id="1_ad4cs"]
 [ext_resource type="PackedScene" uid="uid://dckbok0o553v7" path="res://barkvr-system/startup/playerSpawnLocation.tscn" id="2_humgq"]
 [ext_resource type="Script" uid="uid://cb6a7hbfmnudr" path="res://addons/Panel3D/3dpanel.gd" id="5_ykx2e"]
 [ext_resource type="PackedScene" uid="uid://djw2ch2x4mclg" path="res://barkvr-system/ui/3dui/import helpers/audio3d.tscn" id="6_nx2sb"]

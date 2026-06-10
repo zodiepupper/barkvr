@@ -20,7 +20,7 @@ var size_factor: float = 7.5
 
 func _ready():
 	LocalGlobals.clear_gizmos.connect(queue_free)
-	_physics_process(0)
+	#_physics_process(0)
 
 
 
@@ -39,5 +39,6 @@ func _physics_process(_delta: float) -> void:
 		newscale = Vector3(0.01, 0.01, 0.01)
 
 	# Apply scale & position.
-	scale = newscale
 	global_position = target.global_position
+	global_basis = target.global_basis
+	scale = newscale

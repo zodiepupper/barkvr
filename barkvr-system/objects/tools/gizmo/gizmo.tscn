@@ -16,78 +16,177 @@ top_radius = 0.0
 bottom_radius = 0.05
 height = 0.2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xvnkt"]
-size = Vector3(1.1, 0.1, 0.1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_ryvgx"]
+size = Vector3(0.1, 1.1, 0)
+
+[sub_resource type="Gradient" id="Gradient_ryvgx"]
+colors = PackedColorArray(0, 0, 1, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5pajh"]
+gradient = SubResource("Gradient_ryvgx")
+width = 8
+height = 8
+fill_from = Vector2(0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1n8lu"]
+no_depth_test = true
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_5pajh")
+uv1_scale = Vector3(4, 4, 4)
+uv1_offset = Vector3(0.5, 0, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ryvgx"]
+size = Vector3(0.2, 0, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5pajh"]
+size = Vector3(0.2, 0, 0.2)
+
+[sub_resource type="Gradient" id="Gradient_qlf5c"]
+offsets = PackedFloat32Array(0, 0.7558777)
+colors = PackedColorArray(0, 1, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1n8lu"]
+gradient = SubResource("Gradient_qlf5c")
+width = 8
+height = 8
+fill_from = Vector2(1, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pah8f"]
+no_depth_test = true
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_1n8lu")
+uv1_scale = Vector3(4, 4, 4)
+uv1_offset = Vector3(0.5, 0, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="Gradient" id="Gradient_stwl6"]
+offsets = PackedFloat32Array(0, 0.7558777)
+colors = PackedColorArray(0, 1, 0, 1, 0, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0tm37"]
+gradient = SubResource("Gradient_stwl6")
+width = 8
+height = 8
+fill_from = Vector2(0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq3nu"]
+no_depth_test = true
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_0tm37")
+uv1_scale = Vector3(4, 4, 4)
+uv1_offset = Vector3(0.5, 0, 0.5)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pm28y"]
 no_depth_test = true
 shading_mode = 0
 albedo_color = Color(0.6431373, 0.8980392, 0.039215688, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_v4v8i"]
-size = Vector3(1.1, 0.1, 0.1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_816s8"]
 no_depth_test = true
 shading_mode = 0
 albedo_color = Color(0.19607843, 0.6627451, 0.9607843, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_puepw"]
-size = Vector3(1.1, 0.1, 0.1)
-
 [node name="gizmo" type="Node3D" unique_id=1719174681 groups=["gizmo"]]
 script = ExtResource("1_q74wi")
 
 [node name="x" type="StaticBody3D" parent="." unique_id=589458095]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="x" unique_id=1943817417]
+[node name="neck" type="MeshInstance3D" parent="x" unique_id=1943817417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_ktp1c")
 mesh = SubResource("BoxMesh_5mua7")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="x" unique_id=211683558]
+[node name="head" type="MeshInstance3D" parent="x" unique_id=211683558]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
 material_override = SubResource("StandardMaterial3D_ktp1c")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="xcol" type="CollisionShape3D" parent="x" unique_id=985316295]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
-shape = SubResource("BoxShape3D_xvnkt")
+[node name="col" type="CollisionShape3D" parent="x" unique_id=985316295]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.55, 0, 0)
+shape = SubResource("BoxShape3D_ryvgx")
+
+[node name="xz" type="StaticBody3D" parent="." unique_id=1257561377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0.3)
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("2_vldjq")
+axis = "xz"
+
+[node name="head" type="MeshInstance3D" parent="xz" unique_id=1420268318]
+material_override = SubResource("StandardMaterial3D_1n8lu")
+mesh = SubResource("BoxMesh_ryvgx")
+
+[node name="col" type="CollisionShape3D" parent="xz" unique_id=2057803710]
+shape = SubResource("BoxShape3D_5pajh")
+
+[node name="xy" type="StaticBody3D" parent="." unique_id=1461015197]
+transform = Transform3D(-1, 3.821371e-15, 8.742278e-08, 8.742278e-08, 4.371139e-08, 1, 0, 1, -4.371139e-08, 0.3, 0.3, 0)
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("2_vldjq")
+axis = "xy"
+
+[node name="head" type="MeshInstance3D" parent="xy" unique_id=1249774485]
+material_override = SubResource("StandardMaterial3D_pah8f")
+mesh = SubResource("BoxMesh_ryvgx")
+
+[node name="col" type="CollisionShape3D" parent="xy" unique_id=1903177499]
+shape = SubResource("BoxShape3D_5pajh")
+
+[node name="yz" type="StaticBody3D" parent="." unique_id=1489917810]
+transform = Transform3D(4.371139e-08, 1, -4.3711392e-08, 8.742278e-08, 4.371139e-08, 1, 1, -4.3711392e-08, -8.742278e-08, 0, 0.3, 0.3)
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("2_vldjq")
+axis = "yz"
+
+[node name="head" type="MeshInstance3D" parent="yz" unique_id=1280997165]
+material_override = SubResource("StandardMaterial3D_dq3nu")
+mesh = SubResource("BoxMesh_ryvgx")
+
+[node name="col" type="CollisionShape3D" parent="yz" unique_id=420024314]
+shape = SubResource("BoxShape3D_5pajh")
 
 [node name="y" type="StaticBody3D" parent="." unique_id=1393978621]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
-_axis = "y"
+axis = "y"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="y" unique_id=1583744691]
+[node name="neck" type="MeshInstance3D" parent="y" unique_id=1583744691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_pm28y")
 mesh = SubResource("BoxMesh_5mua7")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="y" unique_id=35350255]
+[node name="head" type="MeshInstance3D" parent="y" unique_id=35350255]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05, 0, 0)
 material_override = SubResource("StandardMaterial3D_pm28y")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="ycol" type="CollisionShape3D" parent="y" unique_id=1563778173]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
-shape = SubResource("BoxShape3D_v4v8i")
+[node name="col" type="CollisionShape3D" parent="y" unique_id=1563778173]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.55, 0, 0)
+shape = SubResource("BoxShape3D_ryvgx")
+
+[node name="col2" type="CollisionShape3D" parent="y" unique_id=173107783]
+transform = Transform3D(9.0161135e-15, -1, 4.37114e-08, -4.371139e-08, -4.3711395e-08, -1, 1, 1.0658141e-14, -4.371139e-08, -0.55, 0, 0)
+shape = SubResource("BoxShape3D_ryvgx")
 
 [node name="z" type="StaticBody3D" parent="." unique_id=1482547774]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("2_vldjq")
-_axis = "z"
+axis = "z"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="z" unique_id=1329052086]
+[node name="neck" type="MeshInstance3D" parent="z" unique_id=1329052086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 material_override = SubResource("StandardMaterial3D_816s8")
 mesh = SubResource("BoxMesh_5mua7")
@@ -97,7 +196,6 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.05,
 material_override = SubResource("StandardMaterial3D_816s8")
 mesh = SubResource("CylinderMesh_tv6ye")
 
-[node name="zcol" type="CollisionShape3D" parent="z" unique_id=284442188]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
-shape = SubResource("BoxShape3D_puepw")
+[node name="col" type="CollisionShape3D" parent="z" unique_id=284442188]
+transform = Transform3D(-4.3711385e-08, -1, -4.37114e-08, 1, -4.371139e-08, 4.37114e-08, -4.37114e-08, -4.37114e-08, 1, -0.55, 0, 0)
+shape = SubResource("BoxShape3D_ryvgx")

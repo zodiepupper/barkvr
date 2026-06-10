@@ -40,5 +40,5 @@ func _physics_process(_delta: float) -> void:
 
 	# Apply scale & position.
 	global_position = target.global_position
-	global_basis = target.global_basis
+	#global_basis = target.global_basis
 	scale = newscale

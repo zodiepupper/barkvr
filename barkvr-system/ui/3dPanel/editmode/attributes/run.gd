@@ -20,7 +20,3 @@ func _ready():
 func set_data(new_name:String, new_target:Node, new_property_name:String):
 	label.text = new_name
 	target = new_target
-	if val.button_pressed:
-		val.text = "true"
-	else:
-		val.text = "false"

@@ -12,8 +12,6 @@ var property_name:String = ''
 
 var event_supplier : BarkJournal
 
-var above_targets : Array
-
 func _ready():
 	event_supplier = Engine.get_singleton("event_manager")
 	val.toggled.connect(func(on):
@@ -40,20 +38,6 @@ func _go() -> void:
 				update_fields()
 	create_tween().tween_callback(_go).set_delay(Engine.get_singleton("settings_manager").inspector_update_interval)
 
-func build_path_to_property() -> String:
-	var out := ""
-	if above_targets and above_targets.size() > 1:
-		for i in above_targets.size():
-			if i > 0:
-				out += "/"
-			if "name" in above_targets[i]:
-				out += above_targets[i].name
-			elif "resource_name" in above_targets[i]:
-				out += above_targets[i].resource_name
-			else:
-				print("couldn't add this object to the node+resource path: "+str(above_targets[i]))
-	return out
-
 func update_fields():
 	#print('bool: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and property_name in target and is_instance_valid(target) and !_check_focus():
@@ -70,8 +54,7 @@ func _check_focus():
 
 ## sets the name, field target node, and the property name for the field to look for
 ## name:String, new_target:Node, new_property_name:String
-func set_data(new_name:String, new_target:Object, new_property_name:String, new_above_targets=[]):
-	above_targets = new_above_targets
+func set_data(new_name:String, new_target:Object, new_property_name:String):
 	label.text = new_name
 	target = new_target
 	property_name = new_property_name
@@ -80,5 +63,4 @@ func set_data(new_name:String, new_target:Object, new_property_name:String, new_
 			queue_free()
 			return
 		val.button_pressed = (target[property_name])
-		build_path_to_property()
 	

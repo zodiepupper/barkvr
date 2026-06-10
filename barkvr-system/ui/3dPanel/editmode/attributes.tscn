@@ -43,19 +43,6 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="closepanel" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=42132135]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.1
-
-[node name="closepanelbtn" type="Button" parent="VBoxContainer/titlebar/HBoxContainer/closepanel" unique_id=1320262428]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-text = "export"
-
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/titlebar/HBoxContainer" unique_id=1381686600]
 visible = false
 layout_mode = 2

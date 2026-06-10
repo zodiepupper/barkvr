@@ -1,39 +1,42 @@
 extends Node
 
+## this function allows us to take in the bytes of a file and pattern match to see
+## if it can be identified by the magics below (magics being our known headers for each
+## filetype)
 func detect_file_type_from_header(content:PackedByteArray) -> String:
 	
 	var format_signatures = [
-		# barkjournal (.bj)
+		### barkjournal (.bj)
 		{
 			"type":'bj',
 			"magics": [
 				
 			]
 		},
-		# WEBP
+		### WEBP
 		{
 			"type":'img',
 			"magics": [
 				[0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50],
 				]
 		},
-		# PNG
+		### PNG
 		{
 			"type":'img',
 			"magics": [
 				[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A],
 				]
 		},
-		# BMP
+		### BMP
 		{
 			"type":'img',
 			"magics": [
 				[0x42, 0x4D],
 				]
 		},
-		# TGA does not have a static header
+		### TGA does not have a static header
 		
-		# JPG
+		### JPG
 		{
 			"type":'img',
 			# I think there are other possible magics
@@ -43,9 +46,9 @@ func detect_file_type_from_header(content:PackedByteArray) -> String:
 				[0xFF, 0xD8, 0xFF, 0xE0],
 				]
 		},
-		# SVG does not have a static header
+		### SVG does not have a static header
 		
-		# KTX
+		### KTX
 		{
 			"type":'img',
 			"magics": [
@@ -53,7 +56,7 @@ func detect_file_type_from_header(content:PackedByteArray) -> String:
 				]
 		},
 		
-		# MeshX
+		### MeshX
 		{
 			"type":'rpkg',
 			"magics": [

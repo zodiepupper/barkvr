@@ -24,6 +24,8 @@ var object_field = load("res://barkvr-system/ui/3dPanel/editmode/attributes/obje
 var color_field = load("res://barkvr-system/ui/3dPanel/editmode/attributes/color.tscn")
 ## array_field barkvr field editor
 var array_field = load("res://barkvr-system/ui/3dPanel/editmode/attributes/array.tscn")
+## this executes a method on the target
+var run_field = load("res://barkvr-system/ui/3dPanel/editmode/attributes/run.tscn")
 ## tracks the current target object we are viewing/editing
 var target : Object = null
 
@@ -42,6 +44,13 @@ var target : Object = null
 @onready var targetname: LineEdit = $VBoxContainer/titlebar/HBoxContainer/Panel/targetname
 ## holds a ref to the header label at the top of the attributes panel
 @onready var properties_header_label: Label = $"VBoxContainer/titlebar/properties header/Panel9/properties header label"
+## toggles whether properties should be loaded in this editor
+@export var load_properties : bool = true
+## toggles whether methods should be loaded in this editor
+@export var load_methods : bool = true
+## toggles whether signals should be loaded in this editor
+@export var load_signals : bool = true
+
 
 ## sets whether the titlebar should be hidden or not and shows/hides the necessary
 ## nodes using the setter
@@ -82,7 +91,13 @@ func set_target(new_target):
 			activetoggle.button_pressed = true
 			activetoggle.disabled = true
 		# set the header to reflect the class of the target
-		properties_header_label.text = new_target.get_class()+" Properties:"
+		properties_header_label.text = new_target.get_class()
+		if load_methods:
+			properties_header_label.text += " Methods," if load_properties or load_signals else " Methods"
+		if load_signals:
+			properties_header_label.text += " Signals," if load_properties else " Signals"
+		if load_properties:
+			properties_header_label.text += " Properties"
 		
 		# this is a dubious hack to forcibly limit how much time we will take
 		# to process and add fields each frame. this allows us to set a fixed
@@ -103,20 +118,26 @@ func set_target(new_target):
 			# finished by freeing the child
 			child.queue_free()
 		# grab the property list of the new target
-		var prop_list :Array[Dictionary]= new_target.get_property_list()
-		# append the method list to the property list but map it through our
-		# helper method to add a type entry to each relevant dictionary so we
-		# don't have to change the code below just yet
-		prop_list.append_array(new_target.get_method_list().map(_add_types_to_method_list))
+		var prop_list :Array[Dictionary]
+		if load_properties:
+			prop_list.append_array(new_target.get_property_list())
+		if load_methods:
+			# append the method list to the property list but map it through our
+			# helper method to add a type entry to each relevant dictionary so we
+			# don't have to change the code below just yet
+			prop_list.append_array(new_target.get_method_list().map(_add_types_to_all_entries.bind(TYPE_CALLABLE)))
+		if load_signals:
+			# same but for signals
+			prop_list.append_array(new_target.get_signal_list().map(_add_types_to_all_entries.bind(TYPE_SIGNAL)))
 		# call the method to add these fields. we call deferred beacuse it prevents the frontend from
 		# stuttering
 		call_deferred("_add_fields", prop_list, new_target)
 
 ## helper method to simply add the type of TYPE_CALLABLE to every entry in the passed array
-## so we can include the method list without needing to change how we handle the property list
+## so we can include the method/signal list without needing to change how we handle the property list
 ## below in _add_fields
-func _add_types_to_method_list(input:Dictionary):
-	input["type"] = TYPE_CALLABLE
+func _add_types_to_all_entries(input:Dictionary, type: Variant.Type):
+	input["type"] = type
 	return input
 
 ## the method that actually adds the fields to the attributes panel
@@ -240,6 +261,11 @@ func _add_fields(prop_list, new_target) -> void:
 				tmp.set_data(fieldname, new_target, prop.name)
 			TYPE_VECTOR2I:
 				var tmp :Vector2_Attribute = vector_2_field.instantiate()
+				v_box_container.add_child(tmp)
+				tmp.name = fieldname
+				tmp.set_data(fieldname, new_target, prop.name)
+			TYPE_CALLABLE, TYPE_SIGNAL:
+				var tmp : Run_Attribute = run_field.instantiate()
 				v_box_container.add_child(tmp)
 				tmp.name = fieldname
 				tmp.set_data(fieldname, new_target, prop.name)

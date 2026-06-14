@@ -27,7 +27,7 @@ line_folding = true
 line_length_guidelines = Array[int]([80, 100])
 gutters_draw_line_numbers = true
 gutters_draw_fold_gutter = true
-delimiter_strings = Array[String](["\"\"\" \"\"\"", "''' '''", "\" \"", "' '"])
+delimiter_strings = Array[String](["''' '''", "\"\"\" \"\"\"", "' '", "\" \""])
 delimiter_comments = Array[String](["##", "#"])
 code_completion_enabled = true
 code_completion_prefixes = Array[String]([".", ",", "(", "=", "$", "@", "\"", "'"])

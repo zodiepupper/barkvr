@@ -120,13 +120,15 @@ func save_code() -> void:
 	if not editable: return
 
 	update_script_data()
-
+	node_target.request_ready()
+	var tmp_target_parent = node_target.get_parent()
+	tmp_target_parent.remove_child(node_target)
 	# Update/Set script on target.
 	node_target.set_script(script_data)
 	# Ensure process and physics_process are running.
 	node_target.set_process(true)
 	node_target.set_physics_process(true)
-
+	tmp_target_parent.add_child(node_target)
 	has_unsaved_changes = false
 
 ## Set the caret to the line that the given method is in.

@@ -42,10 +42,8 @@ func update_fields():
 	#print('bool: ', property_name)
 	if target and !property_name.is_empty() and !_is_editing and property_name in target and is_instance_valid(target) and !_check_focus():
 		val.button_pressed = (target[property_name])
-	elif !is_instance_valid(target):
-		target = null
-		val.button_pressed = false
-		val.text = ''
+	#elif !is_instance_valid(target):
+		#queue_free()
 
 func _check_focus():
 	if val.has_focus():
@@ -60,7 +58,7 @@ func set_data(new_name:String, new_target:Object, new_property_name:String):
 	property_name = new_property_name
 	if property_name in target:
 		if property_name.contains("/"):
-			queue_free()
+			#queue_free()
 			return
 		val.button_pressed = (target[property_name])
 	

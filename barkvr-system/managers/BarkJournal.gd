@@ -13,6 +13,24 @@
 class_name BarkJournal
 extends Node
 
+#TODO: REWRITE
+# basically, the goals are to build a journal that accepts events and attempts to apply
+# those events to the scene in a way that is consistent on every machine
+#
+# we want events for script stuff
+# we want the ability to add custom events (for worlds)
+# apply instantly, locally
+# (MAYBE) rollback
+# if a collision happens, take them in order of seniority (otherwise, pick random)
+# branching
+# exporting as a file
+
+# TODO WHY THE FUCK DID I PUT THE IMPORT LOGIC IN HERE UGHHHHH
+
+## base class for journal events in barkvr
+class BarkJournalEvent:
+	enum type{ADD_NODE, DELETE_NODE, REMOVE_NODE_FROM_TREE, REPARENT_NODE, CALL_ON_NODE, SET_PROPERTY}
+
 static var current_bark_journal: BarkJournal
 
 ## tracks all historical actions

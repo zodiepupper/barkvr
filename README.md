@@ -96,15 +96,7 @@ PRs!!
     - SHOULD be concise and explain the problem 
     - SHOULD explain the expected end result
 - **GenAI Usage**:
-    - if you use genai in your contribution, you *will* state which one\[s] and *exactly* what it was used for ***up-front***.
-    - failure to properly disclose will result in:
-        - your removal from the git history if it is discovered any time in the future
-        - you will be banned, permanently, with no option for recovery
-        - you may be blacklisted entirely from anything related to this project (including using the app on any first-party services)
-    - genai code/assets/concepts are *not* open source
-    - if you use a cloud AI tool then your contrib will be handled at *the sole discretion of the maintainer* (zodiepupper)
-    - if you used local ai to assist you in creating the contribution, especially in cases to overcome a disability, then your contrib *might* be able to be accepted once a contributor ***fully understands the entirety of the contribution***
-    - any genai assisted contribution may be denied with no explanation at the discretion of any contributor with the proper authority.
+    - not allowed in any capacity. (if you have an issue with this, contact me directly (zodiepupper) and i will enlighten you as to why)
 
 > [!TIP]
 > It is recommended that Issues be conversational and informal, but formal is

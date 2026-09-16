@@ -65,7 +65,7 @@ PRs!!
 ## Rules:
 - Contributions should be presented, and handled in all aspects with respect
   and compassion for all involved.
-- Contributions and statements made by contributions:
+- Contributions and statements made by contributors:
     - MUST NOT be hateful, or made with the intention of causing harm
     - MUST NOT be discriminatory against any specific type of person
     - MUST NOT be in support or in the interest of any Nazi ideals, hateful

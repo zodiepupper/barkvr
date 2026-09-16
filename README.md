@@ -96,7 +96,8 @@ PRs!!
     - SHOULD be concise and explain the problem 
     - SHOULD explain the expected end result
 - **GenAI Usage**:
-    - not allowed in any capacity. (if you have an issue with this, contact me directly (zodiepupper) and i will enlighten you as to why)
+    - Contributions MUST NOT contain LLM generated content. For further
+      discussion along this topic, please contact zodiepupper directly.
 
 > [!TIP]
 > It is recommended that Issues be conversational and informal, but formal is

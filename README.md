@@ -104,6 +104,7 @@ PRs!!
     - genai code/assets/concepts are *not* open source
     - if you use a cloud AI tool then your contrib will be handled at *the sole discretion of the maintainer* (zodiepupper)
     - if you used local ai to assist you in creating the contribution, especially in cases to overcome a disability, then your contrib *might* be able to be accepted once a contributor ***fully understands the entirety of the contribution***
+    - any genai assisted contribution may be denied with no explanation at the discretion of any contributor with the proper authority.
 
 > [!TIP]
 > It is recommended that Issues be conversational and informal, but formal is

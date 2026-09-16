@@ -71,9 +71,14 @@ PRs!!
     - MUST NOT be in support or in the interest of any Nazi ideals, hateful
       rhetoric, or suggesting ill fate on any group
 - Generative AI:
-    - MUST NOT be used for any direct contributions (which include code generation, including but not limited with AI agents; issues, pull requests, images, videos, sounds, 3d models etc.)
-    - MUST be limited for local models only (for usage not covered above). Usage for any cloud models (such as ChatGPT, Claude, Gemini, GitHub Copilot), as well as rented VMs (like Google Collaboratory) is banned
-    - usage not covered above (brainstorming, translating etc.) is discouraged. Prefer other methods (such as discussing idea in Matrix or Discord) instead
+    - You may use gen-ai in contributions to this project.
+    - If you use gen-ai in ANY way while contributing to this project, you **will** disclose that and your contribution **will be subject to extra review**
+    - Genai assisted contributions *can* be rejected if:
+        - the code is unintelligible
+        - the code is unneeded
+        - a contributor doesn't have time to review the PR well enough
+        - the PR is too large
+        - a contributor decides that the PR is not viable in some way
 
 > [!IMPORTANT]
 > This is **not** a place for politics that are unrelated to this project, and

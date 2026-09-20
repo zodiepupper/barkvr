@@ -232,22 +232,22 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		# and pass the import process to the import handling code (currently in BarkJournal)
 		if dropped.to_lower().ends_with('.gltf') or \
 			dropped.to_lower().ends_with('.glb'):
-			BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.fbx'):
-			BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
+			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		#elif dropped.to_lower().ends_with('.obj'):
 			#BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		elif dropped.to_lower().ends_with('.vrm'):
-			BarkJournal.current_bark_journal.import_asset('vrm',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('vrm',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.obj'):
-			BarkJournal.current_bark_journal.import_asset('obj',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('obj',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.res') or \
 			dropped.to_lower().ends_with('.tres') or \
 			dropped.to_lower().ends_with('.scn')  or \
 			dropped.to_lower().ends_with('.tscn') or \
 			dropped.to_lower().ends_with('.blend') or \
 			dropped.to_lower().ends_with('.mtl'):
-			BarkJournal.current_bark_journal.import_asset('res',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('res',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
 		#elif dropped.to_lower().ends_with('.pck'):
 			#BarkJournal.current_bark_journal.import_asset('pck', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
@@ -260,13 +260,13 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			dropped.to_lower().ends_with('.ktx')  or \
 			dropped.to_lower().ends_with('.webp') or \
 			type == "img":
-			BarkJournal.current_bark_journal.import_asset('image', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('image', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck') or dropped.to_lower().ends_with(".resonitepackage") or type == "rpkg":
-			BarkJournal.current_bark_journal.import_asset('zip', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('zip', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.ends_with(".mp3") or dropped.ends_with(".ogg") or dropped.ends_with(".wav"):
-			BarkJournal.current_bark_journal.import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		else:
-			BarkJournal.current_bark_journal.import_asset('file', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('file', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
 	# since this process is blocking for the thread it exists in, we can assume the files are fully imported once this 
 	# code is finished executing.
 	# tell the loader to play the done animation and close itself

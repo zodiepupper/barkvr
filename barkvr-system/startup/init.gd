@@ -215,12 +215,10 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		if !file:
 			print_debug('failed to open import file: ',dropped, "\nfailed because: ", FileAccess.get_open_error())
 			continue # skip the rest of the process since the file isn't obtainable
-		file.close()
 		# try to detect the file type:
-		# TODO: HOLY SHIT THIS IS SO STUPID. I LITERALLY LOAD THE WHOLE FILE INTO MEMORY ON A WHIM TO JUST CHECK HEADERS *SOBS*
-		# TODO: we gotta fix this but i'm commenting right now. i will be back for you :evil stare:
-		# TODO: ALSO WHAT THE FUCK I DIDN'T EVEN PROPERLY SWITCH TO USING HEADER DETECTION WTF, WE GOTTA DO THAT TOO FML
-		var type = BarkHelpers.detect_file_type_from_header(FileAccess.get_file_as_bytes(dropped))
+		file.seek(0)
+		var type = BarkHelpers.detect_file_type_from_header(file.get_buffer(32))
+		#var type = BarkHelpers.detect_file_type_from_header(FileAccess.get_file_as_bytes(dropped))
 		# use the offset to move the import position for the aforementioned UX decision
 		var new_import_position :Vector3=import_position+Vector3(0,0,offset)
 		# TODO: use the type we calculated above using the BarkHelpers class
@@ -232,11 +230,11 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		# and pass the import process to the import handling code (currently in BarkJournal)
 		if dropped.to_lower().ends_with('.gltf') or \
 			dropped.to_lower().ends_with('.glb'):
-			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.fbx'):
-			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
+			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		#elif dropped.to_lower().ends_with('.obj'):
-			#BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"base_path":dropped, "position":new_import_position,"scale":player_size_mult,"type":'fbx'})
+			#BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		elif dropped.to_lower().ends_with('.vrm'):
 			BarkvrImportManager.current_instance.import_asset('vrm',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
 		elif dropped.to_lower().ends_with('.obj'):

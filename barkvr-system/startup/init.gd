@@ -1,23 +1,5 @@
 extends Node3D
 
-# here we are just loading all the vrm extensions manually so they are bound for every import.
-# we probably shouldn't do this but i found an interesting benefit in that if a user
-# exports as a GLTF/GLB but the file data still includes the vrm metadata and nodes then
-# having these available for every import means it will still import the avatar properly
-## loading vrm extensions
-var vrm_ext_vrm_extension_0 = load("res://addons/vrm/vrm_extension.gd")
-## loading vrm extensions
-var vrm_ext_emmissive_multiplier = load("res://addons/vrm/1.0/VRMC_materials_hdr_emissiveMultiplier.gd")
-## loading vrm extensions
-var vrm_ext_materials_mtoon = load("res://addons/vrm/1.0/VRMC_materials_mtoon.gd")
-## loading vrm extensions
-var vrm_ext_node_constraint = load("res://addons/vrm/1.0/VRMC_node_constraint.gd")
-## loading vrm extensions
-var vrm_ext_springbone = load("res://addons/vrm/1.0/VRMC_springBone.gd")
-## loading vrm extensions
-var vrm_ext_vrm = load("res://addons/vrm/1.0/VRMC_vrm.gd")
-## loading vrm extensions
-var vrm_ext_vrm_animation = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
 
 ## pre-ref the path to the loading halo to reduce duplicate lines and make it easier to instantiate
 var LOADING_HALO_SCENE := load("res://barkvr-system/ui/3dui/loading_halo.tscn")
@@ -58,14 +40,6 @@ func _ready():
 					(command_line_arguments[arg+1].is_absolute_path() or command_line_arguments[arg+1].is_relative_path()):
 						
 						call_deferred( "import", [ command_line_arguments[ arg+1 ].remove_chars("\\\"") ] )
-	# here we load the vrm extensions we reference at the top of the file
-	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0.new(),true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier.new(), true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_materials_mtoon.new(), true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_node_constraint.new(), true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_springbone.new(), true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm.new(), true)
-	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_animation.new(), true)
 	
 	# some old attempts at permission requests. i believe this is no longer needed and that goodt
 	# asked upon attempting access
@@ -221,31 +195,79 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		#var type = BarkHelpers.detect_file_type_from_header(FileAccess.get_file_as_bytes(dropped))
 		# use the offset to move the import position for the aforementioned UX decision
 		var new_import_position :Vector3=import_position+Vector3(0,0,offset)
-		# TODO: use the type we calculated above using the BarkHelpers class
-		# this part is a little cumbersome to read. but the "event_manager" is the BarkJournal, which handles imports right now
-		# we should move the import code to it's own class for tons of reasons lol
-		# i'm not gonna comment the following lines any further until they are changed because they are all duplicates
-		#
 		# if the type didn't resolve something we can import, then we check the file extension just incase
 		# and pass the import process to the import handling code (currently in BarkJournal)
+		
+		# if you have questions about this part, please look at the BarkvrImportManager 
+		# and BarkvrImportFile classes, they should have ample docs to explain how they are to be used here
 		if dropped.to_lower().ends_with('.gltf') or \
 			dropped.to_lower().ends_with('.glb'):
-			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.glb,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		elif dropped.to_lower().ends_with('.fbx'):
-			BarkvrImportManager.current_instance.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult,"type":'fbx'})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.fbx,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		#elif dropped.to_lower().ends_with('.obj'):
 			#BarkJournal.current_bark_journal.import_asset('glb', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult,"type":'fbx'})
 		elif dropped.to_lower().ends_with('.vrm'):
-			BarkvrImportManager.current_instance.import_asset('vrm',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.vrm,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		elif dropped.to_lower().ends_with('.obj'):
-			BarkvrImportManager.current_instance.import_asset('obj',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.obj,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		elif dropped.to_lower().ends_with('.res') or \
 			dropped.to_lower().ends_with('.tres') or \
 			dropped.to_lower().ends_with('.scn')  or \
 			dropped.to_lower().ends_with('.tscn') or \
 			dropped.to_lower().ends_with('.blend') or \
 			dropped.to_lower().ends_with('.mtl'):
-			BarkvrImportManager.current_instance.import_asset('res',dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.res,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
 		#elif dropped.to_lower().ends_with('.pck'):
 			#BarkJournal.current_bark_journal.import_asset('pck', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
@@ -258,13 +280,53 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 			dropped.to_lower().ends_with('.ktx')  or \
 			dropped.to_lower().ends_with('.webp') or \
 			type == "img":
-			BarkvrImportManager.current_instance.import_asset('image', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.img,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck') or dropped.to_lower().ends_with(".resonitepackage") or type == "rpkg":
-			BarkvrImportManager.current_instance.import_asset('zip', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.zip,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		elif dropped.ends_with(".mp3") or dropped.ends_with(".ogg") or dropped.ends_with(".wav"):
-			BarkvrImportManager.current_instance.import_asset('audio', dropped, filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.audio,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		else:
-			BarkvrImportManager.current_instance.import_asset('file', FileAccess.get_file_as_bytes(dropped), filename, false, {"position":new_import_position,"scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.file,\
+					dropped,\
+					PackedByteArray(),\
+					filename,\
+					"",\
+					new_import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 	# since this process is blocking for the thread it exists in, we can assume the files are fully imported once this 
 	# code is finished executing.
 	# tell the loader to play the done animation and close itself

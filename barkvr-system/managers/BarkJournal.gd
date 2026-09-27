@@ -387,8 +387,8 @@ func receive(action: Dictionary) -> void:
 	match action.action_name:
 		"set_property":
 			set_property(action.target, action.prop_name, action.value, true)
-		"import_asset":
-			BarkvrImportManager.current_instance.import_asset(action.type, action.asset_to_import, action.asset_name, true, action.data)
+		#"import_asset":
+			#BarkvrImportManager.current_instance.import_asset(action.type, action.asset_to_import, action.asset_name, true, action.data)
 		"delete_node":
 			delete_node(action.target, true)
 		"add_node":

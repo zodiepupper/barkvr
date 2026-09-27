@@ -1,3 +1,4 @@
+class_name BarkvrHelpers
 extends Node
 
 ## this function allows us to take in the bytes of a file and pattern match to see
@@ -163,3 +164,61 @@ func rejoin_thread_when_finished(thread: Thread) -> void:
 		return
 	# otherwise, rejoin the thread with the main thread
 	thread.wait_to_finish()
+
+
+## helpers to automatically load and unload the VRM plugin gltf stuff so it 
+## doesn't get in the way when importing
+
+
+# here we are just loading all the vrm extensions manually so they are bound for every import.
+# we probably shouldn't do this but i found an interesting benefit in that if a user
+# exports as a GLTF/GLB but the file data still includes the vrm metadata and nodes then
+# having these available for every import means it will still import the avatar properly
+## loading vrm extensions
+static var vrm_ext_vrm_extension_0_script = load("res://addons/vrm/vrm_extension.gd")
+static var vrm_ext_vrm_extension_0
+## loading vrm extensions
+static var vrm_ext_emmissive_multiplier_script = load("res://addons/vrm/1.0/VRMC_materials_hdr_emissiveMultiplier.gd")
+static var vrm_ext_emmissive_multiplier
+## loading vrm extensions
+static var vrm_ext_materials_mtoon_script = load("res://addons/vrm/1.0/VRMC_materials_mtoon.gd")
+static var vrm_ext_materials_mtoon
+## loading vrm extensions
+static var vrm_ext_node_constraint_script = load("res://addons/vrm/1.0/VRMC_node_constraint.gd")
+static var vrm_ext_node_constraint
+## loading vrm extensions
+static var vrm_ext_springbone_script = load("res://addons/vrm/1.0/VRMC_springBone.gd")
+static var vrm_ext_springbone
+## loading vrm extensions
+static var vrm_ext_vrm_script = load("res://addons/vrm/1.0/VRMC_vrm.gd")
+static var vrm_ext_vrm
+## loading vrm extensions
+static var vrm_ext_vrm_animation_script = load("res://addons/vrm/1.0/VRMC_vrm_animation.gd")
+static var vrm_ext_vrm_animation
+
+static func enable_vrm_gltf():
+	vrm_ext_vrm_extension_0 = vrm_ext_vrm_extension_0_script.new()
+	vrm_ext_emmissive_multiplier = vrm_ext_emmissive_multiplier_script.new()
+	vrm_ext_materials_mtoon = vrm_ext_materials_mtoon_script.new()
+	vrm_ext_node_constraint = vrm_ext_node_constraint_script.new()
+	vrm_ext_springbone = vrm_ext_springbone_script.new()
+	vrm_ext_vrm = vrm_ext_vrm_script.new()
+	vrm_ext_vrm_animation = vrm_ext_vrm_animation_script.new()
+	# here we load the vrm extensions we reference at the top of the file
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_extension_0,true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_emmissive_multiplier, true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_materials_mtoon, true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_node_constraint, true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_springbone, true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm, true)
+	GLTFDocument.register_gltf_document_extension(vrm_ext_vrm_animation, true)
+
+static func disable_vrm_gltf():
+	# here we load the vrm extensions we reference at the top of the file
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_vrm_extension_0)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_emmissive_multiplier)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_materials_mtoon)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_node_constraint)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_springbone)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_vrm)
+	GLTFDocument.unregister_gltf_document_extension(vrm_ext_vrm_animation)

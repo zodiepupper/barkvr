@@ -347,7 +347,18 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 		# set the loader text to indicate what it's importing is an image
 		loader.set_deferred("text", "clipboard image")
 		# pass onto the next part of the import process
-		BarkJournal.current_bark_journal.import_asset('image', clip, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+		BarkvrImportManager.current_instance.import_asset(\
+			BarkvrImportManager.BarkvrImportImage.create_with_image(\
+				BarkvrImportManager.TYPE.img,\
+				clip,\
+				"",
+				PackedByteArray(),\
+				"",\
+				"",\
+				import_position,\
+				player_size_mult*Vector3.ONE
+				)
+			)
 	else:
 		# create a holder for attempting to load the plain text as an svg
 		var trysvg = Image.new()
@@ -359,15 +370,46 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 			# if we did load an svg we wanna update the text to say it's an image
 			# since godot will rasterize the svg to an image resource
 			loader.set_deferred("text", "clipboard image")
-			BarkJournal.current_bark_journal.import_asset('image', trysvg, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportImage.create_with_image(\
+					BarkvrImportManager.TYPE.img,\
+					trysvg,\
+					"",
+					PackedByteArray(),\
+					"",\
+					"",\
+					import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		# if the text is a URL, then we wanna import it as a remote uri
 		elif clipstr.begins_with("http://") or clipstr.begins_with("https://"):
 			loader.set_deferred("text", "clipboard url")
-			BarkJournal.current_bark_journal.import_asset('uri',clipstr,'', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.uri,\
+					clipstr,
+					PackedByteArray(),\
+					"",\
+					"",\
+					import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		# otehrwise we just import it as a 3d text object
 		else:
 			loader.set_deferred("text", "clipboard text")
-			BarkJournal.current_bark_journal.import_asset('text', clipstr, '', false, {"loader":loader ,"position":import_position, "scale":player_size_mult})
+			BarkvrImportManager.current_instance.import_asset(\
+				BarkvrImportManager.BarkvrImportFile.create(\
+					BarkvrImportManager.TYPE.text,\
+					clipstr,\
+					PackedByteArray(),\
+					"",\
+					"",\
+					import_position,\
+					player_size_mult*Vector3.ONE
+					)
+				)
 		
 # here we capture inputs so we can capture when the player is pasting something
 # TODO: make this so it's not hard-coded to ctrl+v

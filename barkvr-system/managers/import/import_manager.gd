@@ -72,6 +72,38 @@ class BarkvrImportFile:
 			tmp.import_attempts = new_import_attempts
 			return tmp
 
+class BarkvrImportImage:
+	extends BarkvrImportFile
+	var image : Image
+	## a function that allows us to easily create a 
+	static func create_with_image(new_type : BarkvrImportManager.TYPE,\
+		new_asset_image : Image,\
+		new_asset_path : StringName = "",\
+		new_asset_bytes : PackedByteArray = PackedByteArray(),\
+		new_asset_name : String = "",\
+		new_asset_base_path : String = "",\
+		new_asset_import_global_position : Vector3 = Vector3(),\
+		new_asset_import_global_scale : Vector3 = Vector3.ONE,\
+		new_loader : LoadingHalo = null,\
+		new_import_attempts : int = 0) -> BarkvrImportFile:
+			var tmp := BarkvrImportImage.new()
+			tmp.type = new_type
+			if !new_asset_image.is_empty():
+				tmp.image = new_asset_image
+			if !new_asset_path.is_empty():
+				tmp.asset_path = new_asset_path
+			if !new_asset_bytes.is_empty():
+				tmp.asset_bytes = new_asset_bytes
+			if !new_asset_name.is_empty():
+				tmp.asset_name = new_asset_name
+			if !new_asset_base_path.is_empty():
+				tmp.asset_base_path = new_asset_base_path
+			tmp.asset_import_global_position = new_asset_import_global_position
+			tmp.asset_import_global_scale = new_asset_import_global_scale
+			tmp.loader = new_loader
+			tmp.import_attempts = new_import_attempts
+			return tmp
+
 var root : Node
 
 ## chekcs if the shared root is valid and if it isn't, we try to find it
@@ -105,24 +137,34 @@ func import_asset( import_file : BarkvrImportFile ) -> void:
 	match import_file.type:
 		TYPE.text:
 			_import_text(import_file)
+			return
 		TYPE.glb, TYPE.vrm, TYPE.fbx:
 			_import_glb(import_file)
+			return
 		TYPE.obj:
 			_import_obj(import_file)
+			return
 		#TYPE.res:
 			## TODO scenes and resources can't easily be sent to peers because of
 			## possible dependencies in other files.
 			#_import_res(import_file)
 		TYPE.img:
+			if import_file is BarkvrImportImage:
+				_import_image_image(import_file)
+				return
 			_import_image_bytes(import_file.asset_name, import_file.asset_bytes if !import_file.asset_bytes.is_empty() else FileAccess.get_file_as_bytes(import_file.asset_path), import_file)
 		TYPE.audio:
 			_import_audio(import_file)
+			return
 		TYPE.file:
 			_import_file(import_file)
+			return
 		TYPE.uri:
 			_import_uri(import_file)
+			return
 		TYPE.zip:
 			_import_zip(import_file)
+			return
 		TYPE.ogv:
 			if !import_file.asset_bytes.is_empty():
 				#var tmp_file := FileAccess.create_temp(FileAccess.WRITE_READ,"",".ogv")
@@ -291,7 +333,7 @@ func _check_loaded(path: String, asset_name:String, data:Dictionary={}, _last_ti
 		var res := ResourceLoader.load_threaded_get(path)
 		if res != null:
 			var node = res.instantiate()
-			_post_import.call_deferred(root,node,asset_name,data, !data.has("nolookatuser"))
+			_post_import.call_deferred(root,node,asset_name,data)
 
 #
 var gltf_document_extension_class = load("res://addons/vrm/vrm_extension.gd")
@@ -418,7 +460,7 @@ func _import_res(asset_name: String, asset_to_import: Variant, data:Dictionary={
 	#res = _load_res_with_dependencies(asset_to_import)
 	if res != null:
 		var node = res.instantiate()
-		_post_import.call_deferred(root,node,asset_name,data, !data.has("nolookatuser"))
+		_post_import.call_deferred(root,node,asset_name)
 	ResourceLoader.load_threaded_request(asset_to_import, 'tres', false, ResourceLoader.CACHE_MODE_IGNORE)
 	_check_loaded(asset_to_import,asset_name,data)
 
@@ -561,10 +603,10 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, import_fi
 
 
 ## Imports an image from an existing image resource.
-func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> void:
+func _import_image_image(import_file: BarkvrImportImage) -> void:
 	check_root()
 	
-	var tex := ImageTexture.create_from_image(img)
+	var tex := ImageTexture.create_from_image(import_file.image)
 	var plane := MeshInstance3D.new()
 	var tmpmesh := PlaneMesh.new()
 	var tmpmat := StandardMaterial3D.new()
@@ -591,14 +633,14 @@ func _import_image_image(asset_name: String, img: Image, data:Dictionary={}) -> 
 	tmpbody.collision_mask = 2
 	
 	tmpbody.add_child(plane)
-	_post_import.call_deferred(root, tmpbody, asset_name, data, !data.has("nolookatuser"))
+	_post_import(root, tmpbody, import_file)
 
 ## Imports an audio file.
 func _import_audio(import_file:BarkvrImportFile) -> void:
 	check_root()
 	var audio3d: Audio3D = load("res://barkvr-system/ui/3dui/import helpers/audio3d.tscn").instantiate()
 	audio3d.load_audio_from_bytes(import_file.asset_bytes, "mp3")
-	_post_import.call_deferred(root, audio3d, import_file.asset_name, import_file)
+	_post_import.call_deferred(root, audio3d, import_file)
 
 ## Imports some text.
 func _import_text(import_file : BarkvrImportFile) -> void:
@@ -639,7 +681,7 @@ func _import_text(import_file : BarkvrImportFile) -> void:
 	#tmpmesh.orientation = PlaneMesh.FACE_Z
 	mesh.mesh = tmpmesh
 	tmpbody.add_child(mesh)
-	_post_import.call_deferred(root, tmpbody, import_file.asset_name, import_file, true)
+	_post_import(root, tmpbody, import_file)
 
 ## Imports a file.
 func _import_file(import_file:BarkvrImportFile) -> void:
@@ -686,8 +728,7 @@ func _import_file(import_file:BarkvrImportFile) -> void:
 	#print(content)
 	
 	#tmpbody.set_meta("file_bytes",str(content.compress(2)))
-	_post_import.call_deferred(root, tmpbody, import_file.asset_name, import_file)
-
+	_post_import.call_deferred(root, tmpbody, import_file)
 
 func _post_import(_rootarget_node:Node,node_to_add:Node,import_file:BarkvrImportFile):
 	check_root()

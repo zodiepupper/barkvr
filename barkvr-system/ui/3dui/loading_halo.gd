@@ -6,7 +6,7 @@ class_name LoadingHalo
 @onready var halo2 = $MeshInstance3D3
 
 @onready var label_3d = $textparent/Label3D
-@onready var mesh_instance_3d = $textparent/MeshInstance3D
+@onready var textparent = $textparent/MeshInstance3D
 
 var isloading := true
 
@@ -19,7 +19,7 @@ var text : String = "":
 			else:
 				label_3d.text = str(value)
 			get_tree().create_tween().tween_callback(func():
-				mesh_instance_3d.detect_size(label_3d)
+				textparent.detect_size(label_3d)
 				).set_delay(.01)
 
 func _ready():

@@ -5,9 +5,7 @@ func _ready() -> void:
 
 func _go() -> void:
 	var last_rotation:=rotation
-	# this check avoids the "colinear UP and target" issue by only performing the lookat
-	# if the operation inputs are valid
-	if abs(get_viewport().get_camera_3d().global_position.dot(Vector3.UP)) < 1.0 :
+	if is_inside_tree():
 		look_at(get_viewport().get_camera_3d().global_position)
 	rotation.x = lerp_angle(last_rotation.x,rotation.x,.1)
 	rotation.y = lerp_angle(last_rotation.y,rotation.y,.1)

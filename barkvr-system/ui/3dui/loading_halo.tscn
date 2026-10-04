@@ -55,7 +55,7 @@ size = Vector2(0.18377, 0.130074)
 script = ExtResource("1_t6gg2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=287552695]
-transform = Transform3D(-0.565142, -0.326286, -0.0563538, -0.3275, 0.567247, 0, 0.0488038, 0.028177, -0.65257, 0, 0, 0)
+transform = Transform3D(0.56724554, 0.32750037, 0, -0.32749957, 0.5672469, 0, 0, 0, 0.6549988, 0, 0, 0)
 mesh = SubResource("TorusMesh_gbg2y")
 skeleton = NodePath("../..")
 
@@ -64,7 +64,7 @@ libraries/ = SubResource("AnimationLibrary_dtajc")
 speed_scale = 0.5
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1997488227]
-transform = Transform3D(0.432359, 0.249623, 0.424004, -0.3275, 0.567247, 0, -0.367198, -0.212002, 0.499245, 0, 0, 0)
+transform = Transform3D(0.5672465, 0.32750037, 0, -0.32750013, 0.5672469, 0, 0, 0, 0.655, 0, 0, 0)
 mesh = SubResource("TorusMesh_gbg2y")
 skeleton = NodePath("../..")
 

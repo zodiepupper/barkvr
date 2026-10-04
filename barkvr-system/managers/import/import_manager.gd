@@ -394,7 +394,7 @@ func _import_glb(import_file : BarkvrImportFile) -> void:
 			#state.take_over_path(content + ".res")
 			#ResourceSaver.save(state, content + ".res")
 	print('post importing glb/gltf/vrm')
-	_post_import(root, generated_scene, import_file)
+	_post_import.call_deferred(root, generated_scene, import_file)
 	if import_file.type == TYPE.vrm:
 		BarkvrHelpers.disable_vrm_gltf()
 
@@ -599,13 +599,17 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, import_fi
 	tmpbody.collision_mask = 2
 	
 	tmpbody.add_child(plane)
-	_post_import(root, tmpbody, import_file)
+	_post_import.call_deferred(root, tmpbody, import_file)
 
 
 ## Imports an image from an existing image resource.
 func _import_image_image(import_file: BarkvrImportImage) -> void:
 	check_root()
 	
+	if !import_file.image:
+		import_file.loader.done("_import_image_image: failed to load image")
+		import_file.free()
+		return
 	var tex := ImageTexture.create_from_image(import_file.image)
 	var plane := MeshInstance3D.new()
 	var tmpmesh := PlaneMesh.new()
@@ -633,7 +637,7 @@ func _import_image_image(import_file: BarkvrImportImage) -> void:
 	tmpbody.collision_mask = 2
 	
 	tmpbody.add_child(plane)
-	_post_import(root, tmpbody, import_file)
+	_post_import.call_deferred(root, tmpbody, import_file)
 
 ## Imports an audio file.
 func _import_audio(import_file:BarkvrImportFile) -> void:
@@ -681,7 +685,7 @@ func _import_text(import_file : BarkvrImportFile) -> void:
 	#tmpmesh.orientation = PlaneMesh.FACE_Z
 	mesh.mesh = tmpmesh
 	tmpbody.add_child(mesh)
-	_post_import(root, tmpbody, import_file)
+	_post_import.call_deferred(root, tmpbody, import_file)
 
 ## Imports a file.
 func _import_file(import_file:BarkvrImportFile) -> void:

@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://dqo4sdqgw62b4" path="res://barkvr-system/managers/import/import_manager.gd" id="9_8ynjq"]
 [ext_resource type="PackedScene" uid="uid://dqavqvokiyaq1" path="res://barkvr-system/startup/start_xr.tscn" id="9_vq5v2"]
 [ext_resource type="PackedScene" uid="uid://dd52tl2k4gref" path="res://barkvr-system/objects/pens/voxel_draw_test.tscn" id="10_vq5v2"]
-[ext_resource type="PackedScene" uid="uid://blgutg7de42f8" path="res://barkvr-system/assets/builtin_worlds/station/station_hallway_straight.tscn" id="11_0m8t2"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_ve6pm"]
 
@@ -41,5 +40,3 @@ playback_type = 1
 [node name="StartXR" parent="." unique_id=1162338548 instance=ExtResource("9_vq5v2")]
 
 [node name="voxel draw test" parent="." unique_id=886625534 instance=ExtResource("10_vq5v2")]
-
-[node name="StationHallwayStraight" parent="." unique_id=1654820823 instance=ExtResource("11_0m8t2")]

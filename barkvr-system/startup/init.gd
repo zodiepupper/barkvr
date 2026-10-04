@@ -108,13 +108,7 @@ func window_files_dropped(files:PackedStringArray):
 		# TODO: oh my dog why did i do this like this please refactor
 		if !OS.get_name() == "Web":
 			# spin the task off to a thread to finish importing so we can continue doing other things
-			WorkerThreadPool.add_task(func():
-				# don't know why we are doing this here, but okay -_-
-				Thread.set_thread_safety_checks_enabled(false)
-				# run the import function which handles file type detection and passing the
-				# import on to the next part of the process
-				import(files,loader,import_pos_and_size.position,import_pos_and_size.size)
-				, true, "importing: "+str(files))
+			WorkerThreadPool.add_task(import.bind(files,loader,import_pos_and_size.position,import_pos_and_size.size))
 			# look for the "localworldroot" which is named poorly but is the root of the shared scene
 			# (like all the stuff under the localworldroot is what gets synced over the network to 
 			# everyone else)
@@ -128,8 +122,8 @@ func window_files_dropped(files:PackedStringArray):
 		# not on web, do it a different way
 		else:
 			# for some reason we aren't passing it to another thread here
-			# TODO: make this use threads
-			import(files,loader,import_pos_and_size.position,import_pos_and_size.size)
+			# TODO: make this use threads - you got it ;3
+			WorkerThreadPool.add_task(import.bind(files,loader,import_pos_and_size.position,import_pos_and_size.size))
 			# find the shared root like mentioned above and add the loader as a child
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 			# see above
@@ -210,7 +204,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		elif dropped.to_lower().ends_with('.fbx'):
@@ -222,7 +217,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		#elif dropped.to_lower().ends_with('.obj'):
@@ -236,7 +232,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		elif dropped.to_lower().ends_with('.obj'):
@@ -248,7 +245,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		elif dropped.to_lower().ends_with('.res') or \
@@ -265,7 +263,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		#elif dropped.ends_with('.zip') or dropped.ends_with('.pck'):
@@ -288,7 +287,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		elif dropped.ends_with(".zip") or dropped.to_lower().ends_with('.pck') or dropped.to_lower().ends_with(".resonitepackage") or type == "rpkg":
@@ -300,7 +300,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		elif dropped.ends_with(".mp3") or dropped.ends_with(".ogg") or dropped.ends_with(".wav"):
@@ -312,7 +313,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		else:
@@ -324,7 +326,8 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 					filename,\
 					"",\
 					new_import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 	# since this process is blocking for the thread it exists in, we can assume the files are fully imported once this 
@@ -356,7 +359,8 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 				"",\
 				"",\
 				import_position,\
-				player_size_mult*Vector3.ONE
+				player_size_mult*Vector3.ONE,\
+				loader
 				)
 			)
 	else:
@@ -379,7 +383,8 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 					"",\
 					"",\
 					import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		# if the text is a URL, then we wanna import it as a remote uri
@@ -393,7 +398,8 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 					"",\
 					"",\
 					import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		# otehrwise we just import it as a 3d text object
@@ -407,7 +413,8 @@ func import_clip(loader:LoadingHalo=null, import_position:Vector3=Vector3(), pla
 					"",\
 					"",\
 					import_position,\
-					player_size_mult*Vector3.ONE
+					player_size_mult*Vector3.ONE,\
+					loader
 					)
 				)
 		

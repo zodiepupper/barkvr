@@ -188,7 +188,7 @@ func is_colliding() -> bool:
 	return query_is_colliding
 
 ## returns the currently collided collider (query_collider)
-func get_collider() -> CollisionObject3D:
+func get_collider() -> Node3D:
 	return query_collider
 
 ## returns the current collision normal (query_normal)
@@ -558,6 +558,10 @@ class GrabbedNode3D:
 		tmp.start_target_offset_position = current_laser_global_position - new_target.global_position
 		tmp.start_local_laser_position = current_laser_local_position
 		return tmp
+	## helper to automatically try to find a parent node that should act as the "object_root"
+	func find_object_root(new_target:=Node3D.new()) -> Node3D:
+		if new_target.has_meta("object_root"): return new_target
+		return null
 	## the node subject to this grab
 	##[br] the setter here automatically grabs the initial transform
 	var target : Node3D:
@@ -567,6 +571,9 @@ class GrabbedNode3D:
 				start_global_position = target.global_position
 				last_global_position = target.global_position
 				start_global_rotation = target.global_rotation
+			
+	## holder for the object_root if there is one
+	var object_root : Node3D
 	
 	## update the transforms of the target node, we do this here so it is self 
 	## managing
@@ -604,11 +611,12 @@ func grab(target:Node=null):
 		target = get_collider()
 	if target is Node3D:
 		grabbed_nodes[target.get_instance_id()] = GrabbedNode3D.\
-		create_from_target_and_laser_positions(\
-			target,\
-			get_collision_point(),\
-			to_local( get_collision_point() )\
-		)
+			create_from_target_and_laser_positions(\
+				target,\
+				get_collision_point(),\
+				to_local( get_collision_point() )\
+			)
+		grabbed_nodes[target.get_instance_id()].smooth_transform_speed = smoothing_speed
 		return
 	if target is Node2D:
 		pass

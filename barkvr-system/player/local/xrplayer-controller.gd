@@ -340,7 +340,7 @@ func flat_movement(_delta:float) -> void:
 	else:
 		grab_point = camera_3d.to_local(camera_3d.project_position(get_viewport().size/2.0, 10.0))
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
-		summon_inspector()
+		summon_inspector.call_deferred()
 
 	righthand.look_at(camera_3d.to_global(grab_point))
 

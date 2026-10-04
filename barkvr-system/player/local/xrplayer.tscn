@@ -71,7 +71,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 
 [node name="uiRay" parent="xrplayer/righthand/handproxy" unique_id=398823697 node_paths=PackedStringArray("query_exception_nodes") instance=ExtResource("4_316iy")]
 follow_mouse = false
 smoothing_enabled = false
-query_exception_nodes = [NodePath("")]
+query_exception_nodes = [null]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779
@@ -105,7 +105,7 @@ script = ExtResource("2_npgyv")
 interaction_index = 1
 follow_mouse = false
 target_position = Vector3(0, 0, -100000)
-query_exception_nodes = [NodePath("")]
+query_exception_nodes = [null]
 private_ui_collision_layers = 512
 edit_ui_collision_layers = 4
 world_collision_layers = 4294966779

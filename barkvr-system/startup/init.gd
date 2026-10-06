@@ -116,9 +116,9 @@ func window_files_dropped(files:PackedStringArray):
 			# if we couldn't populate the loader text with something then we put a silly text in there
 			# since this probably means the import won't work :grimace:
 			if loader.text.is_empty():
-				loader.text = "something or nothing??? i can't tell yet"
+				loader.set_deferred("text","something or nothing??? i can't tell yet")
 			# set the loader position to the import position we lazily found earlier
-			loader.global_position = import_pos_and_size.position
+			loader.set_deferred("global_position",import_pos_and_size.position)
 		# not on web, do it a different way
 		else:
 			# for some reason we aren't passing it to another thread here
@@ -128,9 +128,9 @@ func window_files_dropped(files:PackedStringArray):
 			get_tree().get_first_node_in_group("localworldroot").add_child(loader)
 			# see above
 			if loader.text.is_empty():
-				loader.text = "something or nothing??? i can't tell yet"
+				loader.set_deferred("text","something or nothing??? i can't tell yet")
 			# see above
-			loader.global_position = import_pos_and_size.position
+			loader.set_deferred("global_position", import_pos_and_size.position)
 	
 
 # this was intended to ensure the player is always in the world, that way if the local player object
@@ -176,7 +176,7 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		else:
 			filename = dropped.split('/')[-1]
 		# set the loader text to a good indicator 
-		loader.text = filename + " (" + str(iteration) + "of" + str(files.size()) + ")"
+		loader.set_deferred("text", filename + " (" + str(iteration) + "of" + str(files.size()) + ")")
 		# open the file with only read permissions
 		var file := FileAccess.open(dropped,FileAccess.READ)
 		# if we can't open the file thne it's not real and it can't hurt us
@@ -333,7 +333,7 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 	# since this process is blocking for the thread it exists in, we can assume the files are fully imported once this 
 	# code is finished executing.
 	# tell the loader to play the done animation and close itself
-	loader.done()
+	loader.done.call_deferred()
 
 ## here we handle importing from the clipboard
 ## expects an existing loadinghalo just like the previous function
@@ -437,7 +437,7 @@ func _input(event):
 			var clipthread := Thread.new()
 			clipthread.start(import_clip.bind(loader, import_position, player_size_mult))
 			BarkHelpers.rejoin_thread_when_finished(clipthread)
-			loader.global_position = import_position
+			loader.set_deferred("global_position",import_position)
 		# if the player is pressing the keys to undo, then we wanna send an undo to the BarkJournal
 		if event.physical_keycode == KEY_Z and event.ctrl_pressed and event.pressed:
 			BarkJournal.current_bark_journal.undo_action()

@@ -19,17 +19,11 @@ extends Node
 #
 # we want events for script stuff
 # we want the ability to add custom events (for worlds)
-# apply instantly, locally
-# (MAYBE) rollback
+# instant local apply, corrected once a rebuttal exists
+# (future) rollback
 # if a collision happens, take them in order of seniority (otherwise, pick random)
 # branching
 # exporting as a file
-
-# TODO WHY THE FUCK DID I PUT THE IMPORT LOGIC IN HERE UGHHHHH
-
-## base class for journal events in barkvr
-class BarkJournalEvent:
-	enum type{ADD_NODE, DELETE_NODE, REMOVE_NODE_FROM_TREE, REPARENT_NODE, CALL_ON_NODE, SET_PROPERTY}
 
 static var current_bark_journal: BarkJournal
 
@@ -303,7 +297,7 @@ func delete_node(target: NodePath, recieved := false, undid := false) -> void:
 	# we do this because a node packed into a scene will only include nodes that have
 	# it set as their owner (and *allegedly* all the nodes that those are owners of
 	# but that didn't work when i created this)
-	take_owner_of_node_and_all_children(target_node, target_node)
+	BarkHelpers.take_owner_of_node_and_all_children(target_node, target_node)
 	# TODO: do something with this packedscene ffs
 	# pack the node into the PackedScene so we can save it
 	deleted_node_as_packed_scene.pack(target_node)
@@ -347,49 +341,35 @@ func set_property(target: NodePath, prop_name: String, value: Variant, recieved 
 				'previous_value': previous_value
 			},true)
 
-## helper method to set a node as the owner of all nested nodes
-func take_owner_of_node_and_all_children(node:Node,new_owner:Node):
-	check_root()
-	# set owner of targeted node
-	node.owner = new_owner
-	# iterate over all children recursively
-	if node.get_child_count() > 0:
-		for child in node.get_children():
-			take_owner_of_node_and_all_children(child, new_owner)
-
-## this is deprecated and will be removed soon. it's need will vanish once the networking overhaul is finished
-func net_propagate_node(node_string: String, parent := ^'', node_name := '', recieved := false) -> void:
-	check_root()
-	if node_name.is_empty():
-		node_name = node_string.sha256_text()
-	var node = BarkHelpers.var_to_node(node_string)
-	if parent:
-		root.get_node(parent).add_child(node)
-		if !recieved:
-			actions.append({
-				'action_name': 'net_propagate_node',
-				'node_string': node_string,
-				'parent': parent
-			})
-	else:
-		root.add_child(node)
-		if !recieved:
-			actions.append({
-				'action_name': 'net_propagate_node',
-				'node_string': node_string
-			})
-
 ## Accept an incoming network message and handle it appropriately.
 func receive(action: Dictionary) -> void:
 	check_root()
 	if "content" in action and !action.content.is_empty():
 		action.asset_to_import = action.content
 	match action.action_name:
+		# sets a property on the target node
 		"set_property":
 			set_property(action.target, action.prop_name, action.value, true)
-		#"import_asset":
-			#BarkvrImportManager.current_instance.import_asset(action.type, action.asset_to_import, action.asset_name, true, action.data)
+		# deletes the target node
 		"delete_node":
 			delete_node(action.target, true)
+		"reparent_node":
+			pass
+		# adds the designated node[s] to the scene
 		"add_node":
 			add_node(action.parent,action.nodes,true)
+		# allows passing of world-relevant inputs for some actions like clicking
+		# Panel3D UI stuff, shooting a weapon in a game world, etc.
+		"interact":
+			pass
+		"run_method":
+			pass
+		"copy_on_tick":
+			pass
+		"connect_signal":
+			pass
+		"disconnect_signal":
+			pass
+
+class BarkvrJournalEvent:
+	pass

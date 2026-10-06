@@ -222,3 +222,12 @@ static func disable_vrm_gltf():
 	GLTFDocument.unregister_gltf_document_extension(vrm_ext_springbone)
 	GLTFDocument.unregister_gltf_document_extension(vrm_ext_vrm)
 	GLTFDocument.unregister_gltf_document_extension(vrm_ext_vrm_animation)
+
+## helper method to set a node as the owner of all nested nodes
+func take_owner_of_node_and_all_children(node:Node,new_owner:Node):
+	# set owner of targeted node
+	node.owner = new_owner
+	# iterate over all children recursively
+	if node.get_child_count() > 0:
+		for child in node.get_children():
+			take_owner_of_node_and_all_children(child, new_owner)

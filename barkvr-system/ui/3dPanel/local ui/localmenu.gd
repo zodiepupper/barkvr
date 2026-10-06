@@ -23,10 +23,19 @@ var viewport: Viewport:
 
 var panel: Panel3D:
 	get:
-		return viewport.get_parent() if viewport.get_parent() is Panel3D else null
+		if viewport:
+			return viewport.get_parent() if viewport.get_parent() is Panel3D else null
+		return null
+
+func _init() -> void:
+	SettingsSingleton.instance.changed.connect(func(name: StringName):
+		if name == "flat_mode_enabled":
+			reveal(true)
+		)
 
 func _ready():
-	hide()
+	if !SettingsSingleton.instance.flat_mode_enabled:
+		hide()
 	Engine.register_singleton("local_menu", self)
 	expanded = tab_container.visible
 	if "viewport_size" in get_viewport().get_parent():
@@ -42,6 +51,7 @@ func _ready():
 		else:
 			panel.colshape.disabled = true
 		)
+	
 
 func _input(event:InputEvent):
 	if resize.button_pressed and event is InputEventMouseMotion and get_viewport().get_parent() is Panel3D:
@@ -56,9 +66,10 @@ func reveal(_force_open:bool=false) -> void:
 	previous_player_state = LocalGlobals.player_state
 
 func _close() -> void:
-	if panel:
-		panel.visible = false
-	visible = false
-	if previous_player_state != -1:
-		LocalGlobals.player_state = previous_player_state
-		previous_player_state = -1
+	if !SettingsSingleton.instance.flat_mode_enabled:
+		if panel:
+			panel.visible = false
+		visible = false
+		if previous_player_state != -1:
+			LocalGlobals.player_state = previous_player_state
+			previous_player_state = -1

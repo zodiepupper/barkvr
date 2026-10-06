@@ -1,5 +1,6 @@
 extends Node
 
+static var current_instance := self
 var editor_refs : Dictionary = {}
 var interface : XRInterface
 var webxr_interface
@@ -63,6 +64,7 @@ var voice_capture :GDOpusEncoder:
 signal playerinit(isvr: bool)
 signal playerreleaseuifocus
 signal clear_gizmos
+signal summon_local_menu
 
 func player_init(isvr:bool):
 	playerinit.emit(isvr)

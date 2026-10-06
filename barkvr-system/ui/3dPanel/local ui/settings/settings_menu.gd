@@ -6,6 +6,7 @@ class_name SettingsMenu
 @onready var laser_smoothing_enabled: Bool_Attribute = %"laser smoothing enabled"
 @onready var laser_smoothing_speed: Number_Attribute = %"laser smoothing speed"
 @onready var desktop_laser_origin: Enum_Attribute = %"laser origin"
+@onready var flat_mode_enabled: Bool_Attribute = %"flat_mode_enabled"
 
 # vr settings
 @onready var passthrough_button: Button = $ScrollContainer/VBoxContainer/VRSettingsMargin/VRSettings/Passthrough/Passthrough/Toggle
@@ -78,6 +79,7 @@ func _ready() -> void:
 		laser_smoothing_enabled.set_data("Laser Smoothing Enabled", settings_singleton, "laser_smoothing")
 		laser_smoothing_speed.set_data("Laser Smoothing Speed", settings_singleton, "laser_smoothing_speed")
 		desktop_laser_origin.set_data("Laser Origin", settings_singleton, "desktop_laser_origin", {"hint_string":"Left Hand, Right Hand, Head"})
+		flat_mode_enabled.set_data("Flat Mode Toggle", settings_singleton, "flat_mode_enabled")
 		vr_notification_test.pressed.connect(test_vr_notification)
 		scaling_slider.value = settings_singleton.viewport_scaling
 		anti_aliasing_dropdown.selected = settings_singleton.anti_aliasing

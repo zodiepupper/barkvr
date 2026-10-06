@@ -7,15 +7,17 @@ const PATH := "user://settings.json"
 
 static var instance : SettingsSingleton
 
+## TODO: rework this to make all of these static variables. this will make everything easier
+
 ## toggles camera passthrough if it is supported by the current platform
 var vr_passthrough: bool = false:
 	set(value):
 		vr_passthrough = value
 		if XRServer.primary_interface and XRServer.primary_interface.is_passthrough_supported():
 			if value:
-				XRServer.primary_interface.start_passthrough()
+				XRServer.primary_interface.environment_blend_mode = XRInterface.XR_ENV_BLEND_MODE_ALPHA_BLEND
 			else:
-				XRServer.primary_interface.stop_passthrough()
+				XRServer.primary_interface.environment_blend_mode = XRInterface.XR_ENV_BLEND_MODE_OPAQUE
 		save_and_emit(&"vr_passthrough")
 
 ## toggles hang tracking in code if supported by the current platform
@@ -135,6 +137,15 @@ var desktop_laser_origin: int = 0:
 		desktop_laser_origin = value
 		save_and_emit(&"desktop_laser_origin")
 
+## allows the user to set the app to only run the 2d scene (useful for using the
+## app as just a matrix or activitypub client without the overhead of a 3d scene)
+## [br][br]NOTE: this still leaves the 3d session in the tree, just doesn't render it
+var flat_mode_enabled: bool = false:
+	set(value):
+		get_viewport().disable_3d = value
+		flat_mode_enabled = value
+		save_and_emit(&"flat_mode_enabled")
+
 ## initialization dictionary which defines the schema of the settings file
 ## exists to reduce ambiguity in how the settings file is organized
 const DEFAULT_VALUES := {
@@ -156,7 +167,8 @@ const DEFAULT_VALUES := {
 	inspector_as_singleton = false,
 	laser_smoothing = false,
 	laser_smoothing_speed = .3,
-	desktop_laser_origin = 0
+	desktop_laser_origin = 0,
+	flat_mode_enabled = false
 }
 
 var inspectors := []:
@@ -174,7 +186,7 @@ func _ready() -> void:
 		reload()
 	else:
 		for key in DEFAULT_VALUES:
-			set(key, DEFAULT_VALUES[key])
+			set_deferred(key, DEFAULT_VALUES[key])
 		save()
 
 func save_and_emit(key: StringName) -> void:

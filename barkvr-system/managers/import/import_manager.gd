@@ -124,7 +124,7 @@ func import_asset( import_file : BarkvrImportFile ) -> void:
 	if import_file.loader:
 		if !import_file.loader.is_inside_tree():
 			root.add_child(import_file.loader)
-			import_file.loader.global_position = import_file.position
+			import_file.loader.set_deferred("global_position",import_file.position)
 	# Generate an asset name if not given.
 	if import_file.asset_name.is_empty():
 		# If we have a string path for the asset import, use that instead.
@@ -175,7 +175,7 @@ func import_asset( import_file : BarkvrImportFile ) -> void:
 			_import_video(import_file)
 		_:
 			if import_file.loader:
-				import_file.loader.done('failed')
+				import_file.loader.call_deferred("failed")
 			#if asset_to_import is PackedByteArray:
 				#asset_to_import = asset_to_import.get_string_from_utf8()
 			_import_text(import_file)
@@ -235,16 +235,16 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 				print('importing uri image')
 				while body.size() < 1:
 					if import_file.iterations > 4:
-						import_file.loader.done()
+						import_file.loader.call_deferred("woh, what happened @_@")
 						return
 					import_file.iterations += 1
 					body = (FileAccess.get_file_as_bytes(req.download_file))
 				_import_image_bytes(uri, body, import_file)
-				import_file.loader.done()
+				import_file.loader.call_deferred("haiii ;3")
 				return
 			elif trimmed == "application/json":
 				print('woof')
-				import_file.loader.done()
+				import_file.loader.call_deferred("thx for playing my game o.o")
 				return
 			elif trimmed.contains("gltf-binary"):
 				content_type = "gltf-binary"
@@ -378,7 +378,7 @@ func _import_glb(import_file : BarkvrImportFile) -> void:
 			return
 	if err != OK:
 		if import_file.loader:
-			import_file.loader.done('failed')
+			import_file.loader.call_deferred("done",'failed')
 		return
 	for mesh in state.meshes:
 			if mesh.mesh.get_surface_lod_count(0) == 0:
@@ -567,7 +567,7 @@ func _import_image_bytes(asset_name: String, content: PackedByteArray, import_fi
 	
 	if err != OK or img.is_empty():
 		if is_instance_valid(import_file.loader):
-			import_file.loader.done('failed')
+			import_file.loader.call_deferred("done",'failed')
 			printerr("image failed to load:\n",import_file)
 		return
 	
@@ -607,7 +607,7 @@ func _import_image_image(import_file: BarkvrImportImage) -> void:
 	check_root()
 	
 	if !import_file.image:
-		import_file.loader.done("_import_image_image: failed to load image")
+		import_file.loader.call_deferred("done", "_import_image_image: failed to load image")
 		import_file.free()
 		return
 	var tex := ImageTexture.create_from_image(import_file.image)
@@ -769,5 +769,5 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,import_file:BarkvrImport
 			print('found skele')
 			quickiksetup.armature_skeleton = skele
 	if import_file.loader:
-		import_file.loader.done()
+		import_file.loader.call_deferred("done")
 	import_file.queue_free()

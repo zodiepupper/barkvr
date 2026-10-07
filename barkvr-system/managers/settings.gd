@@ -93,15 +93,6 @@ var screen_space_anti_aliasing: int = 0:
 		get_window().screen_space_aa = value as Viewport.ScreenSpaceAA
 		save_and_emit(&"screen_space_anti_aliasing")
 
-## sets whether the primary viewport should render 3d or not
-## [br]this is meant to be expanded, soon, into the UI only mode
-## where barkvr acts as a normal GUI based client
-var viewport_disable_3d : bool = false:
-	set(value):
-		viewport_disable_3d = value
-		get_viewport().disable_3d = value
-		save_and_emit(&"viewport_disable_3d")
-
 ## this changes the actual rendering resolution for the primary viewport
 ## can be used to save performance or increase visual quality
 var viewport_scaling: float = 1.0:
@@ -144,7 +135,15 @@ var flat_mode_enabled: bool = false:
 	set(value):
 		get_viewport().disable_3d = value
 		flat_mode_enabled = value
+		OS.low_processor_usage_mode = value
 		save_and_emit(&"flat_mode_enabled")
+
+## forces on the low processor mode (saves performance when the screen doesn't
+## need to update, but costs more if enabled on constantly updating scenes
+var low_processor_usage_mode: bool = false:
+	set(value):
+		flat_mode_enabled = value
+		OS.low_processor_usage_mode = value
 
 ## initialization dictionary which defines the schema of the settings file
 ## exists to reduce ambiguity in how the settings file is organized
@@ -159,7 +158,6 @@ const DEFAULT_VALUES := {
 	send_messages_with_ctrl_enter = false,
 	anti_aliasing = 0.0, # float instead of int because typeof on a number from json is always a float, meaning the typeof comparison in reload would always be false if this were an int
 	screen_space_anti_aliasing = RenderingServer.ViewportScreenSpaceAA.VIEWPORT_SCREEN_SPACE_AA_DISABLED,
-	viewport_disable_3d = false,
 	viewport_scaling = 1.0,
 	interface_scaling_factor = 1.0,
 	vr_notification_size = 40.0,
@@ -168,7 +166,8 @@ const DEFAULT_VALUES := {
 	laser_smoothing = false,
 	laser_smoothing_speed = .3,
 	desktop_laser_origin = 0,
-	flat_mode_enabled = false
+	flat_mode_enabled = false,
+	low_processor_usage_mode = false
 }
 
 var inspectors := []:

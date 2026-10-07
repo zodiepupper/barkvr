@@ -28,7 +28,7 @@ class_name SettingsMenu
 @onready var vr_notification_test: Button = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/VRNotificationTest/VRNotificationTest
 @onready var interface_scaling_factor: Number_Attribute = $ScrollContainer/VBoxContainer/UISettingsMargin/UISettings/InterfaceScalingFactor
 @onready var screen_space_anti_aliasing: Enum_Attribute = $ScrollContainer/VBoxContainer/GraphicsMargin/Graphics/ScreenSpaceAntiAliasing
-@onready var viewport_disable_3d: Bool_Attribute = %ViewportDisable3d
+@onready var low_processor_usage_mode: Bool_Attribute = %low_processor_usage_mode
 
 # chat settings
 @onready var ctrl_enter_button: Button = $ScrollContainer/VBoxContainer/ChatSettingsMargin/ChatSettings/CtrlEnter/Toggle
@@ -74,7 +74,7 @@ func _ready() -> void:
 		vr_notification_offset.set_data("VR Notification Offset", settings_singleton, "vr_notification_offset")
 		interface_scaling_factor.set_data("Interface Scaling Factor", settings_singleton, "interface_scaling_factor")
 		screen_space_anti_aliasing.set_data("Scren Space Anti Aliasing", settings_singleton, "screen_space_anti_aliasing", {"hint_string":"Disabled, FXAA_Enabled"})
-		(viewport_disable_3d as Bool_Attribute).set_data("Disable 3D", settings_singleton, "viewport_disable_3d")
+		(low_processor_usage_mode as Bool_Attribute).set_data("Enable Low Processor Mode", settings_singleton, "low_processor_usage_mode" )
 		inspector_as_singleton.call_deferred("set_data","Inspector As Singleton", settings_singleton, "inspector_as_singleton")
 		laser_smoothing_enabled.set_data("Laser Smoothing Enabled", settings_singleton, "laser_smoothing")
 		laser_smoothing_speed.set_data("Laser Smoothing Speed", settings_singleton, "laser_smoothing_speed")

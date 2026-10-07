@@ -27,13 +27,11 @@ var panel: Panel3D:
 			return viewport.get_parent() if viewport.get_parent() is Panel3D else null
 		return null
 
-func _init() -> void:
+func _ready():
 	SettingsSingleton.instance.changed.connect(func(name: StringName):
 		if name == "flat_mode_enabled":
 			reveal(true)
 		)
-
-func _ready():
 	if !SettingsSingleton.instance.flat_mode_enabled:
 		hide()
 	Engine.register_singleton("local_menu", self)

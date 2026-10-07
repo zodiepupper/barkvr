@@ -142,8 +142,9 @@ var flat_mode_enabled: bool = false:
 ## need to update, but costs more if enabled on constantly updating scenes
 var low_processor_usage_mode: bool = false:
 	set(value):
-		flat_mode_enabled = value
-		OS.low_processor_usage_mode = value
+		low_processor_usage_mode = value
+		if !flat_mode_enabled:
+			OS.low_processor_usage_mode = value
 
 ## initialization dictionary which defines the schema of the settings file
 ## exists to reduce ambiguity in how the settings file is organized

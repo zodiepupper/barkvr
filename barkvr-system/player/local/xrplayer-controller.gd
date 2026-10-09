@@ -392,12 +392,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action("pause"):
 		if event.is_pressed():
+			if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_TYPING and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+			else:
+				contextMenuSummon()
+			
+	if event.is_action("mouse_free"):
+		if event.is_pressed():
 			match LocalGlobals.player_state:
 				LocalGlobals.PLAYER_STATE_TYPING:
-					if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-					else:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+					pass
 				LocalGlobals.PLAYER_STATE_PLAYING:
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

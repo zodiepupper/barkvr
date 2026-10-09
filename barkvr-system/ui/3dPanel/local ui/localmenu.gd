@@ -30,7 +30,7 @@ var panel: Panel3D:
 func _ready():
 	SettingsSingleton.instance.changed.connect(func(name: StringName):
 		if name == "flat_mode_enabled":
-			reveal(true)
+			reveal()
 		)
 	if !SettingsSingleton.instance.flat_mode_enabled:
 		hide()
@@ -42,7 +42,7 @@ func _ready():
 		window_properties.call_deferred("set_target", get_window()), 4)
 	if get_viewport().get_parent() is Panel3D:
 		get_viewport().get_parent().minimum_viewport_size = Vector2i(small_height,small_height)
-	close.pressed.connect(_close)
+	close.pressed.connect(close_menu)
 	panel.visibility_changed.connect(func():
 		if panel.visible:
 			panel.colshape.disabled = false
@@ -57,13 +57,13 @@ func _input(event:InputEvent):
 		big_width = event.position.x if event.position.x > tab_container.custom_minimum_size.x else tab_container.custom_minimum_size.x
 		get_viewport().get_parent().viewport_size = Vector2i(big_width, big_height)
 
-func reveal(_force_open:bool=false) -> void:
+func reveal() -> void:
 	show()
 	if panel:
 		panel.show()
 	previous_player_state = LocalGlobals.player_state
 
-func _close() -> void:
+func close_menu() -> void:
 	if !SettingsSingleton.instance.flat_mode_enabled:
 		if panel:
 			panel.visible = false

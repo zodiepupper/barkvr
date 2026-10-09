@@ -312,7 +312,6 @@ func _on_focus_parent_pressed() -> void:
 
 ## Export the target node's hierarchy to the user's download folder, either as a scene or gltf.
 func _export_node(target_node: Node, to_gltf: bool = false):
-	Thread.set_thread_safety_checks_enabled(false)
 
 	var download_folder_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS) + "/"
 
@@ -320,7 +319,7 @@ func _export_node(target_node: Node, to_gltf: bool = false):
 		snackbar_new.call_deferred("Error during export. Couldn't access download folder.", 3, get_editor_icon(&"StatusError"))
 		return
 
-	Engine.get_singleton(&"event_manager").take_owner_of_node_and_all_children(target_node, target_node)
+	BarkHelpers.take_owner_of_node_and_all_children(target_node, target_node)
 
 	if to_gltf: # Export as GLTF.
 		var gltf_doc := GLTFDocument.new()

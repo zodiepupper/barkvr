@@ -578,6 +578,8 @@ class GrabbedNode3D:
 	## update the transforms of the target node, we do this here so it is self 
 	## managing
 	func move_target(goal_global_position: Vector3, goal_global_rotation: Vector3, delta: float):
+		if !is_instance_valid(target):
+			return
 		if is_smooth_transform:
 			goal_global_position = lerp(last_global_position, goal_global_position-start_target_offset_position, smooth_transform_speed * delta)
 		target.global_position = goal_global_position

@@ -1,4 +1,4 @@
-# renik_spine.gd
+# renik_cpp
 # Copyright 2020 MMMaellon
 # Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).
 # Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.
@@ -38,6 +38,8 @@ class Joint:
 	var root_influence: float = 0
 	var leaf_influence: float = 0
 	var twist_influence: float = 1
+	var chest_twist_influence: float = 1
+	var total_length: float = 0
 
 
 const DEFAULT_THRESHOLD: float = 0.0005
@@ -46,6 +48,9 @@ const DEFAULT_LOOP_LIMIT: int = 16
 var leaf_id: int = -1
 var first_id: int = -1
 var root_id: int = -1
+var chest_id: int = -1
+
+var chest_joint: Joint
 
 @export var leaf_bone: StringName = &"Head":
 	set(x):
@@ -57,15 +62,44 @@ var root_id: int = -1
 		root_bone = x
 		root_id = -1
 
+@export var chest_bone: StringName = &"":
+	set(x):
+		chest_bone = x
+		chest_id = -1
+		skel_dirty = true
+
 var joints: Array[Joint]
 var total_length: float = 0
 var rest_leaf: Transform3D
+var skel_dirty: bool = false
 
 @export var chain_curve_direction: Vector3 = Vector3(0, 15, -15)
-@export_range(0,1,0.001) var root_influence: float = 0.5 # how much the start bone is influenced by the root rotation
-@export_range(0,1,0.001) var leaf_influence: float = 0.5 # how much the end bone is influenced by the goal rotation
-@export_range(0,1,0.001) var twist_influence: float = 1 # How much the chain tries to twist to follow the end when the start is facing a different direction
-@export_range(0,1,0.001) var twist_start: float = 0 # Where along the chain the twisting starts
+@export_range(0,1,0.001) var root_influence: float = 0.5: # how much the start bone is influenced by the root rotation
+	set(value):
+		root_influence = value
+		skel_dirty = true
+@export_range(0,1,0.001) var leaf_influence: float = 0.5: # how much the end bone is influenced by the goal rotation
+	set(value):
+		leaf_influence = value
+		skel_dirty = true
+@export_range(0,1,0.001) var twist_influence: float = 1: # How much the chain tries to twist to follow the end when the start is facing a different direction
+	set(value):
+		twist_influence = value
+		skel_dirty = true
+@export_range(0,1,0.001) var twist_start: float = 0: # Where along the chain the twisting starts
+	set(value):
+		twist_start = value
+		skel_dirty = true
+@export_range(0,1,0.001) var twist_stop: float = 1: # Where along the chain the twisting stops
+	set(value):
+		twist_stop = value
+		skel_dirty = true
+@export_range(0,1,0.001) var target_rotation_influence: float = 1.0:
+	set(value):
+		target_rotation_influence = value
+		skel_dirty = true
+
+@export var chest_target: Node3D
 
 @export var head_target: Node3D
 
@@ -120,13 +154,19 @@ func init_chain(skeleton: Skeleton3D):
 		var bone: int = skeleton.get_bone_parent(leaf_id)
 		# generate the chain of bones
 		var chain: PackedInt32Array
+		var total_lengths: PackedFloat32Array
 		var last_length: float = 0.0
+		var chest_index_from_end: int = -1
+		var chest_to_head_length: float = 0.0
 		rest_leaf = skeleton.get_bone_rest(leaf_id)
 		while bone != root_id:
 			var rest_pose: Transform3D = skeleton.get_bone_rest(bone)
 			rest_leaf = rest_pose * rest_leaf.orthonormalized()
+			total_lengths.push_back(total_length)
 			last_length = rest_pose.origin.length()
 			total_length += last_length
+			if chest_index_from_end < 0:
+				chest_to_head_length += last_length
 			if bone < 0: # invalid chain
 				total_length = 0
 				first_id = -1
@@ -134,6 +174,8 @@ func init_chain(skeleton: Skeleton3D):
 				return
 			chain.push_back(bone)
 			first_id = bone
+			if bone == chest_id:
+				chest_index_from_end = len(chain)
 			bone = skeleton.get_bone_parent(bone)
 
 		total_length -= last_length
@@ -145,32 +187,53 @@ func init_chain(skeleton: Skeleton3D):
 			rest_leaf = Transform3D()
 			return
 
+		var chest_twist_start: float = 1
+		var chest_length: float = total_length - chest_to_head_length
+		if chest_index_from_end != -1 and twist_start < chest_length / total_length:
+			chest_twist_start = twist_start / (chest_length / total_length)
+		if twist_start > chest_length / total_length:
+			chest_index_from_end = -1
 		var totalRotation: Basis
 		var progress: float = 0
 		# flip the order and figure out the relative distances of these joints
 		for i in range(len(chain) - 1, -1, -1):
 			var j: Joint = Joint.new()
 			j.id = chain[i]
+			if j.id == chest_id:
+				chest_joint = j
 			var boneTransform: Transform3D = skeleton.get_bone_rest(j.id)
 			j.rotation = boneTransform.basis.get_rotation_quaternion()
 			j.relative_prev = boneTransform.origin * totalRotation
 			j.prev_distance = j.relative_prev.length()
+			j.total_length = total_lengths[i]
+
 
 			# calc influences
 			progress += j.prev_distance
 			var percentage: float = (progress / total_length)
+			var chest_percentage: float
+			if progress >= chest_length:
+				chest_percentage = 1 + (progress - chest_length) / chest_to_head_length
+			else:
+				chest_percentage = progress / chest_length
 			var effectiveRootInfluence: float = 0
 			var effectiveLeafInfluence: float = 0
 			var effectiveTwistInfluence: float = 0
+			var effectiveChestTwistInfluence: float = 0
 			if root_influence > 0 and percentage < root_influence:
 				effectiveRootInfluence = (percentage - root_influence) / -root_influence
 			if leaf_influence > 0 and percentage > 1 - leaf_influence:
 				effectiveLeafInfluence = (percentage - (1 - leaf_influence)) / leaf_influence
+			var twist_len := clampf(twist_stop - twist_start, 0.01, 1.0)
 			if twist_start < 1 and twist_influence > 0 and percentage > twist_start:
-				effectiveTwistInfluence = (percentage - twist_start) * (twist_influence / (1 - twist_start))
+				effectiveTwistInfluence = (percentage - twist_start) / twist_len * (twist_influence / (1 - twist_start))
+			twist_len = clampf(twist_stop - chest_twist_start, 0.01, 1.0)
+			if chest_twist_start < 1 and twist_influence > 0 and percentage > chest_twist_start:
+				effectiveTwistInfluence = (percentage - chest_twist_start) / twist_len * (twist_influence / (1 - chest_twist_start))
 			j.root_influence = minf(effectiveRootInfluence, 1)
 			j.leaf_influence = minf(effectiveLeafInfluence, 1)
 			j.twist_influence = minf(effectiveTwistInfluence, 1)
+			j.chest_twist_influence = minf(effectiveTwistInfluence, 1)
 
 			if not joints.is_empty():
 				joints[len(joints) - 1].relative_next = -j.relative_prev
@@ -189,7 +252,10 @@ func is_valid() -> bool:
 
 
 func update_bones(skeleton: Skeleton3D) -> void:
-	if skeleton != null and (root_id == -1 or leaf_id == -1 or first_id == -1):
+	if skeleton != null and (skel_dirty or chest_id == -1) and not chest_bone.is_empty():
+		chest_id = skeleton.find_bone(chest_bone)
+	if skeleton != null and (skel_dirty or root_id == -1 or leaf_id == -1 or first_id == -1):
+		skel_dirty = false
 		if root_id == -1 and not root_bone.is_empty():
 			root_id = skeleton.find_bone(root_bone)
 		if leaf_id == -1 and not leaf_bone.is_empty():
@@ -236,30 +302,67 @@ func _process_modification() -> void:
 
 func perform_torso_ik ():
 	var skeleton := get_skeleton()
-	if head_target && head_target.visible && skeleton && is_valid():
-		var skel_inverse: Transform3D = skeleton.global_transform.affine_inverse()
-		var headGlobalTransform: Transform3D = (skel_inverse * head_target.global_transform).orthonormalized()
-		var hipTransform: Transform3D
+	var head_xform: Transform3D
+	if skeleton && is_valid():
 		var hip: int = root_id
 		var head: int = leaf_id
+		var skel_inverse: Transform3D = skeleton.global_transform.affine_inverse()
+
+		var parent_id := skeleton.get_bone_parent(hip)
+		var parent_xform: Transform3D = skeleton.get_bone_global_pose(parent_id)
+
+		if head_target && head_target.visible:
+			head_xform = skel_inverse * head_target.global_transform
+		else:
+			head_xform = skeleton.get_bone_global_pose(head)
+		var headGlobalTransform: Transform3D = head_xform.orthonormalized()
+
+		var chestGlobalTransform: Transform3D = headGlobalTransform
+		var use_chest_twist = false
+		if chest_id != -1:
+			var chest_xform: Transform3D
+			if chest_target && chest_target.visible:
+				chest_xform = skel_inverse * chest_target.global_transform
+				use_chest_twist = true
+			else:
+				chest_xform = skeleton.get_bone_global_pose(chest_id)
+			chestGlobalTransform = chest_xform.orthonormalized()
+
+		var has_hip_tracker := false
+		var hipTransform: Transform3D
 		if hip_target and hip_target.visible:
-			hipTransform = hip_target.global_transform.orthonormalized()
-		#else if hip_placement:
-		#	hip_target = placement.interpolated_hip
-		# FIXME: Why skeleton.get_bone_rest(hip).basis
-		var hipGlobalTransform: Transform3D = (skel_inverse * hipTransform).orthonormalized() * Transform3D(skeleton.get_bone_rest(hip).basis).orthonormalized()
+			hipTransform = skel_inverse * hip_target.global_transform.orthonormalized()
+			has_hip_tracker = true
+		else:
+			hipTransform = skeleton.get_bone_global_pose(hip)
+		var hipGlobalTransform: Transform3D = hipTransform.orthonormalized()
+
+		if root_bone != &"Hips":
+			headGlobalTransform.origin += hipGlobalTransform.origin - parent_xform.origin
+
+
 		var delta: Vector3 = hipGlobalTransform.origin + hipGlobalTransform.basis * (joints[0].relative_prev) - headGlobalTransform.origin
 		var fullLength: float = total_length
 		if delta.length() > fullLength:
-			hipGlobalTransform.origin = (headGlobalTransform.origin + (delta.normalized() * fullLength) - hipGlobalTransform.basis * (joints[0].relative_prev))
+			var head_delta: Vector3 = (delta.normalized() * fullLength) - hipGlobalTransform.basis * (joints[0].relative_prev)
+			var hip_delta: Vector3 = (headGlobalTransform.origin + head_delta) - hipGlobalTransform.origin
+			hipGlobalTransform.origin += hip_delta
+			if chest_id != -1 and chest_joint != null and use_chest_twist:
+				chestGlobalTransform.origin += hip_delta
+
+		if chest_id != -1 and use_chest_twist:
+			var chest_delta: Vector3 = (chestGlobalTransform.origin - skeleton.get_bone_global_pose(chest_id).origin)
+			var chest_delta_clamped: Vector3 = chest_delta.clamp(Vector3.ONE * -0.3, Vector3.ONE * 0.3)
+			headGlobalTransform.origin += chest_delta_clamped
+			pass
 
 		var ik_map: Dictionary = solve_ifabrik(
-				hipGlobalTransform * Transform3D(skeleton.get_bone_rest(hip).basis.orthonormalized().inverse()),
-				headGlobalTransform, DEFAULT_THRESHOLD, DEFAULT_LOOP_LIMIT)
-		#skeleton.set_bone_global_pose_override(
-		#    hip, hipGlobalTransform, 1.0f, true)
-		skeleton.set_bone_pose_rotation(hip, hipGlobalTransform.basis.get_rotation_quaternion())
-		skeleton.set_bone_pose_position(hip, hipGlobalTransform.origin)
+				hipGlobalTransform, headGlobalTransform, chestGlobalTransform,
+				use_chest_twist, DEFAULT_THRESHOLD, DEFAULT_LOOP_LIMIT)
+		if has_hip_tracker:
+			skeleton.set_bone_pose_rotation(hip, (parent_xform.basis.inverse() * hipGlobalTransform.basis).get_rotation_quaternion())
+			if root_bone == &"Hips" and has_hip_tracker:
+				skeleton.set_bone_pose_position(hip, hipGlobalTransform.origin)
 
 		apply_ik_map_quat(ik_map, hipGlobalTransform, bone_id_order_spine())
 
@@ -271,9 +374,10 @@ func perform_torso_ik ():
 			neckQuaternion = skeleton.get_bone_pose_rotation(parent_bone) * neckQuaternion
 			parent_bone = skeleton.get_bone_parent(parent_bone)
 
-		#skeleton.set_bone_global_pose_override(
-		#    head, headGlobalTransform, 1.0f, true)
-		skeleton.set_bone_pose_rotation(head, neckQuaternion.inverse() * headGlobalTransform.basis.get_rotation_quaternion())
+		var cur_head_rotation: Quaternion = skeleton.get_bone_pose_rotation(head)
+		skeleton.set_bone_pose_rotation(head, cur_head_rotation.slerp(
+			neckQuaternion.inverse() * headGlobalTransform.basis.get_rotation_quaternion(),
+			target_rotation_influence))
 
 		return true
 
@@ -292,7 +396,7 @@ func bone_id_order_spine () -> PackedInt32Array:
 	return ret
 
 
-func solve_ifabrik(root: Transform3D, target: Transform3D, threshold: float, loopLimit: int) -> Dictionary:
+func solve_ifabrik(root: Transform3D, target: Transform3D, twistTarget: Transform3D, use_chest_twist: bool, threshold: float, loopLimit: int) -> Dictionary:
 	var map: Dictionary
 	if is_valid(): # if the chain is valid there's at least one joint in the chain and there's one bone between it and the root
 		var joints: Array[Joint] = joints # just so I don't have to call it all the time
@@ -300,6 +404,7 @@ func solve_ifabrik(root: Transform3D, target: Transform3D, threshold: float, loo
 		# how the change in the target would affect the chain if the chain was parented to the target instead of the root
 		var targetDelta: Transform3D = target * rest_leaf.affine_inverse()
 		var trueRelativeTarget: Transform3D = trueRoot.affine_inverse() * target
+		var trueRelativeTwistTarget: Transform3D = trueRoot.affine_inverse() * twistTarget
 		var alignToTarget: Quaternion = renik_helper.align_vectors(
 				rest_leaf.origin - joints[0].relative_prev,
 				trueRelativeTarget.origin)
@@ -358,6 +463,7 @@ func solve_ifabrik(root: Transform3D, target: Transform3D, threshold: float, loo
 		# We align the leaf's y axis with the rest_leaf's y-axis and see how far
 		# off the x-axes are to calculate the twist.
 		trueRelativeTarget = trueRelativeTarget.orthonormalized()
+		var relativeTargetQuat := trueRelativeTwistTarget.basis.get_rotation_quaternion()
 		var leafX: Vector3 = renik_helper.align_vectors(
 						trueRelativeTarget.basis * (Vector3(0, 1, 0)),
 						rest_leaf.basis * (Vector3(0, 1, 0))
@@ -368,7 +474,9 @@ func solve_ifabrik(root: Transform3D, target: Transform3D, threshold: float, loo
 			maxTwist *= -1
 
 		# Convert everything to quaternions and store it in the map
+		var rootRot: Quaternion = root.basis.get_rotation_quaternion()
 		var parentRot: Quaternion = root.basis.get_rotation_quaternion()
+		var parentRot2: Quaternion = Quaternion.IDENTITY
 		var parentPos: Vector3 = trueRoot.origin
 		var prevTwist: Quaternion
 		globalJointPoints.push_back(target.origin)
@@ -381,11 +489,27 @@ func solve_ifabrik(root: Transform3D, target: Transform3D, threshold: float, loo
 					Transform3D(parentRot * joints[joint_i].rotation, parentPos)
 							.affine_inverse()
 							 * (globalJointPoints[joint_i])) # offset by one because joints has one extra element
-			var twist: Quaternion = Quaternion(Vector3(0, 1, 0), maxTwist * joints[joint_i].twist_influence)
-			pose = prevTwist.inverse() * joints[joint_i].rotation * pose * twist
-			prevTwist = twist
+
+			pose = Quaternion(Vector3(0, 1, 0), Transform3D(parentRot * joints[joint_i].rotation, parentPos)
+							.affine_inverse()
+							 * (globalJointPoints[joint_i]))
+
+			var new_rotation: Quaternion = pose
+			
+			# renik_spine.gd:497 @ solve_ifabrik(): The quaternion (-0.0, 0.021804, 0.0, 1.000638) must be normalized.
+			var old_rotation: Quaternion = (prevTwist.normalized().inverse() * new_rotation).normalized() # skeleton.get_bone_pose_rotation(joint.x)
+			var lerp_fraction: float = joints[joint_i].chest_twist_influence if use_chest_twist else joints[joint_i].twist_influence # float(joint_i + 1) / len(joints)
+			var child_target_quat := parentRot2.inverse() * relativeTargetQuat
+			var child_twist_quat := renik_helper.get_twist(child_target_quat.normalized(), Vector3(0,1,0)) # Quaternion(child_target_quat * Vector3(0,1,0), 0).inverse() * child_target_quat
+			var swing_quat := renik_helper.get_swing(old_rotation.normalized(), Vector3(0,1,0))
+			var twist_quat := swing_quat * child_twist_quat.normalized()
+			var interpolated: Quaternion = pose.normalized().slerp(twist_quat.normalized(), lerp_fraction)
+			pose = interpolated # twist_quat # interpolated
+			prevTwist = interpolated.inverse() * old_rotation
+
 			map[joints[joint_i].id] = pose
 			parentRot = parentRot * pose
+			parentRot2 = parentRot2 * pose
 			parentPos = globalJointPoints[joint_i]
 
 	return map

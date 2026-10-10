@@ -31,26 +31,30 @@ const renik_gait_class = preload("./renik_placement_gait.gd")
 
 # -2 is falling, -1 is transitioning to standing, 0 is stand state, 1
 # is transitioning to stepping, 2 is stepping
-const FALLING: int = 0
-const STANDING_TRANSITION: int = -1
-const STANDING: int = 1
-const STEPPING_TRANSITION: int = -2
-const STEPPING: int = 2
-const BACKSTEPPING_TRANSITION: int = -3
-const BACKSTEPPING: int = 3
-const LAYING_TRANSITION: int = -4
-const LAYING: int = 4
-const STRAFING_TRANSITION: int = -5
-const STRAFING: int = 5
-const OTHER_TRANSITION: int = -6
-const OTHER: int = 6
+enum WalkState {
+	FALLING = 0,
+	STANDING_TRANSITION = -1,
+	STANDING = 1,
+	STEPPING_TRANSITION = -2,
+	STEPPING = 2,
+	BACKSTEPPING_TRANSITION = -3,
+	BACKSTEPPING = 3,
+	LAYING_TRANSITION = -4,
+	LAYING = 4,
+	STRAFING_TRANSITION = -5,
+	STRAFING = 5,
+	OTHER_TRANSITION = -6,
+	OTHER = 6,
+}
 
-const LOOP_GROUND_IN: int = 0
-const LOOP_LIFT: int = 1
-const LOOP_APEX_IN: int = 2
-const LOOP_APEX_OUT: int = 3
-const LOOP_DROP: int = 4
-const LOOP_GROUND_OUT: int = 5
+enum LoopState {
+	LOOP_GROUND_IN = 0,
+	LOOP_LIFT = 1,
+	LOOP_APEX_IN = 2,
+	LOOP_APEX_OUT = 3,
+	LOOP_DROP = 4,
+	LOOP_GROUND_OUT = 5,
+}
 
 @export var live_preview: bool
 
@@ -125,7 +129,7 @@ func set_default_gaits():
 @export var dangle_ratio: float = 0.9
 @export var dangle_stiffness: float = 3
 @export var dangle_angle: float = PI / 8
-@export var dangle_follow_head: float = 0.5
+@export var dangle_follow_head: float = 0.1
 # distance between hips and head that we'll call the center of balance. 0 is at head
 @export var center_of_balance_position: float = 0.5
 @export var step_pace: float = 0.015
@@ -136,6 +140,7 @@ func set_default_gaits():
 @export var min_transition_speed: float = 0.04
 @export var rotation_threshold: float = PI / 4.0
 @export var balance_threshold: float = 0.03
+@export var laying_threshold: float = 0.5
 
 # Everything scales logarithmically
 @export var strafe_angle_limit: float = cos(deg_to_rad(30.0))
@@ -174,21 +179,26 @@ func _ready():
 	_is_ready = true
 	update_skeleton()
 	set_default_gaits()
-	head_target_spatial = armature_head_target
-	hip_target_spatial = armature_hip_target
-	foot_left_target_spatial = armature_left_foot_target
-	foot_right_target_spatial = armature_right_foot_target
-	set_process_internal(true)
+	head_target_spatial = get_node_or_null(armature_head_target) as Node3D
+	hip_target_spatial = get_node_or_null(armature_hip_target) as Node3D
+	foot_left_target_spatial = get_node_or_null(armature_left_foot_target) as Node3D
+	foot_right_target_spatial = get_node_or_null(armature_right_foot_target) as Node3D
+	if (self as Node3D) is not SkeletonModifier3D:
+		set_process_internal(true)
 	set_physics_process_internal(true)
 
 func update_skeleton():
 	if _is_ready:
-		skeleton = (armature_skeleton_path) as Skeleton3D
+		skeleton = get_node_or_null(armature_skeleton_path) as Skeleton3D
 	if skeleton != null:
+		head_id = skeleton.find_bone(armature_head)
 		left_foot_id = skeleton.find_bone(armature_left_foot)
 		right_foot_id = skeleton.find_bone(armature_right_foot)
 		calculate_leg_lengths()
 		calculate_hip_offset()
+
+func _process_modification():
+	interpolate_transforms(Engine.get_physics_interpolation_fraction())
 
 
 # Calculated using bones.
@@ -205,10 +215,11 @@ func update_skeleton():
 @export_group("Armature", "armature_")
 
 var skeleton: Skeleton3D
+var head_id: int
 var left_foot_id: int
 var right_foot_id: int
 
-@export var armature_skeleton_path: Skeleton3D:
+@export_node_path("Skeleton3D") var armature_skeleton_path: NodePath:
 	set(value):
 		armature_skeleton_path = value
 		update_skeleton()
@@ -232,53 +243,55 @@ var right_foot_id: int
 @export_group("Targets")
 
 var head_target_spatial: Node3D
-@export var armature_head_target: Node3D:
+@export_node_path("Node3D") var armature_head_target: NodePath:
 	set(value):
 		armature_head_target = value
 		if _is_ready:
-			head_target_spatial = (armature_head_target)
+			head_target_spatial = get_node_or_null(armature_head_target) as Node3D
 
 var hip_target_spatial: Node3D
-@export var armature_hip_target: Node3D:
+@export_node_path("Node3D") var armature_hip_target: NodePath:
 	set(value):
 		armature_hip_target = value
 		if _is_ready:
-			hip_target_spatial = (armature_hip_target)
+			hip_target_spatial = get_node_or_null(armature_hip_target) as Node3D
 
 var foot_left_target_spatial: Node3D
-@export var armature_left_foot_target: Node3D:
+@export_node_path("Node3D") var armature_left_foot_target: NodePath:
 	set(value):
 		armature_left_foot_target = value
 		if _is_ready:
-			foot_left_target_spatial = (armature_left_foot_target)
+			foot_left_target_spatial = get_node_or_null(armature_left_foot_target) as Node3D
 
 var foot_right_target_spatial: Node3D
-@export var armature_right_foot_target: Node3D:
+@export_node_path("Node3D") var armature_right_foot_target: NodePath:
 	set(value):
 		armature_right_foot_target = value
 		if _is_ready:
-			foot_right_target_spatial = (armature_right_foot_target)
+			foot_right_target_spatial = get_node_or_null(armature_right_foot_target) as Node3D
 
+@export_group("Internal State")
 
 const foot_basis_offset: Basis = Basis(Vector3(-1, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0))
+const foot_quat_offset: Quaternion = Quaternion(foot_basis_offset)
 
-var fall_override: bool = false
-var prone_override: bool = false
-var walk_state: int = 0
-var walk_transition_progress: float = 0
-var step_progress: float = 0
-var prevHead: Vector3
-var collision_mask: int = 1 # the first bit is on but all others are off
-var collide_with_areas: bool = false
-var collide_with_bodies: bool = true
+@export var fall_override: bool = false
+@export var prone_override: bool = false
+@export var walk_state: WalkState = 0
+@export var walk_transition_progress: float = 0
+@export var step_progress: float = 0
+@export var prevHead: Vector3
+@export_flags_3d_physics var collision_mask: int = 1 # the first bit is on but all others are off
+@export var collide_with_areas: bool = false
+@export var collide_with_bodies: bool = true
 
 # Standing
 var left_stand: Transform3D
 var right_stand: Transform3D
 var left_stand_local: Transform3D # local to ground
 var right_stand_local: Transform3D # local to ground
-var left_ground: Node3D = null
-var right_ground: Node3D = null
+@export var left_ground: Node3D = null
+@export var right_ground: Node3D = null
 var prev_left_ground: Node3D = null
 var prev_right_ground: Node3D = null
 
@@ -290,9 +303,9 @@ var right_grounded_stop: Vector3
 const standing_transition_duration: float = 0.25
 const stepping_transition_duration: float = 0.2
 const laying_transition_duration: float = 0.25
-var left_loop_state: int = 0
-var right_loop_state: int = 0
-var loop_scaling: float = 0
+@export var left_loop_state: LoopState = 0
+@export var right_loop_state: LoopState = 0
+@export var loop_scaling: float = 0
 
 
 func save_previous_transforms () -> void:
@@ -325,15 +338,21 @@ func update_placement (delta: float) -> void:
 	target_foot_is_valid = false
 	target_hip_is_valid = false
 
+	var head_xform: Transform3D
+	if head_target_spatial != null and head_target_spatial.is_inside_tree():
+		head_xform = head_target_spatial.global_transform
+	else:
+		head_xform = skeleton.global_transform * skeleton.get_bone_global_pose(head_id)
+
 	# Based on head position and delta time, we calc our speed and distance from
 	# the ground and place the feet accordingly
-	if ((enable_left_foot_placement or enable_right_foot_placement) && head_target_spatial && head_target_spatial.is_inside_tree()):
+	if enable_left_foot_placement or enable_right_foot_placement:
 		target_foot_is_valid = true
-		foot_place(delta, head_target_spatial.global_transform,
-				head_target_spatial.get_world_3d(), false)
+		foot_place(delta, head_xform,
+				skeleton.get_world_3d(), false)
 		
 
-	if enable_hip_placement && head_target_spatial:
+	if enable_hip_placement:
 		target_hip_is_valid = true
 		# calc twist from hands here
 		var twist: float = 0
@@ -349,8 +368,9 @@ func update_placement (delta: float) -> void:
 				target_right_xform = foot_right_target_spatial.global_transform
 			else:
 				target_right_xform = skeleton.get_bone_global_pose(right_foot_id)
-		hip_place(delta, head_target_spatial.global_transform,
+		hip_place(delta, head_xform,
 				target_left_xform, target_right_xform, twist, false)
+
 
 
 
@@ -358,8 +378,9 @@ func update_placement (delta: float) -> void:
 func hip_place(p_delta: float, p_head: Transform3D,
 		p_left_foot: Transform3D, p_right_foot: Transform3D,
 		p_twist: float, p_instant: bool) -> void:
-	var left_middle: Vector3 = (p_left_foot.translated_local(Vector3(0, 0, left_foot_length / 2))).origin
-	var right_middle: Vector3 = (p_right_foot.translated_local(Vector3(0, 0, right_foot_length / 2))).origin
+
+	var left_middle: Vector3 = (p_left_foot.translated_local(p_head.basis.get_scale() * Vector3(0, 0, left_foot_length / 2))).origin
+	var right_middle: Vector3 = (p_right_foot.translated_local(p_head.basis.get_scale() * Vector3(0, 0, right_foot_length / 2))).origin
 	var left_distance: float = left_middle.distance_squared_to(p_head.origin)
 	var right_distance: float = right_middle.distance_squared_to(p_head.origin)
 	var foot_median: Vector3 = left_middle.lerp(right_middle, 0.5)
@@ -373,11 +394,11 @@ func hip_place(p_delta: float, p_head: Transform3D,
 	var hip_y: Vector3 = -foot_direction.normalized()
 	var hip_z: Vector3 = renik_helper.vector_rejection(hip_forward.normalized(), hip_y).normalized()
 	var hip_x: Vector3 = hip_y.cross(hip_z).normalized()
-	target_hip.basis = Basis(hip_x, hip_y, hip_z).orthonormalized()
+	target_hip.basis = Basis(hip_x, hip_y, hip_z).orthonormalized() # * Basis.from_scale(p_head.basis.get_scale())
 
-	var crouch_distance: float = p_head.origin.distance_to(foot) * crouch_ratio
-	var extra_hip_distance: float = hip_offset.length() - crouch_distance
-	var follow_hip_direction: Vector3 = (p_head.basis * (hip_offset)) * target_hip.basis
+	var crouch_distance: float = p_head.origin.distance_to(foot) * crouch_ratio # * scalar
+	var extra_hip_distance: float = (p_head.basis.get_scale() * hip_offset).length() - crouch_distance
+	var follow_hip_direction: Vector3 = (p_head.basis.orthonormalized() * (hip_offset)) * target_hip.basis
 	var effective_hip_direction: Vector3 = hip_offset.lerp(follow_hip_direction, hip_follow_head_influence).normalized()
 	target_hip.origin = p_head.origin
 	target_hip = target_hip.translated_local(crouch_distance * effective_hip_direction.normalized())
@@ -420,10 +441,10 @@ func foot_place(p_delta: float, p_head: Transform3D, p_world_3d: World3D, p_inst
 	var startOffset: float = ((spine_length) * -center_of_balance_position) / sqrt(2)
 	var leftStart: Vector3 = p_head.translated_local(Vector3(0, startOffset, startOffset) + left_hip_offset).origin
 	var rightStart: Vector3 = p_head.translated_local(Vector3(0, startOffset, startOffset) + right_hip_offset).origin
-	var leftStop: Vector3 = p_head.origin + Vector3(0,
+	var leftStop: Vector3 = p_head.origin + p_head.basis.get_scale() * Vector3(0,
 					(-spine_length - left_leg_length - floor_offset) * (1 + raycast_allowance) + left_hip_offset.y,
 					0) + p_head.basis * (left_hip_offset)
-	var rightStop: Vector3 = p_head.origin + Vector3(0,
+	var rightStop: Vector3 = p_head.origin + p_head.basis.get_scale() * Vector3(0,
 					(-spine_length - right_leg_length - floor_offset) * (1 + raycast_allowance) + right_hip_offset.y,
 					0) + p_head.basis * (right_hip_offset)
 
@@ -439,14 +460,14 @@ func foot_place(p_delta: float, p_head: Transform3D, p_world_3d: World3D, p_inst
 	ray_query_parameters.to = rightStop
 	var right_raycast_dict: Dictionary = dss.intersect_ray(ray_query_parameters)
 	var right_raycast := RaycastResult.new(right_raycast_dict)
-	ray_query_parameters.from = p_head.origin
-	ray_query_parameters.to = p_head.origin - Vector3(0, spine_length + floor_offset, 0)
+	ray_query_parameters.from = p_head.origin + p_head.basis.get_scale() * Vector3(0, spine_length * (1.0 + laying_threshold) / 2, 0)
+	ray_query_parameters.to = p_head.origin - p_head.basis.get_scale() * Vector3(0, spine_length * (1.0 + laying_threshold), 0)
 	var laying_raycast_dict: Dictionary = dss.intersect_ray(ray_query_parameters)
 	var laying_raycast := RaycastResult.new(laying_raycast_dict)
 
-	var left_offset: Vector3 = (leftStart - leftStop).normalized() * floor_offset * left_leg_length
-	var right_offset: Vector3 = (rightStart - rightStop).normalized() * floor_offset * right_leg_length
-	var laying_offset: Vector3 = Vector3(0, floor_offset * (left_leg_length + right_leg_length) / 2, 0)
+	var left_offset: Vector3 = p_head.basis.get_scale() * (leftStart - leftStop).normalized() * floor_offset * left_leg_length
+	var right_offset: Vector3 = p_head.basis.get_scale() * (rightStart - rightStop).normalized() * floor_offset * right_leg_length
+	var laying_offset: Vector3 = p_head.basis.get_scale() * Vector3(0, floor_offset * (left_leg_length + right_leg_length) * laying_threshold, 0)
 	left_raycast.position += left_offset
 	right_raycast.position += right_offset
 	laying_raycast.position += laying_offset
@@ -462,11 +483,6 @@ func dangle_foot(p_head: Transform3D, p_distance: float,
 	var dangle_basis: Basis = p_head.basis * upright_head
 	foot.basis = dangle_basis * Basis(Vector3(1, 0, 0), dangle_angle)
 	foot.origin = p_head.origin + dangle_basis * (-dangle_vector)
-	#foot.origin += Vector3(
-		#sin(Time.get_ticks_msec()/1000.0)*.05,
-		#0,
-		#cos(Time.get_ticks_msec()/1000.0)*.1
-		#)
 	return foot
 
 
@@ -514,22 +530,22 @@ func get_loop_state(p_loop_state_scaling: float, p_loop_progress: float, p_gait:
 	var progress_time: float = p_loop_progress * total_time
 
 	if progress_time < ground_time:
-		state = LOOP_GROUND_IN
+		state = LoopState.LOOP_GROUND_IN
 		r_loop_state_progress = (progress_time) / ground_time
 	elif progress_time < ground_time + lift_time:
-		state = LOOP_LIFT
+		state = LoopState.LOOP_LIFT
 		r_loop_state_progress = (progress_time - ground_time) / lift_time
 	elif progress_time < ground_time + lift_time + apex_in_time:
-		state = LOOP_APEX_IN
+		state = LoopState.LOOP_APEX_IN
 		r_loop_state_progress = (progress_time - ground_time - lift_time) / apex_in_time
 	elif (progress_time < ground_time + lift_time + apex_in_time + apex_out_time):
-		state = LOOP_APEX_OUT
+		state = LoopState.LOOP_APEX_OUT
 		r_loop_state_progress = (progress_time - ground_time - lift_time - apex_in_time) / apex_out_time
 	elif (progress_time < ground_time + lift_time + apex_in_time + apex_out_time + drop_time):
-		state = LOOP_DROP
+		state = LoopState.LOOP_DROP
 		r_loop_state_progress = (progress_time - ground_time - lift_time - apex_in_time - apex_out_time) / drop_time
 	else:
-		state = LOOP_GROUND_OUT
+		state = LoopState.LOOP_GROUND_OUT
 		r_loop_state_progress = (progress_time - ground_time - lift_time - apex_in_time - apex_out_time - drop_time) / ground_time
 
 	return Vector2(state, r_loop_state_progress)
@@ -540,8 +556,9 @@ class LoopFootParams:
 	var r_stand: Transform3D
 	var r_stand_local: Transform3D
 	var p_prev_ground: Node3D
-	var r_loop_state: int
+	var r_loop_state: LoopState
 	var r_grounded_stop: Vector3
+	var p_step_pace: float
 
 
 func loop_foot(params: LoopFootParams,
@@ -557,14 +574,17 @@ func loop_foot(params: LoopFootParams,
 		upright_foot = Quaternion()
 
 	var ground_velocity: Vector3 = renik_helper.vector_rejection(p_velocity, p_ground_normal)
-	if ground_velocity.length() > max_threshold * step_pace:
-		ground_velocity = ground_velocity.normalized() * max_threshold * step_pace
+	if ground_velocity.length() > max_threshold * params.p_step_pace:
+		ground_velocity = ground_velocity.normalized() * max_threshold * params.p_step_pace
 
 	var loop_state_progress: float = 0
 	var state_and_progress: Vector2 = get_loop_state(p_loop_scaling, p_step_progress, p_gait)
 	params.r_loop_state = int(state_and_progress.x)
 	loop_state_progress = state_and_progress.y
 	var head_distance: float = p_head.origin.distance_to(p_ground_pos)
+	var scalar: float = (Vector3.ONE * p_head.basis.get_scale()).length() / sqrt(3)
+	p_leg_length *= scalar
+
 	var ease_scaling: float = p_loop_scaling * p_loop_scaling * p_loop_scaling * p_loop_scaling # ease the growth a little
 	var vertical_scaling: float = head_distance * ease_scaling
 	var horizontal_scaling: float = p_leg_length * ease_scaling
@@ -593,7 +613,7 @@ func loop_foot(params: LoopFootParams,
 							p_gait.drop_horizontal_scalar)
 
 	match params.r_loop_state:
-		LOOP_GROUND_IN, LOOP_GROUND_OUT:
+		LoopState.LOOP_GROUND_IN, LoopState.LOOP_GROUND_OUT:
 			# stick to where it landed
 			if p_ground != null && p_ground == params.p_prev_ground:
 				params.r_stand = stand_foot(grounded_foot, params.r_stand_local, p_ground)
@@ -618,44 +638,44 @@ func loop_foot(params: LoopFootParams,
 			params.r_step *= lean_offset
 			params.r_grounded_stop = params.r_step.origin
 
-		LOOP_LIFT:
+		LoopState.LOOP_LIFT:
 			var step_distance: float = params.r_step.origin.distance_to(p_ground_pos) / p_leg_length
 			var lean_offset: Transform3D
 			var tip_toe_angle: float = (step_distance * p_gait.tip_toe_distance_scalar +
 					horizontal_scaling * p_gait.tip_toe_speed_scalar)
 			tip_toe_angle = p_gait.tip_toe_angle_max if tip_toe_angle > p_gait.tip_toe_angle_max else tip_toe_angle
 
-			params.r_step.basis = (grounded_foot.basis * Basis(Vector3(1, 0, 0), tip_toe_angle)).slerp(
-				lifted_foot.basis, loop_state_progress)
+			params.r_step.basis = Basis((grounded_foot.basis * Basis(Vector3(1, 0, 0), tip_toe_angle)).get_rotation_quaternion().slerp(
+				lifted_foot.basis.get_rotation_quaternion(), loop_state_progress))
 			params.r_step.origin = params.r_grounded_stop.cubic_interpolate(
 					lifted_foot.origin,
 					params.r_grounded_stop - ground_velocity * horizontal_scaling,
 					lifted_foot.origin + p_ground_normal * vertical_scaling,
 					loop_state_progress)
 
-		LOOP_APEX_IN:
-			params.r_step.basis = lifted_foot.basis.slerp(apex_foot.basis, loop_state_progress)
+		LoopState.LOOP_APEX_IN:
+			params.r_step.basis = Basis(lifted_foot.basis.get_rotation_quaternion().slerp(apex_foot.basis.get_rotation_quaternion(), loop_state_progress))
 			params.r_step.origin = lifted_foot.origin.cubic_interpolate(
 					apex_foot.origin, lifted_foot.origin - p_ground_normal * vertical_scaling,
 					apex_foot.origin + ground_velocity * p_leg_length, loop_state_progress)
 
-		LOOP_APEX_OUT:
-			params.r_step.basis = apex_foot.basis.slerp(drop_foot.basis, loop_state_progress)
+		LoopState.LOOP_APEX_OUT:
+			params.r_step.basis = Basis(apex_foot.basis.get_rotation_quaternion().slerp(drop_foot.basis.get_rotation_quaternion(), loop_state_progress))
 			params.r_step.origin = apex_foot.origin.cubic_interpolate(
 					drop_foot.origin,
 					apex_foot.origin - ground_velocity * horizontal_scaling,
 					drop_foot.origin - p_ground_normal * vertical_scaling,
 					loop_state_progress)
 
-		LOOP_DROP:
-			params.r_step.basis = drop_foot.basis.slerp(grounded_foot.basis, loop_state_progress)
+		LoopState.LOOP_DROP:
+			params.r_step.basis = Basis(drop_foot.basis.get_rotation_quaternion().slerp(grounded_foot.basis.get_rotation_quaternion(), loop_state_progress))
 			params.r_step.origin = drop_foot.origin.cubic_interpolate(
 					grounded_foot.origin,
 					drop_foot.origin + p_ground_normal * vertical_scaling,
 					grounded_foot.origin - ground_velocity * horizontal_scaling,
 					loop_state_progress)
 
-	if params.r_loop_state != LOOP_GROUND_IN && params.r_loop_state != LOOP_GROUND_OUT:
+	if params.r_loop_state != LoopState.LOOP_GROUND_IN && params.r_loop_state != LoopState.LOOP_GROUND_OUT:
 		# update standing positions to ensure a smooth transition to standing
 		params.r_stand.origin = p_ground_pos
 		params.r_stand.basis = grounded_foot.basis
@@ -664,7 +684,7 @@ func loop_foot(params: LoopFootParams,
 			ground_global.basis = ground_global.basis.orthonormalized()
 			params.r_stand_local = ground_global.affine_inverse() * params.r_stand
 
-		if walk_state != LOOP_LIFT:
+		if walk_state != LoopState.LOOP_LIFT:
 			params.r_grounded_stop = params.r_step.origin
 		else:
 			var contact_easing: float = p_gait.contact_point_ease + p_gait.contact_point_ease_scalar * p_loop_scaling
@@ -678,7 +698,7 @@ func loop(p_head: Transform3D, p_velocity: Vector3,
 		p_left_ground_pos: Vector3, p_left_normal: Vector3,
 		p_right_ground_pos: Vector3, p_right_normal: Vector3,
 		p_left_grounded: bool, p_right_grounded: bool, p_gait: renik_gait_class) -> void:
-	var stride_speed: float = step_pace * p_velocity.length() / ((left_leg_length + right_leg_length) / 2)
+	var stride_speed: float = loop_foot_params.p_step_pace * p_velocity.length() / ((left_leg_length + right_leg_length) / 2)
 	stride_speed = log(1 + stride_speed)
 	stride_speed = clampf(stride_speed, min_threshold, max_threshold)
 	var new_loop_scaling: float = (stride_speed - min_threshold) / (max_threshold - min_threshold) if max_threshold > min_threshold else 0.0
@@ -741,22 +761,22 @@ func step_direction(p_forward: Vector3, p_side: Vector3,
 	var normalized_forward: Vector3 = p_forward.normalized()
 	var normalized_side: Vector3 = p_side.normalized()
 	if absf(normalized_velocity.dot(normalized_side)) > strafe_angle_limit:
-		if walk_state != STRAFING && walk_state != STRAFING_TRANSITION:
-			walk_state = STRAFING_TRANSITION
+		if walk_state !=  WalkState.STRAFING && walk_state != WalkState.STRAFING_TRANSITION:
+			walk_state =  WalkState.STRAFING_TRANSITION
 			walk_transition_progress = stepping_transition_duration # In units of loop progression
 			initialize_loop(normalized_velocity, p_left_ground, p_right_ground,
 					p_left_grounded, p_right_grounded)
 
 	elif normalized_velocity.dot(normalized_forward) < 0:
-		if walk_state != BACKSTEPPING && walk_state != BACKSTEPPING_TRANSITION:
-			walk_state = BACKSTEPPING_TRANSITION
+		if walk_state != WalkState.BACKSTEPPING && walk_state != WalkState.BACKSTEPPING_TRANSITION:
+			walk_state = WalkState.BACKSTEPPING_TRANSITION
 			walk_transition_progress = stepping_transition_duration # In units of loop progression
 			initialize_loop(normalized_velocity, p_left_ground, p_right_ground,
 					p_left_grounded, p_right_grounded)
 
 	else:
-		if walk_state != STEPPING && walk_state != STEPPING_TRANSITION:
-			walk_state = STEPPING_TRANSITION
+		if walk_state != WalkState.STEPPING && walk_state != WalkState.STEPPING_TRANSITION:
+			walk_state = WalkState.STEPPING_TRANSITION
 			walk_transition_progress = stepping_transition_duration # In units of loop progression
 			initialize_loop(normalized_velocity, p_left_ground, p_right_ground,
 					p_left_grounded, p_right_grounded)
@@ -826,7 +846,9 @@ func foot_place_raycasts(
 
 	left_ground = p_left_raycast.collider as Node3D
 	right_ground = p_right_raycast.collider as Node3D
-	var velocity: Vector3 = (p_head.origin - prevHead) / p_delta
+	var velocity: Vector3 = (p_head.origin - prevHead) / max(1e-6, p_delta)
+	prevHead = p_head.origin
+
 	var left_velocity: Vector3
 	var right_velocity: Vector3
 	if p_left_raycast.collider != null:
@@ -839,17 +861,30 @@ func foot_place_raycasts(
 	else:
 		right_velocity = renik_helper.vector_rejection(velocity, Vector3(0, 1, 0))
 
+	velocity /= p_head.basis.get_scale()
+	left_velocity /= p_head.basis.get_scale()
+	right_velocity /= p_head.basis.get_scale()
 
-	var effective_min_threshold: float = min_threshold * ((left_leg_length + right_leg_length) / 2) / step_pace
-	if (!p_left_raycast.collider && !p_right_raycast.collider && !p_laying_raycast.collider) || fall_override:
+	var scalar: float = p_head.basis.get_scale().length() / sqrt(3)
+	var p_step_pace: float = step_pace * scalar
+	loop_foot_params.p_step_pace = p_step_pace
+
+	var effective_min_threshold: float = min_threshold * ((left_leg_length + right_leg_length) / 2) / p_step_pace
+	if (!p_left_raycast.collider && !p_right_raycast.collider && !p_laying_raycast.collider && !prone_override) || fall_override:
 		# If none of the raycasts hit anything then there isn't any ground to stand on
-		walk_state = FALLING
+		walk_state = WalkState.FALLING
 		walk_transition_progress = 0
 	elif p_laying_raycast.collider || prone_override:
 		# If we're close enough for the laying raycast to trigger and we aren't
 		# already laying down transition to laying down
-		if walk_state != LAYING && walk_state != LAYING_TRANSITION:
-			walk_state = LAYING_TRANSITION
+		if prone_override:
+			target_right_foot.origin.y = p_head.origin.y - scalar * 0.25 * spine_length
+			target_left_foot.origin.y = p_head.origin.y - scalar * 0.25 * spine_length
+		if p_laying_raycast.position.y > target_right_foot.origin.y or p_laying_raycast.position.y > target_left_foot.origin.y:
+			target_right_foot.origin.y = p_laying_raycast.position.y
+			target_left_foot.origin.y = p_laying_raycast.position.y
+		if walk_state != WalkState.LAYING && walk_state != WalkState.LAYING_TRANSITION:
+			walk_state = WalkState.LAYING_TRANSITION
 			walk_transition_progress = laying_transition_duration # In units of loop progression
 
 	else:
@@ -863,7 +898,7 @@ func foot_place_raycasts(
 		forward.x = -forward.x # Flip the x for some reason
 		feet_sideways.x = -feet_sideways.x # Flip the x for some reason
 		match walk_state:
-			STANDING:
+			WalkState.STANDING:
 				# test that the feet aren't twisted in weird ways
 				var left_head_forward: Vector3 = Vector3.BACK*(p_head.basis * Basis(renik_helper.align_vectors(Vector3(0, 1, 0), p_left_raycast.normal * p_head.basis)))
 				var right_head_forward: Vector3 = Vector3.BACK*(p_head.basis * Basis(renik_helper.align_vectors(Vector3(0, 1, 0), p_right_raycast.normal * p_head.basis)))
@@ -903,7 +938,7 @@ func foot_place_raycasts(
 							p_right_raycast.position, p_left_raycast.collider != null,
 							p_right_raycast.collider != null)
 
-			STANDING_TRANSITION:
+			WalkState.STANDING_TRANSITION:
 				if (left_velocity.length() > effective_min_threshold ||
 						right_velocity.length() > effective_min_threshold ||
 						(p_left_raycast.collider != null &&
@@ -914,7 +949,7 @@ func foot_place_raycasts(
 							p_right_raycast.position, p_left_raycast.collider != null,
 							p_right_raycast.collider != null)
 
-			STEPPING, STEPPING_TRANSITION, BACKSTEPPING, BACKSTEPPING_TRANSITION, STRAFING, STRAFING_TRANSITION:
+			WalkState.STEPPING, WalkState.STEPPING_TRANSITION, WalkState.BACKSTEPPING, WalkState.BACKSTEPPING_TRANSITION,  WalkState.STRAFING,  WalkState.STRAFING_TRANSITION:
 				if (left_velocity.length() < effective_min_threshold &&
 						right_velocity.length() < effective_min_threshold &&
 						walk_transition_progress == 0 &&
@@ -924,7 +959,7 @@ func foot_place_raycasts(
 						(p_right_raycast.collider == null ||
 								right_stand.origin.distance_squared_to(p_right_raycast.position) <
 										balance_threshold * (left_leg_length + right_leg_length) / 2)):
-					walk_state = STANDING_TRANSITION
+					walk_state = WalkState.STANDING_TRANSITION
 					walk_transition_progress = standing_transition_duration # In units of loop progression
 				else:
 					step_direction(forward, feet_sideways, velocity, p_left_raycast.position,
@@ -936,7 +971,7 @@ func foot_place_raycasts(
 						p_right_raycast.position, p_left_raycast.collider != null,
 						p_right_raycast.collider != null)
 
-	var stride_speed: float = step_pace * velocity.length() / ((left_leg_length + right_leg_length) / 2)
+	var stride_speed: float = p_step_pace * velocity.length() / ((left_leg_length + right_leg_length) / 2)
 	walk_transition_progress -= maxf(min_transition_speed, stride_speed)
 	walk_transition_progress = maxf(walk_transition_progress, 0.0)
 	if walk_transition_progress == 0 && walk_state < 0:
@@ -944,28 +979,19 @@ func foot_place_raycasts(
 
 	# Step 2: Place foot based on state
 	match walk_state:
-		FALLING:
+		WalkState.FALLING:
 			var left_dangle: Transform3D = dangle_foot(p_head, (spine_length + left_leg_length) * dangle_ratio,
 							left_leg_length, left_hip_offset)
-			left_dangle.origin += Vector3(
-				sin(Time.get_ticks_msec()/1000.0)*.01,
-				0,
-				cos(Time.get_ticks_msec()/1500.0)*.1
-				)
 			var right_dangle: Transform3D = dangle_foot(p_head, (spine_length + right_leg_length) * dangle_ratio,
 							right_leg_length, right_hip_offset)
-			right_dangle.origin += Vector3(
-				cos(Time.get_ticks_msec()/1500.0)*.01,
-				0,
-				sin(Time.get_ticks_msec()/1000.0)*.1
-				)
-			target_left_foot.basis = target_left_foot.basis.slerp(left_dangle.basis * foot_basis_offset,
-							1.0 - (1.0 / dangle_stiffness))
+
+			target_left_foot.basis = Basis(target_left_foot.basis.get_rotation_quaternion().slerp(left_dangle.basis.get_rotation_quaternion() * foot_quat_offset,
+							1.0 - (1.0 / dangle_stiffness)))
 			target_left_foot.origin = renik_helper.log_clamp(
 					target_left_foot.origin, left_dangle.origin, 1.0 / dangle_stiffness)
 
-			target_right_foot.basis = target_right_foot.basis.slerp(right_dangle.basis * foot_basis_offset,
-							1.0 - (1.0 / dangle_stiffness))
+			target_right_foot.basis = Basis(target_right_foot.basis.get_rotation_quaternion().slerp(right_dangle.basis.get_rotation_quaternion() * foot_quat_offset,
+							1.0 - (1.0 / dangle_stiffness)))
 			target_right_foot.origin = renik_helper.log_clamp(
 					target_right_foot.origin, right_dangle.origin, 1.0 / dangle_stiffness)
 
@@ -981,80 +1007,79 @@ func foot_place_raycasts(
 			prev_left_ground = null
 			prev_right_ground = null
 
-		STANDING_TRANSITION, STANDING:
+		WalkState.STANDING_TRANSITION, WalkState.STANDING:
 			var effective_transition_progress: float = walk_transition_progress / standing_transition_duration
 			effective_transition_progress = minf(effective_transition_progress, 1.0)
 			if left_ground != null:
 				left_stand = stand_foot(target_left_foot, left_stand_local, left_ground)
-				target_left_foot = Transform3D(left_stand.basis * foot_basis_offset, left_stand.origin).interpolate_with(
+				target_left_foot = Transform3D(left_stand.basis.get_rotation_quaternion() * foot_quat_offset, left_stand.origin).interpolate_with(
 						target_left_foot, effective_transition_progress)
 				left_grounded_stop = left_stand.origin
 			else:
 				var left_dangle: Transform3D = dangle_foot(p_head, (spine_length + left_leg_length) * dangle_ratio,
 								left_leg_length, left_hip_offset)
-				target_left_foot.basis = target_left_foot.basis.slerp(left_dangle.basis * foot_basis_offset,
-								1.0 - (1.0 / dangle_stiffness))
+				target_left_foot.basis = Basis(target_left_foot.basis.get_rotation_quaternion().slerp(left_dangle.basis.get_rotation_quaternion() * foot_quat_offset,
+								1.0 - (1.0 / dangle_stiffness)))
 				target_left_foot.origin = renik_helper.log_clamp(
 						target_left_foot.origin, left_dangle.origin, 1.0 / dangle_stiffness)
 
 
 			if right_ground != null:
 				right_stand = stand_foot(target_right_foot, right_stand_local, right_ground)
-				target_right_foot = Transform3D(right_stand.basis * foot_basis_offset, right_stand.origin).interpolate_with(
+				target_right_foot = Transform3D(right_stand.basis.get_rotation_quaternion() * foot_quat_offset, right_stand.origin).interpolate_with(
 							target_right_foot, effective_transition_progress)
 				right_grounded_stop = right_stand.origin
 			else:
 				var right_dangle: Transform3D = dangle_foot(p_head, (spine_length + right_leg_length) * dangle_ratio,
 								right_leg_length, right_hip_offset)
-				target_right_foot.basis = target_right_foot.basis.slerp(right_dangle.basis * foot_basis_offset,
-								1.0 - (1.0 / dangle_stiffness))
+				target_right_foot.basis = Basis(target_right_foot.basis.get_rotation_quaternion().slerp(right_dangle.basis.get_rotation_quaternion() * foot_quat_offset,
+								1.0 - (1.0 / dangle_stiffness)))
 				target_right_foot.origin = renik_helper.log_clamp(target_right_foot.origin, right_dangle.origin,
 								1.0 / dangle_stiffness)
 
-		STEPPING_TRANSITION, STEPPING:
+		WalkState.STEPPING_TRANSITION, WalkState.STEPPING:
 			var effective_transition_progress: float = walk_transition_progress / stepping_transition_duration
 			effective_transition_progress = minf(effective_transition_progress, 1.0)
 			loop(p_head, velocity, p_left_raycast.position, p_left_raycast.normal,
 					p_right_raycast.position, p_right_raycast.normal,
 					p_left_raycast.collider != null, p_right_raycast.collider != null,
 					forward_gait)
-			target_left_foot = Transform3D(left_step.basis * foot_basis_offset, left_step.origin).interpolate_with(
+			target_left_foot = Transform3D(left_step.basis.get_rotation_quaternion() * foot_quat_offset, left_step.origin).interpolate_with(
 						target_left_foot, effective_transition_progress)
-			target_right_foot = Transform3D(right_step.basis * foot_basis_offset, right_step.origin).interpolate_with(
+			target_right_foot = Transform3D(right_step.basis.get_rotation_quaternion() * foot_quat_offset, right_step.origin).interpolate_with(
 						target_right_foot, effective_transition_progress)
 
-		BACKSTEPPING_TRANSITION, BACKSTEPPING:
+		WalkState.BACKSTEPPING_TRANSITION, WalkState.BACKSTEPPING:
 			var effective_transition_progress: float = walk_transition_progress / stepping_transition_duration
 			effective_transition_progress = minf(effective_transition_progress, 1.0)
 			loop(p_head, velocity, p_left_raycast.position, p_left_raycast.normal,
 					p_right_raycast.position, p_right_raycast.normal,
 					p_left_raycast.collider != null, p_right_raycast.collider != null,
 					backward_gait)
-			target_left_foot = Transform3D(left_step.basis * foot_basis_offset, left_step.origin).interpolate_with(
+			target_left_foot = Transform3D(left_step.basis.get_rotation_quaternion() * foot_quat_offset, left_step.origin).interpolate_with(
 							target_left_foot, effective_transition_progress)
-			target_right_foot = Transform3D(right_step.basis * foot_basis_offset, right_step.origin).interpolate_with(
+			target_right_foot = Transform3D(right_step.basis.get_rotation_quaternion() * foot_quat_offset, right_step.origin).interpolate_with(
 							target_right_foot, effective_transition_progress)
 
-		STRAFING_TRANSITION, STRAFING:
+		WalkState.STRAFING_TRANSITION,  WalkState.STRAFING:
 			var effective_transition_progress: float = walk_transition_progress / stepping_transition_duration
 			effective_transition_progress = minf(effective_transition_progress, 1.0)
 			loop(p_head, velocity, p_left_raycast.position, p_left_raycast.normal,
 					p_right_raycast.position, p_right_raycast.normal,
 					p_left_raycast.collider != null, p_right_raycast.collider != null,
 					sideways_gait)
-			target_left_foot = Transform3D(left_step.basis * foot_basis_offset, left_step.origin).interpolate_with(
+			target_left_foot = Transform3D(left_step.basis.get_rotation_quaternion() * foot_quat_offset, left_step.origin).interpolate_with(
 						target_left_foot, effective_transition_progress)
-			target_right_foot = Transform3D(right_step.basis * foot_basis_offset, right_step.origin).interpolate_with(
+			target_right_foot = Transform3D(right_step.basis.get_rotation_quaternion() * foot_quat_offset, right_step.origin).interpolate_with(
 						target_right_foot, effective_transition_progress)
 
-		LAYING_TRANSITION, LAYING, OTHER_TRANSITION, OTHER:
+		WalkState.LAYING_TRANSITION, WalkState.LAYING, WalkState.OTHER_TRANSITION, WalkState.OTHER:
 			pass
 
 	if p_instant:
 		prev_left_foot = target_left_foot
 		prev_right_foot = target_right_foot
 
-	prevHead = p_head.origin
 
 
 func is_balanced (p_left: Transform3D, p_right: Transform3D) -> bool:

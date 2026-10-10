@@ -39,24 +39,31 @@ var lower_extra_bone_ids: PackedInt32Array
 var leaf_id: int = -1
 var lower_id: int = -1
 var upper_id: int = -1
+var dynamic_pole_root_id: int = -1
+var dynamic_pole_head_id: int = -1
 
-@export_enum("LeftHand", "RightHand", "LeftFoot", "RightFoot", "Custom Limb") var preset: int = 0:
+const LEFT_HAND = 0
+const RIGHT_HAND = 1
+const LEFT_FOOT = 2
+const RIGHT_FOOT = 3
+const CUSTOM = 4
+
+@export_enum("LeftHand", "RightHand", "LeftFoot", "RightFoot", "Custom Limb") var preset: int = 4:
 	set(x):
 		preset = x
 		leaf_id = -1
 		lower_id = -1
 		upper_id = -1
+		dynamic_pole_root_id = -1
 		mirror_factor = (-1 if mirror else 1)
 
 @export_tool_button("Assign Arm Defaults") var assign_arm_defaults: Callable:
 	get:
-		return _assign_arm_defaults
-
-func _assign_arm_defaults() -> void:
+		return func():
 			upper_twist_offset = -0.5*PI
 			lower_twist_offset = -0.5*PI
 			roll_offset = deg_to_rad(-120.0)
-			upper_limb_twist = 0.25
+			upper_limb_twist = 0.5
 			lower_limb_twist = 0.66666
 			twist_inflection_point_offset = deg_to_rad(180.0)
 			twist_overflow = deg_to_rad(45.0)
@@ -66,9 +73,7 @@ func _assign_arm_defaults() -> void:
 
 @export_tool_button("Assign Leg Defaults") var assign_leg_defaults: Callable:
 	get:
-		return _assign_leg_defaults
-
-func _assign_leg_defaults() -> void:
+		return func():
 			upper_twist_offset = 0
 			lower_twist_offset = PI
 			roll_offset = 0
@@ -148,7 +153,7 @@ var mirror_factor: float = 1
 @export_range(-180.0, 180.0, 0.1, "radians") var upper_twist_offset: float = -0.5*PI
 @export_range(-180.0, 180.0, 0.1, "radians") var lower_twist_offset: float = -0.5*PI
 @export_range(-180.0, 180.0, 0.1, "radians") var roll_offset: float = deg_to_rad(-120.0) # Rolls the entire limb so the joint points in a different direction.
-@export_range(0,1,0.001) var upper_limb_twist: float = 0.25 # How much the upper limb follows the lower limb.
+@export_range(0,1,0.001) var upper_limb_twist: float = 0.5 # How much the upper limb follows the lower limb.
 @export_range(0,1,0.001) var lower_limb_twist: float = 0.66666 # How much the lower limb follows the leaf limb.
 @export_range(-180.0, 180.0, 0.1, "radians") var twist_inflection_point_offset: float = deg_to_rad(180.0) # When the limb snaps from twisting in the positive direction to twisting in the negative direction.
 @export_range(0.0, 180.0, 0.1, "radians") var twist_overflow: float = deg_to_rad(45.0) # How much past the inflection point we go before snapping.
@@ -164,6 +169,8 @@ var mirror_factor: float = 1
 # ADVANCED - How much each of the leaf's axis of translation from rest affects the ik.
 @export var target_position_influence: Vector3 = Vector3(2.0, -1.5, -1.0)
 
+@export_range(0.0,10.0,0.01) var stretchiness: float = 0.0
+
 # STATE: We're keeping a little bit of state now... kinda goes against the design, but it makes life easier so fuck it.
 var overflow_state: int = 0 # 0 means no twist overflow. -1 means underflow. 1 means overflow.
 
@@ -177,19 +184,50 @@ var overflow_state: int = 0 # 0 means no twist overflow. -1 means underflow. 1 m
 @export var arm_shoulder_pole_offset: Quaternion = Quaternion.from_euler(Vector3(0,0,deg_to_rad(-78.0)))
 
 
+@export var dynamic_pole_root_bone: StringName:
+	set(x):
+		dynamic_pole_root_bone = x
+		dynamic_pole_root_id = -1
+	get:
+		match preset:
+			0, 1:
+				return &"Hips"
+			2, 3:
+				return &""
+			_:
+				return dynamic_pole_root_bone
+
+@export var dynamic_pole_head_bone: StringName:
+	set(x):
+		dynamic_pole_head_bone = x
+		dynamic_pole_head_id = -1
+	get:
+		match preset:
+			0, 1:
+				return &"Head"
+			2, 3:
+				return &""
+			_:
+				return dynamic_pole_head_bone
+
+@export var dynamic_pole_spine_length: float = 0.5
+@export var dynamic_pole_min: float = 0.0
+@export var dynamic_pole_max: float = 0.4
+@export var dynamic_pole_power: float = 1.7
+
+@export var pole_target: Node3D
+
 @export var target: Node3D
 
 @export_tool_button("Create Target") var create_target: Callable:
 	get:
-		return _create_target
-
-func _create_target() -> void:
+		return func():
 			var skel = get_skeleton()
 			if skel != null:
 				if skel.has_node(NodePath(leaf_bone + "Target")):
-					target = get_parent().get_node(NodePath(leaf_bone + "Target"))
+					target = get_parent().get_node(NodePath(leaf_bone + "Target")) as Node3D
 				else:
-					var marker = Marker3D.new()
+					var marker := Marker3D.new()
 					marker.name = leaf_bone + "Target"
 					skel.add_child(marker)
 					marker.owner = owner
@@ -198,10 +236,8 @@ func _create_target() -> void:
 
 @export_tool_button("Reset Targets to Rest") var reset_targets_to_rest: Callable:
 	get:
-		return _reset_targets_to_rest
-
-func _reset_targets_to_rest() -> void:
-			var skel = get_skeleton()
+		return func():
+			var skel := get_skeleton()
 			if skel != null:
 				var target_or_self: Node3D = target if target != null else self
 				target_or_self.global_transform = skel.global_transform * skel.get_bone_global_rest(skel.find_bone(leaf_bone))
@@ -238,7 +274,7 @@ func trig_angles(side1: Vector3, side2: Vector3, side3: Vector3) -> Vector2:
 	return Vector2(angle1, angle2)
 
 
-func solve_trig_ik_redux(root: Transform3D, target: Transform3D) -> Dictionary[int, Basis]:
+func get_joint_axis(root: Transform3D, target: Transform3D, has_pole: bool, target_pole: Vector3) -> Vector3:
 	var map: Dictionary[int, Basis]
 	# The true root of the limb is the point where the upper bone starts
 	var trueRoot: Transform3D = root.translated_local(self.upper.origin)
@@ -260,7 +296,7 @@ func solve_trig_ik_redux(root: Transform3D, target: Transform3D) -> Dictionary[i
 
 	var angles: Vector2 = trig_angles(upperVector, lowerVector, targetVector)
 
-	var pole_offset_mirrored = Quaternion(
+	var pole_offset_mirrored := Quaternion(
 		pole_offset.x, mirror_factor * pole_offset.y,
 		mirror_factor * pole_offset.z, pole_offset.w)
 	# The local x-axis of the upper limb is axis along which the limb will bend
@@ -268,13 +304,24 @@ func solve_trig_ik_redux(root: Transform3D, target: Transform3D) -> Dictionary[i
 	# vector will affect this axis
 	var startingPole: Vector3 = pole_offset_mirrored * (
 			Vector3(0, 1, 0)) # the opposite of this vector is where the pole is
-	var jointAxis: Vector3 = renik_helper.align_vectors(startingPole, targetVector) * (pole_offset_mirrored * (Vector3(1, 0, 0)))
+	var jointAxis: Vector3
+	if has_pole:
+		startingPole = trueRoot.affine_inverse() * target_pole
+		jointAxis = targetVector.cross(startingPole);
+		var angleDiff: float = 0 # targetVector.angle_to(startingPole) * influence
+		if jointAxis.length_squared() == 0:
+			jointAxis = renik_helper.get_perpendicular_vector(startingPole)
+		# FIXME: double normalization
+		jointAxis = jointAxis.normalized().normalized()
+	else:
+		jointAxis = renik_helper.align_vectors(startingPole, targetVector) * (pole_offset_mirrored * (Vector3(1, 0, 0)))
 
 	# #We then find how far away from the rest position the leaf is and use
 	# that to change the rotational axis more.
 	var leafRestVector: Vector3 = full_upper.basis * (full_lower * (self.leaf.origin))
 	var positionalOffset: float = (self.target_position_influence * Vector3(1, mirror_factor, mirror_factor)).dot(targetVector - leafRestVector)
-	jointAxis = jointAxis.rotated(normalizedTargetVector, positionalOffset + mirror_factor * self.roll_offset)
+	if not has_pole:
+		jointAxis = jointAxis.rotated(normalizedTargetVector, positionalOffset + mirror_factor * self.roll_offset)
 
 	# Leaf Rotations... here we go...
 	# Let's always try to avoid having the leaf intersect the lowerlimb
@@ -289,6 +336,85 @@ func solve_trig_ik_redux(root: Transform3D, target: Transform3D) -> Dictionary[i
 	# rejections are We scale the amount we rotate with the rotation influence
 	# setting and the angle between the leaf and lower vector so if the arm is
 	# mostly straight, we rotate less
+	var leafRejection: Vector3 = renik_helper.vector_rejection(localLeafVector, normalizedTargetVector)
+	var lowerRejection: Vector3 = renik_helper.vector_rejection(localLowerVector, normalizedTargetVector)
+	var jointRollAmount: float = (leafRejection.angle_to(lowerRejection)) * self.target_rotation_influence
+	jointRollAmount *= absf(localLeafVector.cross(localLowerVector).dot(normalizedTargetVector))
+	if mirror_factor < 0: # if leafRejection.cross(lowerRejection).dot(normalizedTargetVector) > 0:
+		jointRollAmount *= -1
+
+	jointAxis = jointAxis.rotated(normalizedTargetVector, jointRollAmount)
+	var totalRoll: float = jointRollAmount + positionalOffset + mirror_factor * self.roll_offset
+
+	# Add a little twist
+	# We align the leaf's y axis with the lower limb's y-axis and see how far
+	# off the x-axis is from the joint axis to calculate the twist.
+	var leafX: Vector3 = renik_helper.align_vectors(
+					localLeafVector.rotated(normalizedTargetVector, jointRollAmount),
+					localLowerVector.rotated(normalizedTargetVector, jointRollAmount)
+					) * (localTarget.basis * (Vector3(1, 0, 0)))
+	var rolledJointAxis: Vector3 = jointAxis.rotated(localLowerVector, -totalRoll)
+	var lowerZ: Vector3 = rolledJointAxis.cross(localLowerVector)
+	var twistAngle: float = leafX.angle_to(rolledJointAxis)
+	if mirror_factor > 0: # leafX.dot(lowerZ) > 0:
+		twistAngle *= -1
+
+
+	var inflectionPoint: float = (PI if twistAngle > 0 else -PI) - mirror_factor * self.twist_inflection_point_offset
+	var overflowArea: float = self.overflow_state * self.twist_overflow
+	var inflectionDistance: float = twistAngle - inflectionPoint
+
+	if absf(inflectionDistance) < self.twist_overflow:
+		if self.overflow_state == 0:
+			self.overflow_state = 1 if inflectionDistance < 0 else -1
+
+	else:
+		self.overflow_state = 0
+
+
+	if not has_pole:
+		inflectionPoint += overflowArea
+		if twistAngle > 0 && twistAngle > inflectionPoint:
+			twistAngle -= TAU # Change to complement angle
+		elif twistAngle < 0 && twistAngle < inflectionPoint:
+			twistAngle += TAU # Change to complement angle
+
+	if not has_pole:
+		jointAxis = jointAxis.rotated(normalizedTargetVector, twistAngle * self.target_rotation_influence)
+
+	return jointAxis
+
+
+func solve_trig_ik_redux(root: Transform3D, target: Transform3D, jointAxis: Vector3) -> Dictionary[int, Basis]:
+	var map: Dictionary[int, Basis]
+	# The true root of the limb is the point where the upper bone starts
+	var trueRoot: Transform3D = root.translated_local(self.upper.origin)
+	var localTarget: Transform3D = trueRoot.affine_inverse() * target
+
+	var full_upper: Transform3D = self.upper
+	#.translated_local(Vector3(0, limb.upper_extra_bones.origin.length(), 0))
+	var full_lower: Transform3D = self.lower
+	#.translated_local(Vector3(0, limb.lower_extra_bones.origin.length(), 0))
+
+	# The Triangle
+	var upperVector: Vector3 = (self.upper_extra_bones * self.lower).origin
+	var lowerVector: Vector3 = (self.lower_extra_bones * self.leaf).origin
+	var targetVector: Vector3 = localTarget.origin
+	var normalizedTargetVector: Vector3 = targetVector.normalized()
+	var limbLength: float = upperVector.length() + lowerVector.length()
+	if targetVector.length() > upperVector.length() + lowerVector.length():
+		targetVector = normalizedTargetVector * limbLength
+
+	var angles: Vector2 = trig_angles(upperVector, lowerVector, targetVector)
+
+	# #We then find how far away from the rest position the leaf is and use
+	# that to change the rotational axis more.
+	var leafRestVector: Vector3 = full_upper.basis * (full_lower * (self.leaf.origin))
+	var positionalOffset: float = (self.target_position_influence * Vector3(1, mirror_factor, mirror_factor)).dot(targetVector - leafRestVector)
+
+	# Duplicate code from get_joint_axis()
+	var localLeafVector: Vector3 = localTarget.basis * (Vector3(0, 1, 0)) # y axis of the target
+	var localLowerVector: Vector3 = normalizedTargetVector.rotated(jointAxis, angles.x - angles.y).normalized()
 	var leafRejection: Vector3 = renik_helper.vector_rejection(localLeafVector, normalizedTargetVector)
 	var lowerRejection: Vector3 = renik_helper.vector_rejection(localLowerVector, normalizedTargetVector)
 	var jointRollAmount: float = (leafRejection.angle_to(lowerRejection)) * self.target_rotation_influence
@@ -331,12 +457,16 @@ func solve_trig_ik_redux(root: Transform3D, target: Transform3D) -> Dictionary[i
 	elif twistAngle < 0 && twistAngle < inflectionPoint:
 		twistAngle += TAU # Change to complement angle
 
+	var pole_offset_mirrored = Quaternion(
+		pole_offset.x, mirror_factor * pole_offset.y,
+		mirror_factor * pole_offset.z, pole_offset.w)
+	# The local x-axis of the upper limb is axis along which the limb will bend
+	# We take into account how the pole offset and alignment with the target
+	# vector will affect this axis
 
 	var lowerTwist: float = twistAngle * self.lower_limb_twist
 	var upperTwist: float = lowerTwist * self.upper_limb_twist + mirror_factor * self.upper_twist_offset - totalRoll
 	lowerTwist += mirror_factor * self.lower_twist_offset - 2 * mirror_factor * self.roll_offset - positionalOffset - jointRollAmount
-
-	jointAxis = jointAxis.rotated(normalizedTargetVector, twistAngle * self.target_rotation_influence)
 
 	# Rebuild the rotations
 	var upperJointVector: Vector3 = normalizedTargetVector.rotated(jointAxis, angles.x)
@@ -437,6 +567,10 @@ func update_bones() -> void:
 			leaf = Transform3D(Basis(), skeleton.get_bone_rest(leaf_id).origin)
 			lower = Transform3D(Basis(), skeleton.get_bone_rest(lower_id).origin)
 			upper = Transform3D(Basis(), skeleton.get_bone_rest(upper_id).origin)
+	if skeleton != null and dynamic_pole_root_id == -1 and not dynamic_pole_root_bone.is_empty():
+		dynamic_pole_root_id = skeleton.find_bone(dynamic_pole_root_bone)
+	if skeleton != null and dynamic_pole_head_id == -1 and not dynamic_pole_head_bone.is_empty():
+		dynamic_pole_head_id = skeleton.find_bone(dynamic_pole_head_bone)
 
 
 func is_valid() -> bool:
@@ -473,29 +607,53 @@ func _process_modification() -> void:
 	var global_parent: Transform3D = skeleton.get_bone_global_pose(skeleton.get_bone_parent(upper_id))
 	var skel_inverse: Transform3D = skeleton.global_transform.affine_inverse()
 	var target_transform: Transform3D = (skel_inverse * target.global_transform).orthonormalized()
+	var target_pole_transform: Transform3D
+	var target_pole: Vector3
+	var has_pole: bool = false
+	if pole_target != null and pole_target.visible:
+		target_pole_transform = (skel_inverse * pole_target.global_transform).orthonormalized()
+		target_pole = target_pole_transform * (
+			Quaternion(Vector3.UP, -mirror_factor * self.lower_twist_offset) * Vector3(0,0,1000))
+		has_pole = true
 
 	if (target && target.visible && skeleton && is_valid_in_skeleton(skeleton)):
+		if not has_pole and dynamic_pole_root_id != -1 and dynamic_pole_head_id != -1:
+			var global_pole_root: Transform3D = skeleton.get_bone_global_pose(dynamic_pole_root_id)
+			var global_pole_head: Transform3D = skeleton.get_bone_global_pose(dynamic_pole_head_id)
+			has_pole = true
+			var arm_pole_length := (leaf.origin.length() + lower.origin.length()) * 2
+			var up_direction: Vector3 = (global_pole_head.origin - global_pole_root.origin).normalized()
+			var forward_direction: Vector3 = (global_pole_root.basis * Vector3.FORWARD).slerp(global_pole_head.basis * Vector3.FORWARD, 0.3).normalized()
+			var right_direction: Vector3 = (up_direction.cross(forward_direction) + forward_direction * 0.001).normalized()
+			var spine_basis := Basis(right_direction, up_direction, forward_direction).orthonormalized()
+			var arm_midpoint: Vector3 = target_transform.origin.lerp(global_parent.origin, 0.5)
+			var vec_factor: float = (target_transform.origin - global_parent.origin).normalized().dot(target_transform.basis * Vector3(0,0,1))
+			vec_factor = dynamic_pole_spine_length * smoothstep(dynamic_pole_min, dynamic_pole_max, sign(vec_factor) * pow(abs(vec_factor), dynamic_pole_power))
+			var vec1: Vector3 = 0.5 * arm_pole_length * (spine_basis * Vector3(mirror_factor * -2.0,0.0,2)).normalized() # Vector3(0,1,0)
+			var vec2: Vector3 = arm_pole_length * (spine_basis * Vector3(mirror_factor * -2.0,1.0,-2)).normalized() #target_pole.normalized()
+			target_pole = (global_pole_root.origin * 2 - global_pole_head.origin + vec1).lerp(global_pole_head.origin + vec2, vec_factor)
+
+		var joint_axis: Vector3 = get_joint_axis(global_parent, target_transform, has_pole, target_pole)
 		var root: Transform3D = global_parent
-		if false: # has_shoulder:
+		if has_shoulder:
 			var rootBone: int = skeleton.get_bone_parent(upper_id)
 			if rootBone >= 0:
 				var shoulderParent: int = skeleton.get_bone_parent(rootBone)
-				if shoulderParent >= 0:
-					root = root * skeleton.get_bone_global_pose(shoulderParent)
-				
-				root = root * skeleton.get_bone_rest(rootBone)
-				var targetVector: Vector3 = root.affine_inverse() * (target_transform.origin)
-				var offsetQuat: Quaternion = arm_shoulder_offset
-				var poleOffset: Quaternion = arm_shoulder_pole_offset
-				var poleOffsetScaled: Quaternion = poleOffset.slerp(Quaternion(), 1 - arm_shoulder_influence)
-				var quatAlignToTarget: Quaternion = poleOffsetScaled * renik_helper.align_vectors(
-								Vector3(0, 1, 0), poleOffset.inverse() * (offsetQuat.inverse() * (targetVector))
-								).slerp(Quaternion(), 1 - arm_shoulder_influence)
+				var targetVector: Vector3 = root.affine_inverse() * (target_pole_transform.origin if has_pole else target_transform.origin)
+				var offsetQuat: Quaternion = Quaternion(Vector3(0,1,0), arm_shoulder_influence * Quaternion(arm_shoulder_offset * Vector3(-1,0,0), joint_axis).get_euler().y)
+				var poleOffset: float = atan(4 * (1 - targetVector.length() / lower.origin.length()))
+				poleOffset = maxf(poleOffset, 2.0 * (root.affine_inverse() * target_transform).origin.normalized().z)
+				var poleOffsetScaled: float = poleOffset * (arm_shoulder_influence / 2 if poleOffset < 0.0 else arm_shoulder_influence)
+				var quatAlignToTarget: Quaternion = Quaternion(arm_shoulder_pole_offset * Vector3(0,1,0), poleOffsetScaled * PI / 2).normalized()
 				var customPose: Transform3D = Transform3D(offsetQuat * quatAlignToTarget, Vector3())
-				skeleton.set_bone_pose_rotation(rootBone, skeleton.get_bone_rest(rootBone).basis.get_rotation_quaternion() * offsetQuat * quatAlignToTarget)
+				skeleton.set_bone_pose_rotation(rootBone, skeleton.get_bone_pose_rotation(rootBone) * offsetQuat * quatAlignToTarget)
 				root = root * customPose
+				joint_axis = joint_axis * customPose
 
-			# root = skeleton.global_transform *
-			# skeleton.get_bone_global_pose(rootBone)
-
-		apply_ik_map_basis(solve_trig_ik_redux(root, target_transform), root, bone_id_order_limb())
+		apply_ik_map_basis(solve_trig_ik_redux(root, target_transform, joint_axis), root, bone_id_order_limb())
+		var scl: float = clampf(
+			skeleton.get_bone_global_pose(upper_id).origin.distance_to(target_transform.origin) /
+			skeleton.get_bone_global_pose(upper_id).origin.distance_to(skeleton.get_bone_global_pose(leaf_id).origin),
+			1.0, 1.0 + stretchiness)
+		skeleton.set_bone_pose_scale(upper_id, Vector3(1, scl, 1))
+		skeleton.set_bone_pose_scale(leaf_id, Vector3(1, 1 /scl, 1))

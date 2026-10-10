@@ -285,6 +285,11 @@ func _ready():
 		)
 
 func _physics_process(delta:float) -> void:
+	# if the scaling bind is pressed, then scale the player accordingly
+	if Input.is_action_just_pressed("scale_up"):
+		scale *= 1.1
+	if Input.is_action_just_pressed("scale_down"):
+		scale *= .9
 	# if the window isn't focused, then set the player to paused but don't change anything else
 	if !DisplayServer.window_is_focused(0) and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_PAUSED:
 		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
@@ -487,8 +492,8 @@ func _unhandled_input(event: InputEvent) -> void:
 					else:
 						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 				LocalGlobals.PLAYER_STATE_PLAYING:
-					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 					localui.ui.reveal()
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
 					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 				LocalGlobals.PLAYER_STATE_PAUSED:
 					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
@@ -511,12 +516,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 		camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 
-	if event is InputEventMouseButton:
-		if event.pressed:
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.ctrl_pressed:
-				scale *= 1.1
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.ctrl_pressed:
-				scale *= .9
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():

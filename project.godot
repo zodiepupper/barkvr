@@ -59,7 +59,7 @@ export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/unidot_importer/plugin.cfg", "res://addons/vrm/plugin.cfg")
+enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/vrm/plugin.cfg")
 
 [filesystem]
 
@@ -275,8 +275,12 @@ scale_down={
 
 [input_devices]
 
+sensors/enable_accelerometer=true
+sensors/enable_gravity=true
+sensors/enable_gyroscope=true
+sensors/enable_magnetometer=true
+pen_tablet/driver.windows="auto"
 buffering/agile_event_flushing=true
-pointing/emulate_touch_from_mouse=true
 pointing/emulate_mouse_from_touch=false
 
 [layer_names]
@@ -355,10 +359,13 @@ META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_RIGHT={
 openxr/enabled=true
 openxr/foveation_level=2
 openxr/foveation_dynamic=true
+openxr/extensions/frame_synthesis=true
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
 openxr/extensions/eye_gaze_interaction=true
 openxr/extensions/render_model=true
+openxr/binding_modifiers/analog_threshold=true
+openxr/binding_modifiers/dpad_binding=true
 shaders/enabled=true
 openxr/extensions/hand_tracking_aim=true
 openxr/extensions/htc/passthrough=true
@@ -371,4 +378,3 @@ openxr/extensions/meta/hand_tracking_mesh=true
 openxr/extensions/meta/hand_tracking_capsules=true
 openxr/extensions/meta/application_space_warp=true
 openxr/extensions/meta/environment_depth=true
-openxr/extensions/meta/color_space/starting_color_space=2

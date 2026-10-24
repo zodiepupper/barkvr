@@ -1,3 +1,4 @@
+## The barkvr player controller
 class_name BarkvrPlayerController
 extends CharacterBody3D
 
@@ -477,7 +478,7 @@ func flat_movement(_delta:float) -> void:
 			camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event.is_action("clear_gizmos"):
 		LocalGlobals.clear_gizmos.emit()
 	# this is complicted but self-explanatory. 
@@ -517,78 +518,81 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 
 	if event is InputEventScreenTouch:
-		if event.pressed:
-			if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
-				lookdrag = {
-					'index': event.index,
-					'relative': Vector2(),
-					'velocity': Vector2(),
-					'startposition': event.position,
-					'position': event.position,
-					'dragstarttime': Time.get_ticks_msec()
-				}
-			else:
-				movedrag = {
-					'index': event.index,
-					'relative': Vector2(),
-					'velocity': Vector2(),
-					'startposition': event.position,
-					'position': event.position,
-					'dragstarttime': Time.get_ticks_msec()
-				}
-				screen_just_touched = true
-
-		if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
-			if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
-				_screen_tap_click(event)
-			lookdrag = {}
-		if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
-			if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			and Time.get_ticks_msec()-movedrag.dragstarttime<100:
-				_screen_tap_click(event)
-			movedrag = {}
-			touch_move_left = 0.0
-			touch_move_right = 0.0
-			touch_move_forward = 0.0
-			touch_move_backward = 0.0
-	if event is InputEventScreenDrag:
-		if movedrag and event.index == movedrag.index:
-			movedrag = {
-				'index': event.index,
-				'relative': event.relative,
-				'velocity': event.velocity,
-				'startposition': movedrag.startposition,
-				'position': event.position,
-				'dragstarttime': movedrag.dragstarttime
-			}
-			touch_move_left = (movedrag.startposition.x-event.position.x)*.01
-			touch_move_right = (event.position.x-movedrag.startposition.x)*.01
-			touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
-			touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
-		if lookdrag and event.index == lookdrag.index:
-			lookdrag = {
-				'index': event.index,
-				'relative': event.relative,
-				'velocity': event.velocity,
-				'startposition': lookdrag.startposition,
-				'position': event.position,
-				'dragstarttime': lookdrag.dragstarttime
-			}
-			if !touchsticklook:
-				rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
-				xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-				camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+		if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PAUSED and !localui.ui.visible:
+			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+		#if event.pressed:
+			#if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
+				#lookdrag = {
+					#'index': event.index,
+					#'relative': Vector2(),
+					#'velocity': Vector2(),
+					#'startposition': event.position,
+					#'position': event.position,
+					#'dragstarttime': Time.get_ticks_msec()
+				#}
+			#else:
+				#movedrag = {
+					#'index': event.index,
+					#'relative': Vector2(),
+					#'velocity': Vector2(),
+					#'startposition': event.position,
+					#'position': event.position,
+					#'dragstarttime': Time.get_ticks_msec()
+				#}
+				#screen_just_touched = true
+#
+		#if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
+			#if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			#and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
+				#_screen_tap_click(event)
+			#lookdrag = {}
+		#if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
+			#if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
+			#and Time.get_ticks_msec()-movedrag.dragstarttime<100:
+				#_screen_tap_click(event)
+			#movedrag = {}
+			#touch_move_left = 0.0
+			#touch_move_right = 0.0
+			#touch_move_forward = 0.0
+			#touch_move_backward = 0.0
+	#if event is InputEventScreenDrag:
+		#if movedrag and event.index == movedrag.index:
+			#movedrag = {
+				#'index': event.index,
+				#'relative': event.relative,
+				#'velocity': event.velocity,
+				#'startposition': movedrag.startposition,
+				#'position': event.position,
+				#'dragstarttime': movedrag.dragstarttime
+			#}
+			#touch_move_left = (movedrag.startposition.x-event.position.x)*.01
+			#touch_move_right = (event.position.x-movedrag.startposition.x)*.01
+			#touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
+			#touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
+		#if lookdrag and event.index == lookdrag.index:
+			#lookdrag = {
+				#'index': event.index,
+				#'relative': event.relative,
+				#'velocity': event.velocity,
+				#'startposition': lookdrag.startposition,
+				#'position': event.position,
+				#'dragstarttime': lookdrag.dragstarttime
+			#}
+			#if !touchsticklook:
+				#rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
+				#xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+				#camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
 
 ## helper method to click the ui_ray when the screen is tapped 
 func _screen_tap_click(_event:InputEvent) -> void:
-	LocalGlobals.playerreleaseuifocus.emit()
-	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
-		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-	else:
-		LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-	ui_ray.click()
-	ui_ray.release()
+	pass
+	#LocalGlobals.playerreleaseuifocus.emit()
+	#if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		#LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+	#else:
+		#LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+	#ui_ray.click()
+	#ui_ray.release()
 
 ## summons the context menu to the player (look at the hand.gd for more info)
 func contextMenuSummon():

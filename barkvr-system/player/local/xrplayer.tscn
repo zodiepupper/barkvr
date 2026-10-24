@@ -23,6 +23,56 @@ size = Vector3(0.05, 0.05, 0.15)
 height = 1.0
 radius = 0.1
 
+[sub_resource type="Gradient" id="Gradient_yvht1"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.19149196, 0.30140576, 0.3458317)
+colors = PackedColorArray(0, 0, 1, 1, 0.98052996, 0.98052996, 0.98052996, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v67q7"]
+gradient = SubResource("Gradient_yvht1")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yvht1"]
+radius = 38.2
+
+[sub_resource type="Gradient" id="Gradient_0waw3"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.25, 0.35, 0.65, 0.75)
+colors = PackedColorArray(1, 1, 1, 0, 0.98052996, 0.98052996, 0.98052996, 1, 1, 1, 1, 0, 0.98052996, 0.98052996, 0.98052996, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ej0ax"]
+gradient = SubResource("Gradient_0waw3")
+
+[sub_resource type="Gradient" id="Gradient_v67q7"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.19149196, 0.30140576, 0.3458317)
+colors = PackedColorArray(0, 1, 0, 1, 0.98052996, 0.98052996, 0.98052996, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0waw3"]
+gradient = SubResource("Gradient_v67q7")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_ej0ax"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.106374905, 0.30140576, 0.3458317)
+colors = PackedColorArray(1, 0, 0, 1, 0.98052996, 0.98052996, 0.98052996, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ajm43"]
+gradient = SubResource("Gradient_ej0ax")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1112241949 groups=["player"]]
 script = ExtResource("1_iwrfe")
 metadata/health = SubResource("GDScript_swjn5")
@@ -240,3 +290,109 @@ shape = SubResource("CylinderShape3D_clvwe")
 [node name="playercamoffset" type="Node3D" parent="." unique_id=1786473985]
 
 [node name="modules" type="Node" parent="." unique_id=409030114]
+
+[node name="touch_canvas" type="CanvasLayer" parent="." unique_id=274740730]
+layer = 6
+
+[node name="lookstick" type="VirtualJoystick" parent="touch_canvas" unique_id=1143237384]
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+joystick_mode = 2
+joystick_size = 500.0
+action_left = &"lookleft"
+action_right = &"lookright"
+action_up = &"lookup"
+action_down = &"lookdown"
+visibility_mode = 1
+
+[node name="movestick" type="VirtualJoystick" parent="touch_canvas" unique_id=666332221]
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+joystick_mode = 2
+joystick_size = 500.0
+action_left = &"left"
+action_right = &"right"
+action_up = &"up"
+action_down = &"down"
+visibility_mode = 1
+
+[node name="inspector_touch_button_parent" type="Control" parent="touch_canvas" unique_id=1690922822]
+layout_mode = 3
+anchor_left = 0.031
+anchor_top = 0.08
+anchor_right = 0.031
+anchor_bottom = 0.08
+offset_top = 0.22397614
+offset_bottom = 0.22397614
+metadata/_edit_use_anchors_ = true
+
+[node name="inspector_touch_button" type="TouchScreenButton" parent="touch_canvas/inspector_touch_button_parent" unique_id=830624839]
+position = Vector2(-35.5, -33.223976)
+texture_normal = SubResource("GradientTexture2D_v67q7")
+shape = SubResource("CircleShape2D_yvht1")
+action = "desktop_secondary"
+visibility_mode = 1
+
+[node name="menu_touch_button_parent" type="Control" parent="touch_canvas" unique_id=327587547]
+layout_mode = 3
+anchor_left = 0.112
+anchor_top = 0.08
+anchor_right = 0.112
+anchor_bottom = 0.080000006
+offset_left = -121.5
+offset_top = 0.22397614
+offset_right = -121.5
+offset_bottom = 0.2239685
+metadata/_edit_use_anchors_ = true
+
+[node name="menu_touch_button" type="TouchScreenButton" parent="touch_canvas/menu_touch_button_parent" unique_id=1552794691]
+position = Vector2(131.5, -36.223976)
+texture_normal = SubResource("GradientTexture2D_ej0ax")
+shape = SubResource("CircleShape2D_yvht1")
+action = "pause"
+visibility_mode = 1
+
+[node name="Control2" type="Control" parent="touch_canvas" unique_id=1392174462]
+layout_mode = 3
+anchor_left = 0.93500006
+anchor_top = 0.11100001
+anchor_right = 0.93500006
+anchor_bottom = 0.11100001
+offset_left = 0.49987793
+offset_top = 0.19998932
+offset_right = 0.49987793
+offset_bottom = 0.19998932
+metadata/_edit_use_anchors_ = true
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="touch_canvas/Control2" unique_id=880249688]
+position = Vector2(-45, 10)
+texture_normal = SubResource("GradientTexture2D_0waw3")
+shape = SubResource("CircleShape2D_yvht1")
+action = "click"
+visibility_mode = 1
+
+[node name="Control3" type="Control" parent="touch_canvas" unique_id=239812717]
+layout_mode = 3
+anchor_left = 0.85300004
+anchor_top = 0.049000002
+anchor_right = 0.85300004
+anchor_bottom = 0.049000002
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="touch_canvas/Control3" unique_id=644139802]
+position = Vector2(-42.500122, -18.2)
+texture_normal = SubResource("GradientTexture2D_ajm43")
+shape = SubResource("CircleShape2D_yvht1")
+action = "rightclick"
+visibility_mode = 1

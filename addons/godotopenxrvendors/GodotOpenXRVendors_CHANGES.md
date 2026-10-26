@@ -1,5 +1,120 @@
 # Change history for the Godot OpenXR loaders asset
 
+## 5.1.0
+
+- Add manual page for Android XR Trackables (#499)
+- Automatically start Android XR Streaming client (#498)
+- Fix permission handling in Android XR Depth Texture Extension (#497)
+- Implement `XR_ANDROID_device_anchor_persistence_extension` (#457)
+- Implement `XR_ANDROID_raycast` (#456)
+- Implement `XR_ANDROID_trackables_object` (#466)
+- Implement `XR_ANDROID_trackables` (#455)
+- Add documentation for the OpenXR validation layers (#496)
+- Improvements to the documentation / README (#492 / #493 / #494)
+- Add the Meta anchor API permission when the scene API is enabled (#491)
+- Add support for the composition layer extensions to the main projection layer (#464)
+- Implement `XR_ANDROID_mouse_interaction` (#474)
+
+## 5.0.1
+
+- Fix crash when using space warp on Godot 4.7 (#487)
+- Make `godot_openxr_vendors::Recommendation` destructor virtual (#488)
+
+## 5.0.0
+
+- Do not initialize light estimation extension if unsupported (#478)
+- Fix some minor issues identified by AI (#476)
+- Change space warp sample to use OpenGL renderer (#472)
+- Remove the "Simple Controller" interaction profile in all samples (#471)
+- Add support for `XR_ANDROID_unbounded_reference_space` extension (#458)
+- Update Android XR headers (#469)
+- Add a `create_new_extension.py` script to create scaffolding for new extensions (#467)
+- Fix environment depth extensions (#447)
+- Fix property type in `ADD_PROPERTY()` call to match the underlying data type (#462)
+- Update `extension_api.json` to hold OpenXR singletons (#461)
+- Wizard: Call the default XR main scene `xr_main.tscn` to avoid confusion (#453)
+- Android XR: Add export option to add experimental flag (#454)
+- Allow embedding OpenXR validation layers on Android (#353)
+- Add manual page for Android XR Dynamic Resolution (#450)
+- Allow switching hybrid mode on desktop for testing (#312)
+- Add support for `XR_ANDROID_recommended_resolution` (#393)
+- Don't include the OpenXR loader because it's added by Godot now (#449)
+- Add support for `XR_EXTX2_stationary_reference_space` extension (#418)
+- Make REC709 default for `XR_FB_color_space` (#307)
+- Add `XR_META_hand_tracking_microgestures` to hand tracking sample (#340)
+- Stop using deprecated `OpenXRExtensionWrapperExtension` and rename `*ExtensionWrapper` to `*Extension` (#414)
+- Update to support Godot 4.6+ (#407)
+
+## 4.3.1
+
+- Fix crash when using space warp on Godot 4.7 (#489)
+- Fix environment depth extensions (#448)
+
+## 4.3.0
+
+- Fix issue with instant splash screen
+- Explicitly assign hand tracking mesh skeleton property to parent Skeleton3D
+- Add Linux arm64 builds
+- Minor tweaks to `XR_FB_space_warp` delta pose calculation and the sample
+- Add support and manual page for `XR_ANDROID_scene_meshing` extension
+- Add manual page for Android XR Passthrough Camera State
+- Add documentation about Meta Boundary Visibility extension
+- Add manual page for vendor performance metrics
+- Add support and manual page for `XR_ANDROID_light_estimation` extension
+- Add support and documentation for `XR_ANDROID_eye_tracking` extension
+- Add support for `XR_META_colocation_discovery` extension
+- Add the necessary permissions to enable EXT spatial entities on Meta headsets
+- Fix errors in Meta Environment Depth documentation
+- Add manual page for Body and Face Tracking
+- Add manual page for Meta Color Space
+- Only add shader globals when the environment depth extensions are enabled
+- Add support and documentation for `XR_ANDROID_face_tracking` extension
+- Fix issues with Meta hand-tracking extensions on Android XR
+- Add support and manual page for `XR_ANDROID_depth_texture` extension
+- Add XR Project Setup Wizard
+
+## 4.2.2
+
+- Fix crashes when using the plugin on Godot 4.4.x
+- Fix background opacity on Android XR when using Compatibility renderer
+
+## 4.2.1
+
+- Fix generation of 16kb page compatible binaries
+- Fix logic to detect when running on Android XR devices
+- Fix the logic used to transfer data between hybrid apps' modes
+- Fix generation of the release asset
+
+## 4.2.0
+
+- Add support for the **Android XR** OpenXR vendor
+- Implement `XR_ANDROID_passthrough_camera_state` extension
+- Implement `XR_ANDROID_performance_metrics` extension
+- Document the settings required to make an app have a passthrough loading screen
+- Add experimental support for the `XR_ML_marker_understanding` extension
+- Fix the missing `com.oculus.permission.USE_SCENE` permission for the environment depth feature
+- Add the required permission for enabling spatial entities on Pico devices
+- Fix missing sample links for the passthrough and composition layer documentation pages
+- Only add the global shader uniforms for Meta environment depth when it's enabled
+- Fix missing shader uniform and Godot version in `project.godot` for meta-scene-sample
+- Use `gdformat` to ensure consistent GDScript coding standards in CI
+- Fix `OpenXRFbHandTrackingMesh` changes after startup and detecting when it's not supported
+- Generate native debug symbols for Android
+- Fix the manifest configuration for boundaryless apps: set `android.hardware.vr.headtracking` to `required="true"`
+- Fix running the meta-scene-sample on Godot 4.4
+- Add `quest3s` to the list of supported devices
+- Fix errors reported by `XrApiLayer_core_validation`
+- Allow using bilinear filtering in reprojection and provide example for smoothing in a shader
+- Implement `XR_META_performance_metrics` extension
+- Add documentation page about Meta Environment Depth
+- Add method for getting the Meta environment depth map on the CPU side
+- Clear `XRServer#remove_tracker` errors when closing the Godot editor
+- Fix Meta passthrough when rendering with "Separate" thread model
+- Fix `XR_META_environment_depth` when rendering with "Separate" thread model
+- Fix issues with invalid data returned by `xrGetHandMeshFB`
+- Implement `XR_META_headset_id` extension
+- Implement `XR_META_simultaneous_hands_and_controllers` extension
+
 ## 4.1.1
 
 - Update the export plugin version to match the maven central release

@@ -14,8 +14,8 @@ windows.release.x86_64 = "res://addons/terrain_3d/bin/libterrain.windows.release
 
 linux.debug.x86_64 = "res://addons/terrain_3d/bin/libterrain.linux.debug.x86_64.so"
 linux.release.x86_64 = "res://addons/terrain_3d/bin/libterrain.linux.release.x86_64.so"
-linux.debug.arm64 = "res://addons/terrain_3d/bin/libterrain.linux.debug.arm64.so"
-linux.release.arm64 = "res://addons/terrain_3d/bin/libterrain.linux.release.arm64.so"
+#linux.debug.arm64 = "res://addons/terrain_3d/bin/libterrain.linux.debug.arm64.so"
+#linux.release.arm64 = "res://addons/terrain_3d/bin/libterrain.linux.release.arm64.so"
 linux.debug.rv64 = "res://addons/terrain_3d/bin/libterrain.linux.debug.rv64.so"
 linux.release.rv64 = "res://addons/terrain_3d/bin/libterrain.linux.release.rv64.so"
 

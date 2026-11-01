@@ -537,7 +537,7 @@ func fwd_event(event:InputEvent):
 			#pressed = false
 	#prevPressed = null
 
-### GRABBING LOGIC ###
+#region GRABBING LOGIC
 
 class GrabbedNode3D:
 	## accepts a target node and returns the GrabbedNode3D for the target
@@ -623,7 +623,7 @@ func grab(target:Node=null):
 	if target is Node2D:
 		pass
 
-## ungrabs, not much to say here lol
+## ungrabs target node, if null is passed then ungrab all
 func release_grab(target:Node=null):
 	# if no target was passed in, clear all grabbed nodes
 	if target == null:
@@ -638,3 +638,5 @@ func _place_grabbed_nodes():
 	# TODO: use goal and start offset to translate the grabbed nodes
 	for grabbed_node : GrabbedNode3D in grabbed_nodes.values():
 		grabbed_node.move_target(to_global(grabbed_node.start_local_laser_position), Vector3(), get_process_delta_time())
+
+#endregion 

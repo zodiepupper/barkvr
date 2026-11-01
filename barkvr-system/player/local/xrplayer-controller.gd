@@ -116,8 +116,6 @@ var touch_move_backward := 0.0
 ## toggle to allow disabling touch controlling the camera
 @export var touchsticklook := false
 var grab_point := Vector3()
-## tracks when the screen was last touched so we can drive the correct behaviors contextually
-var screen_just_touched := false
 
 ## track the most recently spawned inspector so we can re-summon it instead of spawning one if the
 ## user has the inspector as singleton setting enabled
@@ -441,7 +439,7 @@ func flat_movement(_delta:float) -> void:
 	if Input.is_action_just_pressed("desktop_secondary") and LocalGlobals.player_state != LocalGlobals.PLAYER_STATE_TYPING:
 		summon_inspector.call_deferred()
 
-	righthand.look_at(camera_3d.to_global(ui_ray.target_position))
+	righthand.look_at((ui_ray.target_position))
 
 	# get the direction for keyboard movement
 	var input_dir : Vector2
@@ -477,31 +475,16 @@ func flat_movement(_delta:float) -> void:
 			rotate_y( -(lookdrag.position.x-lookdrag.startposition.x)*(MOUSE_SPEED/800) )
 			camera_3d.rotate_x( -(lookdrag.position.y-lookdrag.startposition.y)*(MOUSE_SPEED/800) )
 
-
 func _input(event: InputEvent) -> void:
 	if event.is_action("clear_gizmos"):
 		LocalGlobals.clear_gizmos.emit()
 	# this is complicted but self-explanatory. 
 	# if you need to work on this and are stuck, yell at zodie
 	# the pause button releases the mouse and spawns the localmenu accordingly
-	elif event.is_action("pause"):
-		if event.is_pressed():
-			match LocalGlobals.player_state:
-				LocalGlobals.PLAYER_STATE_TYPING:
-					if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-					else:
-						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-				LocalGlobals.PLAYER_STATE_PLAYING:
-					localui.ui.reveal()
-					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
-					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-				LocalGlobals.PLAYER_STATE_PAUSED:
-					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-					localui.ui.close_menu()
-					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if event.is_action("pause"):
+		press_pause(event)
 	# toggles locking the mouse to the window, this is great for editing while in desktop mode
-	elif event.is_action("toggle_mouse_lock"):
+	if event.is_action("toggle_mouse_lock"):
 		if event.is_released():
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE else Input.MOUSE_MODE_VISIBLE
 		
@@ -520,68 +503,24 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if LocalGlobals.player_state == LocalGlobals.PLAYER_STATE_PAUSED and !localui.ui.visible:
 			LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
-		#if event.pressed:
-			#if event.position.x > get_viewport().size.x/2.0 and lookdrag.is_empty():
-				#lookdrag = {
-					#'index': event.index,
-					#'relative': Vector2(),
-					#'velocity': Vector2(),
-					#'startposition': event.position,
-					#'position': event.position,
-					#'dragstarttime': Time.get_ticks_msec()
-				#}
-			#else:
-				#movedrag = {
-					#'index': event.index,
-					#'relative': Vector2(),
-					#'velocity': Vector2(),
-					#'startposition': event.position,
-					#'position': event.position,
-					#'dragstarttime': Time.get_ticks_msec()
-				#}
-				#screen_just_touched = true
-#
-		#if !lookdrag.is_empty() and event.index == lookdrag.index and event.pressed == false:
-			#if lookdrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			#and Time.get_ticks_msec()-lookdrag.dragstarttime<100:
-				#_screen_tap_click(event)
-			#lookdrag = {}
-		#if !movedrag.is_empty() and event.index == movedrag.index and event.pressed == false:
-			#if movedrag.startposition.distance_to(event.position) < get_viewport().size.length()*.01\
-			#and Time.get_ticks_msec()-movedrag.dragstarttime<100:
-				#_screen_tap_click(event)
-			#movedrag = {}
-			#touch_move_left = 0.0
-			#touch_move_right = 0.0
-			#touch_move_forward = 0.0
-			#touch_move_backward = 0.0
-	#if event is InputEventScreenDrag:
-		#if movedrag and event.index == movedrag.index:
-			#movedrag = {
-				#'index': event.index,
-				#'relative': event.relative,
-				#'velocity': event.velocity,
-				#'startposition': movedrag.startposition,
-				#'position': event.position,
-				#'dragstarttime': movedrag.dragstarttime
-			#}
-			#touch_move_left = (movedrag.startposition.x-event.position.x)*.01
-			#touch_move_right = (event.position.x-movedrag.startposition.x)*.01
-			#touch_move_forward = (movedrag.startposition.y-event.position.y)*.01
-			#touch_move_backward = (event.position.y-movedrag.startposition.y)*.01
-		#if lookdrag and event.index == lookdrag.index:
-			#lookdrag = {
-				#'index': event.index,
-				#'relative': event.relative,
-				#'velocity': event.velocity,
-				#'startposition': lookdrag.startposition,
-				#'position': event.position,
-				#'dragstarttime': lookdrag.dragstarttime
-			#}
-			#if !touchsticklook:
-				#rotate_y( -(event.relative.x)*(MOUSE_SPEED/100) )
-				#xr_camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
-				#camera_3d.rotate_x(-event.relative.y*(MOUSE_SPEED/100))
+
+## method to handle the logic of when the user presses the pause button
+func press_pause(event: InputEvent):
+		if event.is_pressed():
+			match LocalGlobals.player_state:
+				LocalGlobals.PLAYER_STATE_TYPING:
+					if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+					else:
+						LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+				LocalGlobals.PLAYER_STATE_PLAYING:
+					localui.ui.reveal()
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PAUSED
+					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				LocalGlobals.PLAYER_STATE_PAUSED:
+					LocalGlobals.player_state = LocalGlobals.PLAYER_STATE_PLAYING
+					localui.ui.close_menu()
+					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 ## helper method to click the ui_ray when the screen is tapped 
 func _screen_tap_click(_event:InputEvent) -> void:

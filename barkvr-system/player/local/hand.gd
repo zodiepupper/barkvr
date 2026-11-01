@@ -2,7 +2,7 @@ class_name BarkHand
 extends XRController3D
 
 @onready var grabArea : Area3D = $handproxy/grabArea
-@onready var ui_ray : Node3D = $handproxy/uiRay
+@onready var ui_ray : InteractionRay = $handproxy/uiRay
 @onready var handmenu :Node3D = %"handmenu"
 @onready var hand_menu_point :Node3D = $handproxy/handMenuPoint
 @onready var grab_parent :Node3D= $handproxy/grabParent
@@ -226,16 +226,12 @@ func grip():
 	if grabArea.get_overlapping_bodies().size() > 0:
 		for item in grabArea.get_overlapping_bodies():
 			if item.has_meta("grabbable"):
-				grab(item,true)
+				ui_ray.grab(item)
 				return
-	if ui_ray.is_colliding():
-		var rayCollided = ui_ray.get_collider()
-		if rayCollided.has_meta("grabbable"):
-			grab(rayCollided,true)
+	ui_ray.grab()
 
 func ungrip():
-	for item in grabbed.values():
-		releasegrab(item.node)
+	ui_ray.release_grab()
 	if isscalinggrabbedobject:
 		scalinggrabbedobject = null
 		scalinggrabbedstartdist = 0

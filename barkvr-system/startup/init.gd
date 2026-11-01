@@ -175,7 +175,7 @@ func import(files:PackedStringArray, loader:LoadingHalo=null, import_position:Ve
 		# everywhere else we can handle it *normally* lmao
 		else:
 			filename = dropped.split('/')[-1]
-		# set the loader text to a good indicator 
+		# set the loader text to a good indicator
 		loader.set_deferred("text", filename + " (" + str(iteration) + "of" + str(files.size()) + ")")
 		# open the file with only read permissions
 		var file := FileAccess.open(dropped,FileAccess.READ)

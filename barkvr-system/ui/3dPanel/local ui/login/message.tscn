@@ -24,13 +24,25 @@ func _pressed() -> void:
 			if is_instance_valid(get_tree().get_first_node_in_group(\"player\")):
 				var tmpscale = get_tree().get_first_node_in_group(\"player\").global_basis.get_scale()
 				player_size_mult = (tmpscale.x+tmpscale.y+tmpscale.z)/3.
-			Engine.get_singleton(\"event_manager\").import_asset(
-				\"uri\", #type 
-				message.get_meta(\"asset_url\"), #asset_to_import
-				message.get_meta(\"import_asset_name\"), #asset_name
-				false, #recieved
-				{\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult} #data
-			)
+			#Engine.get_singleton(\"event_manager\").import_asset(
+				#\"uri\", #type 
+				#message.get_meta(\"asset_url\"), #asset_to_import
+				#message.get_meta(\"import_asset_name\"), #asset_name
+				#false, #recieved
+				#{\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult} #data
+			#)
+			BarkvrImportManager.current_instance.import_asset(\\
+				BarkvrImportManager.BarkvrImportFile.create(\\
+					BarkvrImportManager.TYPE.uri,\\
+					message.get_meta(\"asset_url\"),\\
+					PackedByteArray(),\\
+					message.get_meta(\"import_asset_name\"),\\
+					\"\",\\
+					import_position,\\
+					player_size_mult*Vector3.ONE,\\
+					loader
+					)
+				)
 #import_asset('uri',url.text,'', false, {\"loader\":loader ,\"position\":import_position, \"scale\":player_size_mult})
 	else:
 		DisplayServer.clipboard_set(body.text)
@@ -46,8 +58,8 @@ size_flags_vertical = 3
 script = ExtResource("1_tdypu")
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=1505678559]
-clip_contents = true
 custom_minimum_size = Vector2(0, 53)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

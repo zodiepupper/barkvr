@@ -124,7 +124,7 @@ func import_asset( import_file : BarkvrImportFile ) -> void:
 	if import_file.loader:
 		if !import_file.loader.is_inside_tree():
 			root.add_child(import_file.loader)
-			import_file.loader.set_deferred("global_position",import_file.position)
+			import_file.loader.set_deferred("global_position",import_file.asset_import_global_position)
 	# Generate an asset name if not given.
 	if import_file.asset_name.is_empty():
 		# If we have a string path for the asset import, use that instead.
@@ -203,9 +203,9 @@ func _import_uri(import_file:BarkvrImportFile):
 	# ensure the uri is a valid http[s] url
 	if import_file.asset_path.begins_with("http://") or import_file.asset_path.begins_with("https://"):
 		# if we have already tried 4 times then we wanna say it failed
-		if import_file.iterations > 4:
-			print("loop while trying to import uri, cancelling import")
-			return
+		#if import_file.iterations > 4:
+			#print("loop while trying to import uri, cancelling import")
+			#return
 		# create a new request object
 		var req := HTTPRequest.new()
 		# set the request to write to disk using the temp file path
@@ -276,7 +276,6 @@ func _uri_request_completed(_result: int, response_code: int, headers: PackedStr
 		# hit "https://image.thum.io/get/" to grab an image of the website
 		if !uri.begins_with("https://image.thum.io/get/"):
 			uri = "https://image.thum.io/get/"+uri
-		import_file.iterations += 1
 		print("get preview:\n"+uri)
 		_import_uri(import_file)
 		#elif dropped.ends_with(".zip"):
@@ -735,6 +734,7 @@ func _import_file(import_file:BarkvrImportFile) -> void:
 	_post_import.call_deferred(root, tmpbody, import_file)
 
 func _post_import(_rootarget_node:Node,node_to_add:Node,import_file:BarkvrImportFile):
+	print_debug("_rootarget_node: "+str(_rootarget_node)+"node_to_add: "+str(node_to_add)+"import_file: "+str(import_file))
 	check_root()
 	var position = Vector3()
 	position = import_file.asset_import_global_position
@@ -751,23 +751,23 @@ func _post_import(_rootarget_node:Node,node_to_add:Node,import_file:BarkvrImport
 	print(import_file.asset_name)
 	# add IK stuff if VRM
 	if import_file.asset_name.ends_with(".vrm") or import_file.type == TYPE.vrm:
-		print('attempting ik')
-		var quickiksetup :Node3D = load("res://barkvr-system/ik/auto setup for avatars/quick_ik_setup.tscn").instantiate()
-		node_to_add.add_child(quickiksetup)
-		var skele :Skeleton3D=null
-		for i in node_to_add.get_children():
-			if skele:
-				break
-			if i is Skeleton3D:
-				skele = i
-			elif i.get_child_count() > 0:
-				for a in i.get_children():
-					if a is Skeleton3D:
-						skele = a
-			await get_tree().process_frame
-		if skele:
-			print('found skele')
-			quickiksetup.armature_skeleton = skele
+		print('attempting ik (temporarily disabled)')
+		#var quickiksetup :Node3D = load("res://barkvr-system/ik/auto setup for avatars/quick_ik_setup.tscn").instantiate()
+		#node_to_add.add_child(quickiksetup)
+		#var skele :Skeleton3D=null
+		#for i in node_to_add.get_children():
+			#if skele:
+				#break
+			#if i is Skeleton3D:
+				#skele = i
+			#elif i.get_child_count() > 0:
+				#for a in i.get_children():
+					#if a is Skeleton3D:
+						#skele = a
+			#await get_tree().process_frame
+		#if skele:
+			#print('found skele')
+			#quickiksetup.armature_skeleton = skele
 	if import_file.loader:
 		import_file.loader.call_deferred("done")
 	import_file.queue_free()

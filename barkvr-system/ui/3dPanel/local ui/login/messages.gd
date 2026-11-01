@@ -113,7 +113,6 @@ func _display_message(event):
 						var download_url : String = event.content.url.trim_prefix("mxc://")
 						var download_homeserver : String = download_url.split("/")[0]
 						var download_content_id : String = download_url.split("/")[1]
-						Thread.set_thread_safety_checks_enabled(false)
 						tmp.set_meta("import", true)
 						# automatically convert the mxc uri for the matrix media
 						# repository to a useable uri
@@ -130,8 +129,6 @@ func _display_message(event):
 								tmp.text += "\n[color=#8888][font_size=14]asset type: "+"binary file"
 							if "size" in event.content.info:
 								tmp.text += ", asset size: "+str(int(event.content.info.size))+" bytes"
-						
-						Thread.set_thread_safety_checks_enabled(true)
 						
 				if is_instance_valid(Engine.get_singleton("user_manager")) and event.sender == Engine.get_singleton("user_manager").userData.login.user_id:
 					tmp.leftside = false

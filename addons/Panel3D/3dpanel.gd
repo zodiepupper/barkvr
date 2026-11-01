@@ -4,9 +4,18 @@ class_name Panel3D
 extends StaticBody3D
 var viewport : SubViewport
 var mesh : MeshInstance3D
+var openxr_quad : OpenXRCompositionLayerQuad
 var colshape : CollisionShape3D
+var collision_shape_rid : RID
+var physics_body_rid : RID
 var material : StandardMaterial3D
 
+## TODO: WE NEED TO QUANTIZE THE INPUTS 
+# (like only accept and process events with enough change between the new and the previous, atm
+# the app lags for some actions because we are sending too many events to the Panels each frame)
+
+## track the last position where an interaction happened. most importantly used for 
+## calculating the "relative" mouse position
 var last_input_position := Vector2()
 
 ## this is the root of the scene when it is added to the viewport
@@ -95,9 +104,14 @@ var popout_panels: Array[Panel3D] = []
 		viewport.size = viewport_size.clamp(minimum_viewport_size, maximum_viewport_size)
 		mesh.mesh.size.x = (pixel_size/1000.0)*viewport.size.x
 		mesh.mesh.size.y = (pixel_size/1000.0)*viewport.size.y
+		openxr_quad.quad_size = mesh.mesh.size
+		
 		#mesh.mesh.size.z = (pixel_size/1000.0)
 		mesh.position.z = panel_thickness*.5
 		colshape.shape.size = Vector3((pixel_size/1000.0)*viewport.size.x,(pixel_size/1000.0)*viewport.size.y,panel_thickness)
+		#colshape.disabled = true
+		#colshape.shape.size = Vector3()
+		#PhysicsServer3D.shape_set_data(collision_shape_rid, Vector3((pixel_size/1000.0)*viewport.size.x,(pixel_size/1000.0)*viewport.size.y,panel_thickness))
 
 ## sets the thickness of the collider
 @export var panel_thickness := .00
@@ -188,6 +202,21 @@ const BOTTOM_RIGHT = 8
 		heightmap_scale = val
 		material.heightmap_scale = heightmap_scale
 
+@export_group("XR Settings")
+## only used during the init step, if true we will create an use an OpenXR Composition layer to
+## render the designated viewport while making the quad invisible (leaving the quad there so
+## it can be toggled back on if the user wants the ui to be visible for screen
+## capture or another reason
+@export var use_openxr_composition_layer := true
+## allows us to set the sort order for the composition layer. this is used in barkvr to allow some
+## panels, the local menu, to render on top of other panels
+@export var openxr_composition_layer_sort_order := -2
+## allows us to set whether the openxr composition layer should have hole punching enabled
+## hole punching allows us to have the openxr composition layer render beneath the scene and godot
+## will punch a hole up to it's depth so it can be sorted correclty and not render on top
+@export var openxr_composition_layer_hole_punch := true
+
+
 func _init():
 	# since we use a rigid body for funny options we need to free the body
 	#freeze = true
@@ -207,6 +236,12 @@ func _init():
 	# create and assign the visuals and collision stuff
 	mesh = MeshInstance3D.new()
 	mesh.mesh = QuadMesh.new()
+	if use_openxr_composition_layer:
+		mesh.visible = false
+		openxr_quad = OpenXRCompositionLayerQuad.new()
+		openxr_quad.quad_size = viewport_size
+		openxr_quad.layer_viewport = viewport
+	add_child(openxr_quad)
 	colshape = CollisionShape3D.new()
 	colshape.shape = BoxShape3D.new()
 	# setup for the material to apply all the settings listed in the exports
@@ -240,10 +275,8 @@ func _init():
 	material.heightmap_texture = material.albedo_texture
 	# UNUSED: automatically disable transparency on android for performance
 	# reasons
-	#if transparent and OS.get_name() != "Android" and OS.get_name() != 'Web':
-		#viewport.transparent_bg = true
-	#else:
-		#viewport.transparent_bg = false
+	if transparent and OS.get_name() == "Android" and OS.get_name() == 'Web':
+		viewport.transparent_bg = false
 	_auto_load_ui = _auto_load_ui
 	transparent = transparent
 	viewport_size = viewport_size
@@ -273,6 +306,8 @@ func _ready():
 		LocalGlobals.playerreleaseuifocus.connect(func():
 			viewport.gui_release_focus()
 			)
+	openxr_quad.enable_hole_punch = openxr_composition_layer_hole_punch
+	openxr_quad.sort_order = openxr_composition_layer_sort_order
 
 ##this is an attempt to capture and track any embedded subwindows
 ##into their own Panel3D so they can be treated like normal popups

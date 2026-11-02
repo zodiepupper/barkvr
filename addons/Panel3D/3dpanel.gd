@@ -237,11 +237,13 @@ func _init():
 	mesh = MeshInstance3D.new()
 	mesh.mesh = QuadMesh.new()
 	if use_openxr_composition_layer:
+		# hide the mesh so we aren't rendering this twice
 		mesh.visible = false
+		# create the composition layer quad, set its size and target viewport
 		openxr_quad = OpenXRCompositionLayerQuad.new()
 		openxr_quad.quad_size = viewport_size
 		openxr_quad.layer_viewport = viewport
-	add_child(openxr_quad)
+		add_child(openxr_quad)
 	colshape = CollisionShape3D.new()
 	colshape.shape = BoxShape3D.new()
 	# setup for the material to apply all the settings listed in the exports

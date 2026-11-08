@@ -12,6 +12,7 @@ godot --headless --export-debug "Meta no boundary" ../project.godot
 godot --headless --export-debug "Pico" ../project.godot
 godot --headless --export-debug "Magicleap" ../project.godot
 godot --headless --export-debug "Android" ../project.godot
+godot --headless --export-debug "Meta no boundary Q1" ../project.godot
 
 echo "compressing builds into zip files"
 

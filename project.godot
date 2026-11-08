@@ -59,7 +59,7 @@ export/convert_text_resources_to_binary=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/vrm/plugin.cfg")
+enabled=PackedStringArray("res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/Panel3D/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/contextmenu/plugin.cfg", "res://addons/godot-neovim/plugin.cfg", "res://addons/terrain_3d/plugin.cfg", "res://addons/vrm/plugin.cfg")
 
 [filesystem]
 
@@ -272,6 +272,31 @@ scale_down={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"button_mask":16,"position":Vector2(221, 12),"global_position":Vector2(225, 47),"factor":1.0,"button_index":5,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+rotate_modifier={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"location":0,"echo":false,"script":null)
+]
+}
+scale_held_up={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"button_mask":8,"position":Vector2(402.72656, 13.636719),"global_position":Vector2(406.72656, 50.63672),"factor":1.0,"button_index":4,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+scale_held_down={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"button_mask":16,"position":Vector2(447.5039, 14.996094),"global_position":Vector2(451.5039, 51.996094),"factor":1.0,"button_index":5,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+self_scale_down={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":true,"meta_pressed":false,"button_mask":16,"position":Vector2(376.27344, 10.4921875),"global_position":Vector2(380.27344, 47.492188),"factor":1.0,"button_index":5,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+scale_self_up={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":true,"meta_pressed":false,"button_mask":8,"position":Vector2(300.66406, 13.847656),"global_position":Vector2(304.66406, 50.847656),"factor":1.0,"button_index":4,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
 
 [input_devices]
 
@@ -307,6 +332,7 @@ common/physics_interpolation=true
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method="mobile"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/screen_space_roughness_limiter/amount=4.0
@@ -353,6 +379,10 @@ META_ENVIRONMENT_DEPTH_TO_CAMERA_PROJECTION_RIGHT={
 "type": "mat4",
 "value": Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 }
+META_ENVIRONMENT_DEPTH_TEXEL_SIZE={
+"type": "vec2",
+"value": Vector2(0, 0)
+}
 
 [xr]
 
@@ -362,6 +392,14 @@ openxr/foveation_dynamic=true
 openxr/extensions/frame_synthesis=true
 openxr/extensions/hand_tracking=true
 openxr/extensions/hand_interaction_profile=true
+openxr/extensions/spatial_entity/enabled=true
+openxr/extensions/spatial_entity/enable_spatial_anchors=true
+openxr/extensions/spatial_entity/enable_persistent_anchors=true
+openxr/extensions/spatial_entity/enable_builtin_anchor_detection=true
+openxr/extensions/spatial_entity/enable_plane_tracking=true
+openxr/extensions/spatial_entity/enable_builtin_plane_detection=true
+openxr/extensions/spatial_entity/enable_marker_tracking=true
+openxr/extensions/spatial_entity/enable_builtin_marker_tracking=true
 openxr/extensions/eye_gaze_interaction=true
 openxr/extensions/render_model=true
 openxr/binding_modifiers/analog_threshold=true
@@ -376,5 +414,5 @@ openxr/extensions/meta/body_tracking=true
 openxr/extensions/meta/hand_tracking_aim=true
 openxr/extensions/meta/hand_tracking_mesh=true
 openxr/extensions/meta/hand_tracking_capsules=true
-openxr/extensions/meta/application_space_warp=true
 openxr/extensions/meta/environment_depth=true
+openxr/extensions/meta/dynamic_resolution=false

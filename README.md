@@ -28,6 +28,15 @@ support the project however you wish, or not at all.
 <a href="https://liberapay.com/zodiepupper">Liberapay</a> 
 </div>
 
+## Get Started:
+barkvr builds can be downloaded from the releases section on github, or on barkvr.dev (builds will be uploaded soon there), or steam.
+
+To work on barkvr, all you need to do is clone the repo and open it in the latest version of Godot.
+We aim to keep the project as accessible to contributors as possible.
+
+The quickest way to export the project for all platforms is to run the `exports/create_release_packages.sh`
+This will build all currently suppported platforms.
+
 ## Core Focus:
 - **Accessibility**: Making BarkVR welcoming to everyone, regardless of
   background or ability.

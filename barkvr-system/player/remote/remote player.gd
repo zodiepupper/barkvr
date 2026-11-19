@@ -1,3 +1,4 @@
+class_name BarkRemotePeer
 extends Node3D
 
 @onready var unamelabel: Label3D = %unamelabel

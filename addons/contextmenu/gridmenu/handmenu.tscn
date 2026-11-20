@@ -34,7 +34,7 @@ func onclick():
 	if local_ui:
 		if !get_viewport().use_xr and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		local_ui.reveal(true)
+		local_ui.reveal()
 		var local_ui_panel := get_tree().get_first_node_in_group(\"localuipanel\")
 		local_ui_panel.global_position = global_position
 		if local_ui_panel and local_ui_panel is Node3D:
